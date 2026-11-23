@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Round Thumbnail Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Layout: four option bands, each = one large preview + two card-size previews of real rounds. Same dark broadcast look as the season calendar. */
+:root{
+  --bg:#0C0E13; --bg-2:#101319; --panel:#151922; --panel-2:#1B202B;
+  --ink:#F2F3F5; --ink-2:#B4BAC4; --muted:#6F7785; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
+  --red:#F0432B; --cyan:#3CD3FF; --gold:#FFC83D;
+  --f-body:"Archivo",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.disp{font-stretch:125%;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.02em;line-height:.88;margin:0}
+.eyebrow{font:500 11px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header{padding-block:56px 32px;border-bottom:1px solid var(--line)}
+header h1{font-size:clamp(40px,7vw,96px);margin-top:16px}
+header p{max-width:640px;color:var(--ink-2);font-size:16px;margin:18px 0 0}
+.concept{display:inline-flex;gap:10px;align-items:center;font-size:12.5px;color:var(--ink-2)}
+.concept b{font:700 10px var(--f-mono);letter-spacing:.14em;padding:3px 8px;background:var(--red);color:#fff;transform:skewX(-12deg)}
+.toc{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.toc a{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--panel);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600;font-size:14px}
+.toc a:hover{border-color:var(--line-2)}
+.toc a b{font:900 italic 20px var(--f-body);font-stretch:125%;color:var(--red)}
+.opt{padding-block:64px;border-bottom:1px solid var(--line)}
+.opt-h{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:start;margin-bottom:28px}
+.letter{font:900 italic 96px/.8 var(--f-body);font-stretch:125%;color:var(--red)}
+.opt-h h2{font-size:clamp(30px,4vw,52px)}
+.opt-h p{margin:12px 0 0;color:var(--ink-2);max-width:720px}
+.shows{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.shows span{font:600 10px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border:1px solid var(--line-2);color:var(--ink-2)}
+.row{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px}
+.stack{display:grid;gap:14px}
+.big{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column}
+.big .cap{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;font-size:13px;color:var(--ink-2);border-top:1px solid var(--line);flex-wrap:wrap}
+.big svg{display:block;width:100%;flex:1;min-height:340px;background:var(--bg-2)}
+.card{background:var(--panel);border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column}
+.stripe{display:flex;height:5px}.stripe i{flex:1}
+.c-top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 0}
+.rnd{font:700 11px var(--f-mono);letter-spacing:.14em;color:var(--muted)}.rnd b{color:var(--ink);font-size:13px}
+.status{font:700 10px var(--f-mono);letter-spacing:.12em;padding:4px 8px;text-transform:uppercase;background:var(--panel-2);color:var(--ink-2)}
+.c-main{padding:8px 16px 12px}
+.date{display:flex;align-items:baseline;gap:8px;line-height:1}
+.date b{font:900 italic 22px/1 var(--f-body);font-stretch:110%}
+.date span{font:700 11px var(--f-mono);letter-spacing:.14em;color:var(--red)}
+.c-main h4{font-size:24px;margin-top:8px}
+.c-main .ev{margin-top:6px;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.card svg{display:block;width:100%;height:140px;border-block:1px solid var(--line);background:var(--bg-2)}
+.c-foot{display:flex;justify-content:space-between;padding:10px 16px;font-size:12.5px;color:var(--ink-2)}
+.c-foot b{font:700 11px var(--f-mono);letter-spacing:.1em;color:var(--ink)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:500 11px var(--f-mono);color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:16px;height:3px}
+footer{padding-block:40px;color:var(--muted);font-size:13px}
+@media (max-width:900px){ .row{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:640px){
+  .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .opt-h{grid-template-columns:minmax(0,1fr);gap:8px}
+  .letter{font-size:64px}
+  .big svg{min-height:280px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap">
+    <span class="concept"><b>CONCEPT</b>Unofficial Airtribune redesign · thumbnail study</span>
+    <h1 class="disp">Pick a<br>thumbnail</h1>
+    <p>Four ways to draw a round on its calendar card, each built from the same thing a paragliding comp runs on: a task of cylinders with an optimised route and a GPS tracklog of pilots climbing in thermals and gliding between them. Each option is shown large and at card size on three real rounds. Tasks and tracks are simulated for the concept.</p>
+    <nav class="toc" aria-label="Options">
+      <a href="#opt-a"><b>A</b>Task map</a>
+      <a href="#opt-b"><b>B</b>GPS tracklog</a>
+      <a href="#opt-c"><b>C</b>Barogram</a>
+      <a href="#opt-d"><b>D</b>Live race</a>
+    </nav>
+  </div>
+</header>
+
+<main id="opts"></main>
+<footer><div class="wrap">Unofficial concept · Round names and dates from airtribune.com/events/next · Tasks, tracks and altitudes are simulated.</div></footer>
+
+<script>
+/* ---------------- sample rounds (real listings) ---------------- */
+const ROUNDS = [
+  {n:1, country:"Pakistan", name:"FM Punjab Cup Pakistan 26", city:"Chakral, Punjab", dates:"25–29", mon:"NOV", days:5, colors:["#FFFFFF","#01411C","#01411C","#01411C"], status:"Next"},
+  {n:6, country:"Colombia", name:"Primera Válida Nacional Open Roldanillo 2027", city:"Roldanillo", dates:"19–26", mon:"JAN", days:8, colors:["#FCD116","#FCD116","#003893","#CE1126"], status:"57 days"},
+  {n:21, country:"Slovenia", name:"11th Naviter Open 2027", city:"Gabrje, Tolmin", dates:"05–11", mon:"JUN", days:7, colors:["#FFFFFF","#0057B8","#ED1C24"], status:"195 days"},
+];
+const OPTIONS = [
+  {id:"a", t:"Task map", style:"task",
+   d:"The day's competition task as pilots load it into their instruments: start cylinder, turnpoint cylinders sized to their real radii, the optimised shortest route touching each one, and the goal line. Leg distances in km.",
+   shows:["SSS exit cylinder","Turnpoint radii","Optimised route","Leg km","Goal line","Take-off"],
+   legend:[["var(--cyan)","Cylinders"],["#fff","Optimised route"],["var(--gold)","Take-off"]]},
+  {id:"b", t:"GPS tracklog", style:"track",
+   d:"One pilot's flight over the task. Tight loops are thermal climbs, straight runs are glides. Coloured by vario: orange to red is climbing, blue is sinking. This is what an IGC file looks like on a map.",
+   shows:["Thermal spirals","Glides","Vario colour","Wind drift","Task in background"],
+   legend:[["#FFC83D","Weak climb"],["#F0432B","Strong climb"],["#3CD3FF","Sink / glide"]]},
+  {id:"c", t:"Barogram", style:"baro",
+   d:"The flight seen from the side: altitude over time above the terrain profile. Each saw-tooth climb is a thermal up to cloudbase, each slope a glide. Start gate and goal are marked, and the peak altitude is labelled.",
+   shows:["Altitude trace","Terrain","Cloudbase","Start gate","Goal"],
+   legend:[["#F0432B","Climbing"],["#3CD3FF","Gliding"],["#3a4252","Terrain"]]},
+  {id:"d", t:"Live race", style:"race",
+   d:"A live-tracking frame mid-task: several pilots strung out along the course, each with a fading trail and their competition number, leader highlighted. This is the view Airtribune's tracker is known for.",
+   shows:["Multiple pilots","Comp numbers","Fading trails","Leader","Task in background"],
+   legend:[["#F0432B","Leader"],["#fff","Chasing pack"],["var(--cyan)","Task"]]},
+];
+
+/* ---------------- utils ---------------- */
+const rng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const dist = (a,b) => Math.hypot(a[0]-b[0], a[1]-b[1]);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const MONO = "JetBrains Mono, monospace";
+function noise(seed, w, h){
+  const r = rng(seed), oc = [[4,1],[8,.5],[16,.25]].map(([n,a]) => ({n,a,g:Array.from({length:(n+2)*(n+2)}, r)}));
+  const sm = t => t*t*(3-2*t), v = new Float64Array(w*h);
+  for (let y=0;y<h;y++) for (let x=0;x<w;x++){ let s=0;
+    for (const {n,a,g} of oc){ const N=n+2, fx=x/w*n, fy=y/h*n*.6, ix=fx|0, iy=fy|0, tx=sm(fx-ix), ty=sm(fy-iy), G=(i,j)=>g[j*N+i];
+      s += a*((G(ix,iy)*(1-tx)+G(ix+1,iy)*tx)*(1-ty)+(G(ix,iy+1)*(1-tx)+G(ix+1,iy+1)*tx)*ty); }
+    v[y*w+x]=s; }
+  return v;
+}
+function terrain(sel, seed, W, H, alpha=1){
+  const cell = 10, gw = Math.ceil(W/cell)+1, gh = Math.ceil(H/cell)+1, vals = noise(seed, gw, gh), ex = d3.extent(vals);
+  const cs = d3.contours().size([gw,gh]).thresholds(d3.range(12).map(k => ex[0]+(ex[1]-ex[0])*(k+.5)/12))(vals);
+  sel.append("g").selectAll("path").data(cs).join("path").attr("d", d3.geoPath(d3.geoIdentity().scale(cell)))
+    .attr("fill", (d,k) => `rgba(255,255,255,${0.006*k*alpha})`)
+    .attr("stroke",(d,k)=>k%4===0?`rgba(255,255,255,${.11*alpha})`:`rgba(255,255,255,${.05*alpha})`).attr("stroke-width",.8);
+}
+
+/* ---------------- task generation (km space) ---------------- */
+function makeTask(seed){
+  const r = rng(seed);
+  const TO = [0,0];
+  const sss = {c:[0,0], r:[3,4,5,6][r()*4|0], type:"sss", name:"SSS"};
+  const rad = () => [0.4,0.4,1,1,2,3][r()*6|0];
+  const shape = r(), tps = [];
+  let goalC;
+  if (shape < .4){            // triangle back towards take-off
+    const h0 = r()*Math.PI*2, R = 13 + r()*9, cx = R*Math.cos(h0), cy = R*Math.sin(h0), n = 3;
+    let a = h0 + Math.PI + (r()-.5)*.5;
+    for (let k=0;k<n;k++){ a += (2*Math.PI/n)*(0.8+r()*.4); tps.push({c:[cx + R*Math.cos(a), cy + R*Math.sin(a)], r:rad()}); }
+    goalC = [(r()-.5)*6, (r()-.5)*6 + 4];
+  } else if (shape < .7){     // out and return with a dog-leg
+    const h = r()*Math.PI*2, L = 24 + r()*14;
+    tps.push({c:[8*Math.cos(h+1.4), 8*Math.sin(h+1.4)], r:rad()});
+    tps.push({c:[L*Math.cos(h), L*Math.sin(h)], r:rad()});
+    tps.push({c:[L*.55*Math.cos(h-.35), L*.55*Math.sin(h-.35)], r:rad()});
+    goalC = [L*.15*Math.cos(h+.5), L*.15*Math.sin(h+.5)];
+  } else {                    // open-distance zig-zag
+    let cur = [0,0], h = r()*Math.PI*2; const n = 3 + (r()*2|0);
+    for (let k=0;k<n;k++){ h += (k%2 ? 1 : -1)*(0.5 + r()*.8); const L = 10 + r()*12; cur = [cur[0]+L*Math.cos(h), cur[1]+L*Math.sin(h)]; tps.push({c:cur.slice(), r:rad()}); }
+    h += (r()-.5); goalC = [cur[0]+ (8+r()*8)*Math.cos(h), cur[1] + (8+r()*8)*Math.sin(h)];
+  }
+  tps.forEach((t,k) => { t.type = "tp"; t.name = "TP"+(k+1); });
+  const goal = {c:goalC, r: r()<.55 ? 0 : 0.4, type:"goal", name:"GOAL"};
+  goal.line = goal.r === 0;
+  const cyl = [sss, ...tps, goal];
+  // optimised route: TO -> edge of SSS -> touch each TP -> goal
+  const P = cyl.map(c => c.c.slice());
+  const segClosest = (a,b,c) => { const dx=b[0]-a[0], dy=b[1]-a[1], L=dx*dx+dy*dy||1, t=Math.max(0,Math.min(1,((c[0]-a[0])*dx+(c[1]-a[1])*dy)/L)); return [a[0]+t*dx, a[1]+t*dy]; };
+  for (let it=0; it<40; it++) for (let i=0;i<cyl.length;i++){
+    const c = cyl[i], prev = i===0 ? TO : P[i-1], next = P[i+1];
+    if (!c.r){ P[i] = c.c.slice(); continue; }
+    if (!next){ const a = Math.atan2(prev[1]-c.c[1], prev[0]-c.c[0]); P[i] = [c.c[0]+c.r*Math.cos(a), c.c[1]+c.r*Math.sin(a)]; continue; }
+    if (c.type !== "sss"){ const q = segClosest(prev,next,c.c); if (dist(q,c.c) <= c.r){ P[i] = q; continue; } }
+    let best = Infinity, bp;
+    for (let k=0;k<180;k++){ const a = k/180*Math.PI*2, x = [c.c[0]+c.r*Math.cos(a), c.c[1]+c.r*Math.sin(a)], f = dist(prev,x)+dist(x,next); if (f<best){ best=f; bp=x; } }
+    P[i] = bp;
+  }
+  const route = [TO, ...P];
+  const legs = route.slice(1).map((p,k) => dist(route[k], p));
+  return {TO, cyl, route, legs, total: legs.slice(1).reduce((a,b)=>a+b,0)};
+}
+
+/* ---------------- flight simulation (km, metres, seconds) ---------------- */
+function simulate(task, seed, thermalR, skill=1){
+  const r = rng(seed);
+  const launch = 1250 + r()*500, base0 = launch + 800 + r()*600, floor = launch - 400;
+  const baseAt = t => base0 + 420*Math.min(1, t/12600);
+  const wind = [(r()-.5)*.06, (r()-.5)*.06];
+  let pos = task.TO.slice(), alt = launch, t = 0, ti = 1, since = 0, nextTh = 0, head = 0, waited = false;
+  const pts = [{p:pos.slice(), alt, t, v:0}];
+  const targets = task.route.slice(1);
+  const circle = (turns, climbFn) => {
+    const dir = r()<.5 ? 1 : -1, tgt = targets[ti-1] || pos;
+    const a0 = Math.atan2(pos[1]-tgt[1], pos[0]-tgt[0]) + Math.PI/2*dir;
+    const c = [pos[0] - thermalR*Math.cos(a0), pos[1] - thermalR*Math.sin(a0)];
+    for (let s=1;s<=turns*14;s++){
+      const a = a0 + dir*s/14*Math.PI*2, rr = thermalR*(0.85 + .25*Math.sin(s*.9));
+      c[0] += wind[0]*thermalR*.6; c[1] += wind[1]*thermalR*.6;
+      pos = [c[0] + rr*Math.cos(a), c[1] + rr*Math.sin(a)];
+      const v = climbFn(s); alt = Math.min(baseAt(t), alt + v*26/14); t += 26/14;
+      pts.push({p:pos.slice(), alt, t, v});
+    }
+  };
+  for (let guard=0; guard<6000; guard++){
+    const tgt = targets[ti-1]; if (!tgt) break;
+    if (dist(pos,tgt) < .35){ ti++; if (ti > targets.length) break; continue; }
+    const top = baseAt(t) - 60 - r()*380;
+    if ((alt < floor + 300 || since > nextTh) && alt < top - 150){
+      const climb = (0.9 + r()*2.4) * skill, turns = Math.max(2, Math.min(18, Math.ceil((top - alt)/(climb*26))));
+      circle(turns, () => climb*(0.75+.5*r()));
+      since = 0; nextTh = 6 + r()*12;
+      if (!waited){ waited = true; const wait = 3 + (r()*4|0);   // hold under base until the start gate opens
+        circle(wait, s => Math.sin(s/5)*.9 + (r()-.5)*.6); }
+    } else {
+      const step = .5, want = Math.atan2(tgt[1]-pos[1], tgt[0]-pos[0]);
+      head = want + (r()-.5)*.35;
+      pos = [pos[0] + step*Math.cos(head), pos[1] + step*Math.sin(head)];
+      const ld = 8 + 2*skill + (r()-.5)*2, spd = 30 + 14*skill;
+      alt -= step*1000/ld; t += step/(spd/3600); since += step;
+      pts.push({p:pos.slice(), alt, t, v:-(spd/3.6)/ld});
+    }
+  }
+  return {pts, launch, base: baseAt(t)};
+}
+
+/* ---------------- fit km → px ---------------- */
+function rotateTask(task, th){
+  const c = Math.cos(th), sn = Math.sin(th), R = p => [p[0]*c - p[1]*sn, p[0]*sn + p[1]*c];
+  return {...task, cyl: task.cyl.map(q => ({...q, c:R(q.c)})), route: task.route.map(R)};
+}
+function bestFit(task, W, H, pad){
+  let best = null;
+  for (let k=0;k<36;k++){ const t = rotateTask(task, k*Math.PI/36), f = fitter(t, W, H, pad); if (!best || f.s > best.f.s) best = {t, f}; }
+  return best;
+}
+function fitter(task, W, H, pad){
+  const xs = [], ys = [];
+  task.cyl.forEach(c => { xs.push(c.c[0]-c.r, c.c[0]+c.r); ys.push(c.c[1]-c.r, c.c[1]+c.r); });
+  xs.push(0); ys.push(0);
+  const [x0,x1] = d3.extent(xs), [y0,y1] = d3.extent(ys);
+  const s = Math.min((W-2*pad[0])/(x1-x0), (H-2*pad[1])/(y1-y0));
+  const ox = (W - (x1-x0)*s)/2 - x0*s, oy = (H - (y1-y0)*s)/2 - y0*s;
+  const f = p => [ox + p[0]*s, oy + p[1]*s]; f.s = s; return f;
+}
+function chip(sel, W, H, text, small){
+  const fs = small ? 8.5 : 10, w = text.length*fs*.62 + 14;
+  const g = sel.append("g").attr("transform", `translate(${W-w-8},${8})`);
+  g.append("rect").attr("width",w).attr("height",fs+10).attr("fill","rgba(12,14,19,.82)").attr("stroke","rgba(255,255,255,.14)");
+  g.append("text").attr("x",7).attr("y",fs+4).text(text).attr("fill","#F2F3F5").attr("font-family",MONO).attr("font-size",fs).attr("font-weight",700).attr("letter-spacing",.6);
+}
+function drawCyl(sel, task, f, o){
+  const g = sel.append("g").attr("opacity", o.alpha ?? 1);
+  task.cyl.forEach(c => {
+    const [x,y] = f(c.c);
+    if (c.line){
+      const prev = task.route.at(-2), last = task.route.at(-1), a = Math.atan2(last[1]-prev[1], last[0]-prev[0])*180/Math.PI;
+      const L = Math.max(o.big?22:14, .4*f.s);
+      g.append("rect").attr("x",-2.5).attr("y",-L/2).attr("width",5).attr("height",L).attr("fill","url(#chk)").attr("transform",`translate(${x},${y}) rotate(${a})`);
+      return;
+    }
+    const R = Math.max(c.r*f.s, c.type==="goal"?3:2.5);
+    g.append("circle").attr("cx",x).attr("cy",y).attr("r",R)
+      .attr("fill", c.type==="sss" ? "rgba(60,211,255,.05)" : c.type==="goal" ? "rgba(255,255,255,.08)" : "rgba(60,211,255,.08)")
+      .attr("stroke", c.type==="goal" ? "#fff" : "var(--cyan)").attr("stroke-width", o.big?1.2:1).attr("stroke-dasharray", c.type==="sss" ? "4 3" : null);
+    if (o.labels){
+      const cen = d3.polygonCentroid(task.cyl.map(q=>f(q.c)).concat(task.cyl.length<3?[[x+1,y+1]]:[])), ang = Math.atan2(y-cen[1], x-cen[0]) || -.8;
+      let lx = x + Math.cos(ang)*(R+10), ly = y + Math.sin(ang)*(R+10) + 3, anc = Math.cos(ang) < -.3 ? "end" : Math.cos(ang) > .3 ? "start" : "middle";
+      const svgW = +sel.attr("viewBox").split(" ")[2];
+      if (anc==="end" && lx < 110){ anc = "start"; lx = x + R + 8; } if (anc==="start" && lx > svgW-110){ anc = "end"; lx = x - R - 8; }
+      g.append("text").attr("x", lx).attr("y", ly).attr("text-anchor", anc)
+        .attr("paint-order","stroke").attr("stroke","#101319").attr("stroke-width",3).text(c.type==="tp" ? `${c.name} · ${c.r} km` : c.type==="sss" ? `SSS exit · ${c.r} km` : "GOAL")
+        .attr("fill","#B4BAC4").attr("font-family",MONO).attr("font-size",10).attr("font-weight",700);
+    }
+  });
+  if (o.labels && task.cyl.at(-1).line){ const [x,y] = f(task.cyl.at(-1).c); g.append("text").attr("x",x+10).attr("y",y+18).text("GOAL LINE").attr("fill","#fff").attr("font-family",MONO).attr("font-size",10).attr("font-weight",700); }
+  return g;
+}
+function launchMark(sel, f, big){
+  const [x,y] = f([0,0]), s = big?7:5;
+  sel.append("path").attr("d",`M${x},${y-s} L${x+s*.9},${y+s*.6} L${x-s*.9},${y+s*.6}Z`).attr("fill","var(--gold)").attr("stroke","#0C0E13").attr("stroke-width",1.2);
+  if (big) sel.append("text").attr("x",x-10).attr("y",y+20).text("TAKE-OFF").attr("text-anchor","middle").attr("fill","var(--gold)").attr("font-family",MONO).attr("font-size",9.5).attr("font-weight",700);
+}
+const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFC83D","#FF8A3D","#F0432B"]).clamp(true);
+
+/* ---------------- the four styles ---------------- */
+function render(svgEl, style, round, big){
+  const bb = svgEl.getBoundingClientRect(), W = Math.round(bb.width) || (big?800:320), H = Math.round(bb.height) || (big?400:118), seed = round.n*97 + 13;
+  const sel = d3.select(svgEl).attr("viewBox",`0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid slice");
+  sel.selectAll("*").remove();
+  const defs = sel.append("defs");
+  const pat = defs.append("pattern").attr("id","chk").attr("width",5).attr("height",5).attr("patternUnits","userSpaceOnUse");
+  pat.append("rect").attr("width",5).attr("height",5).attr("fill","#fff");
+  pat.append("rect").attr("width",2.5).attr("height",2.5).attr("fill","#000"); pat.append("rect").attr("x",2.5).attr("y",2.5).attr("width",2.5).attr("height",2.5).attr("fill","#000");
+  let task = makeTask(seed);
+
+  if (style === "baro"){
+    const sim = simulate(task, seed+1, .25);
+    const pts = sim.pts, padL = big?48:10, padR = big?16:10, padT = big?34:24, padB = big?26:10;
+    const x = d3.scaleLinear([0, pts.at(-1).t], [padL, W-padR]);
+    const gr = rng(seed+5), ph = [gr()*6, gr()*6, gr()*6];
+    let dacc = 0; const ground = pts.map((p,k) => { if (k) dacc += dist(p.p, pts[k-1].p);
+      return sim.launch - 650 + 650*Math.exp(-dacc/2.5) + 260*Math.sin(dacc*.13+ph[0]) + 150*Math.sin(dacc*.29+ph[1]) + 60*Math.sin(dacc*.71+ph[2]); });
+    const lo = Math.min(d3.min(ground), d3.min(pts, p=>p.alt)) - 120, hi = sim.base + 220;
+    const y = d3.scaleLinear([lo, hi], [H-padB, padT]);
+    if (big){ y.ticks(5).forEach(v => { sel.append("line").attr("x1",padL).attr("x2",W-padR).attr("y1",y(v)).attr("y2",y(v)).attr("stroke","rgba(255,255,255,.06)");
+      sel.append("text").attr("x",padL-8).attr("y",y(v)+3).attr("text-anchor","end").text(v.toLocaleString("en")).attr("fill","#6F7785").attr("font-family",MONO).attr("font-size",9.5); });
+      sel.append("text").attr("x",padL-8).attr("y",padT-12).attr("text-anchor","end").text("m").attr("fill","#6F7785").attr("font-family",MONO).attr("font-size",9.5); }
+    // cloudbase
+        sel.append("text").attr("x",W-padR-4).attr("text-anchor","end").attr("y",y(sim.base)-8).text("CLOUDBASE").attr("fill","#6F7785").attr("font-family",MONO).attr("font-size",big?9.5:7.5).attr("font-weight",700);
+    // terrain
+    const gArea = d3.area().x((d,k)=>x(pts[k].t)).y0(H).y1(d=>y(d)).curve(d3.curveBasis);
+    sel.append("path").attr("d", d3.line().x((d,k)=>x(pts[k].t)).y((d,k)=>y(sim.base - 420 + 420*Math.min(1,pts[k].t/12600))).curve(d3.curveBasis)(pts)).attr("fill","none").attr("stroke","rgba(255,255,255,.12)").attr("stroke-width",6);
+    const gg = defs.append("linearGradient").attr("id","gnd").attr("x1",0).attr("x2",0).attr("y1",0).attr("y2",1);
+    gg.append("stop").attr("offset",0).attr("stop-color","#3a4252"); gg.append("stop").attr("offset",1).attr("stop-color","#1a1f29");
+    sel.append("path").attr("d", gArea(ground)).attr("fill","url(#gnd)");
+    sel.append("path").attr("d", d3.line().x((d,k)=>x(pts[k].t)).y(d=>y(d)).curve(d3.curveBasis)(ground)).attr("fill","none").attr("stroke","#59627a").attr("stroke-width",1);
+    // start gate + goal
+    const gate = pts.find((p,k) => k>5 && p.v < 0 && pts[k-1].v > -0.5 && pts.slice(0,k).some(q=>q.v>0)) || pts[0];
+    [[gate.t,"START"],[pts.at(-1).t,"GOAL"]].forEach(([t,l],k) => {
+      sel.append("line").attr("x1",x(t)).attr("x2",x(t)).attr("y1",padT-4).attr("y2",H-padB).attr("stroke", k?"#fff":"var(--cyan)").attr("stroke-dasharray","3 3").attr("opacity",.7);
+      if (big) sel.append("text").attr("x",x(t)+(k?-6:6)).attr("y",padT+8).attr("text-anchor",k?"end":"start").text(l).attr("fill",k?"#fff":"var(--cyan)").attr("font-family",MONO).attr("font-size",9.5).attr("font-weight",700);
+    });
+    // trace coloured by vario
+    const g = sel.append("g").attr("stroke-linecap","round");
+    for (let k=1;k<pts.length;k++){ const v = pts[k].v;
+      g.append("line").attr("x1",x(pts[k-1].t)).attr("y1",y(pts[k-1].alt)).attr("x2",x(pts[k].t)).attr("y2",y(pts[k].alt))
+        .attr("stroke", v>0 ? climbCol(v) : "#3CD3FF").attr("stroke-width", big?2:1.5); }
+    const mx = d3.greatest(pts, p=>p.alt);
+    sel.append("circle").attr("cx",x(mx.t)).attr("cy",y(mx.alt)).attr("r",big?4:3).attr("fill","#fff");
+    const hrs = pts.at(-1).t/3600;
+    chip(sel, W, H, `MAX ${Math.round(mx.alt).toLocaleString("en")} m · ${Math.floor(hrs)}h${String(Math.round(hrs%1*60)).padStart(2,"0")}`, !big);
+    if (big) sel.append("text").attr("x",x(mx.t)).attr("y",y(mx.alt)-10).attr("text-anchor","middle").text(Math.round(mx.alt).toLocaleString("en")+" m").attr("fill","#fff").attr("font-family",MONO).attr("font-size",10).attr("font-weight",700);
+    return;
+  }
+
+  terrain(sel, seed, W, H, style==="task" ? 1 : .8);
+  const fit = bestFit(task, W, H, big ? [80,54] : [26,18]); const f = fit.f; task = fit.t;
+  const thermalR = (big ? 4 : 2.4) / f.s;
+
+  if (style === "task"){
+    drawCyl(sel, task, f, {labels:big, big});
+    const R = task.route.map(f);
+    const mk = defs.append("marker").attr("id","arr").attr("viewBox","0 0 10 10").attr("refX",5).attr("refY",5).attr("markerWidth",big?7:5).attr("markerHeight",big?7:5).attr("orient","auto");
+    mk.append("path").attr("d","M0,0 L10,5 L0,10 Z").attr("fill","#fff");
+    sel.append("path").attr("d", d3.line()(R)).attr("fill","none").attr("stroke","#0C0E13").attr("stroke-width",big?4:3).attr("opacity",.6);
+    const routeEl = sel.append("path").attr("d", d3.line()(R)).attr("fill","none").attr("stroke","#fff").attr("stroke-width",big?1.8:1.3);
+    if (!reduce){ const L = routeEl.node().getTotalLength(); routeEl.attr("stroke-dasharray",L).attr("stroke-dashoffset",L).transition().duration(1800).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0); }
+    R.slice(1).forEach((p,k) => {
+      const a = R[k], m = [(a[0]+p[0])/2, (a[1]+p[1])/2], ang = Math.atan2(p[1]-a[1], p[0]-a[0]);
+      if (k>0) sel.append("path").attr("d",`M${m[0]-Math.cos(ang)},${m[1]-Math.sin(ang)}L${m[0]},${m[1]}`).attr("marker-end","url(#arr)");
+      if (big && k>0){ const cen = d3.polygonCentroid(R.length>2?R:[...R,[R[0][0]+1,R[0][1]]]), nx = -Math.sin(ang), ny = Math.cos(ang), sg = ((m[0]-cen[0])*nx + (m[1]-cen[1])*ny) >= 0 ? 1 : -1, off = 13*sg, lx = m[0] + nx*off, ly = m[1] + ny*off;
+        sel.append("text").attr("x",lx).attr("y",ly+3).attr("text-anchor","middle").text(task.legs[k].toFixed(1)+" km").attr("fill","#F2F3F5").attr("font-family",MONO).attr("font-size",10).attr("font-weight",700)
+          .attr("paint-order","stroke").attr("stroke","#0C0E13").attr("stroke-width",3); }
+    });
+    R.slice(2,-1).forEach(p => sel.append("circle").attr("cx",p[0]).attr("cy",p[1]).attr("r",big?2.6:1.8).attr("fill","#fff"));
+    launchMark(sel, f, big);
+    chip(sel, W, H, `TASK ${task.total.toFixed(1)} KM · ${task.cyl.length-2} TP`, !big);
+    return;
+  }
+
+  if (style === "track"){
+    drawCyl(sel, task, f, {alpha:.35, big});
+    sel.append("path").attr("d", d3.line()(task.route.map(f))).attr("fill","none").attr("stroke","rgba(255,255,255,.18)").attr("stroke-dasharray","2 3");
+    const sim = simulate(task, seed+1, thermalR);
+    const g = sel.append("g").attr("stroke-linecap","round");
+    const P = sim.pts.map(p => f(p.p));
+    for (let k=1;k<P.length;k++){ const v = sim.pts[k].v;
+      g.append("line").attr("x1",P[k-1][0]).attr("y1",P[k-1][1]).attr("x2",P[k][0]).attr("y2",P[k][1])
+        .attr("stroke", v>0 ? climbCol(v) : "#3CD3FF").attr("stroke-width", v>0 ? (big?1.2:.9) : (big?1.8:1.3)).attr("opacity", v>0 ? .9 : .9); }
+    if (!reduce){ g.attr("opacity",0).transition().duration(900).attr("opacity",1); }
+    launchMark(sel, f, big);
+    const end = P.at(-1); sel.append("circle").attr("cx",end[0]).attr("cy",end[1]).attr("r",big?4.5:3).attr("fill","#fff").attr("stroke","#0C0E13").attr("stroke-width",1.5);
+    const thermals = sim.pts.filter((p,k) => p.v>0 && !(sim.pts[k-1]?.v>0)).length;
+    const hrs = sim.pts.at(-1).t/3600;
+    chip(sel, W, H, `${task.total.toFixed(1)} KM · ${thermals} THERMALS · ${Math.floor(hrs)}h${String(Math.round(hrs%1*60)).padStart(2,"0")}`, !big);
+    return;
+  }
+
+  if (style === "race"){
+    drawCyl(sel, task, f, {alpha:.5, big});
+    sel.append("path").attr("d", d3.line()(task.route.map(f))).attr("fill","none").attr("stroke","rgba(60,211,255,.35)").attr("stroke-dasharray","3 3");
+    const r = rng(seed+9), N = big ? 9 : 6;
+    const sims = d3.range(N).map(k => ({no: 10 + (r()*190|0), s: simulate(task, seed*13 + k*7, thermalR*.8, .55 + r()*.9)}));
+    const T = d3.median(sims, s => s.s.pts.at(-1).t) * (.5 + r()*.15);
+    sims.forEach(sm => { let i = sm.s.pts.findIndex(p => p.t > T); if (i<0) i = sm.s.pts.length-1; sm.i = i;
+      const rem = task.route.slice(1); sm.prog = sm.s.pts[i].t; sm.pos = sm.s.pts[i].p; });
+    // rank by distance to goal along remaining course (approx: progress index fraction)
+    sims.forEach(sm => sm.frac = sm.i / sm.s.pts.length);
+    sims.sort((a,b) => b.frac - a.frac);
+    const trailN = big ? 70 : 45;
+    sims.slice().reverse().forEach((sm,ri) => {
+      const lead = sm === sims[0], pts = sm.s.pts.slice(Math.max(0, sm.i-trailN), sm.i+1).map(p => f(p.p));
+      for (let k=1;k<pts.length;k++) sel.append("line").attr("x1",pts[k-1][0]).attr("y1",pts[k-1][1]).attr("x2",pts[k][0]).attr("y2",pts[k][1])
+        .attr("stroke", lead ? "#F0432B" : "#ffffff").attr("stroke-opacity", (k/pts.length)*(lead?.95:.55)).attr("stroke-width", big?1.6:1.1).attr("stroke-linecap","round");
+    });
+    sims.forEach(sm => {
+      const lead = sm === sims[0], [x,y] = f(sm.pos);
+      sel.append("circle").attr("cx",x).attr("cy",y).attr("r",big?5:3.4).attr("fill",lead?"#F0432B":"#F2F3F5").attr("stroke","#0C0E13").attr("stroke-width",1.5);
+      const placed = (window.__placed ||= new WeakMap()), list = placed.get(svgEl) || []; placed.set(svgEl, list);
+      if ((big || lead) && (lead || !list.some(q => Math.abs(q[0]-x) < 46 && Math.abs(q[1]-y) < 16))){ list.push([x,y]);
+        const t = lead ? `#${sm.no} LEAD` : `#${sm.no}`, w = t.length*(big?6.4:5.3)+8;
+        const gl = sel.append("g").attr("transform",`translate(${x+7},${y-(big?18:14)})`);
+        gl.append("rect").attr("width",w).attr("height",big?14:12).attr("fill",lead?"#F0432B":"rgba(12,14,19,.85)").attr("stroke",lead?"none":"rgba(255,255,255,.2)");
+        gl.append("text").attr("x",4).attr("y",big?10.5:9).text(t).attr("fill","#fff").attr("font-family",MONO).attr("font-size",big?10:8.5).attr("font-weight",700);
+      }
+    });
+    launchMark(sel, f, big);
+    // live dot chip
+    const lg = sel.append("g").attr("transform","translate(10,10)");
+    lg.append("rect").attr("width",big?62:52).attr("height",big?18:15).attr("fill","#F0432B");
+    lg.append("circle").attr("cx",9).attr("cy",big?9:7.5).attr("r",3).attr("fill","#fff").attr("class","blink");
+    lg.append("text").attr("x",17).attr("y",big?13:11).text("LIVE").attr("fill","#fff").attr("font-family",MONO).attr("font-size",big?10:8.5).attr("font-weight",700).attr("letter-spacing",1);
+    chip(sel, W, H, `TASK ${task.total.toFixed(1)} KM · ${N} SHOWN`, !big);
+  }
+}
+
+/* ---------------- page ---------------- */
+const cardHTML = (r, k, id) => `
+  <article class="card">
+    <span class="stripe" aria-hidden="true">${r.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>
+    <div class="c-top"><span class="rnd">ROUND <b>${String(r.n).padStart(2,"0")}</b></span><span class="status">${r.status}</span></div>
+    <div class="c-main"><div class="date"><b>${r.dates}</b><span>${r.mon}</span></div><h4 class="disp">${r.country}</h4><div class="ev">${r.name}</div></div>
+    <svg id="${id}" role="img" aria-label="Thumbnail for round ${r.n}"></svg>
+    <div class="c-foot"><span>${r.city} · ${r.days} days</span><b>DETAILS →</b></div>
+  </article>`;
+document.getElementById("opts").innerHTML = OPTIONS.map(o => `
+  <section class="opt" id="opt-${o.id}" aria-labelledby="h-${o.id}">
+    <div class="wrap">
+      <div class="opt-h">
+        <span class="letter" aria-hidden="true">${o.id.toUpperCase()}</span>
+        <div><span class="eyebrow">Option ${o.id.toUpperCase()}</span><h2 class="disp" id="h-${o.id}" style="margin-top:10px">${o.t}</h2><p>${o.d}</p>
+        <div class="shows">${o.shows.map(s=>`<span>${s}</span>`).join("")}</div></div>
+      </div>
+      <div class="row">
+        <figure class="big" style="margin:0">
+          <svg id="big-${o.id}" role="img" aria-label="${o.t}, large preview, round ${ROUNDS[0].n}"></svg>
+          <figcaption class="cap"><span>Round ${String(ROUNDS[0].n).padStart(2,"0")} · ${ROUNDS[0].country} · detail view</span><span class="legend">${o.legend.map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join("")}</span></figcaption>
+        </figure>
+        <div class="stack">${ROUNDS.slice(1).map((r,k)=>cardHTML(r,k,`c-${o.id}-${k}`)).join("")}</div>
+      </div>
+    </div>
+  </section>`).join("");
+OPTIONS.forEach(o => {
+  render(document.getElementById(`big-${o.id}`), o.style, ROUNDS[0], true);
+  ROUNDS.slice(1).forEach((r,k) => render(document.getElementById(`c-${o.id}-${k}`), o.style, r, false));
+});
+</script>
+<style>.blink{animation:blink 1.2s infinite}@keyframes blink{50%{opacity:.2}}</style>
+</html>
