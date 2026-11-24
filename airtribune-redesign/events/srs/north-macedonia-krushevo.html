@@ -356,6 +356,20 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .tnote .btn{margin-left:0}
   .words .w{white-space:normal}
 }
+/* ---------- one photo per page: typographic venue card, numbered cards, text-only season rail ---------- */
+.vcard{position:relative;padding:34px 0 30px;border-top:2px solid var(--orange);border-bottom:1px solid var(--line-2)}
+.vc-name{display:block;margin:14px 0 10px;font:900 italic clamp(56px,7vw,104px)/.85 var(--f-display);text-transform:uppercase;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.85);letter-spacing:-.02em;overflow-wrap:anywhere}
+.vc-place{display:block;font:300 italic clamp(18px,1.8vw,24px)/1.2 var(--f-display);color:var(--ink-2)}
+.vc-line{display:flex;gap:0;margin-top:22px;flex-wrap:wrap}
+.vc-line i{font:700 12px var(--f-body);font-style:normal;letter-spacing:.16em;text-transform:uppercase;color:#fff;padding-right:16px;margin-right:16px;border-right:1px solid var(--line-2)}
+.vc-line i:last-child{border-right:0}
+.pc{min-height:300px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line);align-items:stretch}
+.pc::after{display:none}
+.pc-n{position:absolute;top:18px;left:24px;font:900 italic 88px/.8 var(--f-display);color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.22)}
+.pc-b{display:flex;flex-direction:column;justify-content:flex-end}
+.pc-b .btn{align-self:flex-start}
+.rc{aspect-ratio:auto;min-height:170px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line)}
+.rc::after{display:none}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -376,7 +390,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 
 <main>
 <section class="hero" aria-labelledby="h1">
-  <div class="hero-img" style="background-image:url('../img/orange-pod.jpg');--pos:60% 40%" role="img" aria-label="Paraglider racing at SRS Tapalpa 2026"></div>
+  <div class="hero-img" style="background-image:url('../img/pink-close.jpg');--pos:60% 40%" role="img" aria-label="Paraglider racing at SRS Tapalpa 2026"></div>
   <div class="wrap">
     <img class="hero-srs" src="../img/srs-full-white.png" alt="Sports-Class Racing Series">
     <div class="eyebrow">SRS 2027 · Round 3 of 4 <span class="chip ok">Confirmed</span></div>
@@ -402,15 +416,15 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
       <div class="lockup"><img src="../img/srs-full-white.png" alt="Sports-Class Racing Series"><span><b>SRS North Macedonia 2027</b>Krushevo, North Macedonia</span></div>
       <p class="statement" id="iH">Krushevo offers a quality of venue unmatched by any other for its large task area, reliable weather and professional team.</p>
     </div>
-    <figure class="ph"><img src="../img/pink-close.jpg" alt="Paraglider in a racing glide, SRS Tapalpa 2026" loading="lazy"><figcaption>© Aninder Singh</figcaption></figure>
+    <div class="vcard" aria-label="Venue"><span class="eyebrow">Venue</span><b class="vc-name">Krushevo</b><span class="vc-place">Krushevo</span><span class="vc-line"><i>North Macedonia</i><i>22–29 Aug 2027</i></span></div>
   </div>
 </section>
 
 <section class="trio" aria-label="Race, follow and travel">
   <div class="wrap">
-    <article class="pc"><img src="../img/pink-close.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Race</h3><p>7 racing tasks · €370 entry · 120 pilots max.</p><a class="btn btn-o" href="https://airtribune.com/srs-2027-3/">Register</a></div></article>
-    <article class="pc"><img src="../img/gin-field.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Follow live</h3><p>Every pilot is tracked live on Airtribune, task by task.</p><a class="btn btn-o" href="../live.html">Live tracking</a></div></article>
-    <article class="pc"><img src="../img/coral-terraces.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Plan your trip</h3><p>Fly to Skopje (about 2 hours&#x27; drive) or Ohrid (about 1 h 40).</p><a class="btn btn-o" href="#info" data-open-tab="travel">Getting there</a></div></article>
+    <article class="pc"><span class="pc-n" aria-hidden="true">01</span><div class="pc-b"><h3>Race</h3><p>7 racing tasks · €370 entry · 120 pilots max.</p><a class="btn btn-o" href="https://airtribune.com/srs-2027-3/">Register</a></div></article>
+    <article class="pc"><span class="pc-n" aria-hidden="true">02</span><div class="pc-b"><h3>Follow live</h3><p>Every pilot is tracked live on Airtribune, task by task.</p><a class="btn btn-o" href="../live.html">Live tracking</a></div></article>
+    <article class="pc"><span class="pc-n" aria-hidden="true">03</span><div class="pc-b"><h3>Plan your trip</h3><p>Fly to Skopje (about 2 hours&#x27; drive) or Ohrid (about 1 h 40).</p><a class="btn btn-o" href="#info" data-open-tab="travel">Getting there</a></div></article>
   </div>
 </section>
 
@@ -462,7 +476,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 <section class="s" aria-labelledby="rH">
   <div class="wrap">
     <div class="sh"><div><span class="eyebrow">Sports-Class Racing Series</span><h2 class="up" id="rH">The 2027 season</h2></div><a class="btn btn-ghost" href="../index.html#srs">Season calendar</a></div>
-    <div class="rail"><a class="rc " href="slovenia-lijak.html" aria-label="SRS Slovenia 2027"><img src="../img/pink-blur.jpg" alt="" loading="lazy"><span class="t"><span>Round 1 of 4</span><b>Lijak</b><em>15–21 Mar 2027</em></span></a><a class="rc " href="france-montclar.html" aria-label="SRS France, Montclar 2027"><img src="../img/white-blur.jpg" alt="" loading="lazy"><span class="t"><span>Round 2 of 4</span><b>St Jean Montclar</b><em>20–27 Jun 2027</em></span></a><a class="rc " href="world-sports-final-gemona.html" aria-label="1st SRS World Sports Final"><img src="../img/pod-closeup.jpg" alt="" loading="lazy"><span class="t"><span>World Sports Final</span><b>Gemona</b><em>17–24 Jul 2027</em></span></a><a class="rc cur" href="north-macedonia-krushevo.html" aria-label="SRS North Macedonia 2027, this page"><img src="../img/orange-pod.jpg" alt="" loading="lazy"><span class="t"><span>Round 3 of 4</span><b>Krushevo</b><em>22–29 Aug 2027</em></span></a><a class="rc " href="france-st-andre.html" aria-label="SRS St. André les Alpes 2027"><img src="../img/coral-terraces.jpg" alt="" loading="lazy"><span class="t"><span>Round 4 of 4</span><b>St André</b><em>12–19 Sep 2027</em></span></a></div>
+    <div class="rail"><a class="rc " href="slovenia-lijak.html" aria-label="SRS Slovenia 2027"><span class="t"><span>Round 1 of 4</span><b>Lijak</b><em>15–21 Mar 2027</em></span></a><a class="rc " href="france-montclar.html" aria-label="SRS France, Montclar 2027"><span class="t"><span>Round 2 of 4</span><b>St Jean Montclar</b><em>20–27 Jun 2027</em></span></a><a class="rc " href="world-sports-final-gemona.html" aria-label="1st SRS World Sports Final"><span class="t"><span>World Sports Final</span><b>Gemona</b><em>17–24 Jul 2027</em></span></a><a class="rc cur" href="north-macedonia-krushevo.html" aria-label="SRS North Macedonia 2027, this page"><span class="t"><span>Round 3 of 4</span><b>Krushevo</b><em>22–29 Aug 2027</em></span></a><a class="rc " href="france-st-andre.html" aria-label="SRS St. André les Alpes 2027"><span class="t"><span>Round 4 of 4</span><b>St André</b><em>12–19 Sep 2027</em></span></a></div>
   </div>
 </section>
 </main>

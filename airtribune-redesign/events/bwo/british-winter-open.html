@@ -356,6 +356,20 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .tnote .btn{margin-left:0}
   .words .w{white-space:normal}
 }
+/* ---------- one photo per page: typographic venue card, numbered cards, text-only season rail ---------- */
+.vcard{position:relative;padding:34px 0 30px;border-top:2px solid var(--orange);border-bottom:1px solid var(--line-2)}
+.vc-name{display:block;margin:14px 0 10px;font:900 italic clamp(56px,7vw,104px)/.85 var(--f-display);text-transform:uppercase;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.85);letter-spacing:-.02em;overflow-wrap:anywhere}
+.vc-place{display:block;font:300 italic clamp(18px,1.8vw,24px)/1.2 var(--f-display);color:var(--ink-2)}
+.vc-line{display:flex;gap:0;margin-top:22px;flex-wrap:wrap}
+.vc-line i{font:700 12px var(--f-body);font-style:normal;letter-spacing:.16em;text-transform:uppercase;color:#fff;padding-right:16px;margin-right:16px;border-right:1px solid var(--line-2)}
+.vc-line i:last-child{border-right:0}
+.pc{min-height:300px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line);align-items:stretch}
+.pc::after{display:none}
+.pc-n{position:absolute;top:18px;left:24px;font:900 italic 88px/.8 var(--f-display);color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.22)}
+.pc-b{display:flex;flex-direction:column;justify-content:flex-end}
+.pc-b .btn{align-self:flex-start}
+.rc{aspect-ratio:auto;min-height:170px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line)}
+.rc::after{display:none}
 
 /* ---------- BWO: past editions + field ---------- */
 .hist-k{font:600 13px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -402,7 +416,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 
 <main>
 <section class="hero" aria-labelledby="h1">
-  <div class="hero-img" style="background-image:url('../img/pink-forest.jpg');--pos:50% 45%" role="img" aria-label="Paraglider racing at SRS Tapalpa 2026"></div>
+  <div class="hero-img" style="background-image:url('../img/gin-field.jpg');--pos:50% 45%" role="img" aria-label="Paraglider racing at SRS Tapalpa 2026"></div>
   <div class="wrap">
     <div class="eyebrow">British Paragliding Open · 8th edition <span class="chip ok">Confirmed</span></div>
     <h1 class="up" id="h1">Panchgani</h1>
@@ -427,15 +441,15 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
       <div class="lockup"><span style="border-left:0;padding-left:0"><b>8th British Winter Open</b>Panchgani, Maharashtra, India</span></div>
       <p class="statement" id="iH">Keep your race form through the northern winter: a week of tasks over India's Table Land, straight after the PWC at the same venue.</p>
     </div>
-    <figure class="ph"><img src="../img/gin-field.jpg" alt="Paraglider in a racing glide, SRS Tapalpa 2026" loading="lazy"><figcaption>© Aninder Singh</figcaption></figure>
+    <div class="vcard" aria-label="Venue"><span class="eyebrow">Venue</span><b class="vc-name">Panchgani</b><span class="vc-place">Panchgani, Maharashtra</span><span class="vc-line"><i>India</i><i>23 Feb – 2 Mar 2027</i></span></div>
   </div>
 </section>
 
 <section class="trio" aria-label="Race, follow and travel">
   <div class="wrap">
-    <article class="pc"><img src="../img/pink-close.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Race</h3><p>Seven tasks · £300 entry · 120 pilots max, selected by WPRS.</p><a class="btn btn-o" href="https://airtribune.com/bwo2027/">Register</a></div></article>
-    <article class="pc"><img src="../img/orange-blur.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Follow live</h3><p>Every pilot tracked live on Airtribune during the event. Until then, replay any task from past editions.</p><a class="btn btn-o" href="https://airtribune.com/bwo2027/">Live tracking</a></div></article>
-    <article class="pc"><img src="../img/coral-terraces.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Plan your trip</h3><p>Fly to Pune (120 km) or Mumbai (255 km), then a taxi. HQ rooms from about €35.</p><a class="btn btn-o" href="#info" data-open-tab="travel">Getting there</a></div></article>
+    <article class="pc"><span class="pc-n" aria-hidden="true">01</span><div class="pc-b"><h3>Race</h3><p>Seven tasks · £300 entry · 120 pilots max, selected by WPRS.</p><a class="btn btn-o" href="https://airtribune.com/bwo2027/">Register</a></div></article>
+    <article class="pc"><span class="pc-n" aria-hidden="true">02</span><div class="pc-b"><h3>Follow live</h3><p>Every pilot tracked live on Airtribune during the event. Until then, replay any task from past editions.</p><a class="btn btn-o" href="https://airtribune.com/bwo2027/">Live tracking</a></div></article>
+    <article class="pc"><span class="pc-n" aria-hidden="true">03</span><div class="pc-b"><h3>Plan your trip</h3><p>Fly to Pune (120 km) or Mumbai (255 km), then a taxi. HQ rooms from about €35.</p><a class="btn btn-o" href="#info" data-open-tab="travel">Getting there</a></div></article>
   </div>
 </section>
 

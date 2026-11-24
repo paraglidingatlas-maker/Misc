@@ -518,7 +518,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .fcard h3{font:800 30px/1.05 var(--f-display);letter-spacing:-.01em;margin-bottom:10px}
 .fcard p{margin:0 0 18px;color:#3c5052}
 .fcred{position:absolute;z-index:1;right:max(32px,env(safe-area-inset-right,0px));bottom:14px;font:300 italic 11px/1 var(--f-body);letter-spacing:.02em;text-transform:none;color:rgba(255,255,255,.45)}
-.host{background:linear-gradient(90deg,rgba(3,16,15,.96) 30%,rgba(3,16,15,.7)),url("img/coral-terraces.jpg") center/cover no-repeat}
+.host{background:linear-gradient(90deg,rgba(3,16,15,.96) 30%,rgba(3,16,15,.7))}
 @media (max-width:720px){ .srs-sec{background:linear-gradient(0deg,var(--deep) 0%,rgba(3,16,15,.9) 55%,rgba(3,16,15,.6) 100%),url("img/pink-forest.jpg") center top/cover no-repeat} .fcard{padding:22px} .fcard h3{font-size:24px} .fcred{display:none} }
 
 /* ---------- glass system: translucent, hazy surfaces instead of solid fills ---------- */
@@ -784,7 +784,7 @@ const MONTH_FULL = ["January","February","March","April","May","June","July","Au
 
 /* Airtribune event slug per round (airtribune.com/<slug>/: registration, pilot list, live tracking) */
 const AT_SLUG = {"FM Punjab Cup Pakistan 26": "fm-punjab-cup-pakistan-26", "RS Paragliding Championship Encantado": "rs-paragliding-championship-encantado", "RS Paragliding Championship Final Sapiranga": "rs-paragliding-championship-final-sapiranga", "Porterville Paragliding Open 2026": "porterville-open-2026", "Open Distance Challenge Apía 2027": "records-en-el-horizonte", "Primera Válida Nacional Open Roldanillo 2027": "opennacional2027", "Copa Niviuk 2027": "copa-niviuk-2027-iv-edicion", "Manilla PG Sports TDD 2027": "manilla-pg-sports-tdd-2027", "Copa de las Américas Roldanillo 2027": "copadelasamericas2027", "2nd Copa Dédalo's Piedechinche 2027": "2nd-copa-dedalos-piedechinche-2027-powered-sup-air", "Bright Open 2027": "bright-open-2027", "Corryong PG Open 2027": "corryong-pg-open-2027", "8th British Winter Open": "bwo2027", "Open Paragliding Costa Rica 2027": "open-paragliding-costa-rica-2027", "Andes Tour Hike and Fly Challenge": "andes-tour-hike-and-fly-challenge", "Vipava Valley Open 2027": "vv-open-2027", "Corryong Sports Cup 2027": "corryong-sports-cup-2027", "SRS Slovenia 2027": "srs-2027-1", "Glencoe Scottish National 2027": "glencoe-scottish-national-2027", "X-Scotia Hike and Fly 2027": "x-scotia-hike-and-fly-2027", "11th Naviter Open 2027": "no2027", "SRS France, Montclar 2027": "srs-2027-2", "Ozone Chabre Open 2027": "oco2027", "1st SRS World Sports Final": "srs-2027-wsf", "SRS North Macedonia 2027": "srs-2027-3", "SRS St. André-les-Alpes 2027": "srs-2027-4"};
-const SRS_PAGE = {"SRS Slovenia 2027":["srs/slovenia-lijak.html","pink-blur"],"SRS France, Montclar 2027":["srs/france-montclar.html","white-blur"],"1st SRS World Sports Final":["srs/world-sports-final-gemona.html","pod-closeup"],"SRS North Macedonia 2027":["srs/north-macedonia-krushevo.html","orange-pod"],"SRS St. André-les-Alpes 2027":["srs/france-st-andre.html","coral-terraces"],"8th British Winter Open":["bwo/british-winter-open.html","pink-forest"]};
+const SRS_PAGE = {"SRS Slovenia 2027":["srs/slovenia-lijak.html",null],"SRS France, Montclar 2027":["srs/france-montclar.html",null],"1st SRS World Sports Final":["srs/world-sports-final-gemona.html",null],"SRS North Macedonia 2027":["srs/north-macedonia-krushevo.html",null],"SRS St. André-les-Alpes 2027":["srs/france-st-andre.html",null],"8th British Winter Open":["bwo/british-winter-open.html",null]};
 const NOW = Date.now();
 const ymd = s => s.split("-").map(Number);
 const EV = RAW.map((r,i) => {
@@ -1328,7 +1328,7 @@ function rowHTML(e){
   const run = [e.city, `${e.days} day${e.days>1?"s":""}`, typeLabel(e)].map(x=>`<span>${x}</span>`).join("<i>/</i>");
   const distTxt = `<b>${t.total.toFixed(1)} km</b><small>${t.cyl.length-2} TP · preview</small>`;
   const right = e.type==="srs"
-    ? `<span class="ph" style="background-image:url('img/${e.photo}.jpg')"><svg data-glyph="${e.i}" aria-hidden="true"></svg><b>${t.total.toFixed(1)} km<small>${t.cyl.length-2} TP</small></b></span>`
+    ? `<span class="ph"${e.photo ? ` style="background-image:url('img/${e.photo}.jpg')"` : ""}><svg data-glyph="${e.i}" aria-hidden="true"></svg><b>${t.total.toFixed(1)} km<small>${t.cyl.length-2} TP</small></b></span>`
     : `<span class="dist"><svg data-glyph="${e.i}" aria-hidden="true"></svg><span>${distTxt}</span></span>`;
   const tail = feat
     ? `<span class="cd"><span class="k"><i></i>${live ? "Live now" : "Next round · starts in"}</span><strong class="mono" data-cd="${e.i}">${cdText(e)}</strong>${live ? `<a class="btn btn-o" href="live.html">Watch live</a>` : `<button class="btn btn-o" data-open="${e.i}">Race details</button>`}</span>`
