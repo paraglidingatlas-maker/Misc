@@ -39,6 +39,30 @@ Sources are in `airtribune-redesign/src/`:
 - Thumbnails: task map on cards, live race in round details.
 - **Logo is final: Heritage (study direction No. 1)**: red triangle + blue square, lowercase wordmark with triangle dots on the i's. Live on every page, the favicon, the live-tracker top bar (tile) and the broadcast-view corner bug. The owner briefly picked Thermal/Pinwheel with a switch, then settled on Heritage; the switch was removed.
 
+
+## Next job: modern live view (owner asked 24 Nov 2026: "let's work on the modern live view, how can we improve it")
+
+Review of events/live.html (src/live-tracker.html) at 1440, 390 and broadcast view found these problems:
+- Before the start gate the leaderboard ranks pilots by distance to goal with "+0.1" gaps; meaningless. Pilot names are cut off ("POL BE…").
+- The top bar shows "Leader on SSS → SSS"; the map's leader chip (e.g. CASTRO) disagrees with leaderboard P1.
+- The "drag to pan" hint covers the Task chip; pilot labels overlap in the gaggle ("P1 SIGEL" over "…ERKE").
+- The map is stylised relief only: no real terrain, no thermals or wind, nothing that explains why the race unfolds as it does.
+- No altitude story: no barogram or altitude band, the 3D view is basic.
+- The race feed is almost empty and the timeline has no event markers.
+- Phone: the header and stats fill half the screen, the leaderboard is hidden, the map is cramped.
+
+Proposed improvements, in priority order (show the owner, let them pick):
+1. Race states that change what is shown: pre-start (gaggle by height, time to gate) / racing (rank by distance flown, time gaps) / goal (arrivals, final order).
+2. Real terrain + satellite basemap (e.g. MapLibre with open terrain tiles), thermal hotspots from the IGC climbs, wind arrow.
+3. Gaggle clustering: group nearby pilots into one bubble with count, label collision avoidance.
+4. Barogram / altitude band under the map for the selected pilot vs leader, synced to the timeline.
+5. Timeline with event markers: gate open, lead changes, turnpoints, first in goal; click to jump.
+6. Auto race feed generated from the data: "Sigel takes the lead", "12 pilots tagged Las Gemelas", "Desmond lands out".
+7. Compare mode: pick 2–3 pilots, ghost lines and live gap in time and height.
+8. Phone layout: full-screen map, bottom sheet with leaderboard (drag up), compact top bar.
+9. Shareable moments: link to a timestamp + camera, and a clip/still export for social.
+10. Broadcast polish: lower-third captions from the feed, auto-director camera that follows the biggest change.
+
 ## Open items
 
 - **Done this chat:** Rounds section redesigned to the agreed brief (ruled timing-board rows, sticky month rail, SRS rows with photo + route glyph, next-round strip with the only orange button, completed-rounds fold row, one filter bar with region dropdown; ~2,450 px at 1440). Renderer: `/* ROUNDS: timing-board rows */` in `src/season-calendar.html`.
