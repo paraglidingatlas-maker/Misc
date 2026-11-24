@@ -40,6 +40,7 @@ header.top p{color:var(--ink-2);max-width:640px;font-size:16px}
 .toc a{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:#fff;text-decoration:none;font-weight:600;font-size:14px}
 .toc a:hover{border-color:var(--orange)}
 .toc a b{font:900 italic 18px var(--f-display);color:var(--orange)}
+.chosen{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;margin:14px 0 22px;padding:18px 20px;border:1px solid rgba(255,95,0,.5);border-radius:14px}.chosen .lab{width:100%;font:800 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}.chl{font-size:30px}.chs{flex:1 1 260px;color:var(--ink-2);font-size:14px}
 .toc a.rec{border-color:rgba(255,95,0,.5)}
 
 section.dir{padding-block:96px 0;border-top:1px solid var(--line);margin-top:72px}
@@ -132,6 +133,7 @@ footer{margin-top:110px;padding-block:40px;border-top:1px solid var(--line);colo
 <header class="top">
   <div class="wrap">
     <span class="eyebrow">Brand study</span>
+    <div class="chosen"><span class="lab">Chosen · Thermal / Pinwheel</span><span class="chl" data-brand></span><span class="chs">Now live on every page. No. 1 (Heritage) stays one click away: use the Logo switch in the concept bar on any page.</span></div>
     <h1>The Airtribune mark</h1>
     <p>Four directions for the mark, each built from something the current logo already owns. Every direction is shown where it has to work: the dark site navigation, a light background, an app icon and a 16-pixel browser tab.</p>
     <div class="today">
@@ -212,7 +214,7 @@ document.getElementById("dirs").innerHTML = DIRS.map(d => `
     <div class="dh">
       <span class="num" aria-hidden="true">${d.n}</span>
       <div><span class="eyebrow">Direction ${d.n}</span><h2 id="${d.id}h">${d.name}</h2><p>${d.line}</p></div>
-      ${d.rec ? '<span class="pick">Recommended</span>' : "<span></span>"}
+      ${d.rec ? '<span class="pick">Chosen</span>' : "<span></span>"}
     </div>
     <div class="plate">
       <div class="big">${MARK[d.key](d.dark[1], d.dark[2])}</div>
@@ -246,5 +248,6 @@ document.getElementById("dz").innerHTML = DZ.map(d => `<div class="dzr">
   <div class="dzm">${d.m.map((m,i) => { const src = `designers/${d.n}/mark-${"ab"[i]}.svg`; return `<div class="dzc"><div class="pl"><img src="${src}" alt="${m[0]} mark"></div><div class="row"><img src="${src}" alt=""><img src="${src}" alt=""><b>${m[0]}</b></div><div class="why">${m[1]}</div></div>`; }).join("")}</div>
 </div>`).join("");
 </script>
+<script src="../assets/brand.js" defer></script>
 </body>
 </html>

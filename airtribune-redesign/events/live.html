@@ -99,6 +99,7 @@ a{color:inherit;text-decoration:none}
 .map-ov.tl{left:14px;top:14px;flex-direction:column;align-items:flex-start}
 .leg{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:rgba(3,16,15,.82);backdrop-filter:blur(8px);border:1px solid var(--line-2);font:700 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
 .leg b{color:#fff;font:800 italic 14px var(--f-display);letter-spacing:0}
+.toast:empty{display:none}
 .toast{position:absolute;z-index:4;left:50%;top:16px;transform:translate(-50%,-140%);padding:10px 16px;border-radius:8px;background:var(--orange);color:#fff;font:800 italic 15px var(--f-display);text-transform:uppercase;box-shadow:0 20px 40px -12px rgba(0,0,0,.6);transition:transform .5s cubic-bezier(.3,.8,.2,1);white-space:nowrap}
 .toast.on{transform:translate(-50%,0)}
 
@@ -173,6 +174,7 @@ a{color:inherit;text-decoration:none}
 }
 
 /* ---------- glass system ---------- */
+.toast:empty{display:none}
 .toast{background:rgba(8,28,31,.72);color:#FFD9C4;border:1px solid rgba(255,150,92,.45);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 20px 50px -18px rgba(255,95,0,.45)}
 .livepill{background:rgba(255,45,45,.16);color:#FFC2C2;box-shadow:inset 0 0 0 1px rgba(255,90,90,.5)}
 .livepill i{background:#FF5A5A}
@@ -185,6 +187,11 @@ a{color:inherit;text-decoration:none}
 .row.sel{box-shadow:inset 2px 0 0 rgba(255,150,92,.8)}
 
 /* ---------- broadcast view: full-bleed map, minimal SailGP-style overlays ---------- */
+.t-at{display:contents}
+.cine-bug{display:none}
+.app.cine .cine-bug{display:flex;position:absolute;z-index:4;right:max(20px,env(safe-area-inset-right,0px));bottom:16px;padding:8px 12px;border-radius:6px;background:rgba(3,16,15,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:15px;color:#fff}
+@media (max-width:1100px){.app.cine .cine-bug{display:none}}
+
 .cine-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:8px;background:var(--orange);color:#fff;font:800 10.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase}
 .cine-btn:hover{background:#ff7420}
 .cine-board,.cine-bar,.cine-exit{display:none}
@@ -247,18 +254,17 @@ a{color:inherit;text-decoration:none}
 .maphint.gone{opacity:0}
 .app.cine .compass{top:148px;right:max(20px,env(safe-area-inset-right,0px))}
 .app.cine .maphint{display:none}
-@media (max-width:820px){ .maphint{font-size:9.5px;top:auto;bottom:10px} .app.cine .compass{top:176px;right:10px} }
+@media (max-width:820px){ .maphint{font-size:9.5px;top:auto;bottom:10px;white-space:normal;text-align:center;width:max-content;max-width:calc(100% - 32px)} .bottom .ctl{flex-wrap:wrap} .cine-btn{padding:0 10px} .app.cine .compass{top:176px;right:10px} }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
-
 <div class="app">
   <div class="concept"><b>CONCEPT</b><span>Unofficial Airtribune live-tracking concept. Not affiliated with or endorsed by Airtribune or the Sports-Class Racing Series. Task, pilots and race are simulated.</span></div>
 
   <header class="top">
-    <div class="t-brand"><a href="index.html" class="t-back" aria-label="Back to season calendar">←</a><img data-srs="white" alt="Sports-Class Racing Series"><div><h1>SRS Slovenia 2027</h1><p id="tSub"></p></div></div>
+    <div class="t-brand"><a href="index.html" class="t-back" aria-label="Back to season calendar">←</a><span class="t-at" data-brand="tile" role="img" aria-label="Airtribune"></span><img data-srs="white" alt="Sports-Class Racing Series"><div><h1>SRS Slovenia 2027</h1><p id="tSub"></p></div></div>
     <div><span class="livepill" id="livePill"><i></i>LIVE</span></div>
     <div><span class="lbl">Race time</span><span class="t-big num" id="tClock">+0:00:00</span></div>
     <div class="t-local"><span class="lbl">Local</span><span class="t-mid num" id="tLocal">12:30</span></div>
@@ -284,6 +290,7 @@ a{color:inherit;text-decoration:none}
       <div class="maphint" id="maphint">Drag to pan · Right-drag or Shift+drag to rotate · Scroll to zoom</div>
       <div class="cine-board" id="cineBoard" aria-label="Top five"></div>
       <div class="cine-bar" id="cineBar" aria-live="off"></div>
+      <div class="cine-bug" data-brand aria-label="Airtribune live"></div>
       <button class="cine-exit" id="cineExit" aria-label="Exit broadcast view">Exit broadcast <kbd>Esc</kbd></button>
       <div class="tele" id="tele" aria-live="off">
         <div class="tele-h"><span class="fl" id="teFlag"></span><b id="teName">—</b><span class="p" id="tePos">P1</span></div>
@@ -831,6 +838,7 @@ build(); frame(true);
 if (location.hash === "#broadcast") setCine(true);
 requestAnimationFrame(loop);
 </script>
+<script src="../assets/brand.js" defer></script>
 
 </body>
 </html>

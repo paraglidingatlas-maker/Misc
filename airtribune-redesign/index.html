@@ -22,12 +22,14 @@ a.card:hover,a.card:focus-visible{transform:translateY(-3px);border-color:var(--
 .card h2{margin:0;font:900 italic 30px/.95 "Archivo",sans-serif;font-stretch:125%;text-transform:uppercase}
 .card p{margin:0;color:var(--ink-2);font-size:14.5px}
 .go{margin-top:auto;font:700 11px "JetBrains Mono",monospace;letter-spacing:.1em}
+.brandbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:40px}.brandlock{font-size:24px}.brandbar .atb-sw{margin-left:auto}
 footer{margin-top:48px;color:var(--muted);font-size:13px}
 @media (prefers-reduced-motion:reduce){a.card{transition:none}}
 </style>
 </head>
 <body>
 <main>
+  <div class="brandbar"><span class="brandlock" data-brand></span><span data-brand-switch></span></div>
   <span class="tag">CONCEPT</span>
   <h1>Airtribune<br>redesign</h1>
   <p class="lede">An unofficial design concept for airtribune.com, the live-tracking and competition platform for paragliding. Not affiliated with or endorsed by Airtribune. Event names and dates come from the public site; tasks, tracks and races are simulated.</p>
@@ -36,9 +38,11 @@ footer{margin-top:48px;color:var(--muted);font-size:13px}
     <a class="card" href="events/live.html"><span class="k">02 · LIVE</span><h2>Live tracker</h2><p>SailGP-style race viewer for an SRS task: nation-coloured pilots, re-sorting leaderboard, telemetry, follow-cam, 3D tilt and race feed.</p><span class="go">OPEN →</span></a>
     <a class="card" href="events/srs/slovenia-lijak.html"><span class="k">03 · SRS</span><h2>SRS event pages</h2><p>One page per Sports-Class Racing Series 2027 round, built from the official event details, with photography from SRS Tapalpa 2026.</p><span class="go">OPEN →</span></a>
     <a class="card" href="feed/"><span class="k">04 · FEED</span><h2>Live feed</h2><p>The activity feed rebuilt: live flight card, animated tracks on topographic maps, altitude profiles, filters and search, light and dark themes.</p><span class="go">OPEN →</span></a>
+    <a class="card" href="logo/"><span class="k">06 · LOGO</span><h2>Logo study</h2><p>Chosen: Thermal, the four legacy triangles turned into a pinwheel. Switch to No. 1 (Heritage) from the bar at the top of any page.</p><span class="go">OPEN →</span></a>
     <a class="card" href="thumbnails/"><span class="k">05 · STUDY</span><h2>Thumbnail options</h2><p>Four paragliding-accurate thumbnail styles compared: task map, GPS tracklog, barogram and live race.</p><span class="go">OPEN →</span></a>
   </div>
   <footer>Concept by Paragliding Atlas · 2026</footer>
 </main>
+<script src="assets/brand.js" defer></script>
 </body>
 </html>
