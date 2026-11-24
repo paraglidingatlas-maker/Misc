@@ -1,0 +1,222 @@
+ 
+ Paragliding World Cup 
+ Home
+ Events 
+ Events
+ Pre World Cup Events
+ Past Events
+ Results
+ Athletes Gallery 
+ PWC France 2024
+ PWC Switzerland 2024
+ Superfinal 2023
+ News
+ About Us 
+ About Us
+ PWC Champions
+ PWCA Statutes
+ Rules
+ Contact
+ Login
+ div>svg]:size-5" data-flux-navbar-items="data-flux-navbar-items">
+ Login
+ div>svg]:size-5" data-flux-navbar-items="data-flux-navbar-items" target="_blank">
+ div>svg]:size-5" data-flux-navbar-items="data-flux-navbar-items" target="_blank">
+ Home
+ Events
+ Events
+ Pre World Cup Events
+ Past Events
+ Results
+ Athletes Gallery
+ PWC France 2024
+ PWC Switzerland 2024
+ Superfinal 2023
+ News
+ About Us
+ About Us
+ PWC Champions
+ PWCA Statutes
+ Rules
+ Contact
+ PWCA Asian Tour India Panchgani 2027 - Season 2026
+ 06.02.2027 - 12.02.2027 
+ India, Panchgani 
+ 02 
+ months 
+ 11 
+ days 
+ Live Tracking
+ Pilot Information
+ Live Scoring
+ Results
+ Comp. Overall
+ Overall 
+ Women 
+ Teams 
+ Pilot Information
+ Organizing Team 
+ Organizing Team: 
+ Meet Director : Dora Goksal
+ Organiser: Krishan Kant Bhagra
+ Rescue Operations: TBC
+ Supporting Associaitons: 
+ Directorate of Tourism , Maharashtra
+ NAC: Aero Club of India
+ Event Organiser : 
+ Email: [email hidden on pwca.org] 
+ Whatsapp: +91 9816648041
+ Travel Information and Local Support: 
+ Email: [email hidden on pwca.org] 
+ HQ Location: 
+ Cloudmist Resort and SPA 
+ Address:
+Panchgani – Mahabaleshwar Rd, Panchgani, Maharashtra 412805 · 0124 620 1305
+Distance from Town Centre: 4.8 km
+Taxi Fare from Town Centre: Approx. INR 200 (≈ €2) one way for 2–3 people. Taxis are easily available at the city centre taxi stand.
+ An evening shuttle at a fixed time will be available for pilots from HQ to the Town Centre.
+ Facilities at HQ:
+• Conference Hall for daily briefing
+• Multicuisine restaurant
+• Swimming pool
+ Livetracking information: 
+ Satellite trackers 
+From 1 Jan 2026 satellite trackers are mandatory for all PWCA events. This rule is still in place, but we know that there is a problem importing/exporting satellite communication devices into/from India. Because of these known problems - we have to make exception from this rule for Asian Tour and PWC Panchgani. For these two events satellite trackers won't be mandatory and we recommend to leave them home. Of course if you live in India or you already brought you satellite tracker to the country - we will accept it and you will be able to use it. If you decide to travel with satellite tracker to India - you are doing it on your own risk.
+ Livetracking provided by the organizer 
+Flymaster Trackers (the models without antenna) will be provided and used for safety and scoring just like in any other PWCA event.
+As a replacement for the satellite trackers the organizer will build a custom system with radio devices and receivers on the ground. The devices communicate between each-other and with the ground receivers by LoRa standard. They build an ad-hoc network which is able to transmit (re-transmit) position messages through the network on very large distances. The two livetracking systems (GSM-based and radio-based) will work in parallel and complementary to each-other for maximum safety for the pilots. There will be no additional charge for the second livetracking system.
+ Flying site 
+ Panchgani is one of the top paragliding destinations in India, located in the Satara district of Maharashtra. This picturesque hill station and municipal town is nestled amid five hills in the Sahyadri mountain range, surrounded by the villages of Dandeghar, Khingar, Godwali, Amral, and Taighat. The Krishna River flows nearby, forming the scenic Dhom Dam, located just 9 km from Wai.
+To the east of Panchgani lie Wai, Bavdhan, and Nagewadi Dam; to the west is Gureghar; to the south are Khingar and Rajpuri; and to the north stands the Dhom Dam.
+The climate in Panchgani is generally pleasant, with winter temperatures averaging around 12°C and summer temperatures occasionally reaching 34°C. Despite the warmth, humidity remains low. The region experiences heavy monsoon rains from June to February, followed by a dry and sunny spring lasting about three months. The five hills surrounding Panchgani are crowned by a vast volcanic plateau, the second-largest in Asia after the Tibetan Plateau. Locally known as the “Table Land,” this geological wonder forms part of the Deccan Plateau and was created by tectonic uplift between the earth’s plates.
+ Paragliding Season and Conditions 
+ February marks the best time for paragliding in Panchgani. Early spring offers ideal flying conditions with mild temperatures, strong thermals, and moderate wind speeds—making it a perfect venue for both leisure and competition flying.
+The region’s topography of small hills and adjoining flatlands provides excellent cross-country and competition flying opportunities. All take-off sites are easily accessible by car and are equipped with green mats. Sunshades are installed at launch and landing areas where needed. The convergence of sea breeze from the west and land breeze from the east often creates convergence lines over Panchgani, resulting in rewarding flights with great altitude gains and spectacular views.
+Top-landing at the Table Land is easy and safe for pilots of all levels. Numerous alternate landing options are available across the flatlands and lakeside areas, all suitable for varying skill levels. The official landing zone is located at the Boat Club—an obstacle-free, serene, and scenic area. Depending on the day’s task setup, several other safe landing options are available, all well-connected by a robust road network.
+ You can find the flying area map, in the document below:
+ https://drive.google.com/file/d/1_1DYozclJPhy5E6ntz7BoOghSrsvwAfn/view?usp=sharing 
+ Safety & Rescue details 
+ Emergency Medical & Rescue Arrangements 
+ Two (02) ambulances will be strategically stationed—one at the takeoff area and one at the landing zone.
+Each ambulance will be fully equipped with advanced life-support systems including ventilators, defibrillators, patient monitors, in-built ECG machines, syringe pumps, and other critical equipment necessary for monitoring and stabilizing patients in emergency situations.
+ Medical Staff 
+• Doctor: One (01) qualified doctor will be present at the takeoff area and will accompany the ambulance to the landing zone or any location where medical assistance is required.
+• Nursing Staff: Each ambulance will be supported by two (02) nursing staff members.
+ Rescue Team 
+The Rescue Team will be led by Mr. Ganesh Geeth, a highly experienced and dependable professional renowned for his rescue operations during previous Pre-World Cup events in Panchgani and numerous mountain rescues across Maharashtra.
+The team is equipped with two (02) dedicated SUV vehicles capable of navigating off-road terrain and carrying all necessary rescue and first-aid equipment suited for the Panchgani landscape.
+ Helicopter Rescue 
+At present, heli-rescue facilities are not available. The organizers are actively coordinating with authorities to arrange for a heli-ambulance service during the event. Confirmation of availability will be notified once finalized.
+ Rescue Boat 
+One (01) power boat will be deployed at an optimal location on Dhom Lake to ensure rapid response in case of a water landing. Pilots are advised to exercise caution when flying near the lake, as Dhom is an extensive water body intersected by a landmass at its center. Standard precautions for flying over water should be strictly observed, as in any international venue.
+ Safety and Live Tracking 
+All participating pilots will be equipped with Flymaster Live Trackers for real-time tracking and safety monitoring. This system allows the safety team to locate pilots instantly in the event of an emergency, ensuring rapid response and coordination during the competition.
+ Trauma and Diagnostics – Immediate Care 
+ At Panchgani: Nearest to Panchgani Takeoffs
+• Bel Air General Hospital: For minor injuries and trauma. Facilities like X-ray and ECG are available.
+• Bel Air Hospital, WAI Unit: MRI facilities and diagnostics.
+Distance: Approximately 10 km from the town centre and most takeoffs around Panchgani.
+ Immediate Vicinity of Most Landings: Within 45 Minutes’ Road Distance by Ambulance
+• Ajinkya Hospital: Trauma centre, MRI facilities, and other emergency diagnostic facilities.
+• Satara Hospital: Trauma centre with MRI and emergency diagnostic facilities.
+ Multi-Speciality International Hospitals:
+• Apollo Hospital, Pune: Approximately 4 hours from Panchgani town.
+• Columbia Asia Hospital, Pune: Approximately 4 hours from Panchgani town.
+ These multi-speciality hospitals are equipped with the latest medical technology and specialist doctors capable of handling any emergencies.
+ Travel info 
+ How to Get to Panchgani 
+ By Air 
+The nearest international airport is Mumbai (Chhatrapati Shivaji Maharaj International Airport), located approximately 255 km from Panchgani—a drive of about 6 hours. However, peak traffic hours may affect travel times.
+The Pune International Airport is another convenient option, around 120 km away (approximately 2.5 to 3 hours by road).
+ By Road (Taxi) 
+You can easily book a taxi from either Mumbai or Pune Airport using several reliable services:
+ Ola Outstation – www.olacabs.com/outstation
+(also available via the Ola app)
+ Goibibo – www.goibibo.com 
+(Outstation Cab/Car Rentals)
+ Uber Intercity – available through the Uber app
+ Ola Outstation and Uber Intercity are the most convenient and economical options for travel from Mumbai or Pune to Panchgani.
+ Approximate one-way taxi fares (for 2 people with 2 glider bags):
+• Mumbai → Panchgani: ₹6,000 (≈ €60)
+• Pune → Panchgani: ₹3,000 (≈ €30)
+ By Bus 
+Regular private and state transport buses operate between Mumbai/Pune and Panchgani or Mahabaleshwar.
+Tickets can be booked online at: www.redbus.in 
+ The most comfortable and efficient way to reach Panchgani from Mumbai or Pune is by road taxi.
+ Accomodation 
+ Hotel Tariffs at Cloudmist:
+• Single Occupancy with Breakfast: INR 3,500 (≈ €35)
+• Double Occupancy with Breakfast: INR 4,500 (≈ €45)
+• Available Rooms: 30, allotted on a first-come, first-served basis to pilots booking in advance.
+• Please note Panchgani has little or no option for twin beds.
+ For reservations at HQ – Email to [email hidden on pwca.org] 
+ Waypoints & Airspace 
+ to be published
+ Selection List
+ All
+ Male
+ Female
+ #
+ Pilot
+ Country
+ Glider
+ Harness
+ Qualification Letters
+ Status
+ Late Registration
+ #
+ Pilot
+ Country
+ Glider
+ Harness
+ Qualification Letters
+ Status
+ Late Registration
+ #
+ Pilot
+ Country
+ Glider
+ Harness
+ Qualification Letters
+ Status
+ Late Registration
+ Explore
+India,
+Panchgani
+ See you in Panchgani
+ Daniel Dimov
+ Scorer
+ Ivan Lukanov
+ Safety & Retrieve Manager
+ Goran Dimiskovski
+ Event Manager
+ Congratulations to the winners, PWCA Brazil Baixo Guandu 2026
+ 11/10/2026 
+ Read more 
+ A Tactical Final Day in Baixo Guandu
+ 10/10/2026 
+ Read more 
+ Racing Under Blue Skies
+ 09/10/2026 
+ Read more 
+ Stay Up
+To Date
+ Follow us on our
+Social Media Accounts
+ 1 week ago
+ 2 weeks ago
+ 1 month ago
+ 1 month ago
+ OUR PARTNERS 
+ Paragliding World Cup Association 
+© 1991-2025  All rights reserved
+ Privacy
+ Policy 
+ Cookies
+ Policy 
+ Legal Notice 
+ Rules 
+ [email hidden on pwca.org] 
+ Powered by Aracnia
+ We use cookies to collect and analyse information on site performance and usage. By Clicking "Allow cookies", you agree to allow cookies to be placed.
+ Allow cookies
