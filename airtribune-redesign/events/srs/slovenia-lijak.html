@@ -20,6 +20,7 @@
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:70;background:var(--deep)}
@@ -207,9 +208,11 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 /* ---------- glass system: translucent, hazy surfaces instead of solid fills ---------- */
 .btn{font-weight:600;letter-spacing:.18em;font-size:11.5px;backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4)}
 .btn-o,.btn-red{background:linear-gradient(180deg,rgba(255,128,56,.26),rgba(255,95,0,.12));color:#FFE3D2;border:1px solid rgba(255,150,92,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 30px -14px rgba(255,95,0,.55)}
-.btn-o:hover,.btn-red:hover{background:linear-gradient(180deg,rgba(255,128,56,.38),rgba(255,95,0,.2));border-color:rgba(255,176,128,.7);color:#fff;transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 14px 36px -12px rgba(255,95,0,.65)}
+.btn{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,color .25s ease,transform .25s ease}
+.btn-o:hover,.btn-red:hover,.btn-o:focus-visible{background:linear-gradient(180deg,#FF8A3D,#FF5F00);border-color:#FFB07A;color:#fff;transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 0 0 1px rgba(255,140,70,.35),0 0 28px rgba(255,95,0,.75),0 0 70px rgba(255,95,0,.35)}
 .btn-ghost,.btn-line{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.2);color:#EAF2F3;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-.btn-ghost:hover,.btn-line:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.38)}
+.btn-ghost:hover,.btn-line:hover,.btn-ghost:focus-visible{background:rgba(255,95,0,.14);border-color:#FF8A3D;color:#fff;box-shadow:0 0 22px rgba(255,95,0,.45),inset 0 0 12px rgba(255,95,0,.15)}
+.btn-srs:hover{box-shadow:0 0 26px rgba(29,169,225,.45),0 0 26px rgba(227,30,45,.35)}
 .glass{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 70px -30px rgba(0,0,0,.75);backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35)}
 
 .chip.ok{background:rgba(43,212,196,.14);color:var(--teal);box-shadow:inset 0 0 0 1px rgba(43,212,196,.45)}
@@ -223,6 +226,82 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 .rc.cur{box-shadow:inset 0 0 0 1px rgba(255,150,92,.6)}
 .card,.feat,.tiles div,.day,.sched li,.draws div,.pill{backdrop-filter:blur(10px)}
 .nav .btn{height:38px}
+
+/* ---------- SailGP-style event layout ---------- */
+.intro .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;padding-block:96px 40px}
+.intro .eyebrow{color:var(--orange)}
+.lockup{display:flex;align-items:center;gap:18px;margin:18px 0 22px;padding-bottom:20px;border-bottom:1px solid var(--line-2)}
+.lockup img{height:64px}
+.lockup span{font:500 14px var(--f-body);color:var(--ink-2);border-left:1px solid var(--line-2);padding-left:18px}
+.lockup b{display:block;font:800 italic 22px/1.1 var(--f-display);text-transform:uppercase;color:#fff;margin-bottom:4px}
+.statement{font:600 17px/1.5 var(--f-body);text-transform:uppercase;letter-spacing:.02em;max-width:52ch}
+.ph{margin:0;position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph figcaption{position:absolute;left:14px;bottom:10px;font:600 10px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.trio .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pc{position:relative;border-radius:var(--r);overflow:hidden;min-height:380px;display:flex;align-items:flex-end;background:var(--panel)}
+.pc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.pc:hover img{transform:scale(1.05)}
+.pc::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,16,15,.95) 18%,rgba(3,16,15,.25) 65%,rgba(3,16,15,.1))}
+.pc-b{position:relative;z-index:1;padding:24px;width:100%}
+.pc h3{font:900 italic 30px/1 var(--f-display);text-transform:uppercase;margin-bottom:10px}
+.pc p{color:var(--ink-2);font-size:15px;margin-bottom:18px;max-width:34ch}
+.info{margin-top:96px;padding-block:64px 80px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01));border-block:1px solid var(--line)}
+.tabs{display:flex;justify-content:center;gap:0;margin-bottom:48px;flex-wrap:wrap}
+.tabs button{position:relative;padding:10px 26px;font:600 16px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--line-2)}
+.tabs button:last-child{border-right:0}
+.tabs button:hover{color:#fff}
+.tabs button[aria-selected="true"]{color:#fff;font-weight:800}
+.tabs button[aria-selected="true"]::after{content:"";position:absolute;left:50%;bottom:-12px;width:28px;height:3px;margin-left:-14px;background:var(--orange);border-radius:2px;box-shadow:0 0 14px rgba(255,95,0,.8)}
+.panel{animation:fade .45s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.split{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0}
+.split .col-l{padding-right:48px}
+.split .col-r{padding-left:48px;border-left:2px solid var(--line-2)}
+.panel h3{font:800 italic 22px var(--f-display);text-transform:uppercase;margin-bottom:16px}
+.panel p{color:var(--ink-2);margin-bottom:14px;max-width:58ch}
+.panel .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.sch{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:18px}
+.sch li b{display:block;font:800 15px var(--f-body);text-transform:uppercase;letter-spacing:.04em}
+.sch li span{color:var(--ink-2);font-size:15px}
+.links{display:grid;gap:6px}
+.links a{color:var(--orange);font-weight:600;font-size:14px}
+.links a:hover{color:#FF9A57;text-shadow:0 0 12px rgba(255,95,0,.6)}
+.lead{font-size:16px}
+.panel .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font-size:14px;font-weight:500}
+.entry-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:36px;flex-wrap:wrap}
+.fee{display:block;font:900 italic 56px/1 var(--f-display);margin-top:6px}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.mode{padding:24px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
+.mode .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(29,169,225,.12);color:var(--srs-blue);margin-bottom:16px}
+.mode h3{margin-bottom:12px}
+.mode ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.mode li{color:var(--ink-2);font-size:14.5px;padding-left:14px;position:relative}
+.mode li::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--orange)}
+.mode li b{color:#fff;font-weight:600}
+.callout{font-size:14px}
+.prz{padding-block:96px 0}
+.prz .wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+.prz h2{font-size:clamp(34px,4vw,52px);margin-bottom:14px}
+.prz p{color:var(--ink-2);max-width:46ch}
+.prz .prizes{grid-template-columns:repeat(2,1fr)}
+@media (max-width:1000px){
+  .intro .wrap,.prz .wrap{grid-template-columns:minmax(0,1fr)}
+  .trio .wrap{grid-template-columns:minmax(0,1fr)}
+  .pc{min-height:300px}
+  .split{grid-template-columns:minmax(0,1fr)}
+  .split .col-l{padding-right:0}
+  .split .col-r{padding-left:0;border-left:0;border-top:2px solid var(--line-2);padding-top:32px;margin-top:32px}
+}
+@media (max-width:640px){
+  .tabs{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+  .tabs button{font-size:13px;padding:10px 16px;white-space:nowrap}
+  .lockup{flex-direction:column;align-items:flex-start}
+  .lockup span{border-left:0;padding-left:0}
+  .fee{font-size:44px}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -234,7 +313,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
       <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 21C9 10 23 10 28 21" fill="none" stroke="#FF5F00" stroke-width="3.2" stroke-linecap="round"/><path d="M10 21l6 6 6-6" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <b>Airtribune</b>
     </a>
-    <nav aria-label="Page sections"><a href="../index.html">← Calendar</a><a href="#venue">Venue</a><a href="#site">Flying site</a><a href="#entry">Entry</a><a href="#travel">Travel</a></nav>
+    <nav aria-label="Page sections"><a href="../index.html">← Calendar</a><a href="#info" data-open-tab="site">Flying site</a><a href="#info" data-open-tab="entry">Entry</a><a href="#info" data-open-tab="travel">Getting there</a></nav>
     <span class="sp"></span>
     <a class="srsb" href="../index.html#srs" aria-label="Sports-Class Racing Series rounds"><img src="../img/srs-mark-white.png" alt=""></a>
     <a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register</a>
@@ -262,67 +341,80 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 <div class="band"><div class="wrap"><div><b>€320</b><span>Entry fee</span></div><div><b>6</b><span>Racing tasks</span></div><div><b>100</b><span>Max pilots</span></div><div><b>278</b><span>Registered</span></div><div><b>48</b><span>Countries</span></div><div><b>CAT 2</b><span>FAI status</span></div></div></div>
 <div class="wrap"><p class="asof">Registration numbers from Airtribune on 24 Nov 2026.</p></div>
 
-<section class="s" id="venue" aria-labelledby="vH">
-  <div class="wrap two">
+<section class="intro" aria-labelledby="iH">
+  <div class="wrap">
     <div>
-      <div class="sh"><div><span class="eyebrow">The venue</span><h2 class="up" id="vH">The Vipava Valley</h2></div></div>
-      <p class="quote">Lijak is in the south of Slovenia. Offering mild weather throughout the winter, it is the perfect place to kick off the 2027 season.</p>
-      <div class="prose"><p>The Vipava Valley sits between the Julian Alps and the Karst Plateau in south-west Slovenia: rolling hills, vineyards, villages and views towards the Adriatic. It is one of Europe's most attractive free-flying destinations, with flying potential all year and a welcoming local community.</p><p>The SRS will be one of the first competitions of the new European season, a chance for pilots to restart their racing. <strong>The event runs six full racing tasks, 16–21 March 2027.</strong></p></div>
-      <div class="feats"><span class="feat"><i></i>Transport by minibus</span><span class="feat"><i></i>Grass launch</span><span class="feat"><i></i>Ridge &amp; flatland flying</span><span class="feat"><i></i>Cold but scenic</span><span class="feat"><i></i>Tasks typically 40–60 km</span></div>
+      <span class="eyebrow">15–21 Mar 2027</span>
+      <div class="lockup"><img src="../img/srs-full-white.png" alt="Sports-Class Racing Series"><span><b>SRS Slovenia 2027</b>Nova Gorica, Lijak, Slovenia</span></div>
+      <p class="statement" id="iH">Lijak is in the south of Slovenia. Offering mild weather throughout the winter, it is the perfect place to kick off the 2027 season.</p>
     </div>
-    <figure class="photo" style="margin:0"><img src="../img/pink-forest.jpg" alt="Paraglider in a racing glide" loading="lazy"><figcaption>SRS Tapalpa 2026 · Aninder Singh / Paragliding Atlas</figcaption></figure>
+    <figure class="ph"><img src="../img/pink-forest.jpg" alt="Paraglider in a racing glide, SRS Tapalpa 2026" loading="lazy"><figcaption>SRS Tapalpa 2026 · Aninder Singh</figcaption></figure>
   </div>
 </section>
 
-<section class="s" id="site" aria-labelledby="sH">
+<section class="trio" aria-label="Race, follow and travel">
   <div class="wrap">
-    <div class="sh"><div><span class="eyebrow">Flying site</span><h2 class="up" id="sH">Lijak take-off</h2></div></div>
-    <div class="tiles"><div><span class="eyebrow">Take-off</span><b>591 m</b></div><div><span class="eyebrow">Wind</span><b>S · SW · SE</b></div><div><span class="eyebrow">Launch</span><b>Broad grassy slope</b></div><div><span class="eyebrow">Region</span><b>Vipava Valley</b></div></div>
-    <div class="two">
-      <div class="prose"><p>The Lijak take-off is one of Slovenia&#x27;s best-known launch sites, above Nova Gorica in the west of the country, with views across the Vipava Valley to the Adriatic.</p><p>It hosts training flights, soaring, cross-country and tandem flying. A favourable microclimate often allows flying when stronger regional winds stop it elsewhere.</p><div class="callout"><b>Slovenia has special competition rules</b><ul><li>An FAI IPPI 5 licence is mandatory for foreign pilots. Contact your national association early.</li><li>Upload your glider certificate or inspection certificate before the event.</li><li>Flying the practice day needs pre-registration at HQ.</li><li>The road to take-off is private: park by the main road and walk up.</li></ul></div></div>
-      <div class="taskbox"><svg id="task" aria-hidden="true"></svg><p>Illustrative task shape for this round, not an official task. Real tasks are set each morning by the meet director.</p></div>
+    <article class="pc"><img src="../img/pink-close.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Race</h3><p>6 racing tasks · €320 entry · 100 pilots max.</p><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register</a></div></article>
+    <article class="pc"><img src="../img/orange-blur.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Follow live</h3><p>Every pilot is tracked live on Airtribune, task by task.</p><a class="btn btn-o" href="../live.html">Live tracking</a></div></article>
+    <article class="pc"><img src="../img/gin-field.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Plan your trip</h3><p>Trieste airport is about 50 km away; Ljubljana around 100 km.</p><a class="btn btn-o" href="#info" data-open-tab="travel">Getting there</a></div></article>
+  </div>
+</section>
+
+<section class="info" id="info" aria-label="Event information">
+  <div class="wrap">
+    <div class="tabs" role="tablist" aria-label="Event information">
+      <button role="tab" id="t-on" aria-controls="p-on" aria-selected="true" data-tab="on">What's on</button>
+      <button role="tab" id="t-site" aria-controls="p-site" aria-selected="false" data-tab="site">Flying site</button>
+      <button role="tab" id="t-entry" aria-controls="p-entry" aria-selected="false" data-tab="entry">Entry</button>
+      <button role="tab" id="t-onsite" aria-controls="p-onsite" aria-selected="false" data-tab="onsite">On site</button>
+      <button role="tab" id="t-travel" aria-controls="p-travel" aria-selected="false" data-tab="travel">Getting there</button>
+    </div>
+
+    <div class="panel split" role="tabpanel" id="p-on" aria-labelledby="t-on">
+      <div class="col-l">
+        <h3>The Vipava Valley</h3>
+        <p>The Vipava Valley, between the Julian Alps and the Karst, is one of Europe&#x27;s best free-flying regions, flyable all year round.</p><p>SRS opens the 2027 season here: one of the first competitions of the European spring.</p>
+        <div class="acts"><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Details &amp; registration</a><a class="btn btn-ghost" href="../live.html">Live tracking</a></div>
+      </div>
+      <div class="col-r">
+        <h3>Event schedule</h3>
+        <ul class="sch"><li><b>15 March</b><span>Registration &amp; practice day</span></li><li><b>16–21 March</b><span>Six racing tasks</span></li><li><b>Daily</b><span>Transport to launch, retrieves and lunch packs</span></li></ul>
+        <div class="links"><a href="https://airtribune.com/srs-2027-1/">Official event page ↗</a><a href="https://sportsracingseries.org/rules/">SRS rules ↗</a><a href="https://sportsracingseries.org/faqs/">SRS FAQs ↗</a></div>
+      </div>
+    </div>
+
+    <div class="panel split" role="tabpanel" id="p-site" aria-labelledby="t-site" hidden>
+      <div class="col-l">
+        <h3>Lijak take-off</h3>
+        <div class="tiles"><div><span class="eyebrow">Take-off</span><b>591 m</b></div><div><span class="eyebrow">Wind</span><b>S · SW · SE</b></div><div><span class="eyebrow">Launch</span><b>Broad grassy slope</b></div><div><span class="eyebrow">Region</span><b>Vipava Valley</b></div></div>
+        <p class="lead">A broad grassy slope above Nova Gorica, with views over the Vipava Valley to the Adriatic. Its microclimate often stays flyable when stronger winds stop flying elsewhere.</p>
+        <div class="callout"><b>Slovenia has special competition rules</b><ul><li>An FAI IPPI 5 licence is mandatory for foreign pilots. Contact your national association early.</li><li>Upload your glider certificate or inspection certificate before the event.</li><li>Flying the practice day needs pre-registration at HQ.</li><li>The road to take-off is private: park by the main road and walk up.</li></ul></div>
+      </div>
+      <div class="col-r"><div class="taskbox"><svg id="task" aria-hidden="true"></svg><p>Illustrative task shape, not an official task.</p></div></div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-entry" aria-labelledby="t-entry" hidden>
+      <div class="entry-head"><div><span class="eyebrow">Entry fee</span><b class="fee">€320</b></div><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register on Airtribune</a></div>
+      <div class="split">
+        <div class="col-l"><h3>Included</h3><div class="chips"><span>Transport to launch</span><span>Daily retrieves</span><span>Lunch packs</span><span>Live trackers</span><span>Tasking &amp; scoring</span><span>T-shirt &amp; souvenirs</span><span>Bad-weather activity discounts</span><span>Event benefits</span><span>Social evenings</span><span>Prize draws</span></div></div>
+        <div class="col-r"><h3>You need</h3><div class="chips"><span>FAI IPPI 5</span><span>FAI Sporting Licence</span><span>Medical &amp; travel insurance</span><span>Third-party liability</span><span>Mobile phone</span><span>EN-C or below</span><span>Repacked reserve</span><span>Certified helmet</span><span>Harness with back protection</span><span>2 m radio · 143.900 MHz</span></div></div>
+      </div>
+      <div class="terms">
+        <div><b>Sports class</b><span>EN-C and below. No CCC or EN-D.</span></div>
+        <div><b>€45 / season</b><span>SRS membership, paid once.</span></div>
+        <div><b>45 days</b><span>Full refund less €60 before this. 75% after, none in the last 10 days.</span></div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-onsite" aria-labelledby="t-onsite" hidden><div class="pgroup"><span class="eyebrow">Safety</span><div class="pills"><span class="pill "><i></i>Live trackers supplied</span><span class="pill "><i></i>Helicopter rescue</span><span class="pill "><i></i>Medic on takeoff</span><span class="pill "><i></i>Good phone coverage</span><span class="pill "><i></i>Radio coverage</span><span class="pill "><i></i>Live trackers mandatory</span></div></div><div class="pgroup"><span class="eyebrow">Organisation</span><div class="pills"><span class="pill "><i></i>Launch Transport</span><span class="pill "><i></i>Retrieve included</span><span class="pill "><i></i>Toilets on takeoff</span><span class="pill "><i></i>Tracklogs managed</span><span class="pill "><i></i>Airtribune blogging</span></div></div><div class="pgroup"><span class="eyebrow">Benefits</span><div class="pills"><span class="pill "><i></i>Lunch packs</span><span class="pill "><i></i>Free gift</span></div></div><div class="pgroup"><span class="eyebrow">Environment</span><div class="pills"><span class="pill "><i></i>Plastic reduction</span></div></div></div>
+
+    <div class="panel" role="tabpanel" id="p-travel" aria-labelledby="t-travel" hidden>
+      <div class="modes"><div class="mode"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></span><h3>Plane</h3><ul><li><b>Trieste</b> ~50 km</li><li><b>Ljubljana</b> 100–120 km</li><li><b>Venice</b> ~150 km</li></ul></div><div class="mode"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M12 3v8M8 21l2-4M16 21l-2-4"/><circle cx="8.5" cy="14" r=".5"/><circle cx="15.5" cy="14" r=".5"/></svg></span><h3>Train</h3><ul><li>To <b>Nova Gorica</b> station</li><li>Then taxi or transfer to Lijak</li></ul></div><div class="mode"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M6 17v2M18 17v2M3 13l2-6a2 2 0 0 1 2-1.4h10a2 2 0 0 1 2 1.4l2 6v4H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></svg></span><h3>Car</h3><ul><li><b>Ljubljana</b> 1 h 15 – 1 h 40</li><li><b>Trieste airport</b> 45–60 min</li><li>Park on the main road, walk up: the take-off road is private</li></ul></div></div>
     </div>
   </div>
 </section>
 
-<section class="s" id="days" aria-labelledby="dH">
-  <div class="wrap">
-    <div class="sh"><div><span class="eyebrow">Event days</span><h2 class="up" id="dH">15–21 Mar 2027</h2></div></div>
-    <div class="days"><div class="day "><div class="d">15</div><div class="w">Mon · Mar</div><div class="l">Registration &amp; practice</div></div><div class="day task"><div class="d">16</div><div class="w">Tue · Mar</div><div class="l">Race day</div></div><div class="day task"><div class="d">17</div><div class="w">Wed · Mar</div><div class="l">Race day</div></div><div class="day task"><div class="d">18</div><div class="w">Thu · Mar</div><div class="l">Race day</div></div><div class="day task"><div class="d">19</div><div class="w">Fri · Mar</div><div class="l">Race day</div></div><div class="day task"><div class="d">20</div><div class="w">Sat · Mar</div><div class="l">Race day</div></div><div class="day task"><div class="d">21</div><div class="w">Sun · Mar</div><div class="l">Race day</div></div></div>
-    
-  </div>
-</section>
-
-<section class="s" id="entry" aria-labelledby="eH">
-  <div class="wrap">
-    <div class="sh"><div><span class="eyebrow">Entry</span><h2 class="up" id="eH">€320 entry</h2></div><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register on Airtribune</a></div>
-    <div class="lists">
-      <div class="card"><h3><i></i>Your entry includes</h3><ul><li>Daily transport to launch for all tasks</li><li>Retrieves daily</li><li>Daily lunch packs</li><li>Trackers, for safety and scoring</li><li>Typical tasking/scoring services</li><li>T-shirt &amp; other souvenirs as we are able</li><li>Discounts for alternative activities in the event of bad weather</li><li>Other event benefits, as they are made available</li><li>Access to social evenings</li><li>Entry to any prize draws</li></ul></div>
-      <div class="card req"><h3><i></i>You must bring</h3><ul><li>An FAI IPPI 5 licence - required in Slovenia for all foreign pilots participating in the competition (!)</li><li>An FAI Sporting Licence (Don&#x27;t confuse this with an IPPI card)</li><li>Medical/Travel insurance</li><li>Third party liability insurance (usually from your National Organisation)</li><li>A mobile phone</li><li>A paraglider certified as EN-C or below and with a speed limiter between the A &amp; B risers if it is a 2-liner glider, if the paraglider is EN-C class it must comply with the CSC rules announced by CIVL.</li><li>Recently repacked reserve parachute</li><li>Helmet, certified for paragliding use</li><li>Harness with certified back protection (Check rules for harness and gliders restrictions)</li><li>2M Radio capable of 143.900 Mhz FM and with TOT set to the minimum setting,</li><li>Compliance with all SRS rules, published before the event</li></ul></div>
-    </div>
-    <div class="terms">
-      <div><b>Sports class</b><span>No CCC or EN-D wings. EN-C and below, including 2-liner Cs. Pilots with Sports-wing competition experience get priority.</span></div>
-      <div><b>€45 / season</b><span>SRS membership, paid once per season after your first SRS entry is accepted.</span></div>
-      <div><b>45 days</b><span>Cancel 45+ days out: refund less a €60 admin fee. Under 45 days: 75%. Under 10 days: no refund.</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="s" id="onsite" aria-labelledby="oH">
-  <div class="wrap">
-    <div class="sh"><div><span class="eyebrow">On site</span><h2 class="up" id="oH">Safety &amp; organisation</h2></div></div>
-    <div class="pgroup"><span class="eyebrow">Safety</span><div class="pills"><span class="pill "><i></i>Live trackers supplied</span><span class="pill "><i></i>Helicopter rescue</span><span class="pill "><i></i>Medic on takeoff</span><span class="pill "><i></i>Good phone coverage</span><span class="pill "><i></i>Radio coverage</span><span class="pill "><i></i>Live trackers mandatory</span></div></div><div class="pgroup"><span class="eyebrow">Organisation</span><div class="pills"><span class="pill "><i></i>Launch Transport</span><span class="pill "><i></i>Retrieve included</span><span class="pill "><i></i>Toilets on takeoff</span><span class="pill "><i></i>Tracklogs managed</span><span class="pill "><i></i>Airtribune blogging</span></div></div><div class="pgroup"><span class="eyebrow">Benefits</span><div class="pills"><span class="pill "><i></i>Lunch packs</span><span class="pill "><i></i>Free gift</span></div></div><div class="pgroup"><span class="eyebrow">Environment</span><div class="pills"><span class="pill "><i></i>Plastic reduction</span></div></div>
-  </div>
-</section>
-
-<section class="s" id="prizes" aria-labelledby="pH"><div class="wrap"><div class="sh"><div><span class="eyebrow">Awards</span><h2 class="up" id="pH">Prizes &amp; categories</h2></div></div><div class="prizes"><div class="prize"><b>Overall</b><span>All gliders in the competition</span></div><div class="prize"><b>Women</b><span>All female pilots</span></div><div class="prize"><b>Lightweight</b><span>Pilots 85 kg or under</span></div><div class="prize"><b>Medium weight</b><span>Pilots 85–100 kg</span></div></div><div class="draws"><div><b>Prize draw ·</b> A Skywalk prize. The winners name to be drawn at random.</div><div><b>Prize draw ·</b> A brand new Naviter Oudie N Fanet+. The winners name to be drawn at random.</div><div>No cash prizes: the SRS is an amateur racing series. Manufacturers can also enter up to four pilots per event for the <b>Constructors Trophy</b>; the second pilot in goal scores for the team each day.</div></div></div></section>
-
-<section class="s" id="travel" aria-labelledby="tH">
-  <div class="wrap">
-    <div class="sh"><div><span class="eyebrow">Getting there</span><h2 class="up" id="tH">Travel to Lijak</h2></div></div>
-    <div class="travel"><div class="card"><h3><i></i>Plane</h3><p>Consider these these airports: · Trieste Airport — approximately 50 km from the Nova Gorica area. A convenient option if flight connections work for you. · Ljubljana Jože Pučnik Airport — Slovenia’s main international airport, approximately 100–120 km by road from Lijak. · Venice (any) · around 150km from the take off.</p></div><div class="card"><h3><i></i>Train</h3><p>Best for travellers who prefer public transport · Travel to Nova Gorica railway station. · From Ljubljana, look for a train connection towards Nova Gorica; routes and transfers depend on the timetable. · From the station, take a taxi or arrange a transfer to the Lijak take-off site.</p></div><div class="card"><h3><i></i>Car</h3><p>Driving is generally the easiest way to reach Lijak, especially if you are carrying paragliding equipment. Keep in mind that the direct road to the take off is private and non-authorized vehicles are not allowed. Park your car at the parking next to the main road and walk to the take off. From Ljubljana: allow approximately 1 hour 15 minutes to 1 hour 40 minutes, depending on traffic and your exact destination. From Nova Gorica: allow roughly 15–25 minutes, depending on the route and road conditions. From Trieste Airport: allow around 45–60 minutes, depending on traffic and the border route.</p></div></div>
-  </div>
-</section>
+<section class="prz" id="prizes" aria-labelledby="pH"><div class="wrap"><div><span class="eyebrow" style="color:var(--orange)">Awards</span><h2 class="up" id="pH">Prizes &amp; categories</h2><p>Four categories, no cash prizes. Prize draws: Skywalk prize and Naviter Oudie N Fanet+. Plus the <b>Constructors Trophy</b> for manufacturer teams.</p></div><div class="prizes"><div class="prize"><b>Overall</b><span>All gliders in the competition</span></div><div class="prize"><b>Women</b><span>All female pilots</span></div><div class="prize"><b>Lightweight</b><span>Pilots 85 kg or under</span></div><div class="prize"><b>Medium weight</b><span>Pilots 85–100 kg</span></div></div></div></section>
 
 <section class="s" aria-labelledby="rH">
   <div class="wrap">
@@ -528,7 +620,8 @@ const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFC83D","#FF8A3D","#F0432B"]).c
 
 
 /* illustrative task, same generator and seed as the season calendar */
-(function(){
+let taskDrawn = false;
+function drawTask(){ if (taskDrawn) return; taskDrawn = true;
   const svgEl = $("#task"), bb = svgEl.getBoundingClientRect(), W = Math.round(bb.width) || 600, H = Math.round(bb.height) || 340;
   const sel = d3.select(svgEl).attr("viewBox",`0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid slice");
   const chk = addChk(sel), seed = EVT.seed;
@@ -541,8 +634,15 @@ const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFC83D","#FF8A3D","#F0432B"]).c
   launchMark(sel, f, true);
   chip(sel, W, H, `${task.total.toFixed(1)} km · ${task.cyl.length-2} turnpoints`, false);
   if (!reduce){ const L = route.node().getTotalLength(); route.attr("stroke-dasharray",L).attr("stroke-dashoffset",L);
-    new IntersectionObserver((es,o) => { if (es[0].isIntersecting){ route.transition().duration(1800).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0); o.disconnect(); } }).observe(svgEl); }
-})();
+    route.transition().duration(1800).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0); }
+}
+/* tabs */
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+function openTab(k, focus){ tabs.forEach(t => { const on = t.dataset.tab === k; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1; document.getElementById(t.getAttribute("aria-controls")).hidden = !on; if (on && focus) t.focus(); });
+  if (k === "site") requestAnimationFrame(drawTask); }
+tabs.forEach((t,i) => { t.onclick = () => openTab(t.dataset.tab); t.onkeydown = e => { if (e.key==="ArrowRight"||e.key==="ArrowLeft"){ const n = tabs[(i + (e.key==="ArrowRight"?1:-1) + tabs.length) % tabs.length]; openTab(n.dataset.tab, true); } }; });
+document.querySelectorAll("[data-open-tab]").forEach(a => a.addEventListener("click", () => openTab(a.dataset.openTab)));
+
 </script>
 </body>
 </html>
