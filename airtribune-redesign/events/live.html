@@ -96,8 +96,7 @@ a{color:inherit;text-decoration:none}
 
 /* map */
 .mapwrap{position:relative;min-height:0;overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#0B2629,#03100F);perspective:1400px}
-.mapstage{position:absolute;inset:0;transition:transform .9s cubic-bezier(.3,.8,.2,1);transform-origin:50% 70%}
-.mapwrap.tilt .mapstage{transform:rotateX(42deg) scale(1.28) translateY(-6%)}
+.mapstage{position:absolute;inset:0;transform-origin:50% 70%;will-change:transform}
 #map{display:block;width:100%;height:100%}
 .world path,.world circle,.world line,.world rect{vector-effect:non-scaling-stroke}
 .tp-lab{font:700 10.5px var(--f-body);fill:var(--ink-2);paint-order:stroke;stroke:#03100F;stroke-width:3px;letter-spacing:.04em}
@@ -369,7 +368,7 @@ a{color:inherit;text-decoration:none}
       <div class="map-ov tl"><span class="leg"><span>Task</span><b id="ovTask">107.9 km</b></span><span class="leg"><span id="ovLeadL">Leader</span><b id="ovLead">—</b></span></div>
       <div class="toast" id="toast"></div>
       <button class="compass" id="compass" aria-label="Reset map to north up" title="North up"><svg viewBox="0 0 40 40" aria-hidden="true"><g id="compassN"><path d="M20 5 L25 20 L20 17 L15 20Z" fill="#FF5F00"/><path d="M20 35 L25 20 L20 23 L15 20Z" fill="rgba(255,255,255,.55)"/><text x="20" y="4" text-anchor="middle" font-size="6" font-weight="800" fill="#fff" font-family="Inter, sans-serif">N</text></g></svg></button>
-      <div class="maphint" id="maphint">Drag to pan · Right-drag or Shift+drag to rotate · Scroll to zoom</div>
+      <div class="maphint" id="maphint">Drag to move · Scroll or double-click to zoom · Shift- or right-drag to rotate and tilt · N north · R reset</div>
       <div class="cine-board" id="cineBoard" aria-label="Top five"></div>
       <div class="cine-bar" id="cineBar" aria-live="off"></div>
       <div class="cine-bug" data-brand aria-label="Airtribune"></div>
@@ -675,7 +674,7 @@ function settle(prev, better){
 // leaderboard value + gap cell for pilot P at position i
 function cells(P, i, order, phase, T){
   const top = order[0];
-  if (phase === "pre") return {v:`${fmtAlt(P._alt)}<small>m</small>`, g: i === 0 ? "Top" : `−${fmtAlt(top._alt - P._alt)} m`};
+  if (phase === "pre") return {v:`${fmtAlt(P._alt)}<small>m</small>`, g: i === 0 ? "Top" : (d => `${d < 0 ? "+" : "−"}${fmtAlt(Math.abs(d))} m`)(Math.round(top._alt - P._alt))};
   if (phase === "final") return {v:`${Math.round(P.score)}<small>pts</small>`, g: fmtGap(P.goalT)};
   if (P.goalT <= T) return {v:`<span class="gl">GOAL</span>`, g: P === top ? fmtGap(P.goalT) : `+${fmtGap(P.goalT - top.goalT)}`};
   if (!P._started) return {v:`${P._prog.toFixed(1)}<small>km</small>`, g:"Start"};
@@ -973,7 +972,7 @@ function setPlay(on){ st.playing = on; playBtn.innerHTML = on ? '<svg width="16"
 playBtn.onclick = () => { if (st.frac >= 1){ st.frac = 0; M.lastT = null; } setPlay(!st.playing); st.last = performance.now(); };
 document.querySelectorAll("[data-sp]").forEach(b => b.onclick = () => { st.speed = +b.dataset.sp; document.querySelectorAll("[data-sp]").forEach(x => x.setAttribute("aria-pressed", x===b)); });
 document.querySelectorAll("[data-cam]").forEach(b => b.onclick = () => setCam(b.dataset.cam));
-document.querySelectorAll("[data-tilt]").forEach(b => b.onclick = () => { $("#mapwrap").classList.toggle("tilt", b.dataset.tilt === "1"); document.querySelectorAll("[data-tilt]").forEach(x => x.setAttribute("aria-pressed", x===b)); });
+document.querySelectorAll("[data-tilt]").forEach(b => b.onclick = () => st.view.setTilt(b.dataset.tilt === "1" ? 42 : 0));
 $("#scrub").oninput = e => { st.frac = e.target.value/1000; M.lastT = null; frame(true); };
 addEventListener("keydown", e => { if (e.key === " " && e.target === document.body){ e.preventDefault(); playBtn.click(); } });
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const sel = st.sel; build(); select(sel, false); frame(true); }, 200); });
@@ -982,7 +981,7 @@ function setCine(on){
   st.cine = on; st.cineAuto = true;
   document.querySelector(".app").classList.toggle("cine", on);
   $("#cineBtn").setAttribute("aria-pressed", on);
-  $("#mapwrap").classList.toggle("tilt", on || document.querySelector('[data-tilt="1"]').getAttribute("aria-pressed") === "true");
+  if (on){ st.tiltBefore = st.view.tiltT; st.view.setTilt(42); } else if (st.tiltBefore != null) st.view.setTilt(st.tiltBefore);
   if (on) setCam("follow");
   requestAnimationFrame(() => { const sel = st.sel; build(); select(sel, false); frame(true); });
 }
@@ -991,48 +990,169 @@ $("#cineExit").onclick = () => setCine(false);
 addEventListener("keydown", e => { if (e.key === "Escape" && st.cine) setCine(false); if ((e.key === "b" || e.key === "B") && e.target === document.body) setCine(!st.cine); });
 setPlay(st.playing);
 build(); frame(true);
-/* ---------- drag to pan, right/shift-drag or twist to rotate, wheel/pinch to zoom ---------- */
+/* ---------- Google Earth style navigation ----------
+   drag: grab the ground (stays under the pointer, also when tilted) and fling with momentum
+   wheel / pinch / double-click: zoom towards the pointer (shift+double-click zooms out)
+   shift-, ctrl-, right- or middle-drag: left/right rotates, up/down tilts; two fingers: twist rotates, slide up/down tilts
+   keys: arrows pan, shift+arrows rotate/tilt, + / − zoom, N north up, U level, R reset */
 (function(){
   const stage = document.querySelector(".mapstage"), wrap = $("#mapwrap"), V = st.view, ptrs = new Map();
-  let start = null, moved = false;
-  const hint = $("#maphint"); setTimeout(() => hint.classList.add("gone"), 6000);
-  const toFree = () => { if (st.cam !== "free"){ V.fx = M.cam.fx; V.fy = M.cam.fy; V.zoom = M.cam.s; st.cam = "free"; document.querySelectorAll("[data-cam]").forEach(b => b.setAttribute("aria-pressed", false)); } };
-  const pt = e => { const r = stage.getBoundingClientRect(); return [ (e.clientX - r.left) * (M.W / r.width), (e.clientY - r.top) * (M.H / r.height) ]; };
+  const D = 1400, TMAX = 60, ZMIN = .5, ZMAX = 10;
+  V.tilt = 0; V.tiltT = 0;
+  let start = null, moved = false, coast = null, zanim = null, samples = [], lastTap = null;
+  const hint = $("#maphint"); setTimeout(() => hint.classList.add("gone"), 7000);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  // smallest scale at which the tilted plane still covers the whole view (its far corners stay off screen)
+  const tScale = t => { const w = wrap.clientWidth, h = wrap.clientHeight, a = t*Math.PI/180, c = Math.cos(a), s = Math.sin(a);
+    const covers = sc => { const yy = sc*(-.7*h), z = yy*s; if (D - z <= 0) return true; const k = D/(D - z);
+      return h/2 + (.2*h + yy*c)*k <= -2 && w/2 - sc*(w/2)*k <= -2; };
+    let lo = 1, hi = 6; if (covers(1)) return 1; for (let i = 0; i < 22; i++){ const m = (lo + hi)/2; if (covers(m)) hi = m; else lo = m; } return hi; };
+  const tShift = () => 0;
+  const busy = () => { V.dragging = !!(start && moved) || !!coast || !!zanim; };
+  const toFree = () => { if (st.cam !== "free"){ V.fx = M.cam.fx; V.fy = M.cam.fy; V.zoom = M.cam.s; V.rot = M.cam.r; st.cam = "free"; document.querySelectorAll("[data-cam]").forEach(b => b.setAttribute("aria-pressed", false)); } };
+  const stop = () => { coast = null; zanim = null; busy(); };
+  // screen point -> map (svg) coordinates, undoing the perspective tilt
+  const unproject = (X, Y) => {
+    const r = wrap.getBoundingClientRect(), w = r.width, h = r.height; X -= r.left; Y -= r.top;
+    const a = V.tilt*Math.PI/180, c = Math.cos(a), s = Math.sin(a), px = w/2, py = h/2, ox = w/2, oy = h*.7, sc = V.sc || 1, ty = 0;
+    const den = Math.max(D*c*.12, D*c + (Y-py)*s);          // points above the horizon clamp to it
+    const yy = D*(Y - oy)/den, x = (X - px)*(D - yy*s)/D + px - ox;
+    return [(ox + x/sc)*(M.W/w), (oy + yy/sc - ty)*(M.H/h)];
+  };
+  const pt = e => unproject(e.clientX, e.clientY);
+  const toWorld = (p, fx, fy, rot, s) => { const r = rot*Math.PI/180, co = Math.cos(r), si = Math.sin(r), dx = p[0]-M.W/2, dy = p[1]-M.cy; return [fx + (dx*co + dy*si)/s, fy + (-dx*si + dy*co)/s]; };
+  const camFor = (w, p, rot, s) => { const r = rot*Math.PI/180, co = Math.cos(r), si = Math.sin(r), dx = p[0]-M.W/2, dy = p[1]-M.cy; return [w[0] - (dx*co + dy*si)/s, w[1] - (-dx*si + dy*co)/s]; };
+  const setTiltBtns = () => { const on = V.tiltT > 5; document.querySelectorAll("[data-tilt]").forEach(x => x.setAttribute("aria-pressed", (x.dataset.tilt === "1") === on)); };
+  V.setTilt = t => { V.tiltT = clamp(t, 0, TMAX); setTiltBtns(); };
+  // zoom by factor f keeping the map point under screen point p fixed (smoothly)
+  function zoomAt(p, f){
+    hint.classList.add("gone"); coast = null;
+    if (st.cam === "follow"){ V.zoom = clamp(V.zoom*f, .4, 4); return; }      // following: zoom about the pilot
+    toFree();
+    const z0 = zanim ? zanim.t : V.zoom;
+    zanim = { t: clamp(z0*f, ZMIN, ZMAX), p, w: toWorld(p, V.fx, V.fy, V.rot, V.zoom) }; busy();
+  }
   stage.addEventListener("contextmenu", e => e.preventDefault());
   stage.addEventListener("pointerdown", e => {
-    ptrs.set(e.pointerId, pt(e)); moved = false;
-    const two = ptrs.size === 2;
-    start = { mode: two ? "pinch" : (e.button === 2 || e.shiftKey ? "rotate" : "pan"), p: pt(e), rot: V.rot, zoom: st.cam === "free" ? V.zoom : M.cam.s, fx: M.cam.fx, fy: M.cam.fy };
-    if (two){ const [a,b] = [...ptrs.values()]; start.d = Math.hypot(b[0]-a[0], b[1]-a[1]); start.ang = Math.atan2(b[1]-a[1], b[0]-a[0]); start.mid = [(a[0]+b[0])/2,(a[1]+b[1])/2]; }
+    stop(); ptrs.set(e.pointerId, pt(e)); moved = false;
+    const two = ptrs.size >= 2, look = e.button === 2 || e.button === 1 || e.shiftKey || e.ctrlKey || e.altKey;
+    if (e.button === 1) e.preventDefault();
+    start = { mode: two ? "two" : look ? "look" : "pan", p: pt(e), c: [e.clientX, e.clientY], rot: M.cam.r, tilt: V.tilt };
+    if (start.mode === "pan"){ start.w = toWorld(start.p, M.cam.fx, M.cam.fy, M.cam.r, M.cam.s); samples = []; }
+    if (two){
+      const [a,b] = [...ptrs.values()], q = [...ptrs.keys()];
+      start.ids = q.slice(0,2); start.d = Math.hypot(b[0]-a[0], b[1]-a[1]); start.ang = Math.atan2(b[1]-a[1], b[0]-a[0]);
+      start.mid = [(a[0]+b[0])/2, (a[1]+b[1])/2]; start.cl = [...start.ids].map(id => ptrs.get(id)); start.zoom = M.cam.s; start.sub = null;
+      start.cy = e.clientY; start.cy0 = null;
+      start.w = toWorld(start.mid, M.cam.fx, M.cam.fy, M.cam.r, M.cam.s);
+    }
   });
+  const scrY = new Map();
   stage.addEventListener("pointermove", e => {
     if (!ptrs.has(e.pointerId) || !start) return;
-    const p = pt(e); ptrs.set(e.pointerId, p);
-    if (!moved && Math.hypot(p[0]-start.p[0], p[1]-start.p[1]) < 5 && start.mode !== "pinch") return;
-    if (!moved){ moved = true; stage.setPointerCapture(e.pointerId); wrap.classList.add("dragging"); hint.classList.add("gone"); }
-    V.dragging = true;
-    if (start.mode === "rotate"){ V.rot = start.rot + (p[0] - start.p[0]) * .35; return; }
-    toFree();
-    if (start.mode === "pinch" && ptrs.size === 2){
-      const [a,b] = [...ptrs.values()], d = Math.hypot(b[0]-a[0], b[1]-a[1]), ang = Math.atan2(b[1]-a[1], b[0]-a[0]);
-      V.zoom = Math.max(.6, Math.min(8, start.zoom * d / start.d)); V.rot = start.rot + (ang - start.ang)*180/Math.PI;
+    const p = pt(e); ptrs.set(e.pointerId, p); scrY.set(e.pointerId, e.clientY);
+    if (!moved){ const far = start.mode === "two" || Math.hypot(e.clientX - start.c[0], e.clientY - start.c[1]) > 4; if (!far) return;
+      moved = true; try { stage.setPointerCapture(e.pointerId); } catch(_){} wrap.classList.add("dragging"); hint.classList.add("gone"); }
+    busy();
+    if (start.mode === "look"){   // rotate around the view centre and tilt
+      toFree();
+      V.rot = start.rot + (e.clientX - start.c[0])*.3;
+      V.tilt = clamp(start.tilt - (e.clientY - start.c[1])*.25, 0, TMAX); V.tiltT = V.tilt; setTiltBtns();
       return;
     }
-    if (start.mode === "pan"){
-      const r = M.cam.r*Math.PI/180, dx = p[0] - start.p[0], dy = p[1] - start.p[1], s = M.cam.s;
-      V.fx = start.fx - (dx*Math.cos(r) + dy*Math.sin(r))/s; V.fy = start.fy - (-dx*Math.sin(r) + dy*Math.cos(r))/s;
+    if (start.mode === "two"){
+      if (ptrs.size < 2) return;
+      const [a,b] = start.ids.map(id => ptrs.get(id)); if (!a || !b) return;
+      const ys = start.ids.map(id => scrY.get(id));
+      if (start.cy0 == null && ys.every(y => y != null)) start.cy0 = ys;
+      const d = Math.hypot(b[0]-a[0], b[1]-a[1]), ang = Math.atan2(b[1]-a[1], b[0]-a[0]);
+      if (!start.sub && start.cy0){   // decide: two-finger slide up/down = tilt, otherwise pinch/twist/pan
+        const dy0 = ys[0] - start.cy0[0], dy1 = ys[1] - start.cy0[1], dd = Math.abs(d - start.d);
+        if (Math.abs(dy0) > 8 || Math.abs(dy1) > 8 || dd > 10){
+          start.sub = (dy0*dy1 > 0 && Math.min(Math.abs(dy0), Math.abs(dy1)) > 6 && dd < 10 && Math.abs(Math.sin(start.ang)) < .6) ? "tilt" : "pinch";
+        } else return;
+      }
+      if (start.sub === "tilt"){ V.tilt = clamp(start.tilt - ((ys[0]+ys[1])/2 - (start.cy0[0]+start.cy0[1])/2)*.3, 0, TMAX); V.tiltT = V.tilt; setTiltBtns(); return; }
+      toFree();
+      const mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
+      V.zoom = clamp(start.zoom*d/start.d, ZMIN, ZMAX); V.rot = start.rot + (ang - start.ang)*180/Math.PI;
+      [V.fx, V.fy] = camFor(start.w, mid, V.rot, V.zoom);
+      return;
     }
+    // pan: keep the grabbed map point under the pointer
+    toFree();
+    [V.fx, V.fy] = camFor(start.w, p, V.rot, V.zoom);
+    const t = performance.now(); samples.push([t, V.fx, V.fy]); while (samples.length > 2 && t - samples[0][0] > 100) samples.shift();
   });
-  const end = e => { ptrs.delete(e.pointerId); if (ptrs.size === 0){ V.dragging = false; wrap.classList.remove("dragging"); start = null; } else { const q = [...ptrs.values()][0]; start = { mode:"pan", p:q, rot:V.rot, zoom:V.zoom, fx:M.cam.fx, fy:M.cam.fy }; } };
+  const end = e => {
+    if (!ptrs.has(e.pointerId)) return;
+    ptrs.delete(e.pointerId); scrY.delete(e.pointerId);
+    const wasPan = start && start.mode === "pan" && moved;
+    if (ptrs.size === 0){
+      wrap.classList.remove("dragging");
+      if (wasPan && samples.length > 1 && !reduce){   // fling
+        const a = samples[0], b = samples.at(-1), dt = b[0] - a[0];
+        if (dt > 0 && performance.now() - b[0] < 60){ const vx = (b[1]-a[1])/dt, vy = (b[2]-a[2])/dt; if (Math.hypot(vx, vy)*V.zoom > .25) coast = {vx, vy, t: performance.now()}; }
+      }
+      if (!moved && e.pointerType === "touch"){   // double-tap zooms in
+        const now = performance.now();
+        if (lastTap && now - lastTap.t < 320 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30){ zoomAt(pt(e), 2); lastTap = null; }
+        else lastTap = {t: now, x: e.clientX, y: e.clientY};
+      }
+      start = null;
+    } else if (start){   // one finger left: carry on panning from here
+      const q = [...ptrs.values()][0];
+      start = { mode:"pan", p:q, c:[e.clientX, e.clientY], rot:V.rot, tilt:V.tilt, w: toWorld(q, M.cam.fx, M.cam.fy, M.cam.r, M.cam.s) }; samples = []; moved = true;
+    }
+    busy();
+  };
   stage.addEventListener("pointerup", end); stage.addEventListener("pointercancel", end);
   stage.addEventListener("click", e => { if (moved){ e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
-  stage.addEventListener("wheel", e => { e.preventDefault(); hint.classList.add("gone");
-    const f = Math.exp(-e.deltaY * .0015);
-    if (st.cam === "free") V.zoom = Math.max(.6, Math.min(8, V.zoom * f));
-    else V.zoom = Math.max(.4, Math.min(3.5, V.zoom * f));
+  stage.addEventListener("dblclick", e => { e.preventDefault(); zoomAt(pt(e), e.shiftKey ? .5 : 2); });
+  stage.addEventListener("wheel", e => { e.preventDefault();
+    const dy = e.deltaMode === 1 ? e.deltaY*33 : e.deltaY;
+    if (e.shiftKey && !e.ctrlKey){ V.setTilt(V.tiltT - dy*.05); return; }
+    zoomAt(pt(e), Math.exp(-dy*(e.ctrlKey ? .01 : .0018)));   // ctrl+wheel = trackpad pinch
   }, {passive:false});
-  $("#compass").onclick = () => { V.rot = 0; };
-  addEventListener("keydown", e => { if (e.target !== document.body) return; if (e.key === "q" || e.key === "Q") V.rot -= 15; if (e.key === "e" || e.key === "E") V.rot += 15; });
+  const reset = (north, level) => { if (north) V.rot = Math.round(M.cam.r/360)*360; if (level) V.setTilt(0); };
+  $("#compass").onclick = () => reset(true, true);
+  addEventListener("keydown", e => {
+    if (e.target !== document.body || e.metaKey) return;
+    const k = e.key, step = 90;
+    if (/^Arrow/.test(k)){
+      e.preventDefault(); stop();
+      if (e.shiftKey){ if (k === "ArrowLeft") V.rot -= 15; else if (k === "ArrowRight") V.rot += 15; else V.setTilt(V.tiltT + (k === "ArrowUp" ? 10 : -10)); return; }
+      toFree();
+      const dx = k === "ArrowLeft" ? -step : k === "ArrowRight" ? step : 0, dy = k === "ArrowUp" ? -step : k === "ArrowDown" ? step : 0;
+      const w = toWorld([M.W/2 + dx, M.cy + dy], V.fx, V.fy, V.rot, V.zoom); V.fx = w[0]; V.fy = w[1]; return;
+    }
+    if (k === "+" || k === "=") zoomAt([M.W/2, M.cy], 1.6);
+    else if (k === "-" || k === "_") zoomAt([M.W/2, M.cy], 1/1.6);
+    else if (k === "q" || k === "Q") V.rot -= 15; else if (k === "e" || k === "E") V.rot += 15;
+    else if (k === "n" || k === "N") reset(true, false);
+    else if (k === "u" || k === "U") reset(false, true);
+    else if (k === "r" || k === "R") reset(true, true);
+  });
+  // animation: momentum, smooth zoom, tilt
+  let last = performance.now();
+  (function tick(now){
+    const dt = Math.min(50, now - last); last = now;
+    if (coast){
+      V.fx += coast.vx*dt; V.fy += coast.vy*dt; const k = Math.exp(-dt/320); coast.vx *= k; coast.vy *= k;
+      if (Math.hypot(coast.vx, coast.vy)*V.zoom < .02) { coast = null; busy(); }
+    }
+    if (zanim){
+      const r = zanim.t/V.zoom; V.zoom = reduce ? zanim.t : V.zoom*Math.pow(r, Math.min(1, dt/70));
+      [V.fx, V.fy] = camFor(zanim.w, zanim.p, V.rot, V.zoom);
+      if (Math.abs(Math.log(zanim.t/V.zoom)) < .002){ V.zoom = zanim.t; [V.fx, V.fy] = camFor(zanim.w, zanim.p, V.rot, V.zoom); zanim = null; busy(); }
+    }
+    // soft bounds: don't lose the course
+    if (st.cam === "free" && M){ V.fx = clamp(V.fx, -M.W*.3, M.W*1.3); V.fy = clamp(V.fy, -M.H*.3, M.H*1.3); }
+    if (!(start && moved)) V.tilt += (V.tiltT - V.tilt)*(reduce ? 1 : Math.min(1, dt/140));
+    V.sc = V.tilt > .05 ? tScale(V.tilt) : 1;
+    stage.style.transform = V.tilt > .05 ? `rotateX(${V.tilt.toFixed(2)}deg) scale(${V.sc.toFixed(4)})` : "";
+    requestAnimationFrame(tick);
+  })(last);
 })();
 
 /* ---------- phone: leaderboard / feed as a bottom sheet (drag or tap the handle) ---------- */
