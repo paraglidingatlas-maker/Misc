@@ -1,6 +1,6 @@
 # Handover: Airtribune redesign concept
 
-Last updated 24 Nov 2026 by the chat "BWO import" (after "Rounds redesign + real Task 3") (follows "Airtribune logo rollout").
+Last updated 24 Nov 2026 by the chat "Live view navigation + tour review" (after "BWO import") (after "Rounds redesign + real Task 3") (follows "Airtribune logo rollout").
 
 ## Live
 
@@ -70,6 +70,18 @@ Proposed improvements, in priority order. **Owner picked 1, 3, 5, 6 and 8 (24 No
 **Host banner photo (owner, 24 Nov 2026):** the photo is now a `.host-photo` layer sized to the banner height (3:2, right-aligned, left edge masked into the dark) so the whole glider shows instead of being cropped by `cover`; on ≤1000 px it shifts right (`right:-25%`).
 
 **Tour map review (3 agents, 24 Nov 2026), waiting for the owner to choose:** route wraps at the date line (legs R7→R8, R8→R9, R10→R11 cut into 4 subpaths; glider jumps); 13 of 25 legs join overlapping events, so "Season travel 150,691 km" and "Longest transfer 16,103 km" are fictional (SRS-only route ≈ 3,300 km); Europe pins overlap (R22 hidden under R24); clusters "2×/3×" open only one round (R7, R9, R17, R18, R20 unreachable from the map); pins 6–11 px on phone; tooltip never seen on touch; "Continents 5" counts regions. Design proposals: three visual states (past / next / upcoming), SRS as the star, only the next leg bright, crop to the racing, Europe inset, broadcast labels; bolder option: an auto-playing "season replay" with a month scrubber.
+
+**"AI look" cleanup (owner, 24 Nov 2026):** the owner said subtle tells like the coloured accent bars on rows "give away the AI touch", missing the craft of SailGP. Removed: the orange 4 px bar + orange gradient tint on the next-round row, the SRS gradient bar + blue tint on SRS rows, the SRS bar on the SRS spotlight list (`.srs-r`), and the inset orange bar on the live tracker's selected leaderboard row.
+
+## NEXT JOB: high-quality design concepts (owner asked 24 Nov 2026)
+
+Owner: "there are still subtle hints like these bar lines etc which give away the AI touch; in SailGP this is missing; I think we need some concepts like in Midjourney or some high quality results." Goal: move the calendar (start with the All Rounds list and The Tour map) from "competent generated UI" to editorial, broadcast-grade design. Suggested approach, confirm with the owner first:
+1. Study sailgp.com (calendar + event pages) and 2–3 other references (F1 calendar, Red Bull X-Alps live, Nike/Rapha editorial) and write down what makes them feel crafted: real photography at full bleed, restrained palette, few UI chrome elements, big confident type with tight tracking, generous negative space, no pills/chips/bars/icon-in-circle buttons, data set in tabular type, motion that serves content.
+2. Audit the calendar for remaining AI tells: segmented pill filters with counts, arrow-in-circle buttons, accent bars, gradient tints, frosted cards everywhere, mini route "sparkline" glyphs on every row, uppercase letter-spaced micro-labels everywhere, slash-separated runs everywhere, **fake striped flags that are wrong** (Australia renders as a French tricolour, India as Ireland, Slovenia/UK generic) — use real flag SVGs (e.g. flag-icons via jsDelivr) or drop flags.
+3. Produce 2–3 distinct concept directions as static high-fidelity mockup pages (e.g. airtribune-redesign/concepts/rounds-a.html …) and screenshot them for the owner; optionally generate mood imagery with the connected Canva image generation, but the owner wants page-quality results, not just pictures.
+4. Owner picks, then roll the chosen direction into src/season-calendar.html.
+
+Also still waiting for an answer: tour map plan A (fix + refine) or B (season replay), see the tour map review above.
 
 Notes: the map hint moved to the bottom-left so it no longer covers the Task chip; the Local clock is hidden below 1600 px so the top bar fits at 1440. Long double surnames show the first one on the board (DIAZ, TELLO); full name on hover.
 
