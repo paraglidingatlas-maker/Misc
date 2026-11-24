@@ -1,6 +1,6 @@
 # Handover: Airtribune redesign concept
 
-Last updated 24 Nov 2026 by the chat "Airtribune logo rollout" (follows "Airtribune standards upgrade").
+Last updated 24 Nov 2026 by the chat "Rounds redesign + real Task 3" (follows "Airtribune logo rollout").
 
 ## Live
 
@@ -38,14 +38,12 @@ Sources are in `airtribune-redesign/src/`:
 
 ## Open items
 
-- **Rounds section redesign (owner asked; next job).** Owner: "rounds page is too long, endless and samey; present it well and elegantly; ask designers". Today it is 26 identical cards with terrain task maps, 3-col grid under 11 month headings, ~5,100 px tall at 1440 (`src/season-calendar.html`, section `#rounds` ~line 610, renderer near `#months` ~line 1240). Three designers (broadcast, editorial, product) were asked separately and agreed:
-  - one ruled typographic row per round (timing-board / race-schedule style), ~64–76 px at 1440; columns: month rail (sticky, replaces month headings) / R01 / big dates / flag bar + COUNTRY 26–28/800 caps with event name + slash run (place / days / type) / distance board (`81.8 KM · 4 TP`) / status (`IN 18 DAYS`) + arrow; whole row opens the existing modal;
-  - cut the always-on terrain map from normal rows (main cause of "samey"); show it on hover only, or as a thin route-only line glyph (designer 1's idea; needs a route-only mode in `drawTaskMap`);
-  - SRS rows taller (~112–152 px) with SRS mark, gradient rule, `ROUND 2 OF 5`, and a permanent task map or SRS photo;
-  - next round = expanded strip with orange left rule, headline countdown and the only button (solid orange "Race details"); live round = same with pulsing dot + "Watch live"; completed rounds collapse into one "N completed / show" row;
-  - filters → one sticky bar: type toggles with counts, region as a single dropdown, search on the right; header becomes left-aligned "All rounds" + live slash run `26 ROUNDS / 12 COUNTRIES / 5 SRS`;
-  - 390 px: 3-line rows (~90 px), sticky month strip, type chips scroll inside their own strip; target total height ~2,600 px at 1440.
-- **Live broadcast with real Task 3 of the latest SRS round (owner asked; not started).** The live tracker currently shows a simulated "SRS Slovenia 2027 Task 3". Owner wants it to run Task 3 of the latest held SRS event (check which one: probably SRS Tapalpa 2026, the owner's photo set). Find real task data (turnpoints, radii, start/goal, results, ideally tracklogs) on Airtribune or the SRS site; if no tracks are public, replay the real task geometry and real finishing order with simulated tracks, and say so on the page.
+- **Done this chat:** Rounds section redesigned to the agreed brief (ruled timing-board rows, sticky month rail, SRS rows with photo + route glyph, next-round strip with the only orange button, completed-rounds fold row, one filter bar with region dropdown; ~2,450 px at 1440). Renderer: `/* ROUNDS: timing-board rows */` in `src/season-calendar.html`.
+- **Done this chat:** live tracker replays the REAL SRS Tapalpa 2026 (Airtribune srs-2026-6) Task 3, task 6991, 10 Nov 2026, 58.7 km: official task, results, top-20 IGC tracks. Data + scripts + SOURCES.md in `src/data/srs-task3/` (`embed_task3.py` writes data into live-tracker.html; run before `build_pages.py`).
+- **Done this chat:** photo credits made thin/subtle everywhere (300 italic 11px, 45% white, "© Aninder Singh · Paragliding Atlas"); full credit line stays in footers.
+- **NEXT JOB (owner asked): event pages look empty → import data from civlcomps.org, British Winter Open first, then the rest.** Owner first wanted to know which events exist there; list given (below), awaiting go-ahead. civlcomps.org is reachable (list pages render via JS; use Playwright; search URL `https://civlcomps.org/events?search%5Bdates%5D=&search%5Bq%5D=<q>`). Ambiguity to confirm with owner: "event pages" = round details drawer on the calendar (non-SRS rounds have no own page) or new per-event pages like the SRS ones (`build_srs.py`).
+  Found on CIVL (slug after civlcomps.org/event/): R03 `4%C2%AA-etapa-gaucho-de-parapente-2026-sapiranga-rs`; R04 `porterville-paragliding-open-2026-south-africa-pwc`; R06 `primera-valida-nacional-open-roldanillo-2027`; R07 `copa-niviuk-2027-iv-edition`; R09 `copa-de-las-americas-roldanillo-2027`; R10 `2nd-cup-dedalo-s-piedechinche-2027`; R11 `brigth-open-2027`; R12 `corryong-pg-open-2027`; R15 `andes-tour-hike-and-fly-2026` (2026 edition, check); R16 `vipava-valley-open-2027`; R17 `corryong-sports-cup-2027` (+ duplicate `...20272`). Possibly: R02 Encantado = `iii-etapa-do-campeonato-gaucho-de-parapente` (check).
+  Not found: R01 Punjab Cup, R05 Apía, R08 Manilla, R13 **8th British Winter Open** (only 3rd–7th editions exist: `7th-british-winter-open` etc.; past ones can supply venue/format/history), R14 Costa Rica, R18/R22/R24/R25/R26 SRS 2027 rounds (past SRS editions exist e.g. `srs-naviter-edition-2026-tolmin-slovenia`), R19 Glencoe, R20 X-Scotia, R21 11th Naviter Open (7th 2023 latest listed), R23 Chabre.
 - Swap in full-resolution photos if the owner provides them or approves access to the `Website` repository.
 - Feed and thumbnail pages still use the earlier styles.
 - Known small issue fixed this chat: live tracker overflowed 5 px at 390 px (map hint and bottom controls); empty toast box showed in broadcast view.
