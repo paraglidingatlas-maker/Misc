@@ -150,8 +150,8 @@ function drawCyl(sel, task, f, o){
     }
     const R = Math.max(c.r*f.s, c.type==="goal"?3:2.5);
     g.append("circle").attr("cx",x).attr("cy",y).attr("r",R)
-      .attr("fill", c.type==="sss" ? "rgba(43,212,196,.05)" : c.type==="goal" ? "rgba(255,255,255,.08)" : "rgba(43,212,196,.09)")
-      .attr("stroke", c.type==="goal" ? "#FFFFFF" : "#2BD4C4").attr("stroke-width", o.big?1.2:1).attr("stroke-dasharray", c.type==="sss" ? "4 3" : null);
+      .attr("fill", c.type==="sss" ? "rgba(255,255,255,.04)" : c.type==="goal" ? "rgba(255,255,255,.08)" : "rgba(255,255,255,.06)")
+      .attr("stroke", c.type==="goal" ? "#FFFFFF" : "rgba(255,255,255,.6)").attr("stroke-width", o.big?1.2:1).attr("stroke-dasharray", c.type==="sss" ? "4 3" : null);
     if (o.labels){
       const cen = d3.polygonCentroid(task.cyl.map(q=>f(q.c)).concat(task.cyl.length<3?[[x+1,y+1]]:[])), ang = Math.atan2(y-cen[1], x-cen[0]) || -.8;
       let lx = x + Math.cos(ang)*(R+10), ly = y + Math.sin(ang)*(R+10) + 3, anc = Math.cos(ang) < -.3 ? "end" : Math.cos(ang) > .3 ? "start" : "middle";
@@ -167,8 +167,8 @@ function drawCyl(sel, task, f, o){
 }
 function launchMark(sel, f, big){
   const [x,y] = f([0,0]), s = big?7:5;
-  sel.append("path").attr("d",`M${x},${y-s} L${x+s*.9},${y+s*.6} L${x-s*.9},${y+s*.6}Z`).attr("fill","#FFC906").attr("stroke","#03100F").attr("stroke-width",1.4);
-  if (big) sel.append("text").attr("x",x-10).attr("y",y+21).text("Take-off").attr("text-anchor","middle").attr("fill","#FFC906").attr("font-family",MONO).attr("font-size",10.5).attr("font-weight",600).attr("paint-order","stroke").attr("stroke","#03100F").attr("stroke-width",3);
+  sel.append("path").attr("d",`M${x},${y-s} L${x+s*.9},${y+s*.6} L${x-s*.9},${y+s*.6}Z`).attr("fill","#FFFFFF").attr("stroke","#03100F").attr("stroke-width",1.4);
+  if (big) sel.append("text").attr("x",x-10).attr("y",y+21).text("Take-off").attr("text-anchor","middle").attr("fill","#FFFFFF").attr("font-family",MONO).attr("font-size",10.5).attr("font-weight",600).attr("paint-order","stroke").attr("stroke","#03100F").attr("stroke-width",3);
 }
-const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFC83D","#FF8A3D","#F0432B"]).clamp(true);
+const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFB07A","#FF7A2E","#FF5F00"]).clamp(true);
 

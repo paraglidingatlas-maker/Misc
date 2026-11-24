@@ -5,7 +5,8 @@ const ROOT = '/home/user/Misc';
 const MIME = {'.html':'text/html','.js':'application/javascript','.css':'text/css','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml','.json':'application/json','.webp':'image/webp'};
 (async () => {
   const jobs = JSON.parse(fs.readFileSync(process.argv[2]));
-  const browser = await chromium.launch({proxy:{server:'http://127.0.0.1:44937'}});
+  const px = process.env.HTTPS_PROXY || process.env.https_proxy;
+  const browser = await chromium.launch(px ? {proxy:{server:px}} : {});
   const report = [];
   for (const j of jobs) {
     const ctx = await browser.newContext({viewport:{width:j.w,height:j.h||900}, deviceScaleFactor:j.dpr||1, hasTouch: j.w<500, isMobile: j.w<500});
@@ -18,7 +19,8 @@ const MIME = {'.html':'text/html','.js':'application/javascript','.css':'text/cs
     if (j.actions) { try { await page.evaluate(j.actions); } catch(e){ errs.push('action: '+e.message); } await page.waitForTimeout(j.wait2 ?? 900); }
     if (j.scrollTo) { await page.evaluate(s => { const el = document.querySelector(s); if (el) el.scrollIntoView({block:'start'}); }, j.scrollTo); await page.waitForTimeout(700); }
     const ov = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
-    if (j.out) await page.screenshot({path:j.out, fullPage:!!j.full, clip:j.clip});
+    if (j.out && j.el) { const L = page.locator(j.el).first(); await L.scrollIntoViewIfNeeded().catch(()=>{}); await page.waitForTimeout(400); await L.screenshot({path:j.out}).catch(e=>errs.push('el '+e.message)); }
+    else if (j.out) await page.screenshot({path:j.out, fullPage:!!j.full, clip:j.clip});
     if (j.evalOut) report.push({out:j.out, val: await page.evaluate(j.evalOut).catch(e=>'ERR '+e.message)});
     report.push({out:j.out, url:j.url, w:j.w, overflowX:ov, errs});
     await ctx.close();

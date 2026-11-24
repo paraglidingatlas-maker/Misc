@@ -9,8 +9,8 @@
 :root{
   --bg:#051416; --bg-2:#081C1F; --panel:#0C2427; --panel-2:#113034; --deep:#03100F;
   --ink:#FFFFFF; --ink-2:#B7C9CB; --muted:#6E8A8D; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
-  --orange:#FF5F00; --yellow:#FFC906; --teal:#2BD4C4; --live:#FF2D2D;
-  --srs-blue:#1DA9E1; --srs-red:#E31E2D; --srs-grad:linear-gradient(90deg,var(--srs-blue),#7C5BB0 55%,var(--srs-red));
+  --orange:#FF5F00; --yellow:#FFFFFF; --teal:#FFFFFF; --live:#FF2D2D;
+  --srs-blue:#1DA9E1; --srs-red:#1DA9E1; --srs-grad:var(--srs-blue);
   --f-display:"Archivo",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif;
   color-scheme:dark;
 }
@@ -65,8 +65,7 @@ a{color:inherit;text-decoration:none}
 .lb-cols{position:sticky;top:45px;z-index:2;background:var(--bg-2);display:grid;grid-template-columns:26px 10px minmax(0,1fr) 66px 58px;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line)}
 .row{position:absolute;left:0;right:0;height:52px;background:var(--bg-2);display:grid;grid-template-columns:26px 10px minmax(0,1fr) 66px 58px;gap:8px;align-items:center;padding:0 12px;border-bottom:1px solid var(--line);transition:transform .45s cubic-bezier(.3,.8,.2,1),background .2s;cursor:pointer;text-align:left;width:100%}
 .phase{display:inline-flex;align-items:center;gap:6px}
-.phase i{width:6px;height:6px;border-radius:50%;background:var(--yellow)}
-.phase[data-p="race"] i{background:var(--live)}.phase[data-p="goal"] i,.phase[data-p="final"] i{background:var(--teal)}
+.phase i{display:none}
 .row:hover{background:var(--panel)}
 .row.sel{background:var(--panel-2)}
 .row .pos{font:800 italic 18px var(--f-display);text-align:center}
@@ -130,10 +129,8 @@ a{color:inherit;text-decoration:none}
 .feed p{margin:0;font-size:13px;color:var(--ink-2)}
 .feed p b{color:#fff;font:800 italic 13.5px var(--f-display);text-transform:uppercase}
 .feed li.lead p{color:#fff}
-.feed li.lead{background:linear-gradient(90deg,rgba(255,95,0,.16),transparent)}
-.feed li.goal{background:linear-gradient(90deg,rgba(43,212,196,.12),transparent)}
-.feed .tag{display:inline-block;margin-right:6px;padding:1px 6px;border-radius:3px;font:800 9px var(--f-body);letter-spacing:.12em;vertical-align:1px}
-.tag.lead{background:var(--orange);color:#fff}.tag.tp{background:var(--panel-2);color:var(--ink-2)}.tag.goal{background:var(--teal);color:#03100F}.tag.start{background:var(--yellow);color:#1E1600}
+.feed .tag{display:inline-block;margin-right:6px;font:800 10px var(--f-body);letter-spacing:.1em;vertical-align:1px;color:var(--muted)}
+.feed .tag.lead{color:var(--orange)}.feed .tag.goal{color:#fff}
 
 /* bottom: course strip + controls */
 .bottom{background:var(--bg-2);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center}
@@ -147,7 +144,6 @@ a{color:inherit;text-decoration:none}
 #scrub{width:100%;accent-color:var(--orange);margin:2px 0 0}
 .stripwrap{min-width:0}
 
-.feed .tag.climb{background:rgba(255,138,61,.18);color:#FFB27A}.feed .tag.info{background:rgba(255,255,255,.08);color:var(--ink-2)}.feed .tag.high{background:rgba(29,169,225,.2);color:#9FDDF6}
 
 /* grid placement: the sheet wrapper is transparent on desktop, a bottom sheet on phones */
 .sheet{display:contents}
@@ -165,14 +161,14 @@ a{color:inherit;text-decoration:none}
 .tl{position:relative;padding-top:26px}
 .tl-m{position:absolute;left:8px;right:8px;top:0;height:26px}
 .tlm{position:absolute;bottom:0;width:14px;height:26px;margin-left:-7px;display:block}
-.tlm i{position:absolute;left:6px;bottom:2px;width:2px;height:10px;border-radius:1px;background:var(--teal)}
-.tlm[data-k="gate"] i{background:var(--yellow)}
+.tlm i{position:absolute;left:6px;bottom:2px;width:2px;height:10px;border-radius:0;background:var(--ink-2)}
+.tlm[data-k="gate"] i{background:#fff}
 .tlm[data-k="goal"] i{background:#fff;height:24px}
 .tlm[data-k="gate"] i,.tlm[data-k="tp"] i{height:24px}
 .tlm[data-k="lead"] i{left:3px;bottom:4px;width:8px;height:8px;border-radius:1px;transform:rotate(45deg);background:var(--orange)}
 .tlm[data-k="result"] i{left:4px;bottom:4px;width:6px;height:6px;border-radius:50%;background:#fff}
 .tlm.r span{left:auto;right:11px}
-.tlm span{position:absolute;left:11px;bottom:15px;font:700 9px/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;pointer-events:none}
+.tlm span{position:absolute;left:11px;bottom:15px;font:500 11px/1 var(--f-body);color:var(--muted);white-space:nowrap;pointer-events:none}
 .tlm:hover i{box-shadow:0 0 0 3px rgba(255,255,255,.18)}
 .tlm:hover span{color:#fff}
 .tlm.past span{color:var(--ink-2)}
@@ -241,21 +237,19 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- glass system ---------- */
 .toast:empty{display:none}
-.toast{background:rgba(8,28,31,.72);color:#FFD9C4;border:1px solid rgba(255,150,92,.45);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 20px 50px -18px rgba(255,95,0,.45)}
-.livepill{background:rgba(255,45,45,.16);color:#FFC2C2;box-shadow:inset 0 0 0 1px rgba(255,90,90,.5)}
-.livepill i{background:#FF5A5A}
+.toast{background:var(--orange);color:#fff;border:0;border-radius:2px;box-shadow:none}
+.livepill{background:none;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line-2);border-radius:2px}
+.livepill i{display:none}
 .tele{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),rgba(3,16,15,.55);border-color:rgba(255,255,255,.14);backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3)}
 .tele-g{background:rgba(255,255,255,.06)}
 .tele-g div{background:rgba(3,16,15,.35)}
 .leg{background:rgba(8,28,31,.5);border-color:rgba(255,255,255,.14);backdrop-filter:blur(14px)}
-.feed .tag.lead{background:rgba(255,95,0,.2);color:#FFC7A6}
-.feed li.lead{background:linear-gradient(90deg,rgba(255,95,0,.09),transparent)}
 .row.sel{box-shadow:inset 2px 0 0 rgba(255,150,92,.8)}
 
 /* ---------- broadcast view: full-bleed map, minimal SailGP-style overlays ---------- */
 .t-at{display:contents}
 .cine-bug{display:none}
-.app.cine .cine-bug{display:flex;position:absolute;z-index:4;right:max(20px,env(safe-area-inset-right,0px));bottom:16px;padding:8px 12px;border-radius:6px;background:rgba(3,16,15,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:15px;color:#fff}
+.app.cine .cine-bug{display:flex;position:absolute;z-index:4;right:max(20px,env(safe-area-inset-right,0px));bottom:16px;padding:8px 12px;border-radius:2px;background:#03100F;font-size:15px;color:#fff}
 @media (max-width:1100px){.app.cine .cine-bug{display:none}}
 
 .cine-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:8px;background:var(--orange);color:#fff;font:800 10.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase}
@@ -271,7 +265,7 @@ a{color:inherit;text-decoration:none}
 .app.cine .bottom{background:linear-gradient(0deg,rgba(3,16,15,.92),rgba(3,16,15,.55));border-top:0;position:relative;z-index:5}
 .app.cine .mapwrap{height:100%}
 .app.cine .cine-board{display:grid;position:absolute;z-index:4;left:max(20px,env(safe-area-inset-left,0px));top:96px;gap:4px;width:250px}
-.cb-row{display:grid;grid-template-columns:30px 5px minmax(0,1fr) auto;gap:10px;align-items:center;height:36px;padding:0 12px 0 0;background:rgba(3,16,15,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:6px;overflow:hidden;transition:transform .6s cubic-bezier(.3,.8,.2,1)}
+.cb-row{display:grid;grid-template-columns:30px 5px minmax(0,1fr) auto;gap:10px;align-items:center;height:36px;padding:0 12px 0 0;background:#03100F;border-radius:2px;overflow:hidden;transition:transform .6s cubic-bezier(.3,.8,.2,1)}
 .cb-row .p{height:100%;display:grid;place-items:center;font:800 italic 16px var(--f-display);background:rgba(255,255,255,.08)}
 .cb-row:first-child .p{background:var(--orange)}
 .cb-row .c{height:22px;border-radius:2px}
@@ -279,18 +273,18 @@ a{color:inherit;text-decoration:none}
 .cb-row b small{font:600 11px var(--f-body);font-style:normal;color:var(--muted);margin-left:6px}
 .cb-row .g{font:700 12.5px var(--f-body);font-variant-numeric:tabular-nums;color:var(--ink-2)}
 .cb-row:first-child .g{color:#fff}
-.app.cine .cine-bar{display:flex;position:absolute;z-index:4;left:50%;bottom:18px;transform:translateX(-50%);align-items:stretch;border-radius:10px;overflow:hidden;background:rgba(3,16,15,.66);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);white-space:nowrap;max-width:calc(100% - 32px)}
+.app.cine .cine-bar{display:flex;position:absolute;z-index:4;left:50%;bottom:18px;transform:translateX(-50%);align-items:stretch;border-radius:2px;overflow:hidden;background:#03100F;border:0;white-space:nowrap;max-width:calc(100% - 32px)}
 .cine-bar > div{display:flex;flex-direction:column;justify-content:center;padding:8px 16px;border-right:1px solid rgba(255,255,255,.08)}
 .cine-bar > div:last-child{border-right:0}
-.cine-bar .who{flex-direction:row;align-items:center;gap:10px;background:rgba(255,255,255,.04)}
-.cine-bar .who .pp{font:900 italic 24px var(--f-display);color:var(--orange)}
+.cine-bar .who{flex-direction:row;align-items:center;gap:10px;padding-left:0}
+.cine-bar .who .pp{align-self:stretch;display:grid;place-items:center;margin:-8px 4px -8px 0;padding:0 14px;background:var(--orange);font:900 italic 24px var(--f-display);color:#fff}
 .cine-bar .who b{font:800 italic 18px var(--f-display);text-transform:uppercase}
 .cine-bar .fl{width:24px;height:18px}
 .cine-bar .lbl{font-size:9px}
 .cine-bar .v{font:800 italic 19px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
 .cine-bar .v small{font:600 10px var(--f-body);font-style:normal;color:var(--muted);margin-left:2px}
-.cine-bar .up{color:#FF8A3D}.cine-bar .dn{color:var(--teal)}
-.app.cine .cine-exit{display:inline-flex;position:absolute;z-index:6;right:max(20px,env(safe-area-inset-right,0px));top:96px;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:8px;background:rgba(3,16,15,.6);border:1px solid rgba(255,255,255,.18);font:700 10.5px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);backdrop-filter:blur(10px)}
+.cine-bar .up{color:#fff}.cine-bar .dn{color:var(--muted)}
+.app.cine .cine-exit{display:inline-flex;position:absolute;z-index:6;right:max(20px,env(safe-area-inset-right,0px));top:96px;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:2px;background:#03100F;border:1px solid rgba(255,255,255,.18);font:700 10.5px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
 .app.cine .toast{top:96px}
 .app.cine .cine-exit:hover{color:#fff;border-color:var(--orange)}
 .cine-exit kbd{font:600 10px var(--f-body);padding:2px 5px;border-radius:4px;background:rgba(255,255,255,.1)}
@@ -340,7 +334,7 @@ a{color:inherit;text-decoration:none}
     <div><span class="lbl">Race time</span><span class="t-big num" id="tClock">−0:12:00</span></div>
     <div class="t-local"><span class="lbl">Local</span><span class="t-mid num" id="tLocal">12:03</span></div>
     <div class="t-leg"><span class="lbl" id="tLegL">Start gate</span><span class="t-mid num" id="tLeg">—</span></div>
-    <div class="t-wind"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255,255,255,.18)"/><g id="windArrow" transform="rotate(135 20 20)"><path d="M20 6 L26 22 L20 18 L14 22Z" fill="#2BD4C4"/></g></svg><div><span class="lbl">Thermal drift</span><span class="t-mid num" id="tWind">—</span></div></div>
+    <div class="t-wind"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255,255,255,.18)"/><g id="windArrow" transform="rotate(135 20 20)"><path d="M20 6 L26 22 L20 18 L14 22Z" fill="#FFFFFF"/></g></svg><div><span class="lbl">Thermal drift</span><span class="t-mid num" id="tWind">—</span></div></div>
     <div class="t-base"><span class="lbl">Highest pilot</span><span class="t-mid num" id="tBase">—</span></div>
     <div class="t-sp"></div>
     <div class="t-stats"><div><span class="lbl">Racing</span><b id="sAir">12</b></div><div><span class="lbl">In goal</span><b id="sGoal">0</b></div></div>
@@ -505,8 +499,8 @@ function drawCyl(sel, task, f, o){
     }
     const R = Math.max(c.r*f.s, c.type==="goal"?3:2.5);
     g.append("circle").attr("cx",x).attr("cy",y).attr("r",R)
-      .attr("fill", c.type==="sss" ? "rgba(43,212,196,.05)" : c.type==="goal" ? "rgba(255,255,255,.08)" : "rgba(43,212,196,.09)")
-      .attr("stroke", c.type==="goal" ? "#FFFFFF" : "#2BD4C4").attr("stroke-width", o.big?1.2:1).attr("stroke-dasharray", c.type==="sss" ? "4 3" : null);
+      .attr("fill", c.type==="sss" ? "rgba(255,255,255,.04)" : c.type==="goal" ? "rgba(255,255,255,.08)" : "rgba(255,255,255,.06)")
+      .attr("stroke", c.type==="goal" ? "#FFFFFF" : "rgba(255,255,255,.6)").attr("stroke-width", o.big?1.2:1).attr("stroke-dasharray", c.type==="sss" ? "4 3" : null);
     if (o.labels){
       const cen = d3.polygonCentroid(task.cyl.map(q=>f(q.c)).concat(task.cyl.length<3?[[x+1,y+1]]:[])), ang = Math.atan2(y-cen[1], x-cen[0]) || -.8;
       let lx = x + Math.cos(ang)*(R+10), ly = y + Math.sin(ang)*(R+10) + 3, anc = Math.cos(ang) < -.3 ? "end" : Math.cos(ang) > .3 ? "start" : "middle";
@@ -522,10 +516,10 @@ function drawCyl(sel, task, f, o){
 }
 function launchMark(sel, f, big){
   const [x,y] = f([0,0]), s = big?7:5;
-  sel.append("path").attr("d",`M${x},${y-s} L${x+s*.9},${y+s*.6} L${x-s*.9},${y+s*.6}Z`).attr("fill","#FFC906").attr("stroke","#03100F").attr("stroke-width",1.4);
-  if (big) sel.append("text").attr("x",x-10).attr("y",y+21).text("Take-off").attr("text-anchor","middle").attr("fill","#FFC906").attr("font-family",MONO).attr("font-size",10.5).attr("font-weight",600).attr("paint-order","stroke").attr("stroke","#03100F").attr("stroke-width",3);
+  sel.append("path").attr("d",`M${x},${y-s} L${x+s*.9},${y+s*.6} L${x-s*.9},${y+s*.6}Z`).attr("fill","#FFFFFF").attr("stroke","#03100F").attr("stroke-width",1.4);
+  if (big) sel.append("text").attr("x",x-10).attr("y",y+21).text("Take-off").attr("text-anchor","middle").attr("fill","#FFFFFF").attr("font-family",MONO).attr("font-size",10.5).attr("font-weight",600).attr("paint-order","stroke").attr("stroke","#03100F").attr("stroke-width",3);
 }
-const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFC83D","#FF8A3D","#F0432B"]).clamp(true);
+const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFB07A","#FF7A2E","#FF5F00"]).clamp(true);
 
 
 
@@ -684,7 +678,7 @@ function build(){
   const world = svg.append("g").attr("class","world");
   const tg = world.append("g").attr("transform", `translate(${-W},${-H})`); terrain(tg, SEED, W*3, H*3, 1.1);
   drawCyl(world, task, f, {alpha:.85, big:true, chk});
-  world.append("path").attr("d", d3.line()(task.route.map(f))).attr("fill","none").attr("stroke","rgba(43,212,196,.5)").attr("stroke-dasharray","4 4").attr("stroke-width",1.2);
+  world.append("path").attr("d", d3.line()(task.route.map(f))).attr("fill","none").attr("stroke","rgba(255,255,255,.4)").attr("stroke-dasharray","4 4").attr("stroke-width",1.2);
   const trails = world.append("g");
   const screen = svg.append("g");
   // one label per place: a turnpoint within 3 km of the next one shares its label ("Amacueca · Goal")
@@ -694,7 +688,7 @@ function build(){
   tpLabels.forEach(d => d.w = d.name.length*6.6 + 6);
   const tpL = screen.append("g").selectAll("text").data(tpLabels).join("text").attr("class","tp-lab").text(d => d.name);
   const launch = f([0,0]);
-  const launchEl = screen.append("path").attr("fill","#FFC906").attr("stroke","#03100F").attr("stroke-width",1.4);
+  const launchEl = screen.append("path").attr("fill","#FFFFFF").attr("stroke","#03100F").attr("stroke-width",1.4);
   const dots = screen.append("g"), bubL = screen.append("g"), tags = screen.append("g");
   const pilots = PILOTS.map(P => {
     const g = trails.append("g");
@@ -751,7 +745,7 @@ function buildStrip(){
   const total = M.suffix[0], x = d => pad + (d/total)*(w-2*pad);
   s.append("line").attr("x1",x(0)).attr("x2",x(total)).attr("y1",34).attr("y2",34).attr("stroke","rgba(255,255,255,.16)").attr("stroke-width",3).attr("stroke-linecap","round");
   M.cumDist.forEach((d,k) => { if (k===0) return; const xx = x(d);
-    s.append("line").attr("x1",xx).attr("x2",xx).attr("y1",26).attr("y2",42).attr("stroke", k===M.cumDist.length-1 ? "#fff" : "#2BD4C4").attr("stroke-width",2);
+    s.append("line").attr("x1",xx).attr("x2",xx).attr("y1",26).attr("y2",42).attr("stroke", k===M.cumDist.length-1 ? "#fff" : "#B7C9CB").attr("stroke-width",2);
     const nx = M.cumDist[k+1] !== undefined ? x(M.cumDist[k+1]) : Infinity;
     if (nx - xx < 46) return;   // label would collide with the next one (Amacueca TP is 0.5 km before goal)
     s.append("text").attr("x",xx).attr("y",16).attr("text-anchor", k===M.cumDist.length-1 ? "end" : "middle").text(tpName(k)).attr("fill","#B7C9CB").attr("font-family","Inter, sans-serif").attr("font-size",10).attr("font-weight",700); });
@@ -928,7 +922,7 @@ function frame(force){
     $("#teFlag").innerHTML = flagHTML(s.nat.c); $("#teName").textContent = `${s.short} · ${s.nat.c}`; $("#tePos").textContent = `P${sp+1}`;
     $("#teAlt").innerHTML = `${fmtAlt(n.alt)}<small>m</small>`;
     const v = s.done ? 0 : n.v; $("#teVar").innerHTML = `${v>=0?"+":""}${v.toFixed(1)}<small>m/s</small>`;
-    const vb = $("#teVarBar"), w = Math.min(50, Math.abs(v)/4*50); vb.style.width = w + "%"; vb.style.left = v >= 0 ? "50%" : (50-w) + "%"; vb.style.background = v >= 0 ? "#FF5F00" : "#2BD4C4";
+    const vb = $("#teVarBar"), w = Math.min(50, Math.abs(v)/4*50); vb.style.width = w + "%"; vb.style.left = v >= 0 ? "50%" : (50-w) + "%"; vb.style.background = v >= 0 ? "#FF5F00" : "#6E8A8D";
     $("#teGs").innerHTML = `${s.done ? 0 : Math.round(n.gs)}<small>km/h</small>`;
     $("#teRem").innerHTML = s.done ? "GOAL" : `${s.rem.toFixed(1)}<small>km</small>`;
     $("#teTp").innerHTML = s.done ? "—" : `${dist(n.pt.p, M.route[Math.min(n.ti, M.route.length-1)]).toFixed(1)}<small>km</small>`;

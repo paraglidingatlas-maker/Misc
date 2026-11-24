@@ -52,7 +52,7 @@ CALLOUT = ('<div class="callout"><b>Instruments in India</b><ul>'
            '<li>Tracking is a local Meshtastic network; the organisers may also issue Flymaster trackers. Bring USB cables so tracklogs can be downloaded.</li></ul></div>')
 
 # ---------- Entry ----------
-entry = ('<div class="tb-h"><span class="eyebrow">Entry</span><span>8th British Winter Open</span></div>'
+entry = ('<div class="tb-h"><span>8th British Winter Open</span></div>'
          + board([("Entry fee", "£300", "or €360, by PayPal once offered a place"),
                   ("Field", "120", "Pilots max · 20 places held for women until 45 days out"),
                   ("Selection", "WPRS", "BHPA pilots first, other nations about 14 days later"),
@@ -66,7 +66,7 @@ entry = ('<div class="tb-h"><span class="eyebrow">Entry</span><span>8th British 
          + f'<p class="tnote"><b>No entries at the venue</b><span>Places are only offered online, in registration order and by WPRS.</span><a class="btn btn-o" href="{AT}">Register on Airtribune</a></p>')
 
 # ---------- On site ----------
-onsite = ('<div class="tb-h"><span class="eyebrow">On site</span><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0">'
+onsite = ('<div class="tb-h"><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0">'
           + run("Safety", ["Live trackers supplied", "Tracking mandatory", "Medic on take-off", "Radio coverage", "Good phone coverage", "No helicopter rescue"], neg=("No helicopter rescue",))
           + run("Organisation", ["Launch transport", "Retrieves included", "Tracklogs managed", "Airtribune scoring"])
           + run("Benefits", ["Lunch packs", "ID cards", "Social evening", "Party", "Free gift", "PWCA letters"])
@@ -130,7 +130,7 @@ field = f'''
 </section>'''
 
 # ---------- prizes ----------
-prizes = ('<section class="prz" id="prizes" aria-labelledby="pH"><div class="wrap"><div><span class="eyebrow" style="color:var(--orange)">Awards</span>'
+prizes = ('<section class="prz" id="prizes" aria-labelledby="pH"><div class="wrap"><div>'
           '<h2 class="up" id="pH">Trophies &amp; classes</h2><p>Trophies, no cash prizes; maybe small gifts from sponsors. Also British Female, British Sports and the Reynolds class. '
           'A class may be dropped with fewer than five pilots.</p></div><div class="prizes">'
           + "".join(f'<div class="prize"><b>{c}</b><span>{d}</span></div>' for c, d in
@@ -143,7 +143,7 @@ rep = {
   "TITLE": "Panchgani · 8th British Winter Open",
   "DESC": "8th British Winter Open: 23 Feb – 2 Mar 2027, Panchgani, India. Seven tasks, £300 entry, 120 pilots. Past editions and task replays from Airtribune.",
   "REG": AT, "REGSHORT": "airtribune.com/bwo2027",
-  "HERO": "pink-forest", "HEROPOS": "50% 45%", "PHOTO2": "gin-field",
+  "HERO": "pink-forest", "HEROPOS": "50% 45%", "PHOTO2": "coral-terraces",
   "ROUNDLABEL": "British Paragliding Open · 8th edition", "STATUS": "Confirmed", "STATUSCLS": "ok",
   "VENUE": "Panchgani", "COUNTRY": "India", "DATES": "23 Feb – 2 Mar 2027", "EVNAME": "8th British Winter Open", "TASKS": "7",
   "BANDN": str(len(BAND)), "BAND": "".join(f"<div><b>{esc(v)}</b><span>{esc(l)}</span></div>" for v, l in BAND),
@@ -155,7 +155,7 @@ rep = {
   "SITETILES": "".join(f'<div><span class="eyebrow">{esc(k)}</span><b>{esc(v)}</b></div>' for k, v in SITE_TILES),
   "SITESHORT": esc(SITESHORT), "CALLOUT": CALLOUT,
   "ENTRY": entry, "FEATURES": onsite, "TRAVEL": travel, "PRIZES": prizes, "RAIL": "",
-  "PLACE": "Panchgani, Maharashtra", "CARD1": "pink-close", "CARD2": "orange-blur", "CARD3": "coral-terraces",
+  "PLACE": "Panchgani, Maharashtra", "CARD1": "white-blur", "CARD2": "orange-blur", "CARD3": "pod-closeup",
   "RACELINE": "Seven tasks · £300 entry · 120 pilots max, selected by WPRS.",
   "TRIPLINE": "Fly to Pune (120 km) or Mumbai (255 km), then a taxi. HQ rooms from about €35.",
   "EVTJSON": json.dumps({"start": "2027-02-23", "end": "2027-03-02", "tz": 5.5, "seed": 13 * 97 + 13}),
@@ -168,29 +168,29 @@ assert "{{" not in out, re.findall(r"\{\{\w+\}\}", out)
 
 CSS = '''
 /* ---------- BWO: past editions + field ---------- */
-.hist-k{font:600 13px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hist-k{font:400 14px var(--f-body);color:var(--muted)}
 .hist-k b{font:900 italic 22px var(--f-display);color:#fff;margin-right:4px}
 .eds{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-2)}
 .ed{display:grid;grid-template-columns:220px minmax(0,1fr) 260px;gap:32px;padding:28px 0;border-bottom:1px solid var(--line)}
 .ed-y b{display:block;font:900 italic 64px/.85 var(--f-display);color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.85)}
-.ed:first-child .ed-y b{-webkit-text-stroke:0;color:var(--orange)}
-.ed-y span{display:block;margin-top:10px;font:700 12px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.ed:first-child .ed-y b{-webkit-text-stroke:0;color:#fff}
+.ed-y span{display:block;margin-top:10px;font:600 14px var(--f-body);color:var(--ink-2)}
 .ed-y small{display:block;margin-top:4px;font:400 italic 14px var(--f-display);color:var(--muted)}
-.ed-sub{font:700 11px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.ed-sub{font:400 13px var(--f-body);color:var(--muted);margin-bottom:14px}
 .pod{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .pod li{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:14px;align-items:baseline}
-.pod .k{font:700 10.5px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.pod .k{font:400 13px var(--f-body);color:var(--muted)}
 .pod b{font:800 italic clamp(18px,1.9vw,24px)/1.15 var(--f-display);text-transform:uppercase}
 .pod em{font:700 12px var(--f-body);font-style:normal;letter-spacing:.12em;color:var(--muted)}
-.ed-r .k{display:block;font:700 10.5px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.ed-r .k{display:block;font:400 13px var(--f-body);color:var(--muted);margin-bottom:10px}
 .rp{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .rp a{min-width:40px;height:34px;padding:0 10px;display:inline-grid;place-items:center;border-radius:6px;background:var(--orange);color:#fff;font:800 12px var(--f-body);letter-spacing:.08em}
 .rp a:hover{background:#ff7420}
-.res{color:var(--orange);font-weight:600;font-size:14px}
+.res{color:#fff;font-weight:600;font-size:14px;text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px}
 .hist-note{margin-top:18px;color:var(--muted);font-size:13.5px}
 .nat{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:0 28px;font:800 italic clamp(20px,2.2vw,28px)/1.6 var(--f-display)}
 .nat li{display:flex;gap:8px;align-items:baseline}
-.nat span{font:700 13px var(--f-body);color:var(--orange)}
+.nat span{font:500 13px var(--f-body);color:var(--muted)}
 @media (max-width:1000px){.ed{grid-template-columns:minmax(0,1fr);gap:16px}.ed-y{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}.ed-y b{font-size:44px}.ed-y span,.ed-y small{margin:0}}
 @media (max-width:640px){.pod li{grid-template-columns:70px minmax(0,1fr) auto;gap:10px}}
 '''

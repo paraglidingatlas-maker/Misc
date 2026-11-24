@@ -10,7 +10,7 @@ esc = html.escape
 
 EVENTS = [
   dict(slug="slovenia-lijak", at="srs-2027-1", label="SRS 2027 · Round 1 of 4", status="Confirmed", venue="Lijak", country="Slovenia",
-       place="Nova Gorica, Lijak", start="2027-03-15", end="2027-03-21", tz=1, tasks=6, seed=18*97+13, hero="pink-blur", heropos="50% 40%", photo2="pink-forest",
+       place="Nova Gorica, Lijak", start="2027-03-15", end="2027-03-21", tz=1, tasks=6, seed=18*97+13, hero="pink-blur", heropos="50% 40%", photo2="coral-terraces",
        evname="SRS Slovenia 2027",
        blurb="Lijak is in the south of Slovenia. Offering mild weather throughout the winter, it is the perfect place to kick off the 2027 season.",
        bullets=["Transport by minibus","Grass launch","Ridge & flatland flying","Cold but scenic","Tasks typically 40–60 km"],
@@ -24,7 +24,7 @@ EVENTS = [
        callout=("Slovenia has special competition rules",["An FAI IPPI 5 licence is mandatory for foreign pilots. Contact your national association early.","Upload your glider certificate or inspection certificate before the event.","Flying the practice day needs pre-registration at HQ.","The road to take-off is private: park by the main road and walk up."]),
        daylabels={0:"Registration & practice"}, taskfrom=1),
   dict(slug="france-montclar", at="srs-2027-2", label="SRS 2027 · Round 2 of 4", status="Provisional", venue="St Jean Montclar", country="France",
-       place="Montclar, Southern Alps", start="2027-06-20", end="2027-06-27", tz=2, tasks=7, seed=22*97+13, hero="white-blur", heropos="50% 45%", photo2="gin-field",
+       place="Montclar, Southern Alps", start="2027-06-20", end="2027-06-27", tz=2, tasks=7, seed=22*97+13, hero="white-blur", heropos="50% 45%", photo2="pink-close",
        evname="SRS France, Montclar 2027",
        blurb="In the heart of the French Alps. The venue offers classic alpine racing and a uniquely French setting.",
        bullets=["Ski lift to launch","Grass launch","Ridge & alpine flying","Temperatures mid 20s","Tasks typically 50–100 km"],
@@ -38,7 +38,7 @@ EVENTS = [
              "The landing at Col Saint-Jean (1,335 m) is a large grass field at the entrance to the Montclar ski resort. Evening convergence there can lift you back to 2,000 m or higher."],
        callout=None, daylabels={}, taskfrom=0),
   dict(slug="world-sports-final-gemona", at="srs-2027-wsf", label="SRS 2027 · World Sports Final", status="Confirmed", venue="Gemona", country="Italy",
-       place="Bordano, Gemona", start="2027-07-17", end="2027-07-24", tz=2, tasks=7, seed=24*97+13, hero="pod-closeup", heropos="40% 50%", photo2="orange-blur",
+       place="Bordano, Gemona", start="2027-07-17", end="2027-07-24", tz=2, tasks=7, seed=24*97+13, hero="pod-closeup", heropos="40% 50%", photo2="gin-field",
        evname="1st SRS World Sports Final", wsf=True,
        blurb="Who will be the SRS Master for 2027? An SRS favourite, one of the best competition venues in Europe.",
        bullets=["Transport by minibus","Grass launch","Ridge & flatland flying","Temperatures high 20s","Tasks typically 70–100 km"],
@@ -53,7 +53,7 @@ EVENTS = [
        callout=None, daylabels={0:"Registration & practice", 7:"Last task · prize giving"}, taskfrom=1,
        sched=[("08:30","HQ opens"),("09:00","Morning briefing at HQ"),("09:30","Transport to take-off"),("10:30","Task & safety committees"),("11:15","Pilot & task briefing"),("11:30","Take-off window opens"),("16:00","Scoring office opens"),("19:00","Provisional results")]),
   dict(slug="north-macedonia-krushevo", at="srs-2027-3", label="SRS 2027 · Round 3 of 4", status="Confirmed", venue="Krushevo", country="North Macedonia",
-       place="Krushevo", start="2027-08-22", end="2027-08-29", tz=2, tasks=7, seed=25*97+13, hero="orange-pod", heropos="60% 40%", photo2="pink-close",
+       place="Krushevo", start="2027-08-22", end="2027-08-29", tz=2, tasks=7, seed=25*97+13, hero="orange-pod", heropos="60% 40%", photo2="white-blur",
        evname="SRS North Macedonia 2027",
        blurb="Krushevo offers a quality of venue unmatched by any other for its large task area, reliable weather and professional team.",
        bullets=["Transport by coach","AstroTurf launch","Flatland flying","Temperatures low 30s","Tasks typically 70–100 km"],
@@ -94,7 +94,7 @@ ICON = {
 }
 C = {
  "slovenia-lijak": dict(
-   cards=("pink-close","orange-blur","gin-field"),
+   cards=("gin-field","orange-blur","pod-closeup"),
    story=["The Vipava Valley, between the Julian Alps and the Karst, is one of Europe's best free-flying regions, flyable all year round.",
           "SRS opens the 2027 season here: one of the first competitions of the European spring."],
    sched=[("15 March","Registration & practice day"),("16–21 March","Six racing tasks"),("Daily","Transport to launch, retrieves and lunch packs")],
@@ -104,7 +104,7 @@ C = {
            ("Car",["<b>Ljubljana</b> 1 h 15 – 1 h 40","<b>Trieste airport</b> 45–60 min","Park on the main road, walk up: the take-off road is private"])],
    trip="Trieste airport is about 50 km away; Ljubljana around 100 km."),
  "france-montclar": dict(
-   cards=("gin-field","pink-close","orange-blur"),
+   cards=("orange-blur","pod-closeup","coral-terraces"),
    story=["Montclar in the Southern Alps has hosted the French Open, a World Championship, British Opens and Pre-PWCs.",
           "This round is listed as provisional. Check the official page before you book."],
    sched=[("20–27 June","Seven racing tasks"),("From 13:00","Typical start of good distance flying"),("Daily","Transport to launch, retrieves and lunch packs")],
@@ -113,7 +113,7 @@ C = {
            ("Car",["<b>Gap</b> ~1 h","<b>Calais</b> ~10 h","Car hire at all airports"])],
    trip="Fly to Marseille (about 2 hours) or Nice (about 3 hours)."),
  "world-sports-final-gemona": dict(
-   cards=("orange-blur","pink-forest","white-blur"),
+   cards=("pink-forest","orange-blur","coral-terraces"),
    story=["The first SRS World Sports Final crowns the SRS Master for 2027.",
           "Flatlands out front, mountains behind: unstable days race the plain, stable days go into the Alps. Expect 25–30 °C, and ice-cream."],
    sched=[("Sat 17 July","Registration & practice day"),("Sun 18 July","08:30 mandatory safety briefing · Task 1"),("18–24 July","Seven racing tasks · window opens ~11:30"),("Sat 24 July","18:00 trophies & prize draw")],
@@ -122,7 +122,7 @@ C = {
            ("Car",["Practice-day shuttles: book via the <b>Navetta VLF</b> Telegram bot","Event-day transport to launch included"])],
    trip="Base at Bordano, with camping, showers and a bar on site."),
  "north-macedonia-krushevo": dict(
-   cards=("pink-close","gin-field","coral-terraces"),
+   cards=("pink-close","coral-terraces","pod-closeup"),
    story=["At 1,350 m, Krushevo is the highest town in the Balkans: a huge task area, reliable summer weather and a seasoned local team.",
           "Flights run out and back to Prilep, around triangles in the Pelagonia valley, or south towards Greece."],
    sched=[("22–29 August","Seven racing tasks"),("Daily","Coach transport to launch, retrieves included")],
@@ -132,7 +132,7 @@ C = {
            ("Car",["E-75 north–south through the country","Car hire from about €40–50 a day"])],
    trip="Fly to Skopje (about 2 hours' drive) or Ohrid (about 1 h 40)."),
  "france-st-andre": dict(
-   cards=("white-blur","orange-pod","pink-blur"),
+   cards=("white-blur","orange-blur","pod-closeup"),
    story=["The last round of the 2027 series, at one of Europe's classic race venues.",
           "Routes in every direction from Le Chalvet: north to Briançon and Allos, the 115 km out-and-return to Fort Dormillouse, south to Col de Bleyne."],
    sched=[("12–19 September","Seven racing tasks"),("Daily","Transport to launch, retrieves included")],
@@ -223,7 +223,7 @@ def entry_block(e, nums, incl, reqs, det, glider):
             ("Membership", "€45", "Per season, covers every SRS round"),
             ("Field", str(nums["max"]), f"Pilots max · {sel}"),
             ("Refund window", "45 days", "Cancel before for a full refund less €60")]
-    h = f'<div class="tb-h"><span class="eyebrow">Entry</span><span>{esc(e["evname"])}</span></div>'
+    h = f'<div class="tb-h"><span>{esc(e["evname"])}</span></div>'
     h += '<div class="ground figs4">' + "".join(f'<div class="gs"><span class="k">{k}</span><span class="big">{esc(v)}</span><span class="sm">{esc(sm)}</span></div>' for k,v,sm in figs) + '</div>'
     inc = [short_incl(x) for x in incl]; need = short_req(reqs, glider)
     h += '<div class="runs">'
@@ -235,7 +235,7 @@ def entry_block(e, nums, incl, reqs, det, glider):
     h += f'<p class="tnote">{rule}<a class="btn btn-o" href="https://airtribune.com/{e["at"]}/">Register on Airtribune</a></p>'
     return h
 def onsite_block(e, feats):
-    h = f'<div class="tb-h"><span class="eyebrow">On site</span><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0">'
+    h = f'<div class="tb-h"><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0">'
     for g in ("Safety","Organisation","Benefits","Environment"):
         items = feats.get(g)
         if not items: continue
@@ -332,7 +332,7 @@ for e in EVENTS:
         cats = [("Overall","All gliders in the competition"),("Women","All female pilots"),("Lightweight","Pilots 85 kg or under"),("Medium weight","Pilots 85–100 kg")]
         draws = [p for p in prizes_draw if "drawn" in p or "prize" in p.lower()]
         drawtxt = " and ".join(re.sub(r"^A (brand new )?|\. The winners.*$|[*]", "", p).strip() for p in draws)
-        prizes = ('<section class="prz" id="prizes" aria-labelledby="pH"><div class="wrap"><div><span class="eyebrow" style="color:var(--orange)">Awards</span><h2 class="up" id="pH">Prizes &amp; categories</h2>'
+        prizes = ('<section class="prz" id="prizes" aria-labelledby="pH"><div class="wrap"><div><h2 class="up" id="pH">Prizes &amp; categories</h2>'
                   f'<p>Four categories, no cash prizes. Prize draws: {esc(drawtxt)}.' + (' Plus the <b>Constructors Trophy</b> for manufacturer teams.' if "Constructors Trophy" in det else "") + '</p></div>'
                   '<div class="prizes">' + "".join(f'<div class="prize"><b>{c}</b><span>{d}</span></div>' for c,d in cats) + '</div></div></section>')
 
