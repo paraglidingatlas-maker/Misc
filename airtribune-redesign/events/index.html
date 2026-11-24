@@ -787,7 +787,9 @@ const ISO3 = {PK:"PAK",BR:"BRA",ZA:"ZAF",CO:"COL",AU:"AUS",IN:"IND",CR:"CRI",SI:
 const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const MONTH_FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-const SRS_PAGE = {"SRS Slovenia 2027":["srs/slovenia-lijak.html","pink-blur"],"SRS France, Montclar 2027":["srs/france-montclar.html","white-blur"],"1st SRS World Sports Final":["srs/world-sports-final-gemona.html","pod-closeup"],"SRS North Macedonia 2027":["srs/north-macedonia-krushevo.html","orange-pod"],"SRS St. André-les-Alpes 2027":["srs/france-st-andre.html","coral-terraces"]};
+/* Airtribune event slug per round (airtribune.com/<slug>/: registration, pilot list, live tracking) */
+const AT_SLUG = {"FM Punjab Cup Pakistan 26": "fm-punjab-cup-pakistan-26", "RS Paragliding Championship Encantado": "rs-paragliding-championship-encantado", "RS Paragliding Championship Final Sapiranga": "rs-paragliding-championship-final-sapiranga", "Porterville Paragliding Open 2026": "porterville-open-2026", "Open Distance Challenge Apía 2027": "records-en-el-horizonte", "Primera Válida Nacional Open Roldanillo 2027": "opennacional2027", "Copa Niviuk 2027": "copa-niviuk-2027-iv-edicion", "Manilla PG Sports TDD 2027": "manilla-pg-sports-tdd-2027", "Copa de las Américas Roldanillo 2027": "copadelasamericas2027", "2nd Copa Dédalo's Piedechinche 2027": "2nd-copa-dedalos-piedechinche-2027-powered-sup-air", "Bright Open 2027": "bright-open-2027", "Corryong PG Open 2027": "corryong-pg-open-2027", "8th British Winter Open": "bwo2027", "Open Paragliding Costa Rica 2027": "open-paragliding-costa-rica-2027", "Andes Tour Hike and Fly Challenge": "andes-tour-hike-and-fly-challenge", "Vipava Valley Open 2027": "vv-open-2027", "Corryong Sports Cup 2027": "corryong-sports-cup-2027", "SRS Slovenia 2027": "srs-2027-1", "Glencoe Scottish National 2027": "glencoe-scottish-national-2027", "X-Scotia Hike and Fly 2027": "x-scotia-hike-and-fly-2027", "11th Naviter Open 2027": "no2027", "SRS France, Montclar 2027": "srs-2027-2", "Ozone Chabre Open 2027": "oco2027", "1st SRS World Sports Final": "srs-2027-wsf", "SRS North Macedonia 2027": "srs-2027-3", "SRS St. André-les-Alpes 2027": "srs-2027-4"};
+const SRS_PAGE = {"SRS Slovenia 2027":["srs/slovenia-lijak.html","pink-blur"],"SRS France, Montclar 2027":["srs/france-montclar.html","white-blur"],"1st SRS World Sports Final":["srs/world-sports-final-gemona.html","pod-closeup"],"SRS North Macedonia 2027":["srs/north-macedonia-krushevo.html","orange-pod"],"SRS St. André-les-Alpes 2027":["srs/france-st-andre.html","coral-terraces"],"8th British Winter Open":["bwo/british-winter-open.html","pink-forest"]};
 const NOW = Date.now();
 const ymd = s => s.split("-").map(Number);
 const EV = RAW.map((r,i) => {
@@ -805,7 +807,7 @@ const EV = RAW.map((r,i) => {
   if (/Final/.test(name)) tags.push(["","Final"]);
   if (/Cup|Copa/.test(name)) tags.push(["","Cup"]);
   if (/Open/.test(name) && type==="open") tags.push(["","Open"]);
-  return {i, n:i+1, name, sub, city, cc, lat, lon, tz, s, e, sy,sm,sd,ey,em,ed, start, end, days, type, tags, page:(SRS_PAGE[name]||[])[0], photo:(SRS_PAGE[name]||[])[1],
+  return {i, n:i+1, name, sub, city, cc, lat, lon, tz, s, e, sy,sm,sd,ey,em,ed, start, end, days, type, tags, page:(SRS_PAGE[name]||[])[0], at:`https://airtribune.com/${AT_SLUG[name]}/`, photo:(SRS_PAGE[name]||[])[1],
     country:COUNTRY[cc].n, region:COUNTRY[cc].r, colors:COUNTRY[cc].c};
 });
 EV.forEach(e => e.status = NOW >= e.end ? "past" : NOW >= e.start ? "live" : "upcoming");
@@ -1156,7 +1158,7 @@ tick(); setInterval(tick, 1000);
       <div class="col-open">
         <div class="co-head"><span class="eyebrow">${e.type==="srs" ? srsImg("mark","srs-inline","SRS") : ""}${e===NEXT ? "Next round" : relDays(e)} · ${e.country}</span><h3>${e.name}</h3><p>${longDate(e)} · ${e.days} days</p></div>
         <svg class="task" data-strip="${e.i}" aria-hidden="true"></svg>
-        <div class="co-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">Event page</a><button class="btn btn-ghost" data-open="${e.i}">Race preview</button>` : `<button class="btn btn-o" data-open="${e.i}">Round details</button><a class="btn btn-ghost" href="live.html">Live tracking</a>`}</div>
+        <div class="co-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">Event page</a><button class="btn btn-ghost" data-open="${e.i}">Race preview</button>` : `<button class="btn btn-o" data-open="${e.i}">Round details</button><a class="btn btn-ghost" href="${e.at}">Live tracking</a>`}</div>
         <div class="co-time"><div><span>Day 1 local</span><b>09:00 ${tzLabel(e.tz)}</b></div><div><span>Your time</span><b>${localStart(e.start)}</b></div><div><span>Duration</span><b>${e.days} days</b></div></div>
       </div>
     </div>`; }).join("");
@@ -1424,7 +1426,7 @@ function openRound(i){
       <div><dt>Next round</dt><dd>${nxt ? `${rn(nxt)} · ${nxt.country}` : "Season finale"}</dd></div>
     </dl>
     ${e.tags.length?`<div class="tags" style="padding:0">${e.tags.map(([c,t])=>`<span class="tag ${c}">${t}</span>`).join("")}</div>`:""}
-    <div class="d-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">SRS event page</a>` : `<a class="btn btn-red" href="https://airtribune.com/events/next">Event page</a>`}<a class="btn btn-line" href="live.html">Live tracking</a></div>
+    <div class="d-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">${e.type==="srs" ? "SRS event page" : "Event page"}</a>` : `<a class="btn btn-red" href="${e.at}">Event page</a>`}<a class="btn btn-line" href="${e.at}">Live tracking</a></div>
     <p class="note">Dates and venue from the Airtribune listing. The task and race are simulated for this concept; real tasks are set each morning by the meet director and tracked live on Airtribune.</p>`;
   $("#drawer").classList.add("on"); $("#scrim").classList.add("on"); $("#drawer").setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";

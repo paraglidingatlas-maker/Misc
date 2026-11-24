@@ -1,0 +1,915 @@
+{
+ "editions": [
+  {
+   "year": "2020",
+   "slug": "boc2020",
+   "edition": "1st",
+   "title": "British Winter Open",
+   "when_where": "18 - 26 Jan, 2020 | Roldanillo, Colombia",
+   "classes": {
+    "overall": [
+     {
+      "rank": 1,
+      "name": "Cristian Deacu",
+      "nation": "ROU",
+      "glider": "Ozone Enzo 3",
+      "score": 3062
+     },
+     {
+      "rank": 2,
+      "name": "Juan Sebastian Ospina Restrepo",
+      "nation": "GBR",
+      "glider": "Ozone Enzo 3",
+      "score": 3052
+     },
+     {
+      "rank": 3,
+      "name": "Ernesto Hinestroza",
+      "nation": "GER",
+      "glider": "Ozone Enzo 3",
+      "score": 3049
+     }
+    ],
+    "british-overall": [
+     {
+      "rank": 1,
+      "name": "Juan Sebastian Ospina Restrepo",
+      "nation": "GBR",
+      "glider": "Ozone Enzo 3",
+      "score": 3052
+     },
+     {
+      "rank": 2,
+      "name": "Martin Long",
+      "nation": "GBR",
+      "glider": "Ozone Enzo 3",
+      "score": 2957
+     },
+     {
+      "rank": 3,
+      "name": "Guy Anderson",
+      "nation": "GBR",
+      "glider": "Ozone Enzo 3",
+      "score": 2888
+     }
+    ]
+   },
+   "replays": [
+    4581,
+    4584,
+    4585,
+    4588
+   ],
+   "task_ids": [
+    4581,
+    4584,
+    4585,
+    4588
+   ],
+   "tasks": [
+    {
+     "task": "T1 Task 1",
+     "date": "2020-01-19 11:00",
+     "km": 69.8
+    },
+    {
+     "task": "T2 TASK 2",
+     "date": "2020-01-23 10:00",
+     "km": 126.2
+    },
+    {
+     "task": "T3 TASK 6",
+     "date": "2020-01-24 10:00",
+     "km": 87.1
+    },
+    {
+     "task": "T4 TASK 7",
+     "date": "2020-01-25 10:15",
+     "km": 99.4
+    }
+   ],
+   "pilots": 132,
+   "nations": 28
+  },
+  {
+   "year": "2022",
+   "slug": "bwo2022",
+   "edition": "3rd",
+   "title": "3rd British Winter Open",
+   "when_where": "30 Jan, 2022 - 05 Feb, 2022 | Roldanillo, Colombia",
+   "classes": {
+    "overall": [
+     {
+      "rank": 1,
+      "name": "Honorin HAMARD",
+      "nation": "FRA",
+      "glider": "Zeno2",
+      "score": 3924
+     },
+     {
+      "rank": 2,
+      "name": "Marek ROBEL",
+      "nation": "POL",
+      "glider": "X-one",
+      "score": 3896
+     },
+     {
+      "rank": 3,
+      "name": "Martin PETZ",
+      "nation": "DEU",
+      "glider": "Enzo 3",
+      "score": 3895
+     }
+    ],
+    "british-overall": [
+     {
+      "rank": 1,
+      "name": "Juan Sebastian OSPINA RESTREPO",
+      "nation": "GBR",
+      "glider": "Enzo 3",
+      "score": 3838
+     },
+     {
+      "rank": 2,
+      "name": "Ceri BROWN",
+      "nation": "GBR",
+      "glider": "Enzo 3",
+      "score": 3773
+     },
+     {
+      "rank": 3,
+      "name": "Oliver CLOTHIER",
+      "nation": "GBR",
+      "glider": "Enzo 3",
+      "score": 3703
+     }
+    ]
+   },
+   "replays": [
+    5620,
+    5621,
+    5622,
+    5623,
+    5625
+   ],
+   "task_ids": [
+    5620,
+    5621,
+    5622,
+    5623,
+    5625
+   ],
+   "tasks": [
+    {
+     "task": "ONE",
+     "date": "Mon 31-Jan-22",
+     "km": 89.8
+    },
+    {
+     "task": "TWO",
+     "date": "Tue 01-Feb-22",
+     "km": 103.5
+    },
+    {
+     "task": "THREE",
+     "date": "Wed 02-Feb-22",
+     "km": 89.1
+    },
+    {
+     "task": "FOUR",
+     "date": "Thu 03-Feb-22",
+     "km": 119.7
+    },
+    {
+     "task": "SIX",
+     "date": "Sat 05-Feb-22",
+     "km": 85.9
+    }
+   ],
+   "pilots": 141,
+   "nations": 29
+  },
+  {
+   "year": "2023",
+   "slug": "bwo2023",
+   "edition": "4th",
+   "title": "4th British Winter Open",
+   "when_where": "08 - 15 Mar, 2023 | Castelo, Brazil",
+   "classes": {
+    "overall": [
+     {
+      "rank": 1,
+      "name": "Yassen Savov",
+      "nation": "BUL",
+      "glider": "Ozone Enzo 3 - Gold / blue",
+      "score": 4251
+     },
+     {
+      "rank": 2,
+      "name": "Pal Takats",
+      "nation": "HUN",
+      "glider": "Ozone Enzo 3 - Blue-Yellow",
+      "score": 4159
+     },
+     {
+      "rank": 3,
+      "name": "Stephane DROUIN",
+      "nation": "FRA",
+      "glider": "Ozone Zeno 2 - blue",
+      "score": 4151
+     }
+    ],
+    "female": [
+     {
+      "rank": 1,
+      "name": "Violeta Jimenez",
+      "nation": "USA",
+      "glider": "Ozone Enzo 3 - Blue Purple",
+      "score": 3834
+     },
+     {
+      "rank": 2,
+      "name": "Nanda Walliser",
+      "nation": "SUI",
+      "glider": "Ozone Enzo 3 - Purple orange",
+      "score": 3663
+     },
+     {
+      "rank": 3,
+      "name": "Galen kirkpatrick",
+      "nation": "USA",
+      "glider": "Ozone Enzo 3 - Pinkblue",
+      "score": 3335
+     }
+    ],
+    "sports": [
+     {
+      "rank": 1,
+      "name": "Roman Murzyn",
+      "nation": "POL",
+      "glider": "Ozone Alpina 4 - orange blue",
+      "score": 2545
+     },
+     {
+      "rank": 2,
+      "name": "Matias Nombarasco",
+      "nation": "GBR",
+      "glider": "Ozone Alpina 4 - Green/Blue",
+      "score": 2478
+     },
+     {
+      "rank": 3,
+      "name": "Summer Barham",
+      "nation": "USA",
+      "glider": "Ozone Alpina 4 - Blue Orange Purple",
+      "score": 2071
+     }
+    ],
+    "british-overall": [
+     {
+      "rank": 1,
+      "name": "Guy Anderson",
+      "nation": "GBR",
+      "glider": "Ozone Zeno 2 - Red",
+      "score": 4059
+     },
+     {
+      "rank": 2,
+      "name": "Grant Oseland",
+      "nation": "GBR",
+      "glider": "Niviuk X-One - Blue",
+      "score": 3964
+     },
+     {
+      "rank": 3,
+      "name": "Dougie Swanson-Low",
+      "nation": "GBR",
+      "glider": "Ozone Zeno 2 - Yellow/Blue",
+      "score": 3898
+     }
+    ]
+   },
+   "replays": [
+    6074,
+    6075,
+    6077,
+    6078,
+    6079,
+    6080
+   ],
+   "task_ids": [
+    6074,
+    6075,
+    6077,
+    6078,
+    6079,
+    6080
+   ],
+   "tasks": [],
+   "pilots": 110,
+   "nations": 23
+  },
+  {
+   "year": "2024",
+   "slug": "v2_bwo2024",
+   "edition": "5th",
+   "title": "5th British Winter Open",
+   "when_where": "27 Jan, 2024 - 03 Feb, 2024 | Roldanillo, Colombia",
+   "classes": {
+    "overall": [
+     {
+      "rank": 1,
+      "name": "Federico BROWN MANZONE",
+      "nation": "ITA",
+      "glider": "Enzo 3/Submarine",
+      "score": 5179
+     },
+     {
+      "rank": 2,
+      "name": "Andrei GAIA",
+      "nation": "ROU",
+      "glider": "Icepeak X-One/Submarine",
+      "score": 5164
+     },
+     {
+      "rank": 3,
+      "name": "Michal GIERLACH",
+      "nation": "POL",
+      "glider": "Enzo 3/Submarine",
+      "score": 5149
+     }
+    ],
+    "female": [
+     {
+      "rank": 1,
+      "name": "Alexia FISCHER",
+      "nation": "USA",
+      "glider": "Enzo 3/Submarine",
+      "score": 5113
+     },
+     {
+      "rank": 2,
+      "name": "Jenny ONEIL",
+      "nation": "USA",
+      "glider": "Enzo 3/Submarine",
+      "score": 4959
+     },
+     {
+      "rank": 3,
+      "name": "Katalin JUHASZ",
+      "nation": "HUN",
+      "glider": "XC-Racer 2 /Submarine",
+      "score": 4695
+     }
+    ],
+    "sports": [
+     {
+      "rank": 1,
+      "name": "Matthijs GROENEVELD",
+      "nation": "NLD",
+      "glider": "Photon/Genie Race 4",
+      "score": 4197
+     },
+     {
+      "rank": 2,
+      "name": "Mark HAYMAN",
+      "nation": "GBR",
+      "glider": "Photon/Kanibal 2",
+      "score": 4023
+     },
+     {
+      "rank": 3,
+      "name": "Tom HODGKIN",
+      "nation": "GBR",
+      "glider": "Scala 2/Arrow",
+      "score": 4010
+     }
+    ],
+    "british-overall": [
+     {
+      "rank": 1,
+      "name": "Dylan MANSLEY",
+      "nation": "GBR",
+      "glider": "Enzo 3/Genie Race 5",
+      "score": 5096
+     },
+     {
+      "rank": 2,
+      "name": "Juan Sebastian OSPINA",
+      "nation": "GBR",
+      "glider": "Enzo 3/Submarine",
+      "score": 5078
+     },
+     {
+      "rank": 3,
+      "name": "Martin LONG",
+      "nation": "GBR",
+      "glider": "Enzo 3/Submarine",
+      "score": 4780
+     }
+    ]
+   },
+   "replays": [
+    6350,
+    6353,
+    6356,
+    6359,
+    6360,
+    6361,
+    6362
+   ],
+   "task_ids": [
+    6350,
+    6353,
+    6356,
+    6359,
+    6360,
+    6361,
+    6362
+   ],
+   "tasks": [
+    {
+     "task": "T1",
+     "date": "Sun 28-Jan-24",
+     "km": 86.9
+    },
+    {
+     "task": "T2",
+     "date": "Mon 29-Jan-24",
+     "km": 100.3
+    },
+    {
+     "task": "T3",
+     "date": "Tue 30-Jan-24",
+     "km": 133.3
+    },
+    {
+     "task": "T4",
+     "date": "Wed 31-Jan-24",
+     "km": 81.2
+    },
+    {
+     "task": "T5",
+     "date": "Thu 01-Feb-24",
+     "km": 101.8
+    },
+    {
+     "task": "T6",
+     "date": "Fri 02-Feb-24",
+     "km": 59.4
+    },
+    {
+     "task": "T7",
+     "date": "Sat 03-Feb-24",
+     "km": 74.7
+    }
+   ],
+   "pilots": 142,
+   "nations": 32
+  },
+  {
+   "year": "2025",
+   "slug": "bwo2025",
+   "edition": "6th",
+   "title": "6th British Winter Open ",
+   "when_where": "18 - 25 Jan, 2025 | Roldanillo, Colombia",
+   "classes": {
+    "overall": [
+     {
+      "rank": 1,
+      "name": "Bogdan BIALKA",
+      "nation": "IRL",
+      "glider": "Icepeak X-One/Submarine",
+      "score": 5189
+     },
+     {
+      "rank": 2,
+      "name": "Robert BERG",
+      "nation": "POL",
+      "glider": "Enzo 3/Submarine",
+      "score": 5139
+     },
+     {
+      "rank": 3,
+      "name": "Andrei GAIA",
+      "nation": "ROU",
+      "glider": "Icepeak X-One/Submarine",
+      "score": 5137
+     }
+    ],
+    "female": [
+     {
+      "rank": 1,
+      "name": "Katalin JUHASZ",
+      "nation": "HUN",
+      "glider": "Spectra 2/Submarine",
+      "score": 4751
+     },
+     {
+      "rank": 2,
+      "name": "Elisa DEUTSCHMANN",
+      "nation": "DEU",
+      "glider": "Poison/Submarine",
+      "score": 4660
+     },
+     {
+      "rank": 3,
+      "name": "Magdalena JANAWAY",
+      "nation": "GBR",
+      "glider": "Zeno 2/Genie Race 5",
+      "score": 4291
+     }
+    ],
+    "sports": [
+     {
+      "rank": 1,
+      "name": "Tom HODGKIN",
+      "nation": "GBR",
+      "glider": "Scala 2/Submarine",
+      "score": 4777
+     },
+     {
+      "rank": 2,
+      "name": "Tudor DOROBANTU",
+      "nation": "ROU",
+      "glider": "Photon/X-Rated 7",
+      "score": 3908
+     },
+     {
+      "rank": 3,
+      "name": "Yérmenson AGUDELO",
+      "nation": "COL",
+      "glider": "Photon/Genie Race 5",
+      "score": 3769
+     }
+    ],
+    "british-overall": [
+     {
+      "rank": 1,
+      "name": "Craig MORGAN",
+      "nation": "GBR",
+      "glider": "Enzo 3/Submarine",
+      "score": 5080
+     },
+     {
+      "rank": 2,
+      "name": "Joshua SANDERSON",
+      "nation": "GBR",
+      "glider": "Enzo/Exoceat",
+      "score": 5074
+     },
+     {
+      "rank": 3,
+      "name": "Jacob AUBREY",
+      "nation": "GBR",
+      "glider": "Enzo 3/Submarine",
+      "score": 5064
+     }
+    ]
+   },
+   "replays": [
+    6598,
+    6599,
+    6600,
+    6601,
+    6602,
+    6603,
+    6604
+   ],
+   "task_ids": [
+    6598,
+    6599,
+    6600,
+    6601,
+    6602,
+    6603,
+    6604
+   ],
+   "tasks": [
+    {
+     "task": "ONE",
+     "date": "Sun 19-Jan-25",
+     "km": 87.2
+    },
+    {
+     "task": "TWO",
+     "date": "Mon 20-Jan-25",
+     "km": 91.5
+    },
+    {
+     "task": "THREE",
+     "date": "Tue 21-Jan-25",
+     "km": 100.0
+    },
+    {
+     "task": "FOUR",
+     "date": "Wed 22-Jan-25",
+     "km": 95.5
+    },
+    {
+     "task": "FIVE",
+     "date": "Thu 23-Jan-25",
+     "km": 122.3
+    },
+    {
+     "task": "SIX",
+     "date": "Fri 24-Jan-25",
+     "km": 81.2
+    },
+    {
+     "task": "SEVEN",
+     "date": "Sat 25-Jan-25",
+     "km": 92.0
+    }
+   ],
+   "pilots": 130,
+   "nations": 32
+  },
+  {
+   "year": "2026",
+   "slug": "bwo2026",
+   "edition": "7th",
+   "title": "7th British Winter Open",
+   "when_where": "10 - 17 Feb, 2026 | Roldanillo, Colombia",
+   "classes": {
+    "overall": [
+     {
+      "rank": 1,
+      "name": "Ross DESMOND",
+      "nation": "USA",
+      "glider": "Enzo 3/Submarine",
+      "score": 3691
+     },
+     {
+      "rank": 2,
+      "name": "Jhojan Styven MARIN OROZCO",
+      "nation": "COL",
+      "glider": "Enzo 3/Submarine",
+      "score": 3690
+     },
+     {
+      "rank": 2,
+      "name": "Dominik KAPICA",
+      "nation": "POL",
+      "glider": "Enzo 3/X-Rated 7",
+      "score": 3690
+     }
+    ],
+    "female": [
+     {
+      "rank": 1,
+      "name": "Violeta JIMENEZ",
+      "nation": "USA",
+      "glider": "Enzo 3/Submarine",
+      "score": 3611
+     },
+     {
+      "rank": 2,
+      "name": "Jenny ONEIL",
+      "nation": "USA",
+      "glider": "Enzo 3/Submarine",
+      "score": 3210
+     },
+     {
+      "rank": 3,
+      "name": "Magdalena JANAWAY",
+      "nation": "GBR",
+      "glider": "Zeno 2/Genie Race 5",
+      "score": 2938
+     }
+    ],
+    "sports": [
+     {
+      "rank": 1,
+      "name": "David FERIA",
+      "nation": "COL",
+      "glider": "Photon/Submarine",
+      "score": 3453
+     },
+     {
+      "rank": 2,
+      "name": "Tudor DOROBANTU",
+      "nation": "ROU",
+      "glider": "Photon/Genie Race 5",
+      "score": 3370
+     },
+     {
+      "rank": 3,
+      "name": "Edwing VALLEJO",
+      "nation": "COL",
+      "glider": "Photon/Submarine",
+      "score": 3241
+     }
+    ],
+    "british-overall": [
+     {
+      "rank": 1,
+      "name": "Dylan MANSLEY",
+      "nation": "GBR",
+      "glider": "Enzo 3/Submarine",
+      "score": 3681
+     },
+     {
+      "rank": 2,
+      "name": "Juan Sebastian OSPINA",
+      "nation": "GBR",
+      "glider": "Enzo 3/Submarine",
+      "score": 3676
+     },
+     {
+      "rank": 3,
+      "name": "Richard MEEK",
+      "nation": "GBR",
+      "glider": "Enzo 3/Genie Race 5",
+      "score": 3514
+     }
+    ]
+   },
+   "replays": [
+    6841,
+    6842,
+    6844,
+    6845,
+    6846
+   ],
+   "task_ids": [
+    6841,
+    6842,
+    6844,
+    6845,
+    6846
+   ],
+   "tasks": [
+    {
+     "task": "TASK.1",
+     "date": "Wed 11-Feb-26",
+     "km": 82.9
+    },
+    {
+     "task": "TASK.2",
+     "date": "Thu 12-Feb-26",
+     "km": 99.6
+    },
+    {
+     "task": "TASK.4",
+     "date": "Sat 14-Feb-26",
+     "km": 97.1
+    },
+    {
+     "task": "TASK.6",
+     "date": "Mon 16-Feb-26",
+     "km": 75.5
+    },
+    {
+     "task": "TASK.7",
+     "date": "Tue 17-Feb-26",
+     "km": 63.6
+    }
+   ],
+   "pilots": 130,
+   "nations": 30
+  }
+ ],
+ "y2027": {
+  "confirmed": "6/120",
+  "registered": 163,
+  "nations": 38,
+  "by_nation": [
+   [
+    "GBR",
+    35
+   ],
+   [
+    "USA",
+    14
+   ],
+   [
+    "FRA",
+    13
+   ],
+   [
+    "ITA",
+    11
+   ],
+   [
+    "IND",
+    9
+   ],
+   [
+    "POL",
+    8
+   ],
+   [
+    "KAZ",
+    6
+   ],
+   [
+    "SUI",
+    6
+   ],
+   [
+    "GER",
+    4
+   ],
+   [
+    "HKG",
+    4
+   ],
+   [
+    "NED",
+    4
+   ],
+   [
+    "HUN",
+    4
+   ]
+  ],
+  "by_status": [
+   [
+    "registered",
+    129
+   ],
+   [
+    "waiting_payment",
+    28
+   ],
+   [
+    "confirmed",
+    6
+   ]
+  ],
+  "women": 19,
+  "gliders": [
+   [
+    "Ozone",
+    86
+   ],
+   [
+    "Niviuk",
+    15
+   ],
+   [
+    "Ozone ",
+    14
+   ],
+   [
+    "ozone",
+    10
+   ],
+   [
+    "Gin",
+    9
+   ],
+   [
+    "OZONE",
+    4
+   ],
+   [
+    "GIN",
+    3
+   ],
+   [
+    "Advance",
+    2
+   ],
+   [
+    "BGD",
+    2
+   ],
+   [
+    "Ozon",
+    2
+   ]
+  ],
+  "hq": [
+   17.934128,
+   73.804221
+  ],
+  "keys": [
+   "avatar",
+   "civl_id",
+   "civl_id_official",
+   "country",
+   "current_civl_ranking",
+   "gender",
+   "glider_certification",
+   "glider_manufacturer",
+   "glider_max_weight",
+   "glider_min_weight",
+   "glider_model",
+   "glider_size",
+   "harness_manufacturer",
+   "harness_model",
+   "is_any_status_member",
+   "is_member",
+   "last_status_change",
+   "name",
+   "registration_time",
+   "sponsor",
+   "srs_id",
+   "srs_member",
+   "srs_score",
+   "status"
+  ]
+ }
+}
