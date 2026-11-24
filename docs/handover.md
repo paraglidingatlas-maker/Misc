@@ -1,6 +1,6 @@
 # Handover: Airtribune redesign concept
 
-Last updated 24 Nov 2026 by the chat "Live view navigation + tour review" (after "BWO import") (after "Rounds redesign + real Task 3") (follows "Airtribune logo rollout").
+Last updated 24 Nov 2026 by the chat "Tour map plan A + design audit" (after "Live view navigation + tour review") (after "BWO import") (after "Rounds redesign + real Task 3") (follows "Airtribune logo rollout").
 
 ## Live
 
@@ -39,6 +39,18 @@ Sources are in `airtribune-redesign/src/`:
 - Thumbnails: task map on cards, live race in round details.
 - **Logo is final: Heritage (study direction No. 1)**: red triangle + blue square, lowercase wordmark with triangle dots on the i's. Live on every page, the favicon, the live-tracker top bar (tile) and the broadcast-view corner bug. The owner briefly picked Thermal/Pinwheel with a switch, then settled on Heritage; the switch was removed.
 
+
+
+## NOW: fix the design audit, batches 1 and 2 (owner said "Ok", 24 Nov 2026)
+
+A full audit found 98 details that read as generated rather than designed, or are plain bugs: calendar 38, event pages 30, live tracker 30. Review page for the owner: https://claude.ai/artifact/Qh394Ym3DANTECr7Bms3mp (private). Data: `docs/design-audit/cal.json`, `ev.json`, `live.json` (fields: id, title, what, why, fix, severity, effort, where = source file:line, img), screenshots in `docs/design-audit/img/`, page generator `docs/design-audit/build_review.py` (expects findings/*.json + png beside it; adapt paths).
+
+Owner agreed to this plan ("Will it help or will we degrade?" → answered, then "Ok"):
+- **Batch 1, bugs and wrong data, do first:** real flags (flag-icons SVG via cdn.jsdelivr.net, or inline SVG) everywhere the stripe flags are (`COUNTRY.c` arrays, `.flag`, `.col-flag`); remove invented content (route doodle + "81.8 km · 4 TP · PREVIEW" on calendar rows, fake podium in the drawer for unflown races); SRS pages: Included/You-bring lists run off the edge (`build_srs.py` ~201/213 join without spaces + `.words .w` nowrap), per-round glider rule (Kruševo allows EN-D), placeholder fact cells and 278-vs-100 registration figures; phone: header logo wraps "airtri / bune", "100–120 km" clipped, "LIGHTWEIG/HT"; live tracker: captions/toasts never fully hide and go stale after scrubbing, board order contradicts gaps/heights, rows fly through each other on reshuffle, empty flag gap in the broadcast lower third, B/Space stop working after clicking a control, map label overlap ("AmacuecaGoal"), Leaderboard header wraps at Result stage, phone broadcast cuts the stats bar. See all severity high + any finding that is a bug.
+- **Batch 2, strip generated touches, then:** gradient bars/fills on SRS, gradient-clipped text and glow blobs in the host block, coloured bars on prize cards, glassy rounded captions on the live tracker; cut accent colours from ~10 to three (+ SRS blue on SRS only); thin uppercase micro-labels to nav/buttons/one label per block; stop reusing the pink glider photo four times on a page.
+  **Careful (owner decisions):** keep SRS prominent (logo + blue), keep some slash-separated broadcast runs (owner liked them; thin, don't remove), keep one or two motion touches (next-round orange, maybe one count-up). Flag, don't silently change, anything that touches an owner decision.
+- **Batch 3, layout (city as headline, stacked dates, calendar under the title, next round once, fewer stat rows/ledes): do NOT build live.** Make a mockup page first (`airtribune-redesign/concepts/`), screenshot, owner approves. This merges with the "NEXT JOB: high-quality design concepts" below.
+- Way of working promised to the owner: one commit per batch (easy revert), before/after screenshots of every change sent to the owner before the next batch, 1440 + 390 checks with Playwright, no console errors.
 
 ## Next job: modern live view (owner asked 24 Nov 2026: "let's work on the modern live view, how can we improve it")
 
