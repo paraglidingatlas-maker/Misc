@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Airtribune Mark Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..900;1,300..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: logo study. Current mark → four directions, each: hero plate + applications row (nav, light, app icon, favicon). Single dark look matching the redesign. */
+:root{
+  --bg:#051416; --bg-2:#081C1F; --panel:#0C2427; --deep:#03100F;
+  --ink:#FFFFFF; --ink-2:#B7C9CB; --muted:#6E8A8D; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
+  --orange:#FF5F00; --red:#ED1C24; --blue:#0095DA; --sky:#00AEEF; --paper:#F4F6F6;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.eyebrow{font:700 11px/1.2 var(--f-body);letter-spacing:.18em;text-transform:uppercase;color:var(--orange)}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+.concept{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--ink-2);padding:8px 0;border-bottom:1px solid var(--line)}
+.concept b{font:800 10px var(--f-body);letter-spacing:.12em;padding:2px 8px;border-radius:4px;background:var(--orange);color:#fff}
+header.top{padding-block:64px 40px}
+header.top h1{font:900 italic clamp(44px,7vw,92px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:-.02em;margin:14px 0 18px}
+header.top p{color:var(--ink-2);max-width:640px;font-size:16px}
+.today{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1px;background:var(--line);border-radius:16px;overflow:hidden;margin-top:36px}
+.today > div{padding:30px;display:flex;flex-direction:column;gap:18px}
+.today .lt{background:#fff;color:#051416}
+.today .dk{background:var(--deep)}
+.today .lab{font:700 10.5px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.today .lt .lab{color:#6b7b7d}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:28px}
+.notes b{display:block;font:800 italic 15px var(--f-display);text-transform:uppercase;margin-bottom:6px}
+.notes span{color:var(--ink-2);font-size:14px}
+.toc{display:flex;gap:8px;flex-wrap:wrap;margin-top:34px}
+.toc a{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:#fff;text-decoration:none;font-weight:600;font-size:14px}
+.toc a:hover{border-color:var(--orange)}
+.toc a b{font:900 italic 18px var(--f-display);color:var(--orange)}
+.toc a.rec{border-color:rgba(255,95,0,.5)}
+
+section.dir{padding-block:96px 0;border-top:1px solid var(--line);margin-top:72px}
+.dh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:28px;align-items:end;margin-bottom:28px}
+.dh .num{font:900 italic 96px/.75 var(--f-display);color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.6)}
+.dh h2{font:900 italic clamp(34px,4.4vw,56px)/.9 var(--f-display);text-transform:uppercase;margin-top:8px}
+.dh p{color:var(--ink-2);margin-top:12px;max-width:62ch}
+.pick{font:800 10.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase;padding:6px 10px;border-radius:5px;background:var(--orange);color:#fff;white-space:nowrap}
+.plate{position:relative;border-radius:20px;overflow:hidden;background:radial-gradient(120% 120% at 20% 0%,#0E3035,#03100F 70%);border:1px solid var(--line);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;min-height:380px}
+.plate .big{display:grid;place-items:center;padding:40px;border-right:1px solid var(--line);height:100%}
+.plate .big svg{width:min(220px,60%);height:auto}
+.plate .lock{padding:40px 48px;display:grid;gap:26px}
+.keeps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding-top:22px;border-top:1px solid var(--line)}
+.keeps b{display:block;font:700 10.5px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.keeps span{font-size:14px;color:var(--ink-2)}
+.apps{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.4fr) minmax(0,.8fr) minmax(0,.8fr);gap:12px;margin-top:12px}
+.app{border-radius:16px;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column}
+.app .cap{font:700 10px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line);background:var(--bg-2)}
+.app .st{flex:1;display:flex;align-items:center;justify-content:center;padding:22px;min-height:150px}
+.nav-m{background:rgba(3,16,15,.95);justify-content:space-between!important;gap:16px}
+.nav-m .links{display:flex;gap:14px;white-space:nowrap;font:700 10px var(--f-body);letter-spacing:.12em;color:var(--ink-2)}
+.nav-m .b{font:700 10px var(--f-body);letter-spacing:.12em;padding:9px 12px;border-radius:7px;background:var(--orange);color:#fff}
+.light{background:var(--paper)}
+.icon-st{background:repeating-linear-gradient(45deg,#0a1d20 0 10px,#081a1d 10px 20px);gap:14px}
+.ico{width:84px;height:84px;border-radius:20px;display:grid;place-items:center;box-shadow:0 14px 30px -12px rgba(0,0,0,.7)}
+.ico svg{width:56%;height:auto}
+.ico.sm{width:48px;height:48px;border-radius:12px}
+.fav-st{background:#e9ecee;flex-direction:column;gap:10px}
+.tab{display:flex;align-items:center;gap:8px;background:#fff;border-radius:8px 8px 0 0;padding:8px 12px;font:500 12px var(--f-body);color:#222;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.tab svg{width:16px;height:16px}
+.fav-row{display:flex;gap:12px;align-items:center}
+.fav-row svg{display:block}
+
+/* wordmarks */
+.wm{display:inline-flex;align-items:center;gap:.42em;line-height:1;white-space:nowrap}
+.wm svg{height:1.25em;width:auto;flex:none}
+.wm span{font-family:var(--f-display)}
+.wm-heritage span{font-weight:700;letter-spacing:-.01em}
+.wm-pin span{font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.015em}
+.wm-tp span{font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.wm-can span{font-weight:300;font-style:italic;letter-spacing:-.01em}
+.wm-can span b{font-weight:900}
+.tit{position:relative;display:inline-block}
+.tit::before{content:"";position:absolute;left:50%;top:-.06em;width:.3em;height:.3em;transform:translateX(-30%);background:var(--tc,var(--orange));clip-path:polygon(0 0,100% 0,100% 100%)}
+.s-xl{font-size:clamp(40px,5vw,64px)}
+.s-md{font-size:22px}
+.s-sm{font-size:17px}
+
+footer{margin-top:110px;padding-block:40px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+@media (max-width:980px){
+  .plate{grid-template-columns:minmax(0,1fr)}
+  .plate .big{border-right:0;border-bottom:1px solid var(--line);padding:36px}
+  .plate .lock{padding:30px 24px}
+  .apps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .notes{grid-template-columns:minmax(0,1fr)}
+  .today{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .dh{grid-template-columns:minmax(0,1fr)}
+  .dh .num{font-size:64px}
+  .apps{grid-template-columns:minmax(0,1fr)}
+  .keeps{grid-template-columns:minmax(0,1fr)}
+  .nav-m .links{display:none}
+  .s-xl{font-size:38px}
+}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="concept"><b>CONCEPT</b><span>Unofficial logo study for an Airtribune redesign. Not affiliated with or endorsed by Airtribune.</span></div></div>
+
+<header class="top">
+  <div class="wrap">
+    <span class="eyebrow">Brand study</span>
+    <h1>The Airtribune mark</h1>
+    <p>Four directions for the mark, each built from something the current logo already owns. Every direction is shown where it has to work: the dark site navigation, a light background, an app icon and a 16-pixel browser tab.</p>
+    <div class="today">
+      <div class="lt"><span class="lab">Today · on light</span><div id="cur1"></div></div>
+      <div class="dk"><span class="lab">Today · on the dark redesign</span><div id="cur2"></div></div>
+    </div>
+    <div class="notes">
+      <div><b>Worth keeping</b><span>The triangles. They appear in the mark and as the dots on both i's, and they are the most ownable thing in the logo.</span></div>
+      <div><b>What holds it back</b><span>Four triangles and four squares turn to noise at favicon size, and the red-and-blue pairing clashes with dark, photographic pages.</span></div>
+      <div><b>The brief</b><span>Keep the triangle, add motion, survive at 16 px, and sit comfortably beside the SRS and event logos.</span></div>
+    </div>
+    <nav class="toc" aria-label="Directions">
+      <a href="#d1"><b>1</b>Heritage</a>
+      <a href="#d2" class="rec"><b>2</b>Pinwheel</a>
+      <a href="#d3"><b>3</b>Turnpoint</a>
+      <a href="#d4"><b>4</b>Canopy</a>
+    </nav>
+  </div>
+</header>
+
+<main id="dirs"></main>
+
+<footer><div class="wrap">Unofficial concept study. The current logo is shown for reference only and belongs to Airtribune.</div></footer>
+
+<script>
+/* ---------- marks (40×40 grid) ---------- */
+const MARK = {
+  heritage: (a="#ED1C24", b="#00AEEF") => `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 2h36v36z" fill="${a}"/><rect x="2" y="20" width="16" height="16" fill="${b}"/></svg>`,
+  pinwheel: (a="#FF5F00", b="#FFFFFF") => `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M1 1h18v18z" fill="${a}"/><path d="M39 1v18H21z" fill="${a}"/><path d="M39 39H21V21z" fill="${a}"/><path d="M1 39V21h18z" fill="${a}"/><rect x="17.5" y="17.5" width="5" height="5" fill="${b}"/></svg>`,
+  turnpoint: (a="#FF5F00", b="#FFFFFF") => `<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="13" cy="25" r="10" fill="none" stroke="${b}" stroke-width="2.6" stroke-dasharray="4.2 3.2"/><path d="M3 38 L13 15 L28 10" fill="none" stroke="${a}" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/><path d="M39 6.5 L26.5 2 L29.5 17z" fill="${a}"/><circle cx="13" cy="15" r="2.6" fill="${b}"/></svg>`,
+  canopy: (a="#FF5F00", b="#FFFFFF") => `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 16 Q20 -2 38 16 Q20 7 2 16z" fill="${a}"/><path d="M4.5 15.2 L20 33 L35.5 15.2" fill="none" stroke="${b}" stroke-width="1.6" stroke-linejoin="round"/><path d="M14.5 33.5h11L20 39z" fill="${a}"/></svg>`,
+};
+const CUR = `<svg viewBox="0 0 230.238 36.949" style="height:44px;width:auto;display:block" aria-label="Current Airtribune logo"><path fill="#0095DA" d="M65.074 30.744L63.25 25.67h-8.58l-1.743 5.074h-4.934l9.98-25.373h1.945l10.06 25.374h-4.904zm115.24.018v-1.54c-.608.513-1.438.95-2.497 1.317-1.055.36-2.03.548-2.922.548-4.244 0-6.367-2.258-6.367-6.77V12.444h4.268v11.55c0 2.345 1.058 3.517 3.16 3.517.97 0 1.867-.25 2.7-.752.83-.5 1.382-1.078 1.657-1.736v-12.58h4.268v18.318h-4.267zm-44.978-.018V15.95h-2.344v-3.505h6.665v18.3h-4.32zm94.54-7.844H216.81c.082 1.457.584 2.594 1.506 3.397.92.813 2.162 1.213 3.725 1.213 1.95 0 3.425-.506 4.44-1.516l1.653 3.26c-1.498 1.22-3.74 1.832-6.73 1.832-2.786 0-4.997-.82-6.618-2.455-1.62-1.632-2.438-3.910-2.438-6.84 0-2.88.893-5.220 2.678-7.003 1.783-1.790 3.918-2.682 6.414-2.682 2.65 0 4.78.787 6.39 2.374 1.604 1.580 2.408 3.597 2.408 6.046 0 .525-.123 1.320-.36 2.374zm-12.915-3.212h8.987c-.293-2.670-1.773-4.012-4.438-4.012-2.438 0-3.955 1.340-4.550 4.012zm-14.163 11.056V20.172c0-1.564-.297-2.700-.897-3.417-.594-.718-1.574-1.080-2.928-1.080-.63 0-1.293.176-2.007.532-.71.350-1.270.793-1.666 1.312v13.226h-4.270v-18.300h2.150l1.710 1.707c1.160-1.365 2.875-2.047 5.137-2.047 2.180 0 3.895.653 5.154 1.953 1.260 1.306 1.886 3.125 1.886 5.457v11.227h-4.270zm-53.282-1.010l-1.354 1.354h-2.010V5.370h4.268v7.774c1.144-.694 2.386-1.038 3.727-1.038 2.677 0 4.833.845 6.472 2.537 1.646 1.690 2.460 3.855 2.460 6.500 0 3.064-.820 5.482-2.478 7.267-1.650 1.785-3.890 2.678-6.712 2.678-1.696 0-3.154-.455-4.373-1.354zm.904-12.934v9.552c.630.740 1.475 1.108 2.547 1.108 2.060 0 3.522-.483 4.380-1.465.860-.980 1.294-2.547 1.294-4.700 0-3.714-1.777-5.568-5.334-5.568-1.260 0-2.223.356-2.887 1.073zm-21.487-.373c-.765-.500-1.600-.752-2.514-.752-.992 0-1.866.450-2.637 1.347-.770.904-1.155 2-1.155 3.300v10.422h-4.270v-18.300h4.270v1.675c1.195-1.343 2.782-2.013 4.766-2.013 1.458 0 2.577.222 3.353.665l-1.814 3.655zm-25.573-.548h-2.117v-3.436h2.117V5.378l4.268-.023v7.090h5.027v3.435h-5.027v8.010c0 1.314.204 2.235.618 2.778.408.540 1.126.810 2.152.810 1.024 0 1.980-.273 2.868-.833v3.930c-.990.340-2.402.515-4.233.515-1.825 0-3.225-.520-4.204-1.553-.980-1.025-1.470-2.494-1.470-4.396v-9.260zm-6.387.547c-.765-.500-1.600-.752-2.514-.752-.992 0-1.867.450-2.637 1.347-.770.904-1.155 2-1.155 3.300v10.422H86.400v-18.300h4.270v1.675c1.195-1.343 2.780-2.013 4.764-2.013 1.458 0 2.577.222 3.353.665l-1.814 3.655zm-21.390 14.317V15.950h-2.345v-3.505h6.665v18.300h-4.320zM58.944 13.028l-3.010 9.242h6.013l-3.003-9.242z"/><path fill="#ED1C24" d="M74.077 5.37h5.878v5.88zM133.833 5.37h5.876v5.88zM0 18.475h18.475V36.95z"/><path fill="#00AEEF" d="M0 27.71h9.237v9.24H0z"/><path fill="#ED1C24" d="M18.475 0H36.95v18.475z"/><path fill="#00AEEF" d="M18.475 9.237h9.237v9.238h-9.237z"/><path fill="#ED1C24" d="M0 0h18.475v18.475z"/><path fill="#00AEEF" d="M0 9.237h9.237v9.238H0z"/><path fill="#ED1C24" d="M18.475 18.475H36.95V36.95z"/><path fill="#00AEEF" d="M18.475 27.71h9.237v9.24h-9.237z"/></svg>`;
+document.getElementById("cur1").innerHTML = CUR; document.getElementById("cur2").innerHTML = CUR;
+
+/* triangle-tittle word: replaces each i with a dotless i carrying the brand triangle */
+const tit = (word, color) => word.replace(/i/g, `<span class="tit" style="--tc:${color}">ı</span>`).replace(/I/g, `<span class="tit" style="--tc:${color}">I</span>`);
+const WM = {
+  heritage: (ink, a, b, sz) => `<span class="wm wm-heritage ${sz}" style="color:${ink}">${MARK.heritage(a,b)}<span>${tit("airtribune", a)}</span></span>`,
+  pinwheel: (ink, a, b, sz) => `<span class="wm wm-pin ${sz}" style="color:${ink}">${MARK.pinwheel(a,b)}<span>Airtribune</span></span>`,
+  turnpoint:(ink, a, b, sz) => `<span class="wm wm-tp ${sz}" style="color:${ink}">${MARK.turnpoint(a,b)}<span>Airtribune</span></span>`,
+  canopy:   (ink, a, b, sz) => `<span class="wm wm-can ${sz}" style="color:${ink}">${MARK.canopy(a,b)}<span><b>air</b>tribune</span></span>`,
+};
+
+const DIRS = [
+  { id:"d1", key:"heritage", n:"1", name:"Heritage", rec:false,
+    line:"The smallest step. One quadrant of today's grid, enlarged into a single triangle and square, keeping the red and blue. The wordmark stays lowercase with triangle tittles on the i's.",
+    keeps:"Red and blue, the triangle, the triangle tittles", adds:"One shape instead of eight; reads at favicon size",
+    dark:["#FFFFFF","#ED1C24","#00AEEF"], light:["#0B2630","#ED1C24","#0095DA"], icon:["#0B2630","#ED1C24","#00AEEF"] },
+  { id:"d2", key:"pinwheel", n:"2", name:"Pinwheel", rec:true,
+    line:"Today's four triangles, each turned a quarter so the grid becomes a pinwheel: wind, rotation, the climb in a thermal. The offset blades give it spin, and the centre square is the pilot.",
+    keeps:"The four triangles and the square, in the same 2 × 2 frame", adds:"Motion, one colour that matches the redesign, a confident italic wordmark",
+    dark:["#FFFFFF","#FF5F00","#FFFFFF"], light:["#051416","#FF5F00","#051416"], icon:["#FF5F00","#FFFFFF","#FFFFFF"] },
+  { id:"d3", key:"turnpoint", n:"3", name:"Turnpoint", rec:false,
+    line:"The language of a competition task: a turnpoint cylinder, the optimised route touching its edge and turning, and the triangle pointing to goal. It says racing and tracking before anyone reads the name.",
+    keeps:"The triangle, now as the arrowhead", adds:"A story specific to competition hosting and live tracking",
+    dark:["#FFFFFF","#FF5F00","#FFFFFF"], light:["#051416","#FF5F00","#051416"], icon:["#051416","#FF5F00","#FFFFFF"] },
+  { id:"d4", key:"canopy", n:"4", name:"Canopy", rec:false,
+    line:"A paraglider drawn in three strokes: the wing, the lines, and the triangle as the pilot. The most literal direction, and the warmest. The wordmark sets air in heavy type against a light tribune.",
+    keeps:"The triangle, now as the pilot", adds:"Instant recognition for the flying community; a softer, friendlier tone",
+    dark:["#FFFFFF","#FF5F00","#FFFFFF"], light:["#051416","#FF5F00","#051416"], icon:["#FF5F00","#FFFFFF","#FFFFFF"] },
+];
+const iconBg = d => d.key === "pinwheel" || d.key === "canopy" ? "#FF5F00" : "#051416";
+const iconMark = d => d.key === "pinwheel" ? MARK.pinwheel("#FFFFFF","#051416") : d.key === "canopy" ? MARK.canopy("#FFFFFF","#051416") : MARK[d.key](...d.icon.slice(1));
+const favMark = d => d.key === "heritage" ? MARK.heritage("#ED1C24","#0095DA") : MARK[d.key]("#FF5F00","#051416");
+
+document.getElementById("dirs").innerHTML = DIRS.map(d => `
+<section class="dir" id="${d.id}" aria-labelledby="${d.id}h">
+  <div class="wrap">
+    <div class="dh">
+      <span class="num" aria-hidden="true">${d.n}</span>
+      <div><span class="eyebrow">Direction ${d.n}</span><h2 id="${d.id}h">${d.name}</h2><p>${d.line}</p></div>
+      ${d.rec ? '<span class="pick">Recommended</span>' : "<span></span>"}
+    </div>
+    <div class="plate">
+      <div class="big">${MARK[d.key](d.dark[1], d.dark[2])}</div>
+      <div class="lock">
+        ${WM[d.key](...d.dark, "s-xl")}
+        <div class="keeps"><div><b>Keeps</b><span>${d.keeps}</span></div><div><b>Adds</b><span>${d.adds}</span></div></div>
+      </div>
+    </div>
+    <div class="apps">
+      <div class="app"><div class="st nav-m">${WM[d.key](...d.dark, "s-sm")}<span class="links">CALENDAR · LIVE · RESULTS</span><span class="b">CREATE EVENT</span></div><span class="cap">Site navigation</span></div>
+      <div class="app"><div class="st light">${WM[d.key](...d.light, "s-md")}</div><span class="cap">On light</span></div>
+      <div class="app"><div class="st icon-st"><span class="ico" style="background:${iconBg(d)}">${iconMark(d)}</span><span class="ico sm" style="background:${iconBg(d)}">${iconMark(d)}</span></div><span class="cap">App icon</span></div>
+      <div class="app"><div class="st fav-st"><span class="tab">${favMark(d)}Airtribune</span><div class="fav-row"><span style="width:32px">${favMark(d).replace('<svg','<svg width="32" height="32"')}</span><span style="width:16px">${favMark(d).replace('<svg','<svg width="16" height="16"')}</span></div></div><span class="cap">Browser tab · 32 / 16 px</span></div>
+    </div>
+  </div>
+</section>`).join("");
+</script>
+</body>
+</html>

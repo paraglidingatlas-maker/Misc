@@ -329,6 +329,33 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .gs{border-right:0;margin-right:0;border-bottom:1px solid var(--line);padding:22px 0}
   .gs:last-child{border-bottom:0}
 }
+
+/* ---------- entry + on site: typographic ---------- */
+.figs4{grid-template-columns:repeat(4,minmax(0,1fr));border-top:0}
+.runs{margin-top:44px}
+.run{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px;padding:24px 0;border-top:1px solid var(--line-2)}
+.run:last-child{border-bottom:1px solid var(--line-2)}
+.run-h .k{display:block;font:700 11px var(--f-body);letter-spacing:.18em;text-transform:uppercase;color:var(--orange)}
+.run-h .n{display:block;margin-top:8px;font:900 italic 56px/.85 var(--f-display);color:transparent;-webkit-text-stroke:1.3px rgba(255,255,255,.7)}
+.words{margin:0!important;max-width:none!important;font:800 italic clamp(18px,1.9vw,24px)/1.45 var(--f-display);text-transform:uppercase;color:#fff!important;letter-spacing:-.005em}
+.words i{font-style:normal;color:var(--orange);margin:0 .45em;font-weight:400}
+.words .no{color:#FF6B6B}
+.run.need .words{color:var(--ink-2)!important}
+.run.need .words i{color:var(--muted)}
+.run.need .words b{color:#fff;font-weight:900}
+.tnote .btn{margin-left:auto}
+.words .w{white-space:nowrap}
+#p-entry .tnote,#p-travel .tnote{width:100%;max-width:none}
+.tnote{flex-wrap:wrap;align-items:center}
+@media (max-width:900px){
+  .figs4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .figs4 .gs{border-right:0;margin-right:0;border-bottom:1px solid var(--line);padding:20px 16px 18px 0}
+  .run{grid-template-columns:minmax(0,1fr);gap:10px}
+  .run-h{display:flex;align-items:baseline;gap:14px}
+  .run-h .n{font-size:34px;margin:0}
+  .tnote .btn{margin-left:0}
+  .words .w{white-space:normal}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -420,20 +447,9 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
       <div class="col-r"><div class="taskbox"><svg id="task" aria-hidden="true"></svg><p>Illustrative task shape, not an official task.</p></div></div>
     </div>
 
-    <div class="panel" role="tabpanel" id="p-entry" aria-labelledby="t-entry" hidden>
-      <div class="entry-head"><div><span class="eyebrow">Entry fee</span><b class="fee">€395</b></div><a class="btn btn-o" href="https://airtribune.com/srs-2027-wsf/">Register on Airtribune</a></div>
-      <div class="split">
-        <div class="col-l"><h3>Included</h3><div class="chips"><span>Transport to launch</span><span>Daily retrieves</span><span>Lunch packs</span><span>Live trackers</span><span>Tasking &amp; scoring</span><span>T-shirt &amp; souvenirs</span><span>Bad-weather activity discounts</span><span>Event benefits</span><span>Social evenings</span><span>Prize draws</span></div></div>
-        <div class="col-r"><h3>You need</h3><div class="chips"><span>FAI IPPI 4</span><span>FAI Sporting Licence</span><span>Medical &amp; travel insurance</span><span>Third-party liability</span><span>Mobile phone</span><span>EN-C or below</span><span>Repacked reserve</span><span>Certified helmet</span><span>Harness with back protection</span><span>2 m radio · 143.900 MHz</span></div></div>
-      </div>
-      <div class="terms">
-        <div><b>Sports class</b><span>EN-C and below. No CCC or EN-D.</span></div>
-        <div><b>€45 / season</b><span>SRS membership, paid once.</span></div>
-        <div><b>45 days</b><span>Full refund less €60 before this. 75% after, none in the last 10 days.</span></div>
-      </div>
-    </div>
+    <div class="panel" role="tabpanel" id="p-entry" aria-labelledby="t-entry" hidden><div class="tb-h"><span class="eyebrow">Entry</span><span>1st SRS World Sports Final</span></div><div class="ground figs4"><div class="gs"><span class="k">Entry fee</span><span class="big">€395</span><span class="sm">Per pilot, by PayPal once accepted</span></div><div class="gs"><span class="k">Membership</span><span class="big">€45</span><span class="sm">Per season, covers every SRS round</span></div><div class="gs"><span class="k">Field</span><span class="big">125</span><span class="sm">Pilots max · Selection by the organisers</span></div><div class="gs"><span class="k">Refund window</span><span class="big">45 days</span><span class="sm">Cancel before for a full refund less €60</span></div></div><div class="runs"><div class="run"><div class="run-h"><span class="k">Included</span><span class="n">10</span></div><p class="words"><span class="w">Transport to launch</span><i>/</i><span class="w">Daily retrieves</span><i>/</i><span class="w">Lunch packs</span><i>/</i><span class="w">Live trackers</span><i>/</i><span class="w">Tasking &amp; scoring</span><i>/</i><span class="w">T-shirt &amp; souvenirs</span><i>/</i><span class="w">Bad-weather activity discounts</span><i>/</i><span class="w">Event benefits</span><i>/</i><span class="w">Social evenings</span><i>/</i><span class="w">Prize draws</span></p></div><div class="run need"><div class="run-h"><span class="k">You bring</span><span class="n">10</span></div><p class="words"><b class="w">FAI IPPI 4</b><i>/</i><b class="w">FAI Sporting Licence</b><i>/</i><span class="w">Medical &amp; travel insurance</span><i>/</i><span class="w">Third-party liability</span><i>/</i><span class="w">Mobile phone</span><i>/</i><b class="w">EN-C or below</b><i>/</i><span class="w">Repacked reserve</span><i>/</i><span class="w">Certified helmet</span><i>/</i><span class="w">Harness with back protection</span><i>/</i><span class="w">2 m radio · 143.900 MHz</span></p></div></div><p class="tnote"><b>Sports class</b><span>EN-C and below, including 2-liner Cs. No CCC or EN-D.</span><a class="btn btn-o" href="https://airtribune.com/srs-2027-wsf/">Register on Airtribune</a></p></div>
 
-    <div class="panel" role="tabpanel" id="p-onsite" aria-labelledby="t-onsite" hidden><div class="pgroup"><span class="eyebrow">Safety</span><div class="pills"><span class="pill "><i></i>Live trackers supplied</span><span class="pill "><i></i>Helicopter rescue</span><span class="pill "><i></i>Medic on takeoff</span><span class="pill "><i></i>Good phone coverage</span><span class="pill "><i></i>Radio coverage</span><span class="pill "><i></i>Live trackers mandatory</span></div></div><div class="pgroup"><span class="eyebrow">Organisation</span><div class="pills"><span class="pill "><i></i>Launch Transport</span><span class="pill "><i></i>Retrieve included</span><span class="pill "><i></i>Toilets on takeoff</span><span class="pill "><i></i>Tracklogs managed</span><span class="pill "><i></i>Airtribune blogging</span></div></div><div class="pgroup"><span class="eyebrow">Benefits</span><div class="pills"><span class="pill "><i></i>Lunch packs</span><span class="pill "><i></i>ID Cards</span><span class="pill "><i></i>Free WiFi</span><span class="pill "><i></i>Goal beers</span><span class="pill "><i></i>Food</span><span class="pill "><i></i>Party</span><span class="pill "><i></i>Live music</span><span class="pill "><i></i>Free gift</span></div></div><div class="pgroup"><span class="eyebrow">Environment</span><div class="pills"><span class="pill "><i></i>Plastic reduction</span></div></div></div>
+    <div class="panel" role="tabpanel" id="p-onsite" aria-labelledby="t-onsite" hidden><div class="tb-h"><span class="eyebrow">On site</span><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0"><div class="run"><div class="run-h"><span class="k">Safety</span><span class="n">6</span></div><p class="words"><span class="w">Live trackers supplied</span><i>/</i><span class="w">Helicopter rescue</span><i>/</i><span class="w">Medic on takeoff</span><i>/</i><span class="w">Good phone coverage</span><i>/</i><span class="w">Radio coverage</span><i>/</i><span class="w">Live trackers mandatory</span></p></div><div class="run"><div class="run-h"><span class="k">Organisation</span><span class="n">5</span></div><p class="words"><span class="w">Launch Transport</span><i>/</i><span class="w">Retrieve included</span><i>/</i><span class="w">Toilets on takeoff</span><i>/</i><span class="w">Tracklogs managed</span><i>/</i><span class="w">Airtribune blogging</span></p></div><div class="run"><div class="run-h"><span class="k">Benefits</span><span class="n">8</span></div><p class="words"><span class="w">Lunch packs</span><i>/</i><span class="w">ID Cards</span><i>/</i><span class="w">Free WiFi</span><i>/</i><span class="w">Goal beers</span><i>/</i><span class="w">Food</span><i>/</i><span class="w">Party</span><i>/</i><span class="w">Live music</span><i>/</i><span class="w">Free gift</span></p></div><div class="run"><div class="run-h"><span class="k">Environment</span><span class="n">1</span></div><p class="words"><span class="w">Plastic reduction</span></p></div></div></div>
 
     <div class="panel" role="tabpanel" id="p-travel" aria-labelledby="t-travel" hidden>
       <div class="tb-h"><span class="eyebrow">Arrive</span><span>Airport details not published yet</span></div><div class="ground"><div class="gs"><span class="k">Base</span><span class="big">Bordano</span><span class="sm">HQ, landing and camping · Via Campo Sportivo, 33010 Bordano (UD)</span></div><div class="gs"><span class="k">Practice day</span><span class="big">Shuttle</span><span class="sm">Book through the Navetta VLF bot on Telegram</span></div><div class="gs"><span class="k">Task days</span><span class="big">Included</span><span class="sm">Transport to launch and retrieves</span></div></div><p class="tnote"><b>Camping</b><span>Paid camping at the landing field, with water, showers, toilets and a bar.</span></p>
