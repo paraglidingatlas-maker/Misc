@@ -62,8 +62,11 @@ a{color:inherit;text-decoration:none}
 
 /* leaderboard */
 .lb{position:relative}
-.lb-cols{display:grid;grid-template-columns:28px 14px 1fr 62px 52px;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line)}
-.row{position:absolute;left:0;right:0;height:52px;display:grid;grid-template-columns:28px 14px 1fr 62px 52px;gap:8px;align-items:center;padding:0 12px;border-bottom:1px solid var(--line);transition:transform .7s cubic-bezier(.3,.8,.2,1),background .2s;cursor:pointer;text-align:left;width:100%}
+.lb-cols{position:sticky;top:45px;z-index:2;background:var(--bg-2);display:grid;grid-template-columns:26px 10px minmax(0,1fr) 66px 58px;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.row{position:absolute;left:0;right:0;height:52px;display:grid;grid-template-columns:26px 10px minmax(0,1fr) 66px 58px;gap:8px;align-items:center;padding:0 12px;border-bottom:1px solid var(--line);transition:transform .45s cubic-bezier(.3,.8,.2,1),background .2s;cursor:pointer;text-align:left;width:100%}
+.phase{display:inline-flex;align-items:center;gap:6px}
+.phase i{width:6px;height:6px;border-radius:50%;background:var(--yellow)}
+.phase[data-p="race"] i{background:var(--live)}.phase[data-p="goal"] i,.phase[data-p="final"] i{background:var(--teal)}
 .row:hover{background:var(--panel)}
 .row.sel{background:var(--panel-2);box-shadow:inset 3px 0 0 var(--orange)}
 .row .pos{font:800 italic 18px var(--f-display);text-align:center}
@@ -71,11 +74,12 @@ a{color:inherit;text-decoration:none}
 .row .chg{font-size:10px;text-align:center}
 .row .chg.up{color:#39D98A}.row .chg.dn{color:#FF5A5A}
 .pil{display:flex;align-items:center;gap:9px;min-width:0}
-.sw{width:6px;height:30px;border-radius:3px;flex:none}
-.pil .fl{width:26px;height:17px;border-radius:3px;overflow:hidden;display:flex;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.sw{width:4px;height:30px;border-radius:2px;flex:none}
+.pil .fl{width:14px;height:10px;border-radius:2px;overflow:hidden;display:inline-flex;flex:none;vertical-align:-1px;margin-right:5px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
 .pil .fl i{flex:1}
 .pil b{display:block;font:800 italic 15px/1 var(--f-display);text-transform:uppercase}
-.pil small{display:block;font:600 11px var(--f-body);color:var(--muted);margin-top:3px}
+.pil small{display:block;font:600 11px var(--f-body);color:var(--muted);margin-top:4px}
+.row .d .gl{color:var(--teal)}
 .row .d{font:800 italic 15px var(--f-display);text-align:right}
 .row .d small{font:600 10px var(--f-body);font-style:normal;color:var(--muted);margin-left:2px}
 .row .g{text-align:right;font:600 12px var(--f-body);color:var(--ink-2)}
@@ -143,33 +147,96 @@ a{color:inherit;text-decoration:none}
 #scrub{width:100%;accent-color:var(--orange);margin:2px 0 0}
 .stripwrap{min-width:0}
 
+.feed .tag.climb{background:rgba(255,138,61,.18);color:#FFB27A}.feed .tag.info{background:rgba(255,255,255,.08);color:var(--ink-2)}.feed .tag.high{background:rgba(29,169,225,.2);color:#9FDDF6}
+
+/* grid placement: the sheet wrapper is transparent on desktop, a bottom sheet on phones */
+.sheet{display:contents}
+.sheet-head{display:none}
+.side.left{grid-column:1;grid-row:1}
+.mapwrap{grid-column:2;grid-row:1}
+.side.right{grid-column:3;grid-row:1}
+.concept .short{display:none}
+
+/* gaggle bubbles on the map */
+.bub{cursor:pointer}
+.bub text.n{font:800 italic 12px var(--f-display)}
+
+/* timeline with event markers (sits on the scrubber) */
+.tl{position:relative;padding-top:26px}
+.tl-m{position:absolute;left:8px;right:8px;top:0;height:26px}
+.tlm{position:absolute;bottom:0;width:14px;height:26px;margin-left:-7px;display:block}
+.tlm i{position:absolute;left:6px;bottom:2px;width:2px;height:10px;border-radius:1px;background:var(--teal)}
+.tlm[data-k="gate"] i{background:var(--yellow)}
+.tlm[data-k="goal"] i{background:#fff;height:24px}
+.tlm[data-k="gate"] i,.tlm[data-k="tp"] i{height:24px}
+.tlm[data-k="lead"] i{left:3px;bottom:4px;width:8px;height:8px;border-radius:1px;transform:rotate(45deg);background:var(--orange)}
+.tlm[data-k="result"] i{left:4px;bottom:4px;width:6px;height:6px;border-radius:50%;background:#fff}
+.tlm.r span{left:auto;right:11px}
+.tlm span{position:absolute;left:11px;bottom:15px;font:700 9px/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;pointer-events:none}
+.tlm:hover i{box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.tlm:hover span{color:#fff}
+.tlm.past span{color:var(--ink-2)}
+
+@media (max-width:1600px){ .t-local{display:none!important} }
 @media (max-width:1180px){ .main{grid-template-columns:300px minmax(0,1fr)} .side.right{display:none} }
 @media (max-width:820px){
-  .app{height:auto}
-  .main{grid-template-columns:minmax(0,1fr)}
-  .mapwrap{height:62vh;order:-1}
-  .side.left{border-right:0;max-height:none;overflow:visible}
-  .side.right{display:block;border-left:0;max-height:420px}
-  .tele{left:10px;right:10px;width:auto;bottom:10px}
-  .tele-g div{padding:8px 10px}
-  .tele-g b{font-size:16px}
-  #baro{display:none}
-  .bottom{grid-template-columns:minmax(0,1fr);gap:10px}
-  .t-stats,.t-local{display:none!important}
-  .top{flex-wrap:wrap;overflow:visible}
-  .top > div{padding:8px 12px}
-  .t-brand{flex-basis:100%;min-width:0;white-space:normal!important;border-right:0!important;border-bottom:1px solid var(--line)}
-  .t-brand h1{font-size:17px}
-  .t-brand img{height:32px}
-  .concept{font-size:11px}
-  .t-sp{display:none!important}
-  .t-wind .lbl{display:none}
-  .row{grid-template-columns:24px 12px minmax(0,1fr) 58px 46px;gap:6px;padding:0 10px}
-  .lb-cols{grid-template-columns:24px 12px minmax(0,1fr) 58px 46px;gap:6px;padding:8px 10px}
-  .tele{position:static;width:auto;margin:0;border-radius:0;border-width:1px 0 0}
-  .mapwrap{height:auto;display:flex;flex-direction:column}
-  .mapstage{position:relative;height:56vh}
-  .map-ov.tl{top:10px;left:10px}
+  .app{height:100vh;height:100dvh;overflow:hidden}
+  .concept{padding:4px 12px;font-size:11px;flex-wrap:nowrap;white-space:nowrap}
+  .concept .long{display:none}.concept .short{display:inline;overflow:hidden;text-overflow:ellipsis}
+  .top{flex-wrap:nowrap}
+  .top > div{padding:7px 10px}
+  .t-brand{gap:10px!important;padding-left:12px!important}
+  .t-brand img,.t-brand .t-at,#tSub{display:none}
+  .t-back{width:30px;height:30px}
+  .t-brand h1{font-size:14px;white-space:nowrap}
+  .top{overflow:hidden}
+  .t-leg{min-width:0;flex:1 1 auto}
+  .t-leg .t-mid{overflow:hidden;text-overflow:ellipsis;font-size:12px}
+  .t-big{font-size:18px}
+  .t-mid{font-size:13px}
+  .top .lbl{font-size:8.5px}
+  .t-wind,.t-base,.t-stats,.t-local,.t-sp,.t-pill{display:none!important}
+  .main{grid-template-columns:minmax(0,1fr);position:relative;overflow:hidden}
+  .mapwrap{grid-column:1}
+  .sheet{display:flex;flex-direction:column;position:absolute;z-index:6;left:0;right:0;bottom:0;height:calc(100% - 48px);background:var(--bg-2);border-radius:16px 16px 0 0;border-top:1px solid var(--line-2);box-shadow:0 -18px 40px -16px rgba(0,0,0,.75);transform:translateY(calc(100% - var(--peek)));transition:transform .35s cubic-bezier(.3,.8,.2,1)}
+  .sheet[data-state="half"]{transform:translateY(45%)}
+  .sheet[data-state="full"]{transform:none}
+  .sheet.dragging{transition:none}
+  .sheet-head{display:block;flex:none;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;border-bottom:1px solid var(--line)}
+  .grip{display:block;width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.28);margin:8px auto 4px}
+  .tabs{display:flex}
+  .tabs button{flex:1;height:36px;font:800 italic 13px var(--f-display);text-transform:uppercase;color:var(--muted);box-shadow:inset 0 -2px 0 transparent}
+  .tabs button[aria-selected="true"]{color:#fff;box-shadow:inset 0 -2px 0 var(--orange)}
+  .tabs .phase{font:700 9px var(--f-body);letter-spacing:.12em;color:var(--muted);margin-left:6px;font-style:normal}
+  .sheet .side{grid-column:auto;grid-row:auto;flex:1;min-height:0;overflow-y:auto;border:0;overscroll-behavior:contain}
+  .sheet[data-tab="lb"] .side.right,.sheet[data-tab="feed"] .side.left{display:none}
+  .sheet[data-tab="feed"] .side.right{display:block}
+  .side-h{display:none}
+  .lb-cols{top:0}
+  .row{grid-template-columns:22px 10px minmax(0,1fr) 64px 54px;gap:6px;padding:0 12px}
+  .lb-cols{grid-template-columns:22px 10px minmax(0,1fr) 64px 54px;gap:6px;padding:7px 12px}
+  .tele{left:10px;right:66px;top:10px;bottom:auto;width:auto;border-radius:12px}
+  .tele-h{padding:8px 12px}
+  .tele-h b{font-size:15px}
+  .tele-h .p{font-size:17px}
+  .tele-g div{padding:6px 10px}
+  .tele-g div:nth-child(3),.tele-g div:nth-child(5),.tele-g div:nth-child(6),.vario,#baro,.tele-f{display:none}
+  .tele-g b{font-size:16px;margin-top:2px}
+  .map-ov.tl{display:none}
+  .toast{top:112px;font-size:13px}
+  .bottom{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}
+  .bottom .ctl{display:contents}
+  #play{order:1;width:38px;height:38px}
+  .stripwrap{order:2;flex:1 1 0;min-width:0}
+  #strip{display:none}
+  .bottom [aria-label="Playback speed"]{order:3}
+  .bottom [data-sp="30"]{display:none}
+  .bottom [aria-label="Camera"]{order:4}
+  .bottom [aria-label="View"]{order:5}
+  .bottom .seg button{padding:0 7px;height:30px;letter-spacing:.06em}
+  .cine-btn{order:6;margin-left:auto;width:38px;padding:0;justify-content:center}
+  .cine-btn span{display:none}
+  .bottom::after{content:"";order:2;flex-basis:100%;height:0}
 }
 
 /* ---------- glass system ---------- */
@@ -196,6 +263,7 @@ a{color:inherit;text-decoration:none}
 .cine-board,.cine-bar,.cine-exit{display:none}
 .app.cine .concept,.app.cine .side,.app.cine .tele,.app.cine .map-ov,.app.cine .t-wind,.app.cine .t-local,.app.cine .t-stats,.app.cine .t-leg,.app.cine .ctl .seg{display:none!important}
 .app.cine .main{grid-template-columns:minmax(0,1fr);grid-row:1;min-height:0}
+.app.cine .mapwrap{grid-column:1}
 .app.cine .bottom{grid-row:2}
 .app.cine .top{background:linear-gradient(180deg,rgba(3,16,15,.85),rgba(3,16,15,0));border-bottom:0;position:absolute;left:0;right:0;top:0;z-index:5}
 .app.cine .top > div{border-right:0}
@@ -249,23 +317,25 @@ a{color:inherit;text-decoration:none}
 .compass:hover{border-color:var(--orange)}
 .compass svg{width:38px;height:38px;overflow:visible}
 #compassN{transform-origin:20px 20px;transform-box:view-box}
-.maphint{position:absolute;z-index:3;left:50%;top:14px;transform:translateX(-50%);padding:6px 12px;border-radius:6px;background:rgba(3,16,15,.6);font:600 10.5px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap;transition:opacity .6s;pointer-events:none}
+.maphint{position:absolute;z-index:3;padding:6px 12px;border-radius:6px;background:rgba(3,16,15,.6);font:600 10.5px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap;transition:opacity .6s;pointer-events:none}
 .maphint.gone{opacity:0}
 .app.cine .compass{top:148px;right:max(20px,env(safe-area-inset-right,0px))}
 .app.cine .maphint{display:none}
-@media (max-width:820px){ .maphint{font-size:9.5px;top:auto;bottom:10px;white-space:normal;text-align:center;width:max-content;max-width:calc(100% - 32px)} .bottom .ctl{flex-wrap:wrap} .cine-btn{padding:0 10px} .app.cine .compass{top:176px;right:10px} }
+.maphint{left:14px;top:auto;bottom:14px;transform:none;white-space:normal;max-width:calc(100% - 350px)}
+.app.cine .sheet{display:none!important}
+@media (max-width:820px){ .maphint{display:none} .app.cine .compass{top:176px;right:10px} }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
 <div class="app">
-  <div class="concept"><b>CONCEPT</b><span>Unofficial Airtribune live-tracking concept. Not affiliated with or endorsed by Airtribune or the Sports-Class Racing Series. Replay of real data: official task, results and IGC tracklogs of the top 20 finishers, published on Airtribune. Background relief is stylised.</span></div>
+  <div class="concept"><b>CONCEPT</b><span class="short">Not affiliated with Airtribune · real SRS Tapalpa data</span><span class="long">Unofficial Airtribune live-tracking concept. Not affiliated with or endorsed by Airtribune or the Sports-Class Racing Series. Replay of real data: official task, results and IGC tracklogs of the top 20 finishers, published on Airtribune. Background relief is stylised.</span></div>
 
   <header class="top">
     <div class="t-brand"><a href="index.html" class="t-back" aria-label="Back to season calendar">←</a><span class="t-at" data-brand="tile" role="img" aria-label="Airtribune"></span><img data-srs="white" alt="Sports-Class Racing Series"><div><h1 id="tTitle">SRS Tapalpa 2026</h1><p id="tSub"></p></div></div>
-    <div><span class="livepill" id="livePill"><i></i>REPLAY</span></div>
+    <div class="t-pill"><span class="livepill" id="livePill"><i></i>REPLAY</span></div>
     <div><span class="lbl">Race time</span><span class="t-big num" id="tClock">−0:12:00</span></div>
     <div class="t-local"><span class="lbl">Local</span><span class="t-mid num" id="tLocal">12:03</span></div>
-    <div class="t-leg"><span class="lbl">Leader on</span><span class="t-mid" id="tLeg">Start</span></div>
+    <div class="t-leg"><span class="lbl" id="tLegL">Start gate</span><span class="t-mid num" id="tLeg">—</span></div>
     <div class="t-wind"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255,255,255,.18)"/><g id="windArrow" transform="rotate(135 20 20)"><path d="M20 6 L26 22 L20 18 L14 22Z" fill="#2BD4C4"/></g></svg><div><span class="lbl">Thermal drift</span><span class="t-mid num" id="tWind">—</span></div></div>
     <div class="t-base"><span class="lbl">Highest pilot</span><span class="t-mid num" id="tBase">—</span></div>
     <div class="t-sp"></div>
@@ -273,15 +343,23 @@ a{color:inherit;text-decoration:none}
   </header>
 
   <div class="main">
+    <div class="sheet" id="sheet" data-state="peek" data-tab="lb">
+    <div class="sheet-head" id="sheetHead"><span class="grip"></span><div class="tabs" role="tablist"><button role="tab" data-tab="lb" aria-selected="true">Leaderboard<span class="phase lbl" data-p="pre" id="phaseM"><i></i><span>Start</span></span></button><button role="tab" data-tab="feed" aria-selected="false">Race feed</button></div></div>
     <aside class="side left" aria-label="Leaderboard">
-      <div class="side-h"><h2>Leaderboard</h2><span class="lbl">Distance to goal</span></div>
-      <div class="lb-cols lbl"><span>Pos</span><span></span><span>Pilot</span><span style="text-align:right">To goal</span><span style="text-align:right">Gap</span></div>
+      <div class="side-h"><h2>Leaderboard</h2><span class="lbl phase" data-p="pre" id="phase"><i></i><span>Start gaggle · by height</span></span></div>
+      <div class="lb-cols lbl"><span>Pos</span><span></span><span>Pilot</span><span style="text-align:right" id="colV">Height</span><span style="text-align:right" id="colG">Gap</span></div>
       <div class="lb" id="lb"></div>
     </aside>
 
+
+    <aside class="side right" aria-label="Race feed">
+      <div class="side-h"><h2>Race feed</h2><span class="lbl">Newest first</span></div>
+      <ol class="feed" id="feed"></ol>
+    </aside>
+    </div>
     <section class="mapwrap" id="mapwrap" aria-label="Live map">
       <div class="mapstage"><svg id="map" role="img" aria-label="Live map of the task with pilot positions"></svg></div>
-      <div class="map-ov tl"><span class="leg"><span>Task</span><b id="ovTask">107.9 km</b></span><span class="leg"><span>Leader</span><b id="ovLead">—</b></span></div>
+      <div class="map-ov tl"><span class="leg"><span>Task</span><b id="ovTask">107.9 km</b></span><span class="leg"><span id="ovLeadL">Leader</span><b id="ovLead">—</b></span></div>
       <div class="toast" id="toast"></div>
       <button class="compass" id="compass" aria-label="Reset map to north up" title="North up"><svg viewBox="0 0 40 40" aria-hidden="true"><g id="compassN"><path d="M20 5 L25 20 L20 17 L15 20Z" fill="#FF5F00"/><path d="M20 35 L25 20 L20 23 L15 20Z" fill="rgba(255,255,255,.55)"/><text x="20" y="4" text-anchor="middle" font-size="6" font-weight="800" fill="#fff" font-family="Inter, sans-serif">N</text></g></svg></button>
       <div class="maphint" id="maphint">Drag to pan · Right-drag or Shift+drag to rotate · Scroll to zoom</div>
@@ -303,11 +381,6 @@ a{color:inherit;text-decoration:none}
         <div class="tele-f"><span id="teState">Gliding</span><span>Real track · tap a pilot to follow</span></div>
       </div>
     </section>
-
-    <aside class="side right" aria-label="Race feed">
-      <div class="side-h"><h2>Race feed</h2><span class="lbl">Newest first</span></div>
-      <ol class="feed" id="feed"></ol>
-    </aside>
   </div>
 
   <div class="bottom">
@@ -315,11 +388,11 @@ a{color:inherit;text-decoration:none}
       <button class="ib" id="play" aria-label="Pause"></button>
       <div class="seg" role="group" aria-label="Playback speed"><button data-sp="30">30×</button><button data-sp="60" aria-pressed="true">60×</button><button data-sp="180">180×</button></div>
     </div>
-    <div class="stripwrap"><svg id="strip" aria-label="Pilot progress along the task"></svg><input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Race time"></div>
+    <div class="stripwrap"><svg id="strip" aria-label="Pilot progress along the task"></svg><div class="tl"><div class="tl-m" id="tlm" aria-label="Race moments"></div><input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Race time"></div></div>
     <div class="ctl">
       <div class="seg" role="group" aria-label="Camera"><button data-cam="course" aria-pressed="false">Course</button><button data-cam="follow" aria-pressed="true">Follow</button></div>
       <div class="seg" role="group" aria-label="View"><button data-tilt="0" aria-pressed="true">2D</button><button data-tilt="1" aria-pressed="false">3D</button></div>
-      <button class="cine-btn" id="cineBtn" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Broadcast</button>
+      <button class="cine-btn" id="cineBtn" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Broadcast</span></button>
     </div>
   </div>
 </div>
@@ -467,7 +540,7 @@ const fmtClock = s => { s = (START_CLOCK + s)|0; return `${String((s/3600|0)%24)
 const flagHTML = f => f.map(c => `<i style="background:${c}"></i>`).join("");
 const tpName = k => k === 1 ? "SSS" : k === BASE_TASK.route.length-1 ? "Goal" : BASE_TASK.cyl[k-1].name;
 $("#tTitle").textContent = `SRS ${T3.ev.place} 2026`;
-$("#tSub").textContent = `Task 3 · Race to goal · ${T3.ev.dist.toFixed(1)} km · ${T3.ev.date.replace(/^\w+ /,"")} · ${T3.ev.place}, ${T3.ev.country}`;
+$("#tSub").textContent = `Task 3 · ${T3.ev.dist.toFixed(1)} km race to goal · ${T3.ev.date.replace(/^\w+ /,"")}`;
 $("#tSub").title = `${T3.ev.name}, ${T3.ev.dates}`;
 $("#ovTask").textContent = `${T3.ev.dist.toFixed(1)} km · ${BASE_TASK.cyl.length-2} TPs`;
 if (T3.wind){ const dirs = ["N","NE","E","SE","S","SW","W","NW"];
@@ -476,11 +549,138 @@ if (T3.wind){ const dirs = ["N","NE","E","SE","S","SW","W","NW"];
 
 const PILOTS = T3.pilots.map((pd,k) => ({k, no: pd.id, name: pd.n, sur: pd.n.split(" ").filter(w => w === w.toUpperCase() && /\p{L}/u.test(w)).join(" ") || pd.n,
   nat: {c: pd.c, f: FLAGS[pd.c] || ["#6E8A8D","#B7C9CB","#6E8A8D"]}, col: COLS[k % COLS.length], wing: pd.gl.split("/")[0],
-  rank: pd.rk, time: pd.tm, score: pd.sc, pts: decodeTrack(pd)}));
+  rank: pd.rk, time: pd.tm, score: pd.sc, tg: pd.tg, pts: decodeTrack(pd)}));
+
+/* ---------- race analysis (computed once from the real tracks) ----------
+   progress, time gaps, lead changes, and the generated race feed + timeline markers */
+const LEGS = BASE_TASK.legs, ROUTE = BASE_TASK.route, SUFFIX = LEGS.map((_,k) => d3.sum(LEGS.slice(k))), TOTAL = SUFFIX[0];
+const remKm = pt => pt.ti > LEGS.length ? 0 : dist(pt.p, ROUTE[pt.ti]) + (pt.ti < LEGS.length ? SUFFIX[pt.ti] : 0);
+const T_START = -12*60, T_END = d3.max(PILOTS, P => P.pts.at(-1).t) + 300;
+const N = PILOTS.length;
+PILOTS.forEach(P => {
+  let m = 0;
+  P.pts.forEach(q => { q.rem = remKm(q); q.prog = q.ti >= 2 ? TOTAL - q.rem : 0; m = Math.max(m, q.prog); q.bp = m; });
+  P.goalT = P.pts.at(-1).t;
+  P.short = P.sur.length > 11 ? P.sur.split(" ")[0] : P.sur;
+});
+const fmtGap = s => { s = Math.max(0, Math.round(s)); const h = s/3600|0, m = (s/60|0)%60, x = String(s%60).padStart(2,"0"); return h ? `${h}:${String(m).padStart(2,"0")}:${x}` : `${m}:${x}`; };
+const fmtAlt = a => Math.round(a).toLocaleString("en");
+// first moment pilot P had covered x km of the task (for time gaps)
+function timeAtProg(P, x){
+  const a = P.pts; let lo = 0, hi = a.length-1;
+  if (a[hi].bp < x - 1e-9) return null;
+  while (lo < hi){ const m = (lo+hi) >> 1; if (a[m].bp >= x) hi = m; else lo = m+1; }
+  if (lo === 0) return a[0].t;
+  const p = a[lo-1], q = a[lo]; return p.t + (q.t - p.t)*((x - p.bp)/Math.max(1e-6, q.bp - p.bp));
+}
+// pilot state at time T in km space (no screen projection)
+function at(P, T){
+  const a = P.pts; let i = Math.max(0, Math.min(a.length-1, Math.floor((T - a[0].t)/10)));
+  while (i > 0 && a[i].t > T) i--; while (i < a.length-1 && a[i+1].t <= T) i++;
+  return a[i];
+}
+const legName = q => q.ti < 2 ? "on the way out of the start" : `on the leg to ${tpName(Math.min(q.ti, ROUTE.length-1))}`;
+
+const EVENTS = (() => {
+  const E = [], who = P => `<b>${P.short}</b>`, nm = k => BASE_TASK.cyl[k-1] ? BASE_TASK.cyl[k-1].name : "";
+  const push = (t, type, html, o={}) => E.push({t, type, html, ...o});
+  // before the gate
+  const stack = T => PILOTS.slice().sort((a,b) => at(b,T).alt - at(a,T).alt);
+  const s10 = stack(-600);
+  push(-600, "info", `<span class="tag info">START</span>${N} pilots climbing over ${T3.tps[0][1]}. Top of the stack: ${who(s10[0])} at ${fmtAlt(at(s10[0],-600).alt)} m.`);
+  const s1 = stack(-60);
+  push(-60, "info", `<span class="tag info">−1 MIN</span>One minute to the gate. Highest: ${s1.slice(0,3).map(who).join(", ")}; ${fmtAlt(at(s1[0],-60).alt - at(s1.at(-1),-60).alt)} m between top and bottom of the gaggle.`);
+  push(0, "gate", `<span class="tag start">GATE</span>Start gate open, ${T3.ev.gate} local. Race to goal, ${T3.ev.dist.toFixed(1)} km: exit the ${BASE_TASK.cyl[0].r} km start, ${BASE_TASK.cyl.slice(1,-1).filter((c,k,a) => k < a.length-1 || LEGS.at(-1) > 1.5).map(c => c.name).join(", ")}, goal at ${shortName(T3.tps.at(-1)[1])}.`,
+    {mark:"gate", label:"Gate", toast:"Start gate open"});
+  // tag milestones per turnpoint (tag 0 = start, last = goal)
+  const nTags = PILOTS[0].tg.length;
+  for (let j=0; j<nTags; j++){
+    const seq = PILOTS.map(P => ({P, t:P.tg[j]})).sort((a,b) => a.t - b.t), first = seq[0], last = seq.at(-1);
+    if (j === 0){
+      push(first.t, "start", `<span class="tag start">START</span>${who(first.P)} first out of the start, ${Math.round(first.t)} s after the gate.`);
+      push(last.t, "start", `<span class="tag start">START</span>All ${N} pilots out of the start within ${Math.round(last.t)} s of the gate.`);
+    } else if (j === nTags-1){
+      push(first.t, "goal", `<span class="tag goal">GOAL</span>${who(first.P)} first in goal in ${fmtGap(first.t)}.`, {mark:"goal", label:"1st goal", k:first.P.k, toast:`${first.P.short} first in goal`, hi:true});
+      seq.slice(1).forEach(({P,t}) => push(t, "goal", `<span class="tag goal">GOAL</span>${who(P)} in goal · ${fmtGap(t)} · +${fmtGap(t - first.t)}`, {k:P.k}));
+      push(last.t + 1, "goal", `<span class="tag goal">GOAL</span>All ${N} in goal. ${fmtGap(last.t - first.t)} between first and last.`, {mark:"goal", label:""});
+    } else {
+      if (LEGS[j+1] !== undefined && LEGS[j+1] < 1.5 && j === nTags-2) continue;   // a TP just before goal: its tags are the goal arrivals
+      const name = nm(j+1), half = seq[Math.floor(N/2)-1];
+      push(first.t, "tp", `<span class="tag tp">TP${j}</span>${who(first.P)} first to tag ${name}.`, {mark:"tp", label:`TP${j}`, k:first.P.k, toast:`${first.P.short} first at ${name}`});
+      push(half.t, "tp", `<span class="tag tp">TP${j}</span>${N/2|0} of ${N} have tagged ${name}, ${fmtGap(half.t - first.t)} after ${who(first.P)}.`);
+      push(last.t, "tp", `<span class="tag tp">TP${j}</span>All ${N} through ${name}; ${who(last.P)} last, ${fmtGap(last.t - first.t)} behind.`);
+    }
+  }
+  // lead changes: the leader must hold it for 2 race minutes by more than 250 m
+  let lead = null, cand = null, candT = 0;
+  for (let T = 0; T <= T_END; T += 10){
+    const st = PILOTS.map(P => ({P, q: at(P,T)}));
+    if (st.some(s => s.P.goalT <= T)) break;
+    st.sort((a,b) => a.q.rem - b.q.rem);
+    const L = st[0].P, margin = st[1].q.rem - st[0].q.rem;
+    if (lead === null){ lead = L; continue; }
+    if (L === lead){ cand = null; continue; }
+    if (cand !== L){ cand = L; candT = T; continue; }
+    if (T - candT >= 120 && margin > .25 && T > 300){
+      push(T, "lead", `<span class="tag lead">LEAD</span>${who(L)} takes the lead from ${who(lead)}, ${legName(at(L,T))}.`, {mark:"lead", label:"", k:L.k, toast:`${L.short} takes the lead`, hi:true});
+      lead = L; cand = null;
+    }
+  }
+  // strongest climbs: 2-minute average, announced each time the day's best is beaten clearly
+  const climbs = [];
+  PILOTS.forEach(P => { const a = P.pts; for (let i=0; i+12 < a.length; i += 3){ const r = (a[i+12].alt - a[i].alt)/(a[i+12].t - a[i].t); if (r >= 1.8 && a[i+12].t > -300 && a[i+12].t < P.goalT) climbs.push({P, t:a[i+12].t, r, q:a[i+6]}); } });
+  climbs.sort((a,b) => a.t - b.t);
+  let best = 0;
+  climbs.forEach(c => { if (c.r > best + .3){ best = c.r;
+    push(c.t, "climb", `<span class="tag climb">CLIMB</span>${who(c.P)} averages +${c.r.toFixed(1)} m/s over two minutes ${c.t < 0 ? "in the start gaggle" : legName(c.q)}: strongest climb so far.`, {k:c.P.k}); } });
+  // highest point of the race
+  let hi = {alt:0};
+  PILOTS.forEach(P => P.pts.forEach(q => { if (q.t >= 0 && q.t < P.goalT && q.alt > hi.alt) hi = {alt:q.alt, t:q.t, P, q}; }));
+  if (hi.P) push(hi.t, "high", `<span class="tag high">HIGH</span>${who(hi.P)} tops out at ${fmtAlt(hi.alt)} m ${legName(hi.q)}, the highest anyone gets today.`, {k:hi.P.k});
+  push(T_END - 120, "result", `<span class="tag goal">RESULT</span>Official day result: ${T3.top.map(r => `${r[0]}. <b>${r[1].split(" ").filter(w => w === w.toUpperCase()).join(" ")}</b> ${r[2]} ${r[3].toFixed(1)} pts`).join(" · ")}. ${T3.stats.goal} of ${T3.stats.pilots} pilots made goal; points include lead-out, so the score order differs from the goal order.`,
+    {mark:"result", label:"Result", hi:true});
+  return E.sort((a,b) => a.t - b.t);
+})();
+
+/* race stage at time T: before the gate / racing / pilots arriving in goal / all in, official result */
+const phaseAt = T => T < 0 ? "pre" : PILOTS.every(P => P.goalT <= T) ? "final" : PILOTS.some(P => P.goalT <= T) ? "goal" : "race";
+const PHASE = {
+  pre:   {head:"Start gaggle · by height", m:"Before start", v:"Height", g:"Gap", chip:"Highest"},
+  race:  {head:"Racing · distance flown", m:"Racing", v:"Flown", g:"Gap", chip:"Leader"},
+  goal:  {head:"Arrivals · goal order", m:"Arrivals", v:"Flown", g:"Gap", chip:"First in goal"},
+  final: {head:"Official result · by score", m:"Result", v:"Score", g:"Time", chip:"Day winner"}};
+const OFFICIAL = PILOTS.slice().sort((a,b) => a.rank - b.rank);
+function rankAt(T, phase){
+  if (phase === "pre") return PILOTS.slice().sort((a,b) => b._alt - a._alt);
+  if (phase === "final") return OFFICIAL.slice();
+  return PILOTS.slice().sort((a,b) => { const ad = a.goalT <= T, bd = b.goalT <= T;
+    if (ad && bd) return a.goalT - b.goalT; if (ad !== bd) return ad ? -1 : 1; return b._prog - a._prog; });
+}
+// steady ordering between refreshes: a pilot only passes another when clearly ahead (15 m higher / 50 m further)
+const ahead = (phase, T) => phase === "pre" ? (a,b) => a._alt > b._alt + 15 : phase === "final" ? () => false : (a,b) => {
+  const ad = a.goalT <= T, bd = b.goalT <= T; if (ad || bd) return ad && (!bd || a.goalT < b.goalT); return a._prog > b._prog + .05; };
+function settle(prev, better){
+  const o = prev.slice();
+  for (let pass = 0, sw = true; sw && pass < N; pass++){ sw = false;
+    for (let i = 0; i < o.length-1; i++) if (better(o[i+1], o[i])){ [o[i], o[i+1]] = [o[i+1], o[i]]; sw = true; } }
+  return o;
+}
+// leaderboard value + gap cell for pilot P at position i
+function cells(P, i, order, phase, T){
+  const top = order[0];
+  if (phase === "pre") return {v:`${fmtAlt(P._alt)}<small>m</small>`, g: i === 0 ? "Top" : `−${fmtAlt(top._alt - P._alt)} m`};
+  if (phase === "final") return {v:`${Math.round(P.score)}<small>pts</small>`, g: fmtGap(P.goalT)};
+  if (P.goalT <= T) return {v:`<span class="gl">GOAL</span>`, g: P === top ? fmtGap(P.goalT) : `+${fmtGap(P.goalT - top.goalT)}`};
+  if (!P._started) return {v:`${P._prog.toFixed(1)}<small>km</small>`, g:"Start"};
+  if (i === 0) return {v:`${P._prog.toFixed(1)}<small>km</small>`, g:"Leader"};
+  const tr = timeAtProg(top, P._prog);
+  return {v:`${P._prog.toFixed(1)}<small>km</small>`, g: tr === null ? "—" : `+${fmtGap(T - tr)}`};
+}
 
 /* ---------- state ---------- */
 const st = { view: {zoom:1, rot:0, fx:0, fy:0, dragging:false}, frac: reduce ? .45 : 0.02, playing: !reduce, speed: 60, cam: "follow", sel: null, last: performance.now(), tick: 0 };
 let M = null;   // built map/sim model
+const PHONE = matchMedia("(max-width:820px)");
 
 function build(){
   const wrap = $("#mapwrap"), bb = wrap.getBoundingClientRect(), W = Math.max(320, Math.round(bb.width)), H = Math.max(280, Math.round(bb.height));
@@ -497,53 +697,53 @@ function build(){
   const tpL = screen.append("g").selectAll("text").data(tpLabels).join("text").attr("class","tp-lab").attr("text-anchor", d => d.flip ? "end" : null).text(d => d.name);
   const launch = f([0,0]);
   const launchEl = screen.append("path").attr("fill","#FFC906").attr("stroke","#03100F").attr("stroke-width",1.4);
-  const legs = task.legs, route = task.route, suffix = legs.map((_,k) => d3.sum(legs.slice(k)));
-  const remaining = pt => pt.ti > legs.length ? 0 : dist(pt.p, route[pt.ti]) + (pt.ti < legs.length ? suffix[pt.ti] : 0);
+  const dots = screen.append("g"), bubL = screen.append("g"), tags = screen.append("g");
   const pilots = PILOTS.map(P => {
     const g = trails.append("g");
-    const pl = {...P, P: P.pts.map(q => f(q.p)), i: 0,
+    const pl = Object.assign(P, {P: P.pts.map(q => f(q.p)), i: 0,
       full: g.append("path").attr("fill","none").attr("stroke", P.col).attr("stroke-opacity",.16).attr("stroke-width",1),
       trail: g.append("path").attr("fill","none").attr("stroke", P.col).attr("stroke-width",2.2).attr("stroke-linecap","round").attr("stroke-linejoin","round"),
-      dotG: screen.append("g").attr("class","pdot")};
+      dotG: dots.append("g").attr("class","pdot")});
     pl.ring = pl.dotG.append("circle").attr("r",11).attr("fill","none").attr("stroke","#FF5F00").attr("stroke-width",2).attr("opacity",0);
     pl.dot = pl.dotG.append("circle").attr("r",5.5).attr("fill", P.col).attr("stroke","#03100F").attr("stroke-width",2);
-    const tag = pl.dotG.append("g").attr("class","ptag").attr("transform","translate(9,-22)");
-    pl.tagRect = tag.append("rect").attr("height",16).attr("rx",4).attr("fill","rgba(3,16,15,.88)").attr("stroke", P.col).attr("stroke-width",1.2);
-    pl.tagText = tag.append("text").attr("x",6).attr("y",11.5).attr("fill","#fff").text(P.sur);
-    pl.tagRect.attr("width", pl.tagText.node().getComputedTextLength() + 12);
-    pl.tag = tag;
     pl.dotG.on("click", () => select(pl.k, true));
-    // events
-    pl.events = [];
-    let started = false;
-    for (let j=1;j<pl.pts.length;j++){
-      const a = pl.pts[j-1], b = pl.pts[j];
-      if (!started && b.ti >= 2){ started = true; pl.events.push({t:b.t, type:"start", k:P.k}); }
-      if (b.ti > a.ti && a.ti >= 2 && a.ti < task.route.length-1) pl.events.push({t:b.t, type:"tp", k:P.k, tp: tpName(a.ti), n: a.ti-1});
-    }
-    pl.events.push({t: pl.pts.at(-1).t, type:"goal", k:P.k});
+    pl.tag = mkTag(tags, P.col); pl.tag.g.on("click", () => select(pl.k, true));
     return pl;
   });
-  // replay clock: t = seconds from the 12:15 start gate; open 12 minutes before it
-  const tStart = -12*60, tEnd = d3.max(pilots, pl => pl.pts.at(-1).t) + 300;
-  const events = pilots.flatMap(pl => pl.events).concat([{t: tEnd - 120, type:"result"}]).sort((a,b) => a.t - b.t);
-  const cumDist = route.map((_,k) => d3.sum(legs.slice(0,k)));
-  M = {W, H, svg, world, f, task, pilots, tpL, tpLabels, launch, launchEl, remaining, suffix, tStart, tEnd, events, cumDist, route,
-       cam: {fx:W/2, fy:H/2, s:1, r:0}, lastLead: null, leadEvents: [], order: pilots.slice()};
-  buildBoard(); buildStrip();
+  // gaggle bubbles: a pool, one per possible cluster
+  const bubbles = d3.range(Math.ceil(N/3)).map(() => {
+    const g = bubL.append("g").attr("class","bub").attr("display","none");
+    const c = g.append("circle").attr("fill","rgba(3,16,15,.88)").attr("stroke","#fff").attr("stroke-width",1.5);
+    const n = g.append("text").attr("class","n").attr("text-anchor","middle").attr("dy","0.36em").attr("fill","#fff");
+    const b = {g, c, n, tag: mkTag(tags, "#fff")};
+    const zoomIn = () => { if (!b.mem) return; select(b.mem[0].k, true); st.view.zoom = Math.min(3.5, st.view.zoom*1.9); };
+    g.on("click", zoomIn); b.tag.g.on("click", zoomIn);
+    return b;
+  });
+  const cy = PHONE.matches ? (104 + H - 150)/2 : H*.5;   // phone: centre between the telemetry card and the sheet
+  M = {W, H, cy, svg, world, f, task, pilots, tpL, tpLabels, launch, launchEl, bubbles, tStart: T_START, tEnd: T_END, cumDist: ROUTE.map((_,k) => d3.sum(LEGS.slice(0,k))),
+       route: ROUTE, suffix: SUFFIX, cam: {fx:W/2, fy:H/2, s:1, r:0}, order: pilots.slice(), phase: null};
+  buildBoard(); buildStrip(); buildTimeline();
+}
+function mkTag(parent, col){
+  const g = parent.append("g").attr("class","ptag").attr("display","none").style("cursor","pointer");
+  const rect = g.append("rect").attr("height",16).attr("rx",4).attr("fill","rgba(3,16,15,.88)").attr("stroke", col).attr("stroke-width",1.2);
+  const text = g.append("text").attr("x",6).attr("y",11.5).attr("fill","#fff");
+  return {g, rect, text, w: 0, s: null, set(s, fill){ if (s !== this.s){ this.s = s; text.text(s); this.w = text.node().getComputedTextLength() + 12; rect.attr("width", this.w); } rect.attr("fill", fill); }};
 }
 
 /* ---------- leaderboard ---------- */
 const ROW_H = 52;
 function buildBoard(){
   const lb = $("#lb"); lb.style.height = (PILOTS.length*ROW_H) + "px";
-  lb.innerHTML = M.pilots.map(pl => `<button class="row" data-k="${pl.k}" style="transform:translateY(${pl.k*ROW_H}px)">
+  lb.innerHTML = M.pilots.map(pl => `<button class="row" data-k="${pl.k}" title="${pl.name} · ${pl.nat.c} · ${pl.wing}" style="transform:translateY(${pl.k*ROW_H}px)">
     <span class="pos">${pl.k+1}</span><span class="chg"></span>
-    <span class="pil"><span class="sw" style="background:${pl.col}"></span><span class="fl">${flagHTML(pl.nat.f)}</span><span><b>${pl.sur}</b><small>${pl.nat.c} · ${pl.wing}</small></span></span>
+    <span class="pil"><span class="sw" style="background:${pl.col}"></span><span><b>${pl.short}</b><small><span class="fl">${flagHTML(pl.nat.f)}</span>${pl.nat.c} · ${pl.wing}</small></span></span>
     <span class="d">0</span><span class="g">—</span></button>`).join("");
   M.rows = [...lb.querySelectorAll(".row")];
   M.rows.forEach(r => r.addEventListener("click", () => select(+r.dataset.k, true)));
   M.prevPos = {};
+  if (st.sel !== null) select(st.sel, false);
 }
 
 /* ---------- course strip ---------- */
@@ -561,6 +761,23 @@ function buildStrip(){
   M.stripDots = M.pilots.map(pl => s.append("circle").attr("cy",34).attr("r",5.5).attr("fill",pl.col).attr("stroke","#03100F").attr("stroke-width",1.5));
   M.stripLead = s.append("text").attr("y",54).attr("text-anchor","middle").attr("fill","#FF5F00").attr("font-family","Archivo, sans-serif").attr("font-style","italic").attr("font-weight",800).attr("font-size",10.5);
 }
+
+/* ---------- timeline markers: click to jump ---------- */
+const fracOf = t => (t - T_START)/(T_END - T_START);
+function buildTimeline(){
+  const box = $("#tlm"), w = box.getBoundingClientRect().width || 600;
+  let lastRight = -1e9;
+  const marks = EVENTS.filter(e => e.mark);
+  box.innerHTML = marks.map((e,i) => {
+    const fr = fracOf(e.t), x = fr*w, lw = e.label.length*6.6 + 12, r = x > w - 70, l0 = r ? x - lw : x, lab = e.label && l0 > lastRight + 6;
+    if (lab) lastRight = r ? x : x + lw;
+    const plain = e.html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    return `<button class="tlm${r ? " r" : ""}" data-i="${i}" data-k="${e.mark}" style="left:${(fr*100).toFixed(2)}%" title="${fmtT(e.t).slice(1)} · ${plain.replace(/"/g,"&quot;")}" aria-label="${plain.replace(/"/g,"&quot;")}"><i></i>${lab ? `<span>${e.label}</span>` : ""}</button>`;
+  }).join("");
+  M.marks = marks; M.markEls = [...box.querySelectorAll(".tlm")];
+  M.markEls.forEach(b => b.onclick = () => { const e = marks[+b.dataset.i]; jump(e.t - (e.mark === "gate" ? 30 : 20)); if (e.k !== undefined) select(e.k, true); });
+}
+function jump(t){ st.frac = Math.max(0, Math.min(1, fracOf(t))); M.lastT = null; frame(true); }
 
 /* ---------- selection, camera, toast ---------- */
 function select(k, manual){
@@ -581,22 +798,22 @@ function interp(pl, T){
   const A = pl.P[pl.i], B = pl.P[Math.min(pl.i+1, pts.length-1)];
   return {x: A[0] + (B[0]-A[0])*u, y: A[1] + (B[1]-A[1])*u, alt: a.alt + (b.alt - a.alt)*u, v: b.v, gs: b.gs, ti: b.ti, pt: {p:[a.p[0]+(b.p[0]-a.p[0])*u, a.p[1]+(b.p[1]-a.p[1])*u], ti: b.ti}};
 }
+const overlap = (a,b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
 function frame(force){
-  const T = M.tStart + st.frac*(M.tEnd - M.tStart), rel = T;   // rel: seconds from the start gate
-  M.pilots.forEach(pl => { pl.now = interp(pl, T); pl.rem = M.remaining(pl.now.pt); pl.done = pl.i === pl.pts.length-1; });
-  const order = M.pilots.slice().sort((a,b) => (a.done && b.done) ? a.pts.at(-1).t - b.pts.at(-1).t : a.rem - b.rem);
-  const lead = order[0];
+  const T = M.tStart + st.frac*(M.tEnd - M.tStart), rel = T;   // seconds from the start gate
+  M.pilots.forEach(pl => { pl.now = interp(pl, T); pl.rem = remKm(pl.now.pt); pl.done = pl.goalT <= T;
+    pl._alt = pl.now.alt; pl._started = pl.now.ti >= 2; pl._prog = pl.done ? TOTAL : pl._started ? Math.max(0, TOTAL - pl.rem) : 0; });
+  const phase = phaseAt(T);
+
+  // one ranking snapshot, refreshed with the board, used everywhere (board, map tags, chip, strip, broadcast)
+  const now = performance.now(), ui = force || now - (M.uiAt||0) > 2000 || phase !== M.phase;
+  if (ui){ M.uiAt = now; M.order = force || phase !== M.phase ? rankAt(T, phase) : settle(M.order, ahead(phase, T)); }
+  const order = M.order, lead = order[0];
   if (st.sel === null || (st.cine && st.cineAuto && st.sel !== lead.k)) select(lead.k, false);
-  // lead change events (forward playback only)
-  // announce a new leader only after they have held it for 2 race minutes by a clear margin
-  const margin = order[1] ? order[1].rem - lead.rem : 1;
-  if (M.lastLead === null) { M.lastLead = lead.k; M.cand = null; }
-  else if (lead.k !== M.lastLead){
-    if (M.cand !== lead.k){ M.cand = lead.k; M.candT = T; }
-    else if (T - M.candT > 120 && margin > .25 && st.playing && rel > 300){
-      M.leadEvents.push({t:T, type:"lead", k:lead.k}); toast(`${lead.sur} takes the lead`); M.lastLead = lead.k; M.cand = null; }
-  } else M.cand = null;
-  M.leadEvents = M.leadEvents.filter(e => e.t <= T);
+
+  // toasts for the big moments, forward playback only
+  if (M.lastT != null && st.playing && T > M.lastT){ const e = EVENTS.find(e => e.toast && e.t > M.lastT && e.t <= T); if (e) toast(e.toast); }
+  M.lastT = T;
 
   // camera
   const selPl = M.pilots[st.sel], c = M.cam, V = st.view;
@@ -607,7 +824,7 @@ function frame(force){
   const k = force || reduce || V.dragging ? 1 : .08;
   c.fx += (tgt.fx - c.fx)*k; c.fy += (tgt.fy - c.fy)*k; c.s += (tgt.s - c.s)*k;
   let dr = V.rot - c.r; dr = ((dr + 540) % 360) - 180; c.r += dr*(V.dragging ? 1 : .15);
-  const cx = M.W/2, cy = M.H*.5, rad = c.r*Math.PI/180, co = Math.cos(rad), si = Math.sin(rad);
+  const cx = M.W/2, cy = M.cy, rad = c.r*Math.PI/180, co = Math.cos(rad), si = Math.sin(rad);
   M.world.attr("transform", `translate(${cx},${cy}) rotate(${c.r}) scale(${c.s}) translate(${-c.fx},${-c.fy})`);
   const scr = p => { const dx = (p[0]-c.fx)*c.s, dy = (p[1]-c.fy)*c.s; return [cx + dx*co - dy*si, cy + dx*si + dy*co]; };
   M.scrInv = (sx, sy) => { const dx = sx - cx, dy = sy - cy; return [c.fx + (dx*co + dy*si)/c.s, c.fy + (-dx*si + dy*co)/c.s]; };
@@ -615,74 +832,108 @@ function frame(force){
   M.tpL.attr("x", d => scr(d.p)[0] + 10).attr("y", d => scr(d.p)[1] - 8);
   const L = scr(M.launch), ls = 7; M.launchEl.attr("d", `M${L[0]},${L[1]-ls} L${L[0]+ls*.9},${L[1]+ls*.6} L${L[0]-ls*.9},${L[1]+ls*.6}Z`);
 
-  // pilots
+  // pilots: trails + screen positions
   const posOf = new Map(order.map((pl,i) => [pl.k, i]));
   M.pilots.forEach(pl => {
-    const i = pl.i, isSel = pl.k === st.sel, isLead = pl === lead;
+    const i = pl.i;
     if (force || st.tick % 6 === 0) pl.full.attr("d", d3.line()(pl.P.slice(0, i+1)));
-    pl.trail.attr("d", d3.line()(pl.P.slice(Math.max(0, i-60), i+1).concat([[pl.now.x, pl.now.y]]))).attr("stroke-opacity", isSel ? 1 : .7);
-    const [sx, sy] = scr([pl.now.x, pl.now.y]);
-    pl.dotG.attr("transform", `translate(${sx},${sy})`);
+    pl.trail.attr("d", d3.line()(pl.P.slice(Math.max(0, i-60), i+1).concat([[pl.now.x, pl.now.y]]))).attr("stroke-opacity", pl.k === st.sel ? 1 : .7);
+    [pl.sx, pl.sy] = scr([pl.now.x, pl.now.y]);
+  });
+  // gaggles: pilots within 22 px of a better-placed pilot merge into one bubble (3 or more); the followed pilot stays separate
+  const used = new Set(), clusters = [];
+  order.forEach(pl => { if (used.has(pl.k) || pl.k === st.sel || pl.done) return;
+    const mem = order.filter(q => !used.has(q.k) && q.k !== st.sel && !q.done && Math.hypot(q.sx - pl.sx, q.sy - pl.sy) < 22);
+    if (mem.length >= 3){ mem.forEach(q => used.add(q.k)); clusters.push(mem); } });
+  const tagText = (pl, p) => phase === "pre" ? `${pl.short} ${fmtAlt(pl._alt)} m` : `P${p+1} ${pl.short}`;
+  const labels = [];   // [tag, anchorX, anchorY, radius, priority]
+  M.pilots.forEach(pl => {
+    const isSel = pl.k === st.sel, isLead = pl === lead, inC = used.has(pl.k), p = posOf.get(pl.k);
+    pl.dotG.attr("transform", `translate(${pl.sx},${pl.sy})`).attr("opacity", inC ? .5 : 1);
     pl.ring.attr("opacity", isSel ? 1 : 0).attr("stroke", isLead ? "#FF5F00" : "#fff");
-    pl.dot.attr("r", isSel ? 7 : 5.5);
-    const p = posOf.get(pl.k);
-    pl.tag.attr("display", (p < 4 || isSel) ? null : "none");
-    pl.tagText.text(`P${p+1} ${pl.sur}`); pl.tagRect.attr("width", pl.tagText.node().getComputedTextLength() + 12).attr("fill", isLead ? "#FF5F00" : "rgba(3,16,15,.88)");
+    pl.dot.attr("r", isSel ? 7 : inC ? 3 : 5.5);
+    pl.tag.set(tagText(pl, p), isLead ? "#FF5F00" : "rgba(3,16,15,.88)");
     if (isSel) pl.dotG.raise();
+    if (!inC && (isSel || p < 4)) labels.push([pl.tag, pl.sx, pl.sy, isSel ? 11 : 7, isSel ? -1 : p]); else pl.tag.g.attr("display","none");
+  });
+  M.bubbles.forEach((b,j) => {
+    const mem = clusters[j]; b.mem = mem;
+    if (!mem){ b.g.attr("display","none"); b.tag.g.attr("display","none"); return; }
+    const x = d3.mean(mem, q => q.sx), y = d3.mean(mem, q => q.sy), r = 10 + Math.min(6, mem.length), best = mem[0], p = posOf.get(best.k);
+    b.g.attr("display", null).attr("transform", `translate(${x},${y})`);
+    b.c.attr("r", r).attr("stroke", best === lead ? "#FF5F00" : "rgba(255,255,255,.85)");
+    b.n.text(mem.length);
+    b.tag.set(phase === "pre" ? `Gaggle ${mem.length} · top ${fmtAlt(best._alt)} m` : `P${p+1} ${best.short} +${mem.length-1}`, best === lead ? "#FF5F00" : "rgba(3,16,15,.88)");
+    labels.push([b.tag, x, y, r + 2, p - .5]);
+  });
+  // label placement: try four spots round each anchor, skip a label that would overlap one already placed
+  labels.sort((a,b) => a[4] - b[4]);
+  const placed = [];
+  labels.forEach(([tag, x, y, r, pr]) => {
+    const w = tag.w, spots = [[r-2, -r-14], [-w-r+2, -r-14], [r-2, r-2], [-w-r+2, r-2]];
+    let ok = null;
+    for (const [dx,dy] of spots){ const R = [x+dx, y+dy, x+dx+w, y+dy+16]; if (!placed.some(q => overlap(q, R))){ ok = R; break; } }
+    if (!ok && pr === -1) ok = [x+spots[0][0], y+spots[0][1], x+spots[0][0]+w, y+spots[0][1]+16];
+    if (!ok){ tag.g.attr("display","none"); return; }
+    placed.push(ok); tag.g.attr("display", null).attr("transform", `translate(${ok[0]},${ok[1]})`);
   });
 
   // strip
-  M.pilots.forEach((pl,i) => M.stripDots[i].attr("cx", M.stripX(M.suffix[0] - pl.rem)).attr("r", pl.k === st.sel ? 7.5 : 5.5));
-  M.stripLead.attr("x", Math.min(M.stripX(M.suffix[0]) - 28, M.stripX(M.suffix[0] - lead.rem))).text(lead.sur);
+  M.pilots.forEach((pl,i) => M.stripDots[i].attr("cx", M.stripX(pl._prog)).attr("r", pl.k === st.sel ? 7.5 : 5.5));
+  M.stripLead.attr("x", Math.max(M.stripX(0) + 20, Math.min(M.stripX(M.suffix[0]) - 28, M.stripX(lead._prog)))).text(phase === "pre" ? "" : lead.short);
 
   // top bar
   $("#tClock").textContent = fmtT(rel);
   $("#tLocal").textContent = fmtClock(rel);
-  $("#tLeg").textContent = lead.done ? "In goal" : `${tpName(Math.max(1, lead.now.ti-1))} → ${tpName(lead.now.ti)}`;
   const inGoal = M.pilots.filter(p => p.done).length;
+  if (phase === "pre"){ $("#tLegL").textContent = `Gate ${T3.ev.gate}`; $("#tLeg").textContent = `in ${fmtGap(-T)}`; }
+  else if (phase === "race"){ const ti = Math.min(ROUTE.length-1, Math.max(2, lead.now.ti)); $("#tLegL").textContent = "Leader on"; $("#tLeg").textContent = `${tpName(ti-1)} → ${tpName(ti)}`; }
+  else { $("#tLegL").textContent = "In goal"; $("#tLeg").textContent = `${inGoal} of ${N}`; }
   $("#sGoal").textContent = inGoal; $("#sAir").textContent = M.pilots.length - inGoal;
-  $("#ovLead").textContent = lead.sur;
-  const hi = d3.max(M.pilots, p => p.done ? 0 : p.now.alt); $("#tBase").textContent = hi ? `${Math.round(hi).toLocaleString("en")} m` : "—";
-  const live = st.frac > .995 ? false : true;
+  $("#ovLead").textContent = lead.short; $("#ovLeadL").textContent = PHASE[phase].chip;
+  const hi = d3.max(M.pilots, p => p.done ? 0 : p.now.alt); $("#tBase").textContent = hi ? `${fmtAlt(hi)} m` : "—";
   $("#scrub").value = Math.round(st.frac*1000);
 
   // slower UI: board, feed, telemetry
-  const now = performance.now();
-  if (force || now - (M.uiAt||0) > 900){ M.uiAt = now;
+  if (ui){
+    if (phase !== M.phase){ M.phase = phase; const P = PHASE[phase];
+      ["#phase", "#phaseM"].forEach(s => { const el = $(s); el.dataset.p = phase; el.lastChild.textContent = s === "#phase" ? P.head : P.m; });
+      $("#colV").textContent = P.v; $("#colG").textContent = P.g; }
     order.forEach((pl,i) => { const r = M.rows[pl.k], prev = M.prevPos[pl.k];
       r.style.transform = `translateY(${i*ROW_H}px)`; r.classList.toggle("p1", i===0); r.classList.toggle("goal", pl.done);
       r.querySelector(".pos").textContent = i+1;
       const ch = r.querySelector(".chg");
-      if (prev !== undefined && prev !== i){ ch.textContent = prev > i ? "▲" : "▼"; ch.className = "chg " + (prev > i ? "up" : "dn"); pl.chgAt = now; }
+      if (prev !== undefined && prev !== i && M.prevPhase === phase){ ch.textContent = prev > i ? "▲" : "▼"; ch.className = "chg " + (prev > i ? "up" : "dn"); pl.chgAt = now; }
       else if (!pl.chgAt || now - pl.chgAt > 4000){ ch.textContent = ""; ch.className = "chg"; }
       M.prevPos[pl.k] = i;
-      r.querySelector(".d").innerHTML = pl.done ? "GOAL" : `${pl.rem.toFixed(1)}<small>km</small>`;
-      r.querySelector(".g").textContent = i===0 && !pl.done ? "Leader" : pl.done ? pl.time.replace(/^0/,"") : `+${(pl.rem - lead.rem).toFixed(1)}`;
+      const cl = cells(pl, i, order, phase, T);
+      r.querySelector(".d").innerHTML = cl.v; r.querySelector(".g").textContent = cl.g;
     });
-    const all = M.events.filter(e => e.t <= T).concat(M.leadEvents).sort((a,b) => b.t - a.t).slice(0, 30);
-    const key = all.map(e => e.type+e.k+e.t).join("|");
+    M.prevPhase = phase;
+    const all = EVENTS.filter(e => e.t <= T).reverse().slice(0, 40);
+    const key = all.length + ":" + (all[0] ? all[0].t : "");
     if (key !== M.feedKey){ M.feedKey = key;
-      $("#feed").innerHTML = all.map(e => { const pl = M.pilots[e.k], who = pl ? `<b>${pl.sur}</b>` : "";
-        const txt = e.type==="result" ? `<span class="tag goal">RESULT</span>Official day result: ${T3.top.map(r => `${r[0]}. <b>${r[1].split(" ").filter(w => w === w.toUpperCase()).join(" ")}</b> ${r[2]} ${r[3].toFixed(1)} pts`).join(" · ")}. ${T3.stats.goal} of ${T3.stats.pilots} pilots made goal; points include lead-out, so the score order differs from the goal order.`
-          : e.type==="lead" ? `<span class="tag lead">LEAD</span>${who} takes the lead` : e.type==="tp" ? `<span class="tag tp">TP${e.n}</span>${who} tags ${e.tp}` : e.type==="goal" ? `<span class="tag goal">GOAL</span>${who} makes goal · official time ${pl.time.replace(/^0/,"")}` : `<span class="tag start">START</span>${who} leaves the start cylinder`;
-        return `<li class="${e.type}"><time>${fmtT(e.t).slice(1)}</time><p>${txt}</p></li>`; }).join("") || `<li><time>—</time><p>Start gate opens at ${T3.ev.gate}. Pilots are climbing out from Gravedad Cero above Tapalpa.</p></li>`;
+      $("#feed").innerHTML = all.map(e => `<li class="${e.hi ? e.type : ""}"><time>${e.t < 0 ? "−" : ""}${fmtT(e.t).slice(1)}</time><p>${e.html}</p></li>`).join("")
+        || `<li><time>—</time><p>Start gate opens at ${T3.ev.gate}. Pilots are climbing out from ${T3.tps[0][1]} above Tapalpa.</p></li>`;
     }
+    M.markEls.forEach((b,i) => b.classList.toggle("past", M.marks[i].t <= T));
     const s = M.pilots[st.sel], sp = posOf.get(s.k), n = s.now;
-    $("#teFlag").innerHTML = flagHTML(s.nat.f); $("#teName").textContent = `${s.sur} · ${s.nat.c}`; $("#tePos").textContent = `P${sp+1}`;
-    $("#teAlt").innerHTML = `${Math.round(n.alt).toLocaleString("en")}<small>m</small>`;
+    $("#teFlag").innerHTML = flagHTML(s.nat.f); $("#teName").textContent = `${s.short} · ${s.nat.c}`; $("#tePos").textContent = `P${sp+1}`;
+    $("#teAlt").innerHTML = `${fmtAlt(n.alt)}<small>m</small>`;
     const v = s.done ? 0 : n.v; $("#teVar").innerHTML = `${v>=0?"+":""}${v.toFixed(1)}<small>m/s</small>`;
     const vb = $("#teVarBar"), w = Math.min(50, Math.abs(v)/4*50); vb.style.width = w + "%"; vb.style.left = v >= 0 ? "50%" : (50-w) + "%"; vb.style.background = v >= 0 ? "#FF5F00" : "#2BD4C4";
     $("#teGs").innerHTML = `${s.done ? 0 : Math.round(n.gs)}<small>km/h</small>`;
     $("#teRem").innerHTML = s.done ? "GOAL" : `${s.rem.toFixed(1)}<small>km</small>`;
     $("#teTp").innerHTML = s.done ? "—" : `${dist(n.pt.p, M.route[Math.min(n.ti, M.route.length-1)]).toFixed(1)}<small>km</small>`;
-    const goalElev = GOAL_ELEV, ld = (s.rem*1000) / Math.max(1, n.alt - goalElev);
-    $("#teLd").textContent = s.done ? "—" : (n.alt - goalElev > 20 && ld < 25 ? `1:${ld.toFixed(1)}` : "—");
+    const ld = (s.rem*1000) / Math.max(1, n.alt - GOAL_ELEV);
+    $("#teLd").textContent = s.done ? "—" : (n.alt - GOAL_ELEV > 20 && ld < 25 ? `1:${ld.toFixed(1)}` : "—");
     $("#teState").textContent = s.done ? "In goal" : n.v > 0 ? "Climbing in a thermal" : "On glide";
     if (st.cine){
-      $("#cineBoard").innerHTML = order.slice(0,5).map((pl,i) => `<div class="cb-row"><span class="p">${i+1}</span><span class="c" style="background:${pl.col}"></span><b>${pl.sur}<small>${pl.nat.c}</small></b><span class="g">${i===0 ? (pl.done ? "GOAL" : pl.rem.toFixed(1)+" km") : "+"+(pl.rem - order[0].rem).toFixed(1)}</span></div>`).join("");
+      $("#cineBoard").innerHTML = order.slice(0,5).map((pl,i) => { const cl = cells(pl, i, order, phase, T);
+        return `<div class="cb-row"><span class="p">${i+1}</span><span class="c" style="background:${pl.col}"></span><b>${pl.short}<small>${pl.nat.c}</small></b><span class="g">${i===0 ? cl.v.replace(/<[^>]+>/g," ").trim() : cl.g}</span></div>`; }).join("");
       const vv = s.done ? 0 : n.v;
-      $("#cineBar").innerHTML = `<div class="who"><span class="pp">P${sp+1}</span><span class="fl" style="width:28px;height:18px;border-radius:3px;overflow:hidden;display:flex">${flagHTML(s.nat.f)}</span><b>${s.sur}</b></div>`
-        + `<div><span class="lbl">Altitude</span><span class="v">${Math.round(n.alt).toLocaleString("en")}<small>m</small></span></div>`
+      $("#cineBar").innerHTML = `<div class="who"><span class="pp">P${sp+1}</span><span class="fl" style="width:28px;height:18px;border-radius:3px;overflow:hidden;display:flex">${flagHTML(s.nat.f)}</span><b>${s.short}</b></div>`
+        + `<div><span class="lbl">Altitude</span><span class="v">${fmtAlt(n.alt)}<small>m</small></span></div>`
         + `<div><span class="lbl">Vario</span><span class="v ${vv>=0?"up":"dn"}">${vv>=0?"+":""}${vv.toFixed(1)}<small>m/s</small></span></div>`
         + `<div><span class="lbl">Speed</span><span class="v">${s.done?0:Math.round(n.gs)}<small>km/h</small></span></div>`
         + `<div><span class="lbl">To goal</span><span class="v">${s.done ? "GOAL" : s.rem.toFixed(1)}${s.done?"":"<small>km</small>"}</span></div>`;
@@ -691,13 +942,13 @@ function frame(force){
     const bsv = d3.select("#baro"), bw = Math.round($("#baro").getBoundingClientRect().width) || 300, bh = 54;
     if (bw > 0){ bsv.attr("viewBox", `0 0 ${bw} ${bh}`);
       const hist = s.pts.slice(0, s.i+1).filter((_,j) => j % 3 === 0), all2 = s.pts;
-      const x = d3.scaleLinear([0, all2.at(-1).t], [0, bw]), y = d3.scaleLinear(d3.extent(all2, q=>q.alt), [bh-4, 6]);
+      const x = d3.scaleLinear([all2[0].t, all2.at(-1).t], [0, bw]), y = d3.scaleLinear(d3.extent(all2, q=>q.alt), [bh-4, 6]);
       let path = bsv.select("path.l"); if (path.empty()){ bsv.append("path").attr("class","a").attr("fill","rgba(255,95,0,.14)"); path = bsv.append("path").attr("class","l").attr("fill","none").attr("stroke","#FF5F00").attr("stroke-width",1.5); }
       path.attr("d", d3.line().x(q=>x(q.t)).y(q=>y(q.alt))(hist));
       bsv.select("path.a").attr("d", d3.area().x(q=>x(q.t)).y0(bh).y1(q=>y(q.alt))(hist));
     }
   }
-  const pill = $("#livePill"); pill.className = "livepill" + (live ? "" : " replay"); pill.lastChild.textContent = live ? "REPLAY" : "FINISHED";
+  const pill = $("#livePill"), live = st.frac <= .995; pill.className = "livepill" + (live ? "" : " replay"); pill.lastChild.textContent = live ? "REPLAY" : "FINISHED";
 }
 
 /* ---------- loop + controls ---------- */
@@ -712,11 +963,11 @@ function loop(now){
 }
 const playBtn = $("#play");
 function setPlay(on){ st.playing = on; playBtn.innerHTML = on ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l12-7z"/></svg>'; playBtn.setAttribute("aria-label", on ? "Pause" : "Play"); }
-playBtn.onclick = () => { if (st.frac >= 1){ st.frac = 0; M.leadEvents = []; M.lastLead = null; } setPlay(!st.playing); st.last = performance.now(); };
+playBtn.onclick = () => { if (st.frac >= 1){ st.frac = 0; M.lastT = null; } setPlay(!st.playing); st.last = performance.now(); };
 document.querySelectorAll("[data-sp]").forEach(b => b.onclick = () => { st.speed = +b.dataset.sp; document.querySelectorAll("[data-sp]").forEach(x => x.setAttribute("aria-pressed", x===b)); });
 document.querySelectorAll("[data-cam]").forEach(b => b.onclick = () => setCam(b.dataset.cam));
 document.querySelectorAll("[data-tilt]").forEach(b => b.onclick = () => { $("#mapwrap").classList.toggle("tilt", b.dataset.tilt === "1"); document.querySelectorAll("[data-tilt]").forEach(x => x.setAttribute("aria-pressed", x===b)); });
-$("#scrub").oninput = e => { st.frac = e.target.value/1000; M.leadEvents = M.leadEvents.filter(ev => ev.t <= M.tStart + st.frac*(M.tEnd-M.tStart)); M.lastLead = null; frame(true); };
+$("#scrub").oninput = e => { st.frac = e.target.value/1000; M.lastT = null; frame(true); };
 addEventListener("keydown", e => { if (e.key === " " && e.target === document.body){ e.preventDefault(); playBtn.click(); } });
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const sel = st.sel; build(); select(sel, false); frame(true); }, 200); });
 
@@ -775,6 +1026,31 @@ build(); frame(true);
   }, {passive:false});
   $("#compass").onclick = () => { V.rot = 0; };
   addEventListener("keydown", e => { if (e.target !== document.body) return; if (e.key === "q" || e.key === "Q") V.rot -= 15; if (e.key === "e" || e.key === "E") V.rot += 15; });
+})();
+
+/* ---------- phone: leaderboard / feed as a bottom sheet (drag or tap the handle) ---------- */
+(function(){
+  const sh = $("#sheet"), head = $("#sheetHead"), PEEK = 150, states = ["peek","half","full"];
+  sh.style.setProperty("--peek", PEEK + "px");
+  const offset = (s, h) => s === "full" ? 0 : s === "half" ? h*.45 : h - PEEK;
+  let y0 = null, base = 0, h = 0, moved = false, cur = 0;
+  const setState = s => { sh.dataset.state = s; };
+  window.__sheet = setState;
+  const tap = tab => {
+    if (tab && tab.dataset.tab !== sh.dataset.tab){ sh.dataset.tab = tab.dataset.tab; head.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", b === tab)); if (sh.dataset.state === "peek") setState("half"); return; }
+    setState(states[(states.indexOf(sh.dataset.state) + 1) % 3]);
+  };
+  let downTab = null;
+  head.addEventListener("pointerdown", e => { if (!PHONE.matches) return; h = sh.getBoundingClientRect().height; base = cur = offset(sh.dataset.state, h); y0 = e.clientY; moved = false;
+    downTab = e.target.closest("[data-tab]"); head.setPointerCapture(e.pointerId); });
+  head.addEventListener("pointermove", e => { if (y0 === null) return; const dy = e.clientY - y0;
+    if (!moved && Math.abs(dy) < 6) return;
+    if (!moved){ moved = true; sh.classList.add("dragging"); }
+    cur = Math.max(0, Math.min(h - PEEK, base + dy)); sh.style.transform = `translateY(${cur}px)`; });
+  const end = () => { if (y0 === null) return; y0 = null; sh.classList.remove("dragging"); sh.style.transform = "";
+    if (moved) setState(d3.least(states, s => Math.abs(offset(s, h) - cur))); else tap(downTab); };
+  head.addEventListener("pointerup", end); head.addEventListener("pointercancel", () => { moved = true; end(); });
+  head.addEventListener("click", e => { if (e.detail === 0) tap(e.target.closest("[data-tab]")); });   // keyboard
 })();
 
 if (location.hash === "#broadcast") setCine(true);

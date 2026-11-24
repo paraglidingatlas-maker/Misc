@@ -51,17 +51,19 @@ Review of events/live.html (src/live-tracker.html) at 1440, 390 and broadcast vi
 - The race feed is almost empty and the timeline has no event markers.
 - Phone: the header and stats fill half the screen, the leaderboard is hidden, the map is cramped.
 
-Proposed improvements, in priority order (show the owner, let them pick):
-1. Race states that change what is shown: pre-start (gaggle by height, time to gate) / racing (rank by distance flown, time gaps) / goal (arrivals, final order).
-2. Real terrain + satellite basemap (e.g. MapLibre with open terrain tiles), thermal hotspots from the IGC climbs, wind arrow.
-3. Gaggle clustering: group nearby pilots into one bubble with count, label collision avoidance.
-4. Barogram / altitude band under the map for the selected pilot vs leader, synced to the timeline.
-5. Timeline with event markers: gate open, lead changes, turnpoints, first in goal; click to jump.
-6. Auto race feed generated from the data: "Sigel takes the lead", "12 pilots tagged Las Gemelas", "Desmond lands out".
-7. Compare mode: pick 2–3 pilots, ghost lines and live gap in time and height.
-8. Phone layout: full-screen map, bottom sheet with leaderboard (drag up), compact top bar.
-9. Shareable moments: link to a timestamp + camera, and a clip/still export for social.
-10. Broadcast polish: lower-third captions from the feed, auto-director camera that follows the biggest change.
+Proposed improvements, in priority order. **Owner picked 1, 3, 5, 6 and 8 (24 Nov 2026); built and live.** Still open for later: 2, 4, 7, 9, 10.
+1. ✅ Race states: before the gate the board ranks by height (gap in m below the top); racing ranks by distance flown with time gaps (time since the leader was at the same distance); arrivals list goal order with times; at the end the official result by score. Top bar shows "Gate 12:15 · in m:ss" / "Leader on X → Y" / "In goal n of 20". One ranking snapshot (every 2 s, with a 15 m / 50 m pass margin so it doesn't flicker) feeds the board, map tags, map chip, strip and broadcast board, so they always agree.
+2. Real terrain + satellite basemap, thermal hotspots from the IGC climbs, wind arrow.
+3. ✅ Gaggle clustering: 3+ pilots within 22 px become one bubble with a count and the best-placed pilot's tag ("P1 SPANCERSKI +12"); click a bubble to zoom in. Labels are placed in one of four spots and skipped if they would overlap.
+4. Barogram / altitude band under the map for the selected pilot vs leader.
+5. ✅ Timeline markers on the scrubber: gate, TP1/TP2 first tags, lead changes (orange diamonds), first goal, all in, result. Click to jump there; hover for the text.
+6. ✅ Generated race feed (`EVENTS` in src/live-tracker.html): pre-start stack, gate, first/last out of the start, first / half / all through each TP, lead changes (held 2 min by >250 m), strongest climbs (2-min average, each time the day's best is beaten by 0.3 m/s), highest altitude, every goal arrival with gap, result. Big moments also show as a toast.
+7. Compare mode: pick 2–3 pilots, ghost lines and live gap.
+8. ✅ Phone (≤820 px): full-screen map, compact top bar and telemetry card, bottom sheet with Leaderboard / Race feed tabs (tap the handle to cycle peek → half → full, or drag it), controls in two rows with the timeline full width.
+9. Shareable moments: link to a timestamp + camera, clip/still export.
+10. Broadcast polish: lower-third captions from the feed, auto-director camera.
+
+Notes: the map hint moved to the bottom-left so it no longer covers the Task chip; the Local clock is hidden below 1600 px so the top bar fits at 1440. Long double surnames show the first one on the board (DIAZ, TELLO); full name on hover.
 
 ## Open items
 
