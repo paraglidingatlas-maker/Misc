@@ -65,6 +65,8 @@ Proposed improvements, in priority order. **Owner picked 1, 3, 5, 6 and 8 (24 No
 
 **Map navigation is now Google Earth style (owner asked 24 Nov 2026, built and live):** drag grabs the ground (the point under the pointer stays under it, also when tilted) and flings with momentum; scroll, pinch and double-click zoom towards the pointer (shift+double-click zooms out; while following a pilot, zoom stays centred on the pilot); shift-, ctrl-, right- or middle-drag rotates (left/right) and tilts (up/down, 0–60°); two fingers: pinch, twist, or slide up/down together to tilt; double-tap zooms in; keys: arrows pan, shift+arrows rotate/tilt, +/− zoom, N north up, U level, R reset; the compass resets north and tilt. The 2D/3D buttons and broadcast view animate the same continuous tilt. Code: `/* ---------- Google Earth style navigation` in src/live-tracker.html (the tilted plane is scaled just enough to always fill the view). Also fixed: the pre-start board showed "−-6 m" when a lower-ranked pilot was briefly higher; it now shows "+6 m".
 
+**Live view reachable from the calendar (owner asked 24 Nov 2026):** the calendar top bar has a permanent red-dot **Live** pill (with "Tapalpa replay" above 1560 px; also shown on phone) and the hero's next-round card has a "Live tracker · Replay SRS Tapalpa 2026 · Task 3" link, both to live.html. Styles: `.nav-live` / `.hc-live` in src/season-calendar.html. Calendar nav links no longer wrap.
+
 Notes: the map hint moved to the bottom-left so it no longer covers the Task chip; the Local clock is hidden below 1600 px so the top bar fits at 1440. Long double surnames show the first one on the board (DIAZ, TELLO); full name on hover.
 
 ## Open items

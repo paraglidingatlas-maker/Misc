@@ -429,6 +429,19 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 
 /* ---------- SRS: featured series ---------- */
 :root{--srs-blue:#1DA9E1;--srs-red:#E31E2D;--srs-grad:linear-gradient(90deg,var(--srs-blue),#7C5BB0 55%,var(--srs-red))}
+.nav-live{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;border:1px solid var(--line-2);font:700 12px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:#fff;white-space:nowrap;transition:border-color .2s,background .2s}
+@media (max-width:1560px){ .nav-live span{display:none} }
+.nav nav a,.nav .login{white-space:nowrap}
+.nav-live:hover{border-color:#FF3B30;background:rgba(255,59,48,.1)}
+.nav-live i,.hc-live i{width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 0 0 rgba(255,59,48,.6);animation:livepulse 1.8s infinite;flex:none}
+.nav-live span{font-weight:600;letter-spacing:.06em;text-transform:none;color:var(--ink-2)}
+@keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(255,59,48,.6)}70%{box-shadow:0 0 0 8px rgba(255,59,48,0)}100%{box-shadow:0 0 0 0 rgba(255,59,48,0)}}
+@media (prefers-reduced-motion:reduce){.nav-live i,.hc-live i{animation:none}}
+.hc-live{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(3,16,15,.35);color:#fff;transition:border-color .2s}
+.hc-live:hover{border-color:#FF3B30}
+.hc-live span{flex:1;min-width:0;font:500 12.5px/1.35 var(--f-body);color:rgba(255,255,255,.7)}
+.hc-live b{display:block;font:800 italic 14px var(--f-display);letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.hc-live em{font-style:normal;font-weight:800;color:var(--orange)}
 .nav-srs{display:flex;align-items:center;gap:10px;padding:5px 12px 5px 10px;border-radius:8px;border:1px solid var(--line-2);transition:border-color .2s,background .2s}
 .nav-srs:hover{border-color:var(--srs-blue);background:rgba(29,169,225,.08)}
 .nav-srs span{font:700 9.5px/1.15 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
@@ -489,7 +502,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .d-srs span{font:700 11px/1.4 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
 .d-srs b{display:block;color:#fff;font:800 italic 16px var(--f-display);letter-spacing:0;text-transform:uppercase}
 .f-srs img{width:150px;display:block;margin:4px 0 10px}
-@media (max-width:1000px){ .srs-sec .wrap{grid-template-columns:minmax(0,1fr)} .nav-srs span{display:none} }
+@media (max-width:1000px){ .srs-sec .wrap{grid-template-columns:minmax(0,1fr)} .nav-srs span{display:none} .nav-live span{display:none} }
 @media (max-width:720px){
   .nav-srs{display:none}
   .racebar .rb-srs{margin-left:0}
@@ -575,6 +588,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <a href="#host">Host</a>
     </nav>
     <span class="sp"></span>
+    <a class="nav-live" href="live.html" title="Live tracker: replay of SRS Tapalpa 2026, Task 3"><i></i><b>Live</b><span>Tapalpa replay</span></a>
     <a class="nav-srs" href="#srs" aria-label="Featured series: Sports-Class Racing Series"><span>Featured<br>series</span><img data-srs="mark" alt=""></a>
     <a class="login" href="https://airtribune.com/events/next">Sign in</a>
     <a class="btn btn-o" href="https://airtribune.com/events/create_event">Create event</a>
@@ -607,6 +621,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <div class="meta"><span class="chip-dk"><i></i>Next round</span><span id="hcDates"></span></div>
       <h3 id="hcName"></h3>
       <button class="btn btn-o" id="hcOpen">Round details</button>
+      <a class="hc-live" href="live.html"><i></i><span><b>Live tracker</b>Replay SRS Tapalpa 2026 · Task 3 · 58.7 km</span><em>→</em></a>
       <div class="series"><img data-srs="white" alt="Sports-Class Racing Series"><span>Featured series this season:<br><a href="#srs" id="hcSrs">5 SRS rounds</a></span></div>
     </div>
   </div>
