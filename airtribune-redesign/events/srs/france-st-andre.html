@@ -203,6 +203,26 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .prize{padding:18px;min-height:120px}
   .prize b{font-size:19px;overflow-wrap:anywhere}
 }
+
+/* ---------- glass system: translucent, hazy surfaces instead of solid fills ---------- */
+.btn{font-weight:600;letter-spacing:.18em;font-size:11.5px;backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4)}
+.btn-o,.btn-red{background:linear-gradient(180deg,rgba(255,128,56,.26),rgba(255,95,0,.12));color:#FFE3D2;border:1px solid rgba(255,150,92,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 30px -14px rgba(255,95,0,.55)}
+.btn-o:hover,.btn-red:hover{background:linear-gradient(180deg,rgba(255,128,56,.38),rgba(255,95,0,.2));border-color:rgba(255,176,128,.7);color:#fff;transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 14px 36px -12px rgba(255,95,0,.65)}
+.btn-ghost,.btn-line{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.2);color:#EAF2F3;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.btn-ghost:hover,.btn-line:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.38)}
+.glass{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 70px -30px rgba(0,0,0,.75);backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35)}
+
+.chip.ok{background:rgba(43,212,196,.14);color:var(--teal);box-shadow:inset 0 0 0 1px rgba(43,212,196,.45)}
+.chip.prov{background:rgba(255,201,6,.12);color:var(--yellow);box-shadow:inset 0 0 0 1px rgba(255,201,6,.45)}
+.chip.wsf{background:linear-gradient(90deg,rgba(29,169,225,.25),rgba(227,30,45,.25));box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.prize{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02))!important;border:1px solid rgba(255,255,255,.12);color:#fff!important;position:relative;overflow:hidden}
+.prize::before{content:"";position:absolute;left:0;top:0;right:0;height:3px}
+.prize:nth-child(1)::before{background:var(--orange)}.prize:nth-child(2)::before{background:var(--srs-red)}.prize:nth-child(3)::before{background:var(--srs-blue)}.prize:nth-child(4)::before{background:var(--teal)}
+.prize span{color:rgba(255,255,255,.65)}
+.rc.cur::before{background:rgba(255,95,0,.22);border:1px solid rgba(255,150,92,.5);color:#FFD9C4;backdrop-filter:blur(8px)}
+.rc.cur{box-shadow:inset 0 0 0 1px rgba(255,150,92,.6)}
+.card,.feat,.tiles div,.day,.sched li,.draws div,.pill{backdrop-filter:blur(10px)}
+.nav .btn{height:38px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
