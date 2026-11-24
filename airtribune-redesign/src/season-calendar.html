@@ -147,38 +147,53 @@ section.block{padding-block:88px 0}
 .strip-nav:hover{background:var(--orange);color:#fff}
 .strip-nav.prev{left:12px}.strip-nav.next{right:12px}
 
-/* map */
-.mapbox{position:relative;background:var(--deep);border:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;overflow:hidden}
-.mapbox svg{display:block;width:100%;height:auto;background:radial-gradient(120% 90% at 50% 0%,#0B2629,#03100F)}
-.country{fill:var(--land);stroke:#03100F;stroke-width:.6}
+/* map: The tour */
+.tour{position:relative;display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:1px;background:var(--line);border-block:1px solid var(--line)}
+.tm{position:relative;margin:0;background:var(--deep);overflow:hidden}
+.tm svg{display:block;width:100%}
+.tm-cap{position:absolute;left:18px;top:14px;z-index:2;font:600 12px var(--f-body);color:var(--ink-2)}
+.tm-cap span{color:var(--muted);font-weight:400}
+.country{fill:var(--land);stroke:var(--deep);stroke-width:.5}
 .country.host{fill:var(--land-host)}
-.grat{fill:none;stroke:rgba(43,212,196,.05)}
-.route{fill:none;stroke:var(--orange);stroke-width:1.5;stroke-dasharray:5 4;opacity:.75}
-.pin{cursor:pointer}
-.pin circle.c{fill:#03100F;stroke:#fff;stroke-width:1.5;transition:.2s}
-.pin text{font:700 9.5px var(--f-body);fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-.pin:hover circle.c,.pin:focus-visible circle.c{fill:#fff}
-.pin:hover text,.pin:focus-visible text{fill:#03100F}
-.pin.is-next circle.c{fill:var(--orange);stroke:#fff}
-.pin.is-next .halo{fill:none;stroke:var(--orange);animation:halo 2s infinite}
-@keyframes halo{from{r:10;opacity:.9}to{r:26;opacity:0}}
-.pin.past circle.c{stroke:var(--done)}
-.pin.past text{fill:var(--muted)}
-.glider path{fill:none;stroke:var(--yellow);stroke-width:2.6;stroke-linecap:round}
-.comet{fill:none;stroke:var(--yellow);stroke-width:2.4;stroke-linecap:round;opacity:.8}
-.maplegend{position:absolute;left:18px;bottom:16px;display:flex;gap:16px;flex-wrap:wrap;font:600 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
-.maplegend span{display:flex;align-items:center;gap:6px}
-.maplegend i{display:inline-block;width:16px;border-top:2px dashed var(--orange)}
-.maplegend em{font-style:normal;width:10px;height:10px;border-radius:50%;background:var(--orange)}
-.tip{position:absolute;z-index:5;pointer-events:none;background:#fff;color:#051416;border-radius:10px;padding:12px 14px;font-size:13px;min-width:200px;max-width:280px;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;box-shadow:0 20px 40px -12px rgba(0,0,0,.6)}
-.tip.on{opacity:1;transform:none}
-.tip b{display:block;font:800 italic 14px var(--f-display);text-transform:uppercase}
-.tip .mono{color:#4a5f61;font-size:12px}
-.travel{display:grid;grid-template-columns:repeat(4,1fr);background:var(--bg-2);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r) var(--r)}
-.travel div{padding:18px 20px;border-right:1px solid var(--line)}
-.travel div:last-child{border-right:0}
+.tm-frame{fill:none;stroke:rgba(255,255,255,.35);stroke-width:1}
+.tm-lead{stroke:rgba(255,255,255,.28);stroke-width:1}
+.tm-srs{fill:none;stroke:#fff;stroke-width:1.4;opacity:.85}
+.tm-srs.done{stroke:var(--done);opacity:1}
+.dot{stroke-width:1.5}
+.dot.up{fill:#fff;stroke:var(--deep)}
+.dot.past{fill:var(--deep);stroke:var(--muted)}
+.dot.next,.dot.live{fill:var(--orange);stroke:var(--deep)}
+.dot.srs.up{fill:var(--srs-blue)}
+.tm-labels{position:absolute;inset:0;pointer-events:none}
+.tl{position:absolute;pointer-events:auto;text-align:left;line-height:1.25;padding:2px 0;white-space:nowrap;text-shadow:0 1px 3px var(--deep),0 0 8px var(--deep)}
+.tl.l{text-align:right}
+.tl b{display:block;font:800 13px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.01em;color:#fff}
+.tl small{display:block;font:400 12px var(--f-body);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tl em{font-style:normal;color:var(--orange);font-weight:600}
+.tl.past b{color:var(--muted)}
+.tl .sh{display:none}
+.tl:hover b,.tl[aria-expanded="true"] b{color:var(--orange)}
+.tm-pop{position:absolute;z-index:6;display:none;min-width:250px;max-width:320px;background:#F4F6F6;color:#051416;border-radius:4px;padding:6px 0;box-shadow:0 24px 48px -16px rgba(0,0,0,.7)}
+.tm-pop.on{display:block}
+.tm-pop h4{font:800 13px var(--f-display);text-transform:uppercase;padding:8px 16px 6px}
+.tm-pop button{display:grid;grid-template-columns:6.4em 1fr;gap:10px;width:100%;text-align:left;padding:8px 16px;font-size:13px;line-height:1.3;border-top:1px solid rgba(5,20,22,.08)}
+.tm-pop button:hover,.tm-pop button:focus-visible{background:#E3E8E8}
+.tm-pop .d{white-space:nowrap;color:#4a5f61;font-variant-numeric:tabular-nums}
+.tm-pop .x{color:#4a5f61}
+.tm-pop .s{color:#0F7FAF;font-weight:700;margin-right:4px}
+.tm-key{display:flex;gap:22px;flex-wrap:wrap;padding:14px 0 0;font-size:12px;color:var(--ink-2)}
+.tm-key span{display:flex;align-items:center;gap:7px}
+.tm-key i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--deep)}
+.tm-key .k-past{border-color:var(--muted)}
+.tm-key .k-next{background:var(--orange)}
+.tm-key .k-up{background:#fff}
+.tm-key .k-srs{background:var(--srs-blue)}
+.travel{display:grid;grid-template-columns:repeat(4,1fr);margin-top:28px;border-top:1px solid var(--line-2)}
+.travel div{padding:16px 24px 0 0}
 .travel .eyebrow{display:block}
-.travel b{display:block;margin:8px 0 2px;font:800 italic 26px var(--f-display);font-variant-numeric:tabular-nums}
+.travel b{display:block;margin:8px 0 2px;font:800 italic 30px var(--f-display);font-variant-numeric:tabular-nums}
+@media (max-width:1000px){ .tour{grid-template-columns:minmax(0,1fr)} .travel{grid-template-columns:repeat(2,1fr);row-gap:18px} }
+@media (max-width:720px){ .tl small{display:none} .tl small.nx{display:block} .tl .lg{display:none} .tl .sh{display:inline} .tl b{font-size:11.5px} .tl{padding:8px 0} .tm-pop{left:12px!important;right:12px;max-width:none} .travel b{font-size:24px} }
 
 /* gantt */
 .gantt-scroll{overflow-x:auto;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);scrollbar-color:var(--line-2) transparent}
@@ -410,7 +425,6 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
   .search{margin-left:0;flex:1}
   .search input{width:100%}
   .filters{position:static}
-  .maplegend{position:static;padding:10px 14px}
   section.block{padding-block:64px 0}
   .col{height:440px}
   .strip-nav{display:none}
@@ -486,9 +500,6 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .date .srs-inline{height:22px;margin-left:auto;align-self:center}
 .chip img{height:15px;display:block}
 .keys img{height:16px;display:block}
-.pin.srs circle.c{stroke:var(--srs-blue);stroke-width:2.6}
-.pin.srs .srs-ring{fill:none;stroke:var(--srs-red);stroke-width:1.6}
-.maplegend .srsk{width:12px;height:12px;border-radius:50%;border:2.5px solid var(--srs-blue);box-shadow:0 0 0 2px var(--srs-red) inset}
 .d-srs{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:rgba(29,169,225,.08);border:1px solid rgba(29,169,225,.3)}
 .d-srs img{height:54px;display:block}
 .d-srs span{font:700 11px/1.4 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
@@ -658,13 +669,14 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
   <div class="wrap">
     <div class="shead">
       <h2 class="up" id="tourH">The tour</h2>
-      <p>Every round on the calendar, joined in date order. Tap a pin to open the round.</p>
+      <p>Where the season races, and the Sports-Class Racing Series route through the Alps. Tap a venue for its rounds.</p>
     </div>
-    <div class="mapbox" id="mapbox">
-      <svg id="map" viewBox="0 0 1200 560" role="img" aria-label="World map of the season's rounds"></svg>
-      <div class="tip" id="tip"></div>
-      <div class="maplegend"><span><i></i>Season route</span><span><em></em>Next round</span><span><b class="srsk"></b>SRS round</span></div>
+    <div class="tour" id="mapbox">
+      <figure class="tm tm-w" id="tmW"><figcaption class="tm-cap">Worldwide</figcaption><svg id="map" role="img" aria-label="World map of the season's venues"></svg><div class="tm-labels"></div></figure>
+      <figure class="tm tm-e" id="tmE"><figcaption class="tm-cap">Alps &amp; Balkans <span>· SRS route in white</span></figcaption><svg id="mapEu" role="img" aria-label="Europe: venues and the SRS route"></svg><div class="tm-labels"></div></figure>
+      <div class="tm-pop" id="tip" role="dialog" aria-label="Rounds at this venue"></div>
     </div>
+    <div class="tm-key"><span><i class="k-past"></i>Raced</span><span><i class="k-next"></i>Next round</span><span><i class="k-up"></i>Coming up</span><span><i class="k-srs"></i>SRS round</span></div>
     <div class="travel" id="travel"></div>
   </div>
 </section>
@@ -1129,10 +1141,13 @@ function startRace(e, opt = {}){
 
 /* ============ RACE BAR + HERO + CALENDAR STRIP ============ */
 const countries = new Set(EV.map(e=>e.cc)), regions = new Set(EV.map(e=>e.region));
-const travelLegs = EV.slice(1).map((e,k) => ({from:EV[k], to:e, km:hav(EV[k], e)}));
-const travelKm = d3.sum(travelLegs, l=>l.km);
+const CONT = {PK:"Asia",IN:"Asia",BR:"S. America",CO:"S. America",CR:"N. America",ZA:"Africa",AU:"Oceania",SI:"Europe",GB:"Europe",FR:"Europe",IT:"Europe",MK:"Europe"};
+const continents = [...new Set(EV.map(e=>CONT[e.cc]))];
+/* SRS tour: the one route a pilot actually follows, round to round in date order */
+const SRS_EV = EV.filter(e=>e.type==="srs");
+const srsKm = d3.sum(SRS_EV.slice(1), (e,k) => hav(SRS_EV[k], e));
 const compDays = d3.sum(EV, e=>e.days);
-$("#stats").innerHTML = [[EV.length,"Rounds"],[countries.size,"Countries"],[compDays,"Race days"],[Math.round(travelKm),"km of season travel"]]
+$("#stats").innerHTML = [[EV.length,"Rounds"],[countries.size,"Countries"],[compDays,"Race days"],[continents.length,"Continents"]]
   .map(([v,l]) => `<div><b data-to="${v}">0</b><span>${l}</span></div>`).join("");
 document.querySelectorAll("[data-to]").forEach(el => {
   const to = +el.dataset.to, t0 = performance.now();
@@ -1211,74 +1226,129 @@ tick(); setInterval(tick, 1000);
   else $("#rbSrs").hidden = true;
 })();
 
-/* ============ MAP ============ */
+/* ============ MAP: The tour ============ */
 (function(){
-  const svg = d3.select("#map"), W = 1200, H = 560;
   const topo = Datamap.prototype.worldTopo;
   const land = topojson.feature(topo, topo.objects.world).features.filter(f => f.id !== "ATA");
-  const proj = d3.geoNaturalEarth1().fitExtent([[10,10],[W-10,H-10]], {type:"FeatureCollection",features:land});
-  const gp = d3.geoPath(proj);
-  const hosts = new Set(Object.values(ISO3).filter((v,k)=>countries.has(Object.keys(ISO3)[k])));
-  svg.append("path").attr("class","grat").attr("d", gp(d3.geoGraticule10()));
-  svg.append("g").selectAll("path").data(land).join("path").attr("class", d => "country" + (hosts.has(d.id)?" host":"")).attr("d", gp);
-  const routeD = gp({type:"LineString", coordinates: EV.map(e=>[e.lon,e.lat])});
-  const route = svg.append("path").attr("class","route").attr("d", routeD);
-  // done part of route
-  const doneIdx = EV.filter(e=>e.status==="past").length;
-  if (doneIdx > 1) svg.append("path").attr("d", gp({type:"LineString",coordinates:EV.slice(0,doneIdx).map(e=>[e.lon,e.lat])})).attr("fill","none").attr("stroke","var(--done)").attr("stroke-width",1.6);
-  // pins grouped by location
-  const groups = d3.groups(EV, e => e.lat.toFixed(1)+","+e.lon.toFixed(1)).map(([k,evs]) => ({evs, p:proj([evs[0].lon, evs[0].lat])}));
-  // nudge pins that sit too close to each other
-  for (let a=0;a<groups.length;a++) for (let b=a+1;b<groups.length;b++){
-    const A=groups[a].p, B=groups[b].p, dx=B[0]-A[0], dy=B[1]-A[1], d=Math.hypot(dx,dy);
-    if (d < 22){ const push=(22-d)/2+.5, ux=d?dx/d:1, uy=d?dy/d:0; A[0]-=ux*push; A[1]-=uy*push; B[0]+=ux*push; B[1]+=uy*push; }
-  }
-  const tip = $("#tip"), box = $("#mapbox");
-  const pins = svg.append("g").selectAll("g").data(groups).join("g")
-    .attr("class", g => "pin" + (g.evs.includes(NEXT)?" is-next":"") + (g.evs.every(e=>e.status==="past")?" past":"") + (g.evs.some(e=>e.type==="srs")?" srs":""))
-    .attr("transform", g => `translate(${g.p})`).attr("tabindex",0).attr("role","button")
-    .attr("aria-label", g => g.evs.map(e=>`Round ${e.n}, ${e.name}`).join("; "));
-  pins.filter(g => g.evs.includes(NEXT)).append("circle").attr("class","halo").attr("r",10);
-  pins.filter(g => g.evs.some(e=>e.type==="srs")).append("circle").attr("class","srs-ring").attr("r", g => (g.evs.length>1 ? 12 : 10) + 3.5);
-  pins.append("circle").attr("class","c").attr("r", g => g.evs.length>1 ? 12 : 10);
-  pins.append("text").text(g => g.evs.length>1 ? g.evs.length+"×" : g.evs[0].n);
-  pins.on("mouseenter focus", function(ev, g){
-    tip.innerHTML = g.evs.map(e => `<div style="margin-bottom:6px"><span class="mono">${rn(e)} · ${longDate(e)}</span><b>${e.name}</b></div>`).join("") + `<span class="mono">${g.evs[0].city}, ${g.evs[0].country}</span>`;
-    const r = box.getBoundingClientRect(), s = this.getBoundingClientRect();
-    let x = s.left - r.left + 18, y = s.top - r.top - 10;
-    if (x + 290 > r.width) x = s.left - r.left - 290;
-    tip.style.left = Math.max(8,x)+"px"; tip.style.top = Math.max(8,y)+"px"; tip.classList.add("on");
-  }).on("mouseleave blur", () => tip.classList.remove("on"))
-    .on("click", (ev,g) => openRound((g.evs.find(e=>e.status!=="past")||g.evs[0]).i))
-    .on("keydown", (ev,g) => { if (ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); openRound(g.evs[0].i); } });
-  if (!reduce){ const L = route.node().getTotalLength(); route.attr("stroke-dasharray",`0 ${L}`).transition().duration(3200).ease(d3.easeCubicInOut).attrTween("stroke-dasharray",()=>t=>{
-      const l = L*t, parts=[]; for (let k=0;k<l;k+=9) parts.push(Math.min(5,l-k), 4); return parts.join(" ")+` 0 ${L}`; }).on("end",()=>route.attr("stroke-dasharray","5 4")); }
+  const hosts = new Set([...countries].map(c => ISO3[c]));
+  const pop = $("#tip"), box = $("#mapbox");
+  const dd = e => `${e.sd}${e.sm!==e.em?" "+MON[e.sm-1]:""}–${e.ed} ${MON[e.em-1]}`;
+  const span = evs => { const a = evs[0], b = evs.at(-1); return a===b ? dd(a) : `${MON[a.sm-1]}${a.sm!==b.em?"–"+MON[b.em-1]:""}`; };
+  /* Venue areas, named the way a race broadcast would. side: label left/right of the dot; dx/dy: label offset in px */
+  const AREAS = [
+    {k:"PK", t:"Pakistan", s:"Pakistan", m:e=>e.cc==="PK", side:"r", dx:16, dy:-26},
+    {k:"IN", t:"Panchgani, India", s:"India", m:e=>e.cc==="IN", side:"l", dx:-16, dy:12},
+    {k:"BR", t:"Rio Grande do Sul", s:"Brazil", m:e=>e.cc==="BR", side:"r", dx:18, dy:6},
+    {k:"ZA", t:"South Africa", s:"S. Africa", m:e=>e.cc==="ZA", side:"r", dx:14, dy:12},
+    {k:"CO", t:"Colombia", s:"Colombia", m:e=>e.cc==="CO", side:"r", dx:22, dy:-4},
+    {k:"CR", t:"Costa Rica", s:"Costa Rica", m:e=>e.cc==="CR", side:"l", dx:-16, dy:-12},
+    {k:"AU", t:"Australia", s:"Australia", m:e=>e.cc==="AU", side:"l", dx:-8, dy:30},
+    {k:"EU", t:"Europe", s:"Europe", m:e=>CONT[e.cc]==="Europe", side:"l", dx:-30, dy:-30, frame:true},
+  ];
+  const AREAS_EU = [
+    {k:"GB", t:"Glencoe, Scotland ↑", s:"Glencoe ↑", m:e=>e.cc==="GB", side:"r", off:true},
+    {k:"SO", t:"Soča & Friuli", s:"Soča & Friuli", m:e=>e.cc==="SI"||e.cc==="IT", side:"r", dx:26, dy:-40},
+    {k:"FA", t:"Southern French Alps", s:"French Alps", m:e=>e.cc==="FR", side:"r", dx:6, dy:58},
+    {k:"MK", t:"Kruševo, N. Macedonia", s:"Kruševo", m:e=>e.cc==="MK", side:"l", dx:-10, dy:-40},
+  ];
+  const state = e => e===NEXT ? (e.status==="live"?"live":"next") : e.status==="past" ? "past" : "up";
+  const venues = evs => d3.groups(evs, e => e.lat.toFixed(2)+","+e.lon.toFixed(2)).map(([,v]) => v);
+  const dotState = v => v.includes(NEXT) ? state(NEXT) : v.every(e=>e.status==="past") ? "past" : "up";
 
-  if (!reduce){
-    const L = route.node().getTotalLength(), comet = svg.append("path").attr("class","comet");
-    const gl = svg.append("g").attr("class","glider"); gl.append("path").attr("d","M-1,-9 Q6,0 -1,9"); gl.append("circle").attr("r",2.4).attr("cx",-6).attr("fill","#FFFFFF");
-    let vis = false, t0 = performance.now(); new IntersectionObserver(es => vis = es[0].isIntersecting).observe(svg.node());
-    const span = 46000;
-    (function step(now){
-      if (vis && !document.hidden){
-        const l = (((now - t0) / span) % 1) * L, p = route.node().getPointAtLength(l), q = route.node().getPointAtLength(Math.min(L, l + 1.5));
-        const a = Math.atan2(q.y - p.y, q.x - p.x) * 180/Math.PI;
-        gl.attr("transform", `translate(${p.x},${p.y}) rotate(${a})`);
-        const pts = []; let prev = null;
-        for (let k=0;k<=14;k++){ const pp = route.node().getPointAtLength(Math.max(0, l - 60 + k*60/14)); if (prev && Math.hypot(pp.x-prev.x, pp.y-prev.y) > 40) pts.length = 0; pts.push([pp.x,pp.y]); prev = pp; }
-        comet.attr("d", pts.length > 1 ? d3.line()(pts) : null);
-      }
-      requestAnimationFrame(step);
-    })(t0);
+  function openPop(area, anchor, fig){
+    const evs = EV.filter(area.m);
+    if (evs.length === 1 && area.k !== "EU"){ closePop(); openRound(evs[0].i); return; }
+    if (area.k === "EU"){ document.querySelector("#tmE").scrollIntoView({behavior:reduce?"auto":"smooth", block:"nearest"}); return; }
+    pop.innerHTML = `<h4>${area.t}</h4>` + evs.map(e => `<button data-i="${e.i}"><span class="d">${dd(e)}</span><span>${e.type==="srs"?'<span class="s">SRS</span>':""}${e.name.replace(/^SRS |^1st SRS /,"").replace(/ 20\d\d$/,"")}<br><span class="x">${e.city.split(",")[0]}${e.status==="past"?" · raced":""}</span></span></button>`).join("");
+    pop.querySelectorAll("button").forEach(b => b.onclick = () => { closePop(); openRound(+b.dataset.i); });
+    const r = box.getBoundingClientRect(), a = anchor.getBoundingClientRect();
+    pop.classList.add("on");
+    let x = area.side==="l" ? a.right - r.left - pop.offsetWidth : a.left - r.left, y = a.bottom - r.top + 8;
+    x = Math.max(8, Math.min(x, r.width - pop.offsetWidth - 8));
+    if (y + pop.offsetHeight > r.height + 40) y = Math.max(8, a.top - r.top - pop.offsetHeight - 8);
+    pop.style.left = x+"px"; pop.style.top = y+"px";
+    document.querySelectorAll(".tl[aria-expanded]").forEach(t => t.setAttribute("aria-expanded","false"));
+    anchor.setAttribute("aria-expanded","true");
+    pop.querySelector("button")?.focus({preventScroll:true});
   }
-  const longest = d3.greatest(travelLegs, l=>l.km);
-  const continents = [...regions];
+  function closePop(){ pop.classList.remove("on"); document.querySelectorAll(".tl[aria-expanded]").forEach(t => t.setAttribute("aria-expanded","false")); }
+  document.addEventListener("click", ev => { if (!pop.contains(ev.target) && !ev.target.closest(".tl")) closePop(); });
+  document.addEventListener("keydown", ev => { if (ev.key==="Escape" && pop.classList.contains("on")){ const t = document.querySelector('.tl[aria-expanded="true"]'); closePop(); t?.focus(); } });
+
+  function labels(fig, areas, proj, W, H){
+    const lay = fig.querySelector(".tm-labels"); lay.innerHTML = "";
+    const svg = d3.select(fig).select("svg"), g = svg.append("g");
+    const small = W < 500;
+    areas.forEach(area => {
+      const evs = EV.filter(area.m); if (!evs.length) return;
+      const pts = evs.map(e => proj([e.lon,e.lat])), cx = d3.mean(pts,p=>p[0]), cy = d3.mean(pts,p=>p[1]);
+      const k = small ? .6 : 1, lx = area.off ? 14 : cx + area.dx*k, ly = area.off ? 52 : cy + area.dy*k;
+      if (area.frame){ const xs = pts.map(p=>p[0]), ys = pts.map(p=>p[1]), m = 7;
+        g.append("rect").attr("class","tm-frame").attr("x",d3.min(xs)-m).attr("y",d3.min(ys)-m).attr("width",d3.max(xs)-d3.min(xs)+2*m).attr("height",d3.max(ys)-d3.min(ys)+2*m); }
+      if (!area.off) g.append("line").attr("class","tm-lead").attr("x1",cx).attr("y1",cy).attr("x2",lx).attr("y2",ly);
+      const allPast = evs.every(e=>e.status==="past"), nx = evs.includes(NEXT);
+      const sub = nx ? `<em>Next · ${dd(NEXT)}</em>` : area.k==="EU" ? `${evs.length} rounds · ${span(evs)} · close-up ${W<500?"below":"right"}` : area.off ? `${evs.length} rounds · ${span(evs)} · off map, ${fmtK(Math.round(hav(evs[0], SRS_EV[0])/100)*100)} km north-west` : `${evs.length>1?evs.length+" rounds · ":""}${span(evs)}`;
+      const el = document.createElement("button");
+      el.className = "tl " + area.side + (allPast?" past":"");
+      el.setAttribute("aria-expanded","false");
+      el.setAttribute("aria-label", `${area.t}: ${evs.length} round${evs.length>1?"s":""}`);
+      el.innerHTML = `<b><span class="lg">${area.t}</span><span class="sh">${area.s}${evs.length>1?` · ${evs.length}`:""}</span></b><small${nx?' class="nx"':""}>${sub}</small>`;
+      lay.appendChild(el);
+      const w = el.offsetWidth, h = el.offsetHeight;
+      let x = area.side==="l" ? lx - w : lx, y = ly - h/2;
+      x = Math.max(6, Math.min(x, W - w - 6)); y = Math.max(30, Math.min(y, H - h - 6));
+      el.style.left = x+"px"; el.style.top = y+"px";
+      el.onclick = ev => { ev.stopPropagation(); el.getAttribute("aria-expanded")==="true" ? closePop() : openPop(area, el, fig); };
+    });
+  }
+  function dots(svg, proj, r){
+    const g = svg.append("g");
+    const [vw,vh] = [+svg.attr("viewBox").split(" ")[2], +svg.attr("viewBox").split(" ")[3]];
+    venues(EV).forEach(v => { const [x,y] = proj([v[0].lon, v[0].lat]); const st = dotState(v); if (x<0||y<0||x>vw||y>vh) return;
+      g.append("circle").attr("class",`dot ${st}${v.some(e=>e.type==="srs")?" srs":""}`).attr("cx",x).attr("cy",y).attr("r", st==="next"||st==="live" ? r+1.5 : r); });
+    return g;
+  }
+  function draw(){
+    closePop();
+    /* World: cropped to where the racing is, centred east so nothing crosses the date line */
+    const fw = $("#tmW"), W = fw.clientWidth;
+    const H = Math.round(Math.max(W*.46, 230));
+    const crop = {type:"MultiPoint", coordinates: d3.range(-108,176,4).flatMap(x => [[x,-47],[x,62]])};
+    const proj = d3.geoNaturalEarth1().rotate([-34,0]).fitExtent([[8,26],[W-8,H-8]], crop);
+    const gp = d3.geoPath(proj), svg = d3.select("#map").attr("viewBox",`0 0 ${W} ${H}`).attr("height",H);
+    svg.selectAll("*").remove();
+    svg.append("g").selectAll("path").data(land).join("path").attr("class", d => "country" + (hosts.has(d.id)?" host":"")).attr("d", gp);
+    labels(fw, AREAS, proj, W, H);
+    dots(svg, proj, W < 500 ? 2.6 : 3.4);
+
+    /* Europe: the Alps up close, with the SRS route */
+    const fe = $("#tmE"), We = fe.clientWidth, He = W >= We*1.2 ? H : Math.round(We*.72);
+    const ecrop = {type:"MultiPoint", coordinates:[[4.6,47.9],[23.2,47.9],[4.6,40.4],[23.2,40.4]]};
+    const pe = d3.geoMercator().fitExtent([[14,34],[We-14,He-12]], ecrop);
+    const ge = d3.geoPath(pe), se = d3.select("#mapEu").attr("viewBox",`0 0 ${We} ${He}`).attr("height",He);
+    se.selectAll("*").remove();
+    se.append("g").selectAll("path").data(land).join("path").attr("class", d => "country" + (hosts.has(d.id)?" host":"")).attr("d", ge);
+    /* SRS route: gentle arcs in screen space, raced legs dimmed */
+    const rg = se.append("g"), P = SRS_EV.map(e => pe([e.lon,e.lat]));
+    const legs = P.slice(1).map((b,k) => { const a = P[k], mx = (a[0]+b[0])/2, my = (a[1]+b[1])/2, dx = b[0]-a[0], dy = b[1]-a[1], L = Math.hypot(dx,dy)||1, bend = Math.min(60, L*.22);
+      return {d:`M${a[0]},${a[1]} Q${mx - dy/L*bend},${my + dx/L*bend} ${b[0]},${b[1]}`, done: SRS_EV[k+1].status==="past"}; });
+    const paths = rg.selectAll("path").data(legs).join("path").attr("class", l => "tm-srs" + (l.done?" done":"")).attr("d", l => l.d);
+    if (!reduce && !draw.played) paths.each(function(l,k){ const len = this.getTotalLength(); d3.select(this).attr("stroke-dasharray",len).attr("stroke-dashoffset",len)
+      .transition().delay(400 + k*500).duration(700).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0).on("end",function(){ d3.select(this).attr("stroke-dasharray",null); }); });
+    labels(fe, AREAS_EU, pe, We, He);
+    dots(se, pe, We < 500 ? 3.4 : 4);
+  }
+  let seen = false;
+  new IntersectionObserver((es,o) => { if (es[0].isIntersecting && !seen){ seen = true; draw(); draw.played = true; o.disconnect(); } }, {rootMargin:"200px"}).observe(box);
+  let rw = 0; addEventListener("resize", () => { if (!seen) return; clearTimeout(rw); rw = setTimeout(() => { draw.played = true; draw(); }, 150); });
+
+  const sp = Math.round((EV.at(-1).end - EV[0].start)/864e5);
   $("#travel").innerHTML = [
-    ["Season travel", fmtK(travelKm)+" km"],
-    ["Longest transfer", `${fmtK(longest.km)} km`, `${rn(longest.from)} → ${rn(longest.to)}`],
+    ["Rounds", `${EV.length}`, `in ${countries.size} countries`],
     ["Continents", continents.length, continents.join(" · ")],
-    ["Season span", `${Math.round((EV.at(-1).end - EV[0].start)/864e5)} days`, `${MON[EV[0].sm-1]} ${EV[0].sy} – ${MON[EV.at(-1).em-1]} ${EV.at(-1).ey}`],
-  ].map(([l,v,s]) => `<div><span class="eyebrow">${l}</span><b>${v}</b>${s?`<span class="mono" style="font-size:11px;color:var(--muted)">${s}</span>`:""}</div>`).join("");
+    ["SRS tour", `${fmtK(srsKm)} km`, `${SRS_EV.length} rounds · ${SRS_EV[0].city.split(",")[0]} → ${SRS_EV.at(-1).city.split("-")[0]}`],
+    ["Season span", `${sp} days`, `${MON[EV[0].sm-1]} ${EV[0].sy} – ${MON[EV.at(-1).em-1]} ${EV.at(-1).ey}`],
+  ].map(([l,v,s]) => `<div><span class="eyebrow">${l}</span><b>${v}</b><span style="font-size:12px;color:var(--muted)">${s}</span></div>`).join("");
 })();
 
 /* ============ GANTT ============ */
@@ -1327,7 +1397,6 @@ tick(); setInterval(tick, 1000);
 
 /* ============ ROUNDS: timing-board rows ============ */
 const arrow = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-const SRS_EV = EV.filter(e => e.type==="srs");
 const typeLabel = e => (e.tags.find(t => t[1]!=="SRS") || [,e.type==="hf"?"Hike & fly":e.type==="srs"?"Race":"Open"])[1];
 const bigDates = e => [`${pad(e.sd)}–${pad(e.ed)}`, e.sm===e.em ? MON[e.sm-1] : `${MON[e.sm-1]}/${MON[e.em-1]}`];
 const flagEl = e => `<span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>`;
