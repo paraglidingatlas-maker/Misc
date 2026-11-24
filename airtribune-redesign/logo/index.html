@@ -133,7 +133,7 @@ footer{margin-top:110px;padding-block:40px;border-top:1px solid var(--line);colo
 <header class="top">
   <div class="wrap">
     <span class="eyebrow">Brand study</span>
-    <div class="chosen"><span class="lab">Chosen · Thermal / Pinwheel</span><span class="chl" data-brand></span><span class="chs">Now live on every page. No. 1 (Heritage) stays one click away: use the Logo switch in the concept bar on any page.</span></div>
+    <div class="chosen"><span class="lab">Final · Direction 1, Heritage</span><span class="chl" data-brand></span><span class="chs">Chosen by the owner and now live on every page: site navigation, browser tab, and the live tracker's top bar and broadcast bug.</span></div>
     <h1>The Airtribune mark</h1>
     <p>Four directions for the mark, each built from something the current logo already owns. Every direction is shown where it has to work: the dark site navigation, a light background, an app icon and a 16-pixel browser tab.</p>
     <div class="today">
@@ -146,8 +146,8 @@ footer{margin-top:110px;padding-block:40px;border-top:1px solid var(--line);colo
       <div><b>The brief</b><span>Keep the triangle, add motion, survive at 16 px, and sit comfortably beside the SRS and event logos.</span></div>
     </div>
     <nav class="toc" aria-label="Directions">
-      <a href="#d1"><b>1</b>Heritage</a>
-      <a href="#d2" class="rec"><b>2</b>Pinwheel</a>
+      <a href="#d1" class="rec"><b>1</b>Heritage</a>
+      <a href="#d2"><b>2</b>Pinwheel</a>
       <a href="#d3"><b>3</b>Turnpoint</a>
       <a href="#d4"><b>4</b>Canopy</a>
       <a href="#designers"><b>+3</b>Designers</a>
@@ -187,11 +187,11 @@ const WM = {
 };
 
 const DIRS = [
-  { id:"d1", key:"heritage", n:"1", name:"Heritage", rec:false,
+  { id:"d1", key:"heritage", n:"1", name:"Heritage", rec:true,
     line:"The smallest step. One quadrant of today's grid, enlarged into a single triangle and square, keeping the red and blue. The wordmark stays lowercase with triangle tittles on the i's.",
     keeps:"Red and blue, the triangle, the triangle tittles", adds:"One shape instead of eight; reads at favicon size",
     dark:["#FFFFFF","#ED1C24","#00AEEF"], light:["#0B2630","#ED1C24","#0095DA"], icon:["#0B2630","#ED1C24","#00AEEF"] },
-  { id:"d2", key:"pinwheel", n:"2", name:"Pinwheel", rec:true,
+  { id:"d2", key:"pinwheel", n:"2", name:"Pinwheel", rec:false,
     line:"Today's four triangles, each turned a quarter so the grid becomes a pinwheel: wind, rotation, the climb in a thermal. The offset blades give it spin, and the centre square is the pilot.",
     keeps:"The four triangles and the square, in the same 2 × 2 frame", adds:"Motion, one colour that matches the redesign, a confident italic wordmark",
     dark:["#FFFFFF","#FF5F00","#FFFFFF"], light:["#051416","#FF5F00","#051416"], icon:["#FF5F00","#FFFFFF","#FFFFFF"] },
@@ -214,7 +214,7 @@ document.getElementById("dirs").innerHTML = DIRS.map(d => `
     <div class="dh">
       <span class="num" aria-hidden="true">${d.n}</span>
       <div><span class="eyebrow">Direction ${d.n}</span><h2 id="${d.id}h">${d.name}</h2><p>${d.line}</p></div>
-      ${d.rec ? '<span class="pick">Chosen</span>' : "<span></span>"}
+      ${d.rec ? '<span class="pick">Final</span>' : "<span></span>"}
     </div>
     <div class="plate">
       <div class="big">${MARK[d.key](d.dark[1], d.dark[2])}</div>
