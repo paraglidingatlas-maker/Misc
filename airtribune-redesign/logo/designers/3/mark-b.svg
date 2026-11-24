@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <!-- Goal Grid: the 2x2 grid kept on a 7px favicon pitch; three squares of chart grid, the fourth cell becomes the heading triangle breaking out to goal (NE) -->
+  <path fill="#FF5F00" d="M0 0H17.5V17.5H0Z M0 22.5H17.5V40H0Z M22.5 22.5H40V40H22.5Z M22.5 0H40V17.5Z"/>
+</svg>

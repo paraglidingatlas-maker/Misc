@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <!-- Cylinder: turnpoint cylinder + the legacy right triangle as the optimised course line, tangent to the cylinder edge (1px gap at 16px) -->
+  <circle cx="15" cy="25" r="11.875" fill="none" stroke="#FF5F00" stroke-width="6.25"/>
+  <path fill="#FF5F00" d="M15 0H40V25Z"/>
+</svg>

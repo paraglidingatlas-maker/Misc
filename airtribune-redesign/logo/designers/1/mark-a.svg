@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+  <!-- Concept A "Thermal": the four legacy triangles, turned into a pinwheel (circling climb).
+       Grid snapped to 2.5-unit steps so the 5-unit gap lands on exact 2 px at 16 px. -->
+  <g fill="#FF5F00">
+    <path d="M0 0H17.5V17.5Z"/>
+    <path d="M40 0V17.5H22.5Z"/>
+    <path d="M40 40H22.5V22.5Z"/>
+    <path d="M0 40V22.5H17.5Z"/>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+  <!-- Concept B "Canopy": a banked three-cell wing over the legacy i-dot triangle (the pilot) -->
+  <g fill="#FF5F00" transform="rotate(-6 20 22)">
+    <path d="M39.31 23.79A19.5 19.5 0 0 0 29.45 9.44L25.58 16.44A11.5 11.5 0 0 1 31.39 24.90Z"/>
+    <path d="M26.67 8.18A19.5 19.5 0 0 0 13.33 8.18L16.07 15.69A11.5 11.5 0 0 1 23.93 15.69Z"/>
+    <path d="M10.55 9.44A19.5 19.5 0 0 0 0.69 23.79L8.61 24.90A11.5 11.5 0 0 1 14.42 16.44Z"/>
+    <path d="M15 28.5H25V38.5Z"/>
+  </g>
+</svg>
