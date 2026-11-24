@@ -531,7 +531,11 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .fcard h3{font:800 30px/1.05 var(--f-display);letter-spacing:-.01em;margin-bottom:10px}
 .fcard p{margin:0 0 18px;color:#3c5052}
 .fcred{position:absolute;z-index:1;right:max(32px,env(safe-area-inset-right,0px));bottom:14px;font:300 italic 11px/1 var(--f-body);letter-spacing:.02em;text-transform:none;color:rgba(255,255,255,.45)}
-.host{background:linear-gradient(90deg,rgba(3,16,15,.96) 30%,rgba(3,16,15,.7)),url("img/coral-terraces.jpg") center/cover no-repeat}
+.host{background:var(--deep)}
+/* photo sized to the banner height so the whole glider shows; its left edge fades into the dark */
+.host-photo{position:absolute;top:0;right:0;bottom:0;aspect-ratio:3/2;max-width:none;background:url("img/coral-terraces.jpg") center/cover no-repeat;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 45%);mask-image:linear-gradient(90deg,transparent 0%,#000 45%);pointer-events:none}
+.host-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,16,15,.85) 10%,rgba(3,16,15,.55) 50%,rgba(3,16,15,.3))}
+@media (max-width:1000px){ .host-photo{right:-25%;opacity:.8} }
 @media (max-width:720px){ .srs-sec{background:linear-gradient(0deg,var(--deep) 0%,rgba(3,16,15,.9) 55%,rgba(3,16,15,.6) 100%),url("img/pink-forest.jpg") center top/cover no-repeat} .fcard{padding:22px} .fcard h3{font-size:24px} .fcred{display:none} }
 
 /* ---------- glass system: translucent, hazy surfaces instead of solid fills ---------- */
@@ -708,6 +712,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 </section>
 
 <section class="host" id="host" aria-labelledby="hostH">
+  <div class="host-photo" role="img" aria-label="Racing paraglider over terraced hills, SRS Tapalpa 2026"></div>
   <div class="wrap"><div class="host-card">
     <h2 id="hostH">Host your<br><span>competition</span></h2>
     <div>

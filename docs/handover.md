@@ -67,6 +67,10 @@ Proposed improvements, in priority order. **Owner picked 1, 3, 5, 6 and 8 (24 No
 
 **Live view reachable from the calendar (owner asked 24 Nov 2026):** the calendar top bar has a permanent red-dot **Live** pill (with "Tapalpa replay" above 1560 px; also shown on phone) and the hero's next-round card has a "Live tracker · Replay SRS Tapalpa 2026 · Task 3" link, both to live.html. Styles: `.nav-live` / `.hc-live` in src/season-calendar.html. Calendar nav links no longer wrap.
 
+**Host banner photo (owner, 24 Nov 2026):** the photo is now a `.host-photo` layer sized to the banner height (3:2, right-aligned, left edge masked into the dark) so the whole glider shows instead of being cropped by `cover`; on ≤1000 px it shifts right (`right:-25%`).
+
+**Tour map review (3 agents, 24 Nov 2026), waiting for the owner to choose:** route wraps at the date line (legs R7→R8, R8→R9, R10→R11 cut into 4 subpaths; glider jumps); 13 of 25 legs join overlapping events, so "Season travel 150,691 km" and "Longest transfer 16,103 km" are fictional (SRS-only route ≈ 3,300 km); Europe pins overlap (R22 hidden under R24); clusters "2×/3×" open only one round (R7, R9, R17, R18, R20 unreachable from the map); pins 6–11 px on phone; tooltip never seen on touch; "Continents 5" counts regions. Design proposals: three visual states (past / next / upcoming), SRS as the star, only the next leg bright, crop to the racing, Europe inset, broadcast labels; bolder option: an auto-playing "season replay" with a month scrubber.
+
 Notes: the map hint moved to the bottom-left so it no longer covers the Task chip; the Local clock is hidden below 1600 px so the top bar fits at 1440. Long double surnames show the first one on the board (DIAZ, TELLO); full name on hover.
 
 ## Open items
