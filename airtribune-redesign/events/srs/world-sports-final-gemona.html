@@ -206,13 +206,6 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 }
 
 /* ---------- glass system: translucent, hazy surfaces instead of solid fills ---------- */
-.btn{font-weight:600;letter-spacing:.18em;font-size:11.5px;backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4)}
-.btn-o,.btn-red{background:linear-gradient(180deg,rgba(255,128,56,.26),rgba(255,95,0,.12));color:#FFE3D2;border:1px solid rgba(255,150,92,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 30px -14px rgba(255,95,0,.55)}
-.btn{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,color .25s ease,transform .25s ease}
-.btn-o:hover,.btn-red:hover,.btn-o:focus-visible{background:linear-gradient(180deg,#FF8A3D,#FF5F00);border-color:#FFB07A;color:#fff;transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 0 0 1px rgba(255,140,70,.35),0 0 28px rgba(255,95,0,.75),0 0 70px rgba(255,95,0,.35)}
-.btn-ghost,.btn-line{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.2);color:#EAF2F3;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-.btn-ghost:hover,.btn-line:hover,.btn-ghost:focus-visible{background:rgba(255,95,0,.14);border-color:#FF8A3D;color:#fff;box-shadow:0 0 22px rgba(255,95,0,.45),inset 0 0 12px rgba(255,95,0,.15)}
-.btn-srs:hover{box-shadow:0 0 26px rgba(29,169,225,.45),0 0 26px rgba(227,30,45,.35)}
 .glass{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 70px -30px rgba(0,0,0,.75);backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35)}
 
 .chip.ok{background:rgba(43,212,196,.14);color:var(--teal);box-shadow:inset 0 0 0 1px rgba(43,212,196,.45)}
@@ -225,7 +218,6 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 .rc.cur::before{background:rgba(255,95,0,.22);border:1px solid rgba(255,150,92,.5);color:#FFD9C4;backdrop-filter:blur(8px)}
 .rc.cur{box-shadow:inset 0 0 0 1px rgba(255,150,92,.6)}
 .card,.feat,.tiles div,.day,.sched li,.draws div,.pill{backdrop-filter:blur(10px)}
-.nav .btn{height:38px}
 
 /* ---------- SailGP-style event layout ---------- */
 .intro .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;padding-block:96px 40px}
@@ -301,6 +293,41 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .lockup{flex-direction:column;align-items:flex-start}
   .lockup span{border-left:0;padding-left:0}
   .fee{font-size:44px}
+}
+
+/* ---------- getting there: typographic distance board ---------- */
+.tb-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line-2)}
+.tb-h .eyebrow{color:var(--orange)}
+.tb-h span:last-child{font:600 12px var(--f-body);color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.board2{list-style:none;margin:0 0 56px;padding:0}
+.jr{display:grid;grid-template-columns:150px minmax(130px,200px) minmax(0,1fr) auto;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line)}
+.jr .code{font:900 italic 64px/.8 var(--f-display);color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.85);letter-spacing:-.02em}
+.jr:first-child .code{-webkit-text-stroke:0;color:var(--orange)}
+.jr .city{font:700 12px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.jr .city small{display:block;margin-top:4px;font:400 italic 14px var(--f-display);letter-spacing:0;text-transform:none;color:var(--muted)}
+.jr .track{position:relative;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 6px,transparent 6px 12px)}
+.jr .track i{position:absolute;left:0;top:-1px;height:4px;width:0;border-radius:2px;background:linear-gradient(90deg,rgba(255,95,0,.2),var(--orange));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.jr .track i::after{content:"";position:absolute;right:-6px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 4px rgba(255,95,0,.2)}
+.jr .track b{position:absolute;right:0;top:-24px;font:700 10px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.jr .val{text-align:right;white-space:nowrap;font:900 italic 46px/.9 var(--f-display);font-variant-numeric:tabular-nums}
+.jr .val small{font:700 13px var(--f-body);font-style:normal;letter-spacing:.12em;color:var(--muted);margin-left:6px}
+.ground{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line-2)}
+.gs{padding:26px 28px 6px 0;margin-right:28px;border-right:1px solid var(--line)}
+.gs:last-child{border-right:0;margin-right:0}
+.gs .k{display:block;font:700 11px var(--f-body);letter-spacing:.18em;text-transform:uppercase;color:var(--orange)}
+.gs .big{display:block;margin:10px 0 8px;font:900 italic clamp(40px,4.6vw,64px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:-.02em}
+.gs .sm{color:var(--ink-2);font-size:14.5px}
+.tnote{margin-top:36px;display:flex;gap:14px;align-items:baseline;padding-top:18px;border-top:1px solid var(--line)}
+.tnote b{flex:none;font:800 italic 14px var(--f-display);text-transform:uppercase;color:var(--yellow)}
+.tnote span{color:var(--ink-2)}
+@media (max-width:900px){
+  .jr{grid-template-columns:96px minmax(0,1fr) 120px;gap:14px;row-gap:12px}
+  .jr .code{font-size:44px}
+  .jr .track{grid-column:1/-1;order:4}
+  .jr .val{font-size:34px}
+  .ground{grid-template-columns:minmax(0,1fr)}
+  .gs{border-right:0;margin-right:0;border-bottom:1px solid var(--line);padding:22px 0}
+  .gs:last-child{border-bottom:0}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
@@ -409,7 +436,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
     <div class="panel" role="tabpanel" id="p-onsite" aria-labelledby="t-onsite" hidden><div class="pgroup"><span class="eyebrow">Safety</span><div class="pills"><span class="pill "><i></i>Live trackers supplied</span><span class="pill "><i></i>Helicopter rescue</span><span class="pill "><i></i>Medic on takeoff</span><span class="pill "><i></i>Good phone coverage</span><span class="pill "><i></i>Radio coverage</span><span class="pill "><i></i>Live trackers mandatory</span></div></div><div class="pgroup"><span class="eyebrow">Organisation</span><div class="pills"><span class="pill "><i></i>Launch Transport</span><span class="pill "><i></i>Retrieve included</span><span class="pill "><i></i>Toilets on takeoff</span><span class="pill "><i></i>Tracklogs managed</span><span class="pill "><i></i>Airtribune blogging</span></div></div><div class="pgroup"><span class="eyebrow">Benefits</span><div class="pills"><span class="pill "><i></i>Lunch packs</span><span class="pill "><i></i>ID Cards</span><span class="pill "><i></i>Free WiFi</span><span class="pill "><i></i>Goal beers</span><span class="pill "><i></i>Food</span><span class="pill "><i></i>Party</span><span class="pill "><i></i>Live music</span><span class="pill "><i></i>Free gift</span></div></div><div class="pgroup"><span class="eyebrow">Environment</span><div class="pills"><span class="pill "><i></i>Plastic reduction</span></div></div></div>
 
     <div class="panel" role="tabpanel" id="p-travel" aria-labelledby="t-travel" hidden>
-      <div class="modes"><div class="mode"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span><h3>Base</h3><ul><li>HQ & landing: <b>Via Campo Sportivo, Bordano (UD)</b></li><li>Camping on site (paid) with showers and a bar</li></ul></div><div class="mode"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M6 17v2M18 17v2M3 13l2-6a2 2 0 0 1 2-1.4h10a2 2 0 0 1 2 1.4l2 6v4H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></svg></span><h3>Car</h3><ul><li>Practice-day shuttles: book via the <b>Navetta VLF</b> Telegram bot</li><li>Event-day transport to launch included</li></ul></div></div>
+      <div class="tb-h"><span class="eyebrow">Arrive</span><span>Airport details not published yet</span></div><div class="ground"><div class="gs"><span class="k">Base</span><span class="big">Bordano</span><span class="sm">HQ, landing and camping · Via Campo Sportivo, 33010 Bordano (UD)</span></div><div class="gs"><span class="k">Practice day</span><span class="big">Shuttle</span><span class="sm">Book through the Navetta VLF bot on Telegram</span></div><div class="gs"><span class="k">Task days</span><span class="big">Included</span><span class="sm">Transport to launch and retrieves</span></div></div><p class="tnote"><b>Camping</b><span>Paid camping at the landing field, with water, showers, toilets and a bar.</span></p>
     </div>
   </div>
 </section>
@@ -639,7 +666,8 @@ function drawTask(){ if (taskDrawn) return; taskDrawn = true;
 /* tabs */
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 function openTab(k, focus){ tabs.forEach(t => { const on = t.dataset.tab === k; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1; document.getElementById(t.getAttribute("aria-controls")).hidden = !on; if (on && focus) t.focus(); });
-  if (k === "site") requestAnimationFrame(drawTask); }
+  if (k === "site") requestAnimationFrame(drawTask);
+  if (k === "travel") requestAnimationFrame(() => document.querySelectorAll(".jr .track i").forEach(el => el.style.width = el.dataset.w)); }
 tabs.forEach((t,i) => { t.onclick = () => openTab(t.dataset.tab); t.onkeydown = e => { if (e.key==="ArrowRight"||e.key==="ArrowLeft"){ const n = tabs[(i + (e.key==="ArrowRight"?1:-1) + tabs.length) % tabs.length]; openTab(n.dataset.tab, true); } }; });
 document.querySelectorAll("[data-open-tab]").forEach(a => a.addEventListener("click", () => openTab(a.dataset.openTab)));
 
