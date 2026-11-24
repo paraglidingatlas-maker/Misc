@@ -194,7 +194,7 @@ section.block{padding-block:88px 0}
 .keys i{width:16px;height:8px;border-radius:3px}
 
 /* filters */
-.filters{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);z-index:20;background:rgba(5,20,22,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin-bottom:30px;border-block:1px solid var(--line)}
+.filters{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);z-index:20;background:rgba(5,20,22,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin-bottom:0;border-block:1px solid var(--line)}
 .filters .in{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-block:12px}
 .seg{display:flex;flex-wrap:wrap;gap:4px;padding:4px;border-radius:10px;background:var(--panel)}
 .chip{height:32px;padding:0 13px;border-radius:7px;font:700 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);display:inline-flex;align-items:center;gap:7px;transition:.15s}
@@ -205,38 +205,112 @@ section.block{padding-block:88px 0}
 .search{margin-left:auto;display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--muted);min-width:0}
 .search input{border:0;outline:0;background:none;color:#fff;font:inherit;font-size:13.5px;width:190px;min-width:0}
 
-/* rounds grid (team-card style) */
-.month{margin-bottom:52px}
-.month-h{display:flex;align-items:baseline;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line-2)}
-.month-h h3{font:800 28px var(--f-display);text-transform:uppercase}
-.month-h h3 span{font-weight:300!important;font-style:italic}
-.month-h > span{font:600 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.card{position:relative;display:flex;flex-direction:column;text-align:left;background:var(--panel);border-radius:var(--r);overflow:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s,box-shadow .3s}
-.card:hover{transform:translateY(-4px);background:var(--panel-2);box-shadow:0 24px 48px -20px rgba(0,0,0,.7)}
-.card.hidden{display:none}
-.stripe{display:none}
-.c-top{display:flex;justify-content:space-between;align-items:center;padding:0 16px 0 0}
-.rnd{display:flex;align-items:center;gap:12px;font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.rnd b{color:#fff}
+/* rounds: ruled timing-board rows */
+.r-head{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap;margin-bottom:22px}
+.r-head h2{font-size:clamp(36px,4.4vw,56px)}
+.r-run{font:700 12px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.r-run b{color:#fff;font-weight:800}
+.r-run i{font-style:normal;color:var(--orange);margin:0 8px}
+.fsel{position:relative;display:flex;align-items:center;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+.fsel select{appearance:none;-webkit-appearance:none;background:none;border:0;color:#fff;font:700 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;height:100%;padding:0 34px 0 14px;cursor:pointer}
+.fsel select option{background:var(--panel);color:#fff}
+.fsel::after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border:solid var(--ink-2);border-width:0 2px 2px 0;transform:translateY(-70%) rotate(45deg);pointer-events:none}
 .flag{display:inline-flex;overflow:hidden}
 .flag i{flex:1}
-.rnd .flag{width:46px;height:30px;border-radius:0 0 8px 0}
 .status{font:700 10px var(--f-body);letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:5px;background:var(--panel-2);color:var(--ink-2)}
-.card .status{margin-top:12px}
 .status.next{background:var(--orange);color:#fff}
 .status.live{background:var(--teal);color:#03100F}
 .status.past{color:var(--muted)}
-.c-main{display:grid;gap:6px;padding:14px 18px 16px}
-.c-main h4{font:800 28px/1 var(--f-display);text-transform:uppercase}
-.c-main .ev{font:400 italic 15px/1.35 var(--f-display);color:var(--ink-2)}
-.date{display:flex;align-items:baseline;gap:6px;font:700 13px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--orange)}
-.card .task{display:block;width:calc(100% - 20px);height:140px;margin:0 10px;border-radius:12px;background:var(--deep)}
-.c-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 18px 16px;font-size:13px;color:var(--muted)}
-.c-foot .go{display:flex;gap:6px;align-items:center;font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:#fff}
-.card:hover .go{color:var(--orange)}
-.card.past{opacity:.5}
-.card.is-next{box-shadow:inset 0 0 0 2px var(--orange)}
+.mg{display:grid;grid-template-columns:132px minmax(0,1fr);border-top:1px solid var(--line-2)}
+.mg[hidden]{display:none}
+.m-rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px + 66px);align-self:start;padding:18px 0 18px}
+.m-rail b{display:block;font:800 30px/1 var(--f-display);text-transform:uppercase;letter-spacing:-.01em}
+.m-rail span{display:block;margin-top:6px;font:600 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.rows{display:grid}
+.row{position:relative;display:grid;grid-template-columns:56px 150px minmax(0,1fr) 170px 132px;align-items:center;gap:20px;min-height:72px;padding:10px 18px 10px 20px;text-align:left;border-bottom:1px solid var(--line);transition:background .2s}
+.rows .row:last-child{border-bottom:0}
+.row:hover{background:rgba(255,255,255,.035)}
+.row[hidden]{display:none}
+.row .rn{font:800 15px var(--f-display);letter-spacing:.04em;color:var(--muted)}
+.row .dt{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.row .dt b{font:800 26px/1 var(--f-display);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.row .dt span{font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+.row .who{min-width:0;display:grid;gap:4px}
+.row .l1{display:flex;align-items:center;gap:12px;min-width:0}
+.row .l1 .flag{flex:none;width:30px;height:20px;border-radius:3px}
+.row .l1 h3{font:800 26px/1 var(--f-display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap}
+.row .l1 em{font:400 italic 15px var(--f-display);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.row .run{font:600 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .run i{font-style:normal;opacity:.5;margin:0 7px}
+.row .dist{display:flex;align-items:center;gap:12px;justify-content:flex-end;white-space:nowrap}
+.row .dist svg{width:56px;height:34px;flex:none;overflow:visible}
+.row .dist b{font:800 18px var(--f-display);font-variant-numeric:tabular-nums}
+.row .dist small{display:block;font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.row .st{display:flex;align-items:center;justify-content:flex-end;gap:14px;white-space:nowrap;font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.row .st .go{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);color:var(--ink-2);transition:.2s}
+.row:hover .st .go{background:var(--orange);border-color:var(--orange);color:#fff}
+/* SRS rows */
+.row.srs{min-height:128px;grid-template-columns:56px 150px minmax(0,1fr) 230px 132px;background:linear-gradient(90deg,rgba(29,169,225,.07),transparent 55%)}
+.row.srs::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--srs-grad)}
+.row.srs .l1 h3{font-size:30px}
+.row .srsln{display:flex;align-items:center;gap:10px;font:800 10.5px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:#fff}
+.row .srsln img{height:20px;display:block}
+.row .srsln span{color:var(--srs-blue)}
+.row .ph{position:relative;display:block;width:230px;height:104px;border-radius:10px;overflow:hidden;background:var(--deep) center/cover no-repeat}
+.row .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,16,15,.82),rgba(3,16,15,.2))}
+.row .ph svg{position:absolute;left:12px;top:14px;width:84px;height:46px;z-index:1;overflow:visible}
+.row .ph b{position:absolute;left:12px;bottom:10px;z-index:1;font:800 17px var(--f-display);font-variant-numeric:tabular-nums}
+.row .ph small{font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-left:6px}
+/* next / live strip */
+.row.feat{grid-template-columns:56px 150px minmax(0,1fr) 170px 270px;min-height:132px;background:linear-gradient(90deg,rgba(255,95,0,.12),rgba(255,95,0,.02) 60%)}
+.row.feat.srs{min-height:148px}
+.row.feat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--orange)}
+.row.feat .rn{color:var(--orange)}
+.row .cd{display:grid;justify-items:end;gap:10px}
+.row .cd .k{display:flex;align-items:center;gap:8px;font:700 10.5px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--orange-2)}
+.row .cd .k i{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.row.live .cd .k i{background:var(--teal);animation:pulse 1.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(43,212,196,.7)}100%{box-shadow:0 0 0 10px rgba(43,212,196,0)}}
+.row .cd strong{white-space:nowrap;font:800 italic 36px/.9 var(--f-display);text-transform:uppercase;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.row .cd .btn{height:38px;padding:0 18px}
+.row.feat .st{display:none}
+/* completed */
+.donerow{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:56px;padding:0 18px 0 20px;border-top:1px solid var(--line-2);font:700 11px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.donerow b{color:#fff}
+.donerow:hover{color:#fff}
+.row.past{opacity:.55}
+.list-end{border-top:1px solid var(--line-2)}
+@media (max-width:1180px){
+  .row,.row.srs{grid-template-columns:56px 130px minmax(0,1fr) 150px}
+  .row.feat{grid-template-columns:56px 130px minmax(0,1fr) 210px}
+  .row .dist,.row .ph{display:none}
+  .row .dt b{font-size:22px}
+}
+@media (max-width:720px){
+  .mg{grid-template-columns:minmax(0,1fr)}
+  .m-rail{top:calc(env(safe-area-inset-top,0px) + 66px);z-index:5;display:flex;align-items:baseline;gap:10px;padding:10px 0;background:rgba(5,20,22,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .m-rail b{font-size:18px}
+  .m-rail span{margin:0}
+  .row,.row.srs,.row.feat{grid-template-columns:auto auto minmax(0,1fr);grid-template-areas:"rn dt st" "who who who";gap:6px 12px;min-height:90px;padding:12px 4px 12px 14px}
+  .row.srs{min-height:112px}
+  .row.feat{grid-template-areas:"rn dt dt" "who who who" "cd cd cd"}
+  .row .rn{grid-area:rn;font-size:13px}
+  .row .dt{grid-area:dt}
+  .row .dt b{font-size:19px}
+  .row .who{grid-area:who}
+  .row .st{grid-area:st;gap:10px}
+  .row .st .go{width:26px;height:26px}
+  .row .l1 h3,.row.srs .l1 h3{font-size:22px}
+  .row .l1{flex-wrap:wrap;row-gap:2px}
+  .row .l1 em{flex-basis:100%;font-size:14px;white-space:normal}
+  .row .cd{grid-area:cd;justify-items:start;grid-template-columns:auto auto;align-items:center;justify-content:space-between;margin-top:6px}
+  .row .cd .k{grid-column:1/-1}
+  .row .cd strong{font-size:30px}
+  .r-head{gap:10px}
+  .filters .seg#fType{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none}
+  .filters .seg#fType::-webkit-scrollbar{display:none}
+  .filters .seg#fType .chip{flex:none}
+}
 .tags{display:flex;gap:6px;flex-wrap:wrap}
 .tag{font:700 10px var(--f-body);letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:5px;background:var(--panel-2);color:var(--ink-2)}
 .tag.srs{background:rgba(255,95,0,.16);color:var(--orange-2)}
@@ -339,7 +413,6 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
   .search input{width:100%}
   .filters{position:static}
   .maplegend{position:static;padding:10px 14px}
-  .grid{grid-template-columns:minmax(0,1fr)}
   section.block{padding-block:64px 0}
   .col{height:440px}
   .strip-nav{display:none}
@@ -400,9 +473,6 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .col-srs{position:absolute;top:62px;left:58px;width:86px;display:block}
 .col.on .col-srs{opacity:0}
 .co-head .srs-inline{height:22px;vertical-align:-5px;margin-right:8px}
-.card.srs{box-shadow:inset 0 3px 0 0 transparent}
-.card.srs::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--srs-grad);z-index:1}
-.card.srs.is-next{box-shadow:inset 0 0 0 2px var(--orange)}
 .date .srs-inline{height:22px;margin-left:auto;align-self:center}
 .chip img{height:15px;display:block}
 .keys img{height:16px;display:block}
@@ -609,17 +679,17 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 
 <section class="block" id="rounds" aria-labelledby="rH">
   <div class="wrap">
-    <div class="shead"><h2 class="up" id="rH">All rounds</h2></div>
+    <div class="r-head"><h2 class="up" id="rH">All rounds</h2><span class="r-run" id="rRun"></span></div>
   </div>
   <div class="filters">
     <div class="wrap in">
       <div class="seg" id="fType" role="group" aria-label="Filter by type"></div>
-      <span class="divider"></span>
-      <div class="seg" id="fRegion" role="group" aria-label="Filter by region"></div>
+      <label class="fsel"><select id="fRegion" aria-label="Filter by region"></select></label>
       <label class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search site, country…" aria-label="Search rounds"></label>
     </div>
   </div>
   <div class="wrap" id="months"></div>
+  <div class="wrap"><div class="list-end"></div></div>
 </section>
 
 <section class="host" id="host" aria-labelledby="hostH">
@@ -1236,47 +1306,87 @@ tick(); setInterval(tick, 1000);
 })();
 
 
-/* ============ ROUNDS GRID ============ */
+/* ============ ROUNDS: timing-board rows ============ */
 const arrow = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const SRS_EV = EV.filter(e => e.type==="srs");
+const typeLabel = e => (e.tags.find(t => t[1]!=="SRS") || [,e.type==="hf"?"Hike & fly":e.type==="srs"?"Race":"Open"])[1];
+const bigDates = e => [`${pad(e.sd)}–${pad(e.ed)}`, e.sm===e.em ? MON[e.sm-1] : `${MON[e.sm-1]}/${MON[e.em-1]}`];
+const flagEl = e => `<span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>`;
+const isFeat = e => e===NEXT;
+function cdText(e){
+  if (e.status==="live"){ const d = Math.floor((NOW - e.start)/864e5) + 1; return `Day ${Math.min(d,e.days)} of ${e.days}`; }
+  let s = Math.max(0, Math.floor((e.start - Date.now())/1000)); const d = Math.floor(s/86400), h = Math.floor(s%86400/3600), m = Math.floor(s%3600/60);
+  return d ? `${d}d ${pad(h)}h ${pad(m)}m` : `${pad(h)}h ${pad(m)}m`;
+}
+function rowHTML(e){
+  const [db, dm] = bigDates(e), t = taskFor(e), feat = isFeat(e), live = e.status==="live";
+  const srsN = SRS_EV.indexOf(e) + 1;
+  const tag = feat ? "div" : "button";
+  const label = `Round ${e.n}: ${e.name}, ${longDate(e)}`;
+  const run = [e.city, `${e.days} day${e.days>1?"s":""}`, typeLabel(e)].map(x=>`<span>${x}</span>`).join("<i>/</i>");
+  const distTxt = `<b>${t.total.toFixed(1)} km</b><small>${t.cyl.length-2} TP · preview</small>`;
+  const right = e.type==="srs"
+    ? `<span class="ph" style="background-image:url('img/${e.photo}.jpg')"><svg data-glyph="${e.i}" aria-hidden="true"></svg><b>${t.total.toFixed(1)} km<small>${t.cyl.length-2} TP</small></b></span>`
+    : `<span class="dist"><svg data-glyph="${e.i}" aria-hidden="true"></svg><span>${distTxt}</span></span>`;
+  const tail = feat
+    ? `<span class="cd"><span class="k"><i></i>${live ? "Live now" : "Next round · starts in"}</span><strong class="mono" data-cd="${e.i}">${cdText(e)}</strong>${live ? `<a class="btn btn-o" href="live.html">Watch live</a>` : `<button class="btn btn-o" data-open="${e.i}">Race details</button>`}</span>`
+    : `<span class="st"><span>${relDays(e)}</span><span class="go">${arrow}</span></span>`;
+  return `<${tag} class="row ${e.type==="srs"?"srs":""} ${feat?"feat":""} ${live?"live":""} ${e.status==="past"?"past":""}" data-i="${e.i}" ${feat?`aria-label="${label}"`:`aria-label="${label}"`}>
+    <span class="rn">R${pad(e.n)}</span>
+    <span class="dt"><b>${db}</b><span>${dm}</span></span>
+    <span class="who">
+      ${e.type==="srs" ? `<span class="srsln">${srsImg("mark","","SRS")}<span>Sports-Class Racing Series</span>· Round ${srsN} of ${SRS_EV.length}</span>` : ""}
+      <span class="l1">${flagEl(e)}<h3>${e.country}</h3><em>${e.name}</em></span>
+      <span class="run">${run}</span>
+    </span>
+    ${right}
+    ${tail}
+  </${tag}>`;
+}
+const PAST = EV.filter(e => e.status==="past");
+let showPast = false;
 const byMonth = d3.groups(EV, e => e.sy*100 + e.sm);
-$("#months").innerHTML = byMonth.map(([k,evs]) => `
-  <section class="month" data-month="${k}">
-    <div class="month-h"><h3 class="disp">${MONTH_FULL[(k%100)-1]} <span style="font:inherit;color:var(--muted)">${Math.floor(k/100)}</span></h3><span class="mcount">${evs.length} round${evs.length>1?"s":""}</span></div>
-    <div class="grid">${evs.map((e,j) => `
-      <button class="card ${e.status==="past"?"past":""} ${e===NEXT?"is-next":""} ${e.type==="srs"?"srs":""}" data-i="${e.i}" style="--i:${j}" aria-label="Round ${e.n}: ${e.name}, ${longDate(e)}">
-        <span class="c-top"><span class="rnd"><span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>Round <b>${e.n}</b></span><span class="status ${e===NEXT&&e.status!=="live"?"next":e.status}">${e===NEXT&&e.status!=="live"?"Next up":e.status==="live"?"Live":e.status==="past"?"Done":relDays(e)}</span></span>
-        <span class="c-main">
-          <span class="date"><b>${dateRange(e)}</b><span>${MONTH_FULL[(e.sm===e.em?e.sm:e.em)-1].slice(0,3)}</span>${e.type==="srs" ? srsImg("mark","srs-inline","SRS round") : ""}</span>
-          <span><h4 class="disp">${e.country}</h4><div class="ev">${e.name}</div></span>
-        </span>
-        <svg class="task" data-task="${e.i}" aria-hidden="true"></svg>
-        <span class="c-foot"><span>${e.city} · ${e.days} day${e.days>1?"s":""}</span><span class="go">Details ${arrow}</span></span>
-      </button>`).join("")}
-    </div>
+$("#months").innerHTML = (PAST.length ? `<button class="donerow" id="doneRow" aria-expanded="false"><span><b>${PAST.length}</b> completed round${PAST.length>1?"s":""}</span><span id="doneLbl">Show ${arrow}</span></button>` : "")
+  + byMonth.map(([k,evs]) => `
+  <section class="mg" data-month="${k}">
+    <div class="m-rail"><b>${MON[(k%100)-1]}</b><span>${Math.floor(k/100)} · <em class="mcount" style="font-style:normal">${evs.length}</em></span></div>
+    <div class="rows">${evs.map(rowHTML).join("")}</div>
   </section>`).join("") + `<p class="empty" id="empty" hidden>No rounds match these filters. Clear the search or pick "All".</p>`;
-document.querySelectorAll("[data-task]").forEach(s => drawTaskMap(s, EV[+s.dataset.task], false));
-document.querySelectorAll(".card").forEach(c => c.addEventListener("mouseenter", () => { const sv = c.querySelector("svg.task"); sv && sv._replay && sv._replay(); }));
-document.querySelectorAll(".card").forEach(c => c.addEventListener("click", () => openRound(+c.dataset.i)));
 
-/* filters */
+function routeGlyph(svgEl, e){
+  const W = 84, H = 46, sel = d3.select(svgEl).attr("viewBox",`0 0 ${W} ${H}`);
+  const fit = bestFit(taskFor(e), W, H, [5,5]), R = fit.t.route.map(fit.f);
+  sel.append("path").attr("d", d3.line()(R)).attr("fill","none").attr("stroke", e.type==="srs" ? "#fff" : "var(--ink-2)").attr("stroke-width",1.5).attr("stroke-linejoin","round");
+  R.slice(1,-1).forEach(p => sel.append("circle").attr("cx",p[0]).attr("cy",p[1]).attr("r",1.8).attr("fill", e.type==="srs" ? "#fff" : "var(--ink-2)"));
+  const g = R.at(-1); sel.append("circle").attr("cx",g[0]).attr("cy",g[1]).attr("r",3).attr("fill","var(--orange)");
+}
+document.querySelectorAll("[data-glyph]").forEach(s => routeGlyph(s, EV[+s.dataset.glyph]));
+document.querySelectorAll(".row").forEach(r => r.addEventListener("click", ev => { if (ev.target.closest("a")) return; openRound(+r.dataset.i); }));
+setInterval(() => document.querySelectorAll("[data-cd]").forEach(el => el.textContent = cdText(EV[+el.dataset.cd])), 30000);
+if (PAST.length) $("#doneRow").onclick = () => { showPast = !showPast; $("#doneRow").setAttribute("aria-expanded", showPast); $("#doneLbl").innerHTML = (showPast ? "Hide " : "Show ") + arrow; apply(); };
+
+/* filters: type toggles with counts, region dropdown, search */
 const types = [["all","All"],["srs",srsImg("mark","","SRS")],["hf","Hike & fly"],["open","Open & cups"]];
-const regs = [["all","All regions"], ...["Americas","Europe","Oceania","Asia","Africa"].filter(r=>regions.has(r)).map(r=>[r,r])];
+const regs = ["Americas","Europe","Oceania","Asia","Africa"].filter(r=>regions.has(r));
 let fT = "all", fR = "all";
-const mkChips = (host, list, get, set, countFn) => { host.innerHTML = list.map(([v,l]) => `<button class="chip" data-v="${v}" aria-pressed="${v===get()}">${l} <span class="n">${countFn(v)}</span></button>`).join("");
-  host.querySelectorAll(".chip").forEach(b => b.onclick = () => { set(b.dataset.v); host.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed", c===b)); apply(); }); };
-mkChips($("#fType"), types, ()=>fT, v=>fT=v, v => v==="all"?EV.length:EV.filter(e=>e.type===v).length);
-mkChips($("#fRegion"), regs, ()=>fR, v=>fR=v, v => v==="all"?EV.length:EV.filter(e=>e.region===v).length);
+$("#fType").innerHTML = types.map(([v,l]) => `<button class="chip" data-v="${v}" aria-pressed="${v===fT}">${l} <span class="n">${v==="all"?EV.length:EV.filter(e=>e.type===v).length}</span></button>`).join("");
+$("#fType").querySelectorAll(".chip").forEach(b => b.onclick = () => { fT = b.dataset.v; $("#fType").querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed", c===b)); apply(); });
+$("#fRegion").innerHTML = `<option value="all">All regions · ${EV.length}</option>` + regs.map(r => `<option value="${r}">${r} · ${EV.filter(e=>e.region===r).length}</option>`).join("");
+$("#fRegion").onchange = ev => { fR = ev.target.value; apply(); };
 function match(e){ const q = $("#q").value.trim().toLowerCase();
   return (fT==="all"||e.type===fT) && (fR==="all"||e.region===fR) && (!q || (e.name+" "+e.sub+" "+e.city+" "+e.country).toLowerCase().includes(q)); }
 function apply(){
-  let total = 0;
-  document.querySelectorAll(".month").forEach(m => { let n = 0;
-    m.querySelectorAll(".card").forEach(c => { const ok = match(EV[+c.dataset.i]); c.classList.toggle("hidden", !ok); if (ok) n++; });
-    m.hidden = n===0; m.querySelector(".mcount").textContent = `${n} round${n!==1?"s":""}`; total += n; });
-  $("#empty").hidden = total>0;
+  const vis = [];
+  document.querySelectorAll(".mg").forEach(m => { let n = 0;
+    m.querySelectorAll(".row").forEach(r => { const e = EV[+r.dataset.i], ok = match(e) && (showPast || e.status!=="past"); r.hidden = !ok; if (ok){ n++; vis.push(e); } });
+    m.hidden = n===0; m.querySelector(".mcount").textContent = `${n} round${n!==1?"s":""}`; });
+  $("#empty").hidden = vis.length>0;
+  const nc = new Set(vis.map(e=>e.cc)).size, ns = vis.filter(e=>e.type==="srs").length;
+  $("#rRun").innerHTML = `<b>${vis.length}</b> round${vis.length!==1?"s":""}<i>/</i><b>${nc}</b> countr${nc!==1?"ies":"y"}<i>/</i><b>${ns}</b> SRS`;
   window._ganttBars.classed("dim", e => !match(e));
 }
 $("#q").addEventListener("input", apply);
+apply();
 
 /* ============ DRAWER ============ */
 let cur = -1, lastFocus = null;
