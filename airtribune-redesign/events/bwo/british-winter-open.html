@@ -82,7 +82,7 @@ p{margin:0}
 
 /* fact band */
 .band{background:var(--deep);border-block:1px solid var(--line)}
-.band .wrap{display:grid;grid-template-columns:repeat(6,1fr)}
+.band .wrap{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
 .band div{padding:22px 10px;text-align:center;border-right:1px solid var(--line)}
 .band div:last-child{border-right:0}
 .band b{display:block;font:800 italic 30px/1 var(--f-display);font-variant-numeric:tabular-nums}
@@ -182,9 +182,12 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 
 @media (max-width:1000px){
   .two,.lists{grid-template-columns:minmax(0,1fr)}
-  .band .wrap{grid-template-columns:repeat(3,1fr)}
+  .band .wrap{grid-auto-flow:row;grid-template-columns:repeat(3,1fr)}
+  .band .wrap.n4{grid-template-columns:repeat(4,1fr)}
   .band div:nth-child(3){border-right:0}
   .band div:nth-child(-n+3){border-bottom:1px solid var(--line)}
+  .band .wrap.n4 div:nth-child(n){border-bottom:0;border-right:1px solid var(--line)}
+  .band .wrap.n4 div:last-child{border-right:0}
   .prizes{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rail{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
   .nav nav{display:none}
@@ -193,8 +196,8 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 @media (max-width:640px){
   .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
   .nav .srsb{display:none}
-  .band .wrap{grid-template-columns:repeat(2,1fr)}
-  .band div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)}
+  .band .wrap,.band .wrap.n4{grid-template-columns:repeat(2,1fr)}
+  .band div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
   .band div:nth-child(2n){border-right:0!important}
   .terms{grid-template-columns:minmax(0,1fr)}
   .cdbar > div{border-right:0;margin-right:0;padding-right:0;width:100%}
@@ -202,7 +205,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .credit{left:16px;right:auto;bottom:8px}
   .taskbox svg{height:260px}
   .prize{padding:18px;min-height:120px}
-  .prize b{font-size:19px;overflow-wrap:anywhere}
+  .prize b{font-size:clamp(15px,4.3vw,19px);overflow-wrap:normal;hyphens:manual}
 }
 
 /* ---------- glass system: translucent, hazy surfaces instead of solid fills ---------- */
@@ -345,6 +348,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 .run.need .words b{color:#fff;font-weight:900}
 .tnote .btn{margin-left:auto}
 .words .w{white-space:nowrap}
+.words{overflow-wrap:break-word}
 #p-entry .tnote,#p-travel .tnote{width:100%;max-width:none}
 .tnote{flex-wrap:wrap;align-items:center}
 @media (max-width:900px){
@@ -384,6 +388,13 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 @media (max-width:1000px){.ed{grid-template-columns:minmax(0,1fr);gap:16px}.ed-y{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}.ed-y b{font-size:44px}.ed-y span,.ed-y small{margin:0}}
 @media (max-width:640px){.pod li{grid-template-columns:70px minmax(0,1fr) auto;gap:10px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:640px){
+  /* distance board: value fits beside the city; unit on its own line */
+  .jr{grid-template-columns:78px minmax(0,1fr) auto}
+  .jr .code{font-size:32px}
+  .jr .val{font-size:28px}
+  .jr .val small{display:block;margin:4px 0 0;text-align:right}
+}
 </style>
 </head>
 <body>
@@ -417,7 +428,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   <span class="credit">© Aninder Singh · Paragliding Atlas</span>
 </section>
 
-<div class="band"><div class="wrap"><div><b>£300</b><span>Entry fee</span></div><div><b>7</b><span>Tasks</span></div><div><b>120</b><span>Max pilots</span></div><div><b>163</b><span>Registered</span></div><div><b>38</b><span>Countries</span></div><div><b>CAT 2</b><span>FAI status</span></div></div></div>
+<div class="band"><div class="wrap n6"><div><b>£300</b><span>Entry fee</span></div><div><b>7</b><span>Tasks</span></div><div><b>120</b><span>Max pilots</span></div><div><b>163</b><span>Registered</span></div><div><b>38</b><span>Countries</span></div><div><b>CAT 2</b><span>FAI status</span></div></div></div>
 <div class="wrap"><p class="asof">Registration numbers from Airtribune on 24 Nov 2026.</p></div>
 
 <section class="intro" aria-labelledby="iH">
@@ -478,7 +489,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
     <div class="panel" role="tabpanel" id="p-onsite" aria-labelledby="t-onsite" hidden><div class="tb-h"><span class="eyebrow">On site</span><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0"><div class="run"><div class="run-h"><span class="k">Safety</span><span class="n">5</span></div><p class="words"><span class="w">Live trackers supplied</span> <i>/</i> <span class="w">Tracking mandatory</span> <i>/</i> <span class="w">Medic on take-off</span> <i>/</i> <span class="w">Radio coverage</span> <i>/</i> <span class="w">Good phone coverage</span> <i>/</i> <span class="w no">No helicopter rescue</span></p></div><div class="run"><div class="run-h"><span class="k">Organisation</span><span class="n">4</span></div><p class="words"><span class="w">Launch transport</span> <i>/</i> <span class="w">Retrieves included</span> <i>/</i> <span class="w">Tracklogs managed</span> <i>/</i> <span class="w">Airtribune scoring</span></p></div><div class="run"><div class="run-h"><span class="k">Benefits</span><span class="n">6</span></div><p class="words"><span class="w">Lunch packs</span> <i>/</i> <span class="w">ID cards</span> <i>/</i> <span class="w">Social evening</span> <i>/</i> <span class="w">Party</span> <i>/</i> <span class="w">Free gift</span> <i>/</i> <span class="w">PWCA letters</span></p></div><div class="run"><div class="run-h"><span class="k">Environment</span><span class="n">1</span></div><p class="words"><span class="w">Plastic reduction</span></p></div></div></div>
 
     <div class="panel" role="tabpanel" id="p-travel" aria-labelledby="t-travel" hidden>
-      <div class="tb-h"><span class="eyebrow">Fly in</span><span>Distance to Panchgani</span></div><ol class="board2"><li class="jr"><span class="code" aria-hidden="true">PNQ</span><span class="city">Pune<small>International · 2.5–3 h by road</small></span><span class="track"><i data-w="47%"></i></span><span class="val">120<small>km</small></span></li><li class="jr"><span class="code" aria-hidden="true">BOM</span><span class="city">Mumbai<small>Chhatrapati Shivaji Maharaj · ~6 h</small></span><span class="track"><i data-w="100%"></i></span><span class="val">255<small>km</small></span></li></ol><div class="ground "><div class="gs"><span class="k">Taxi</span><span class="big">Ola · Uber</span><span class="sm">Ola Outstation or Uber Intercity from either airport; about €30 from Pune, €60 from Mumbai for two with gliders</span></div><div class="gs"><span class="k">By train</span><span class="big">Pune</span><span class="sm">About 3.5 h from Mumbai, then bus or taxi for the last 120 km</span></div><div class="gs"><span class="k">By bus</span><span class="big">redbus.in</span><span class="sm">Private and state buses to Panchgani or Mahabaleshwar</span></div></div><div class="tb-h" style="margin-top:56px"><span class="eyebrow">Stay at HQ</span><span>Cloudmist Resort &amp; Spa</span></div><div class="ground "><div class="gs"><span class="k">Single</span><span class="big">₹3,500</span><span class="sm">About €35 a night with breakfast</span></div><div class="gs"><span class="k">Double</span><span class="big">₹4,500</span><span class="sm">About €45 a night with breakfast · few twin beds in Panchgani</span></div><div class="gs"><span class="k">Rooms</span><span class="big">30</span><span class="sm">First come, first served for pilots who book early</span></div></div><p class="tnote"><b>HQ</b><span>Panchgani–Mahabaleshwar Road, 4.8 km from the town centre. Taxi to town about ₹200; an evening shuttle runs at a fixed time.</span></p>
+      <div class="tb-h"><span class="eyebrow">Fly in</span><span>Distance to Panchgani</span></div><ol class="board2"><li class="jr"><span class="code" aria-hidden="true">PNQ</span><span class="city">Pune<small>International · 2.5–3&nbsp;h by road</small></span><span class="track"><i data-w="47%"></i></span><span class="val">120<small>km</small></span></li><li class="jr"><span class="code" aria-hidden="true">BOM</span><span class="city">Mumbai<small>Chhatrapati Shivaji Maharaj · ~6&nbsp;h</small></span><span class="track"><i data-w="100%"></i></span><span class="val">255<small>km</small></span></li></ol><div class="ground "><div class="gs"><span class="k">Taxi</span><span class="big">Ola · Uber</span><span class="sm">Ola Outstation or Uber Intercity from either airport; about €30 from Pune, €60 from Mumbai for two with gliders</span></div><div class="gs"><span class="k">By train</span><span class="big">Pune</span><span class="sm">About 3.5 h from Mumbai, then bus or taxi for the last 120 km</span></div><div class="gs"><span class="k">By bus</span><span class="big">redbus.in</span><span class="sm">Private and state buses to Panchgani or Mahabaleshwar</span></div></div><div class="tb-h" style="margin-top:56px"><span class="eyebrow">Stay at HQ</span><span>Cloudmist Resort &amp; Spa</span></div><div class="ground "><div class="gs"><span class="k">Single</span><span class="big">₹3,500</span><span class="sm">About €35 a night with breakfast</span></div><div class="gs"><span class="k">Double</span><span class="big">₹4,500</span><span class="sm">About €45 a night with breakfast · few twin beds in Panchgani</span></div><div class="gs"><span class="k">Rooms</span><span class="big">30</span><span class="sm">First come, first served for pilots who book early</span></div></div><p class="tnote"><b>HQ</b><span>Panchgani–Mahabaleshwar Road, 4.8 km from the town centre. Taxi to town about ₹200; an evening shuttle runs at a fixed time.</span></p>
     </div>
   </div>
 </section>

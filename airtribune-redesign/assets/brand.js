@@ -22,8 +22,8 @@
   var CSS =
     ".atb-lock{display:inline-flex;align-items:center;gap:.45em;line-height:1;white-space:nowrap;color:inherit}" +
     ".atb-m{display:block;flex:none;width:1.2em;height:1.2em}" +
-    "a.logo .atb-m{width:26px;height:26px}" +
-    "a.logo .atb-w,.atb-w{font-family:Archivo,var(--f-display,system-ui),sans-serif;font-weight:700;font-style:normal;text-transform:none;letter-spacing:-.01em;line-height:1;color:inherit}" +
+    "a.logo{white-space:nowrap;flex:none}a.logo .atb-m{width:26px;height:26px}" +
+    "a.logo .atb-w,.atb-w{white-space:nowrap;font-family:Archivo,var(--f-display,system-ui),sans-serif;font-weight:700;font-style:normal;text-transform:none;letter-spacing:-.01em;line-height:1;color:inherit}" +
     ".atb-tit{position:relative;display:inline-block}" +
     ".atb-tit::before{content:'';position:absolute;left:50%;top:-.02em;width:.3em;height:.3em;transform:translateX(-30%);background:" + RED + ";clip-path:polygon(0 0,100% 0,100% 100%)}" +
     ".atb-tile{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;flex:none;background:#0B2630}" +

@@ -128,8 +128,7 @@ section.block{padding-block:88px 0}
 .col-rnd{position:absolute;left:12px;top:16px;writing-mode:vertical-rl;transform:rotate(180deg);font:700 11px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .col-venue{position:absolute;left:8px;bottom:22px;writing-mode:vertical-rl;transform:rotate(180deg);font:800 30px/1 var(--f-display);text-transform:uppercase;letter-spacing:-.01em;color:var(--ink-2);max-height:250px;overflow:hidden;white-space:nowrap}
 .col.on .col-venue{color:#fff}
-.col-flag{position:absolute;top:18px;left:60px;width:42px;height:28px;border-radius:4px;overflow:hidden;display:flex;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
-.col-flag i{flex:1}
+.col-flag{position:absolute;top:18px;left:60px;width:40px;height:30px;border-radius:1px;object-fit:cover}
 .col-dates{position:absolute;left:52px;right:8px;top:200px;display:grid;justify-items:center;line-height:1}
 .col-dates b{font:800 30px var(--f-display)}
 .col-dates span{font:400 15px var(--f-display);text-transform:uppercase;margin-top:4px}
@@ -235,8 +234,7 @@ section.block{padding-block:88px 0}
 .fsel select{appearance:none;-webkit-appearance:none;background:none;border:0;color:#fff;font:700 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;height:100%;padding:0 34px 0 14px;cursor:pointer}
 .fsel select option{background:var(--panel);color:#fff}
 .fsel::after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border:solid var(--ink-2);border-width:0 2px 2px 0;transform:translateY(-70%) rotate(45deg);pointer-events:none}
-.flag{display:inline-flex;overflow:hidden}
-.flag i{flex:1}
+.flag{display:inline-block;object-fit:cover;border-radius:1px;aspect-ratio:4/3}
 .status{font:700 10px var(--f-body);letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:5px;background:var(--panel-2);color:var(--ink-2)}
 .status.next{background:var(--orange);color:#fff}
 .status.live{background:var(--teal);color:#03100F}
@@ -247,7 +245,7 @@ section.block{padding-block:88px 0}
 .m-rail b{display:block;font:800 30px/1 var(--f-display);text-transform:uppercase;letter-spacing:-.01em}
 .m-rail span{display:block;margin-top:6px;font:600 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .rows{display:grid}
-.row{position:relative;display:grid;grid-template-columns:56px 150px minmax(0,1fr) 170px 132px;align-items:center;gap:20px;min-height:72px;padding:10px 18px 10px 20px;text-align:left;border-bottom:1px solid var(--line);transition:background .2s}
+.row{position:relative;display:grid;grid-template-columns:56px 150px minmax(0,1fr) 132px;align-items:center;gap:20px;min-height:72px;padding:10px 18px 10px 20px;text-align:left;border-bottom:1px solid var(--line);transition:background .2s}
 .rows .row:last-child{border-bottom:0}
 .row:hover{background:rgba(255,255,255,.035)}
 .row[hidden]{display:none}
@@ -255,17 +253,16 @@ section.block{padding-block:88px 0}
 .row .dt{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
 .row .dt b{font:800 26px/1 var(--f-display);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 .row .dt span{font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+.row .dt.x{gap:5px}
+.row .dt.x i{font:400 18px var(--f-display);font-style:normal;color:var(--muted)}
+.row .dt.x b{font-size:21px}
 .row .who{min-width:0;display:grid;gap:4px}
 .row .l1{display:flex;align-items:center;gap:12px;min-width:0}
-.row .l1 .flag{flex:none;width:30px;height:20px;border-radius:3px}
+.row .l1 .flag{flex:none;width:28px;height:21px}
 .row .l1 h3{font:800 26px/1 var(--f-display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap}
 .row .l1 em{font:400 italic 15px var(--f-display);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .row .run{font:600 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row .run i{font-style:normal;opacity:.5;margin:0 7px}
-.row .dist{display:flex;align-items:center;gap:12px;justify-content:flex-end;white-space:nowrap}
-.row .dist svg{width:56px;height:34px;flex:none;overflow:visible}
-.row .dist b{font:800 18px var(--f-display);font-variant-numeric:tabular-nums}
-.row .dist small{display:block;font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .row .st{display:flex;align-items:center;justify-content:flex-end;gap:14px;white-space:nowrap;font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
 .row .st .go{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);color:var(--ink-2);transition:.2s}
 .row:hover .st .go{background:var(--orange);border-color:var(--orange);color:#fff}
@@ -277,12 +274,9 @@ section.block{padding-block:88px 0}
 .row .srsln span{color:var(--srs-blue)}
 .row .ph{position:relative;display:block;width:230px;height:104px;border-radius:10px;overflow:hidden;background:var(--deep) center/cover no-repeat}
 .row .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,16,15,.82),rgba(3,16,15,.2))}
-.row .ph svg{position:absolute;left:12px;top:14px;width:84px;height:46px;z-index:1;overflow:visible}
-.row .ph b{position:absolute;left:12px;bottom:10px;z-index:1;font:800 17px var(--f-display);font-variant-numeric:tabular-nums}
-.row .ph small{font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-left:6px}
 /* next / live strip */
-.row.feat{grid-template-columns:56px 150px minmax(0,1fr) 170px 270px;min-height:132px;background:rgba(255,255,255,.025)}
-.row.feat.srs{min-height:148px}
+.row.feat{grid-template-columns:56px 150px minmax(0,1fr) 270px;min-height:132px;background:rgba(255,255,255,.025)}
+.row.feat.srs{min-height:148px;grid-template-columns:56px 150px minmax(0,1fr) 230px 270px}
 .row.feat .rn{color:var(--orange)}
 .row .cd{display:grid;justify-items:end;gap:10px}
 .row .cd .k{display:flex;align-items:center;gap:8px;font:700 10.5px var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--orange-2)}
@@ -300,8 +294,9 @@ section.block{padding-block:88px 0}
 .list-end{border-top:1px solid var(--line-2)}
 @media (max-width:1180px){
   .row,.row.srs{grid-template-columns:56px 130px minmax(0,1fr) 150px}
-  .row.feat{grid-template-columns:56px 130px minmax(0,1fr) 210px}
-  .row .dist,.row .ph{display:none}
+  .row.feat,.row.feat.srs{grid-template-columns:56px 130px minmax(0,1fr) 210px}
+  .row .ph{display:none}
+  .row .dt.x b{font-size:19px}
   .row .dt b{font-size:22px}
 }
 @media (max-width:720px){
@@ -315,6 +310,7 @@ section.block{padding-block:88px 0}
   .row .rn{grid-area:rn;font-size:13px}
   .row .dt{grid-area:dt}
   .row .dt b{font-size:19px}
+  .row .dt.x b{font-size:17px}
   .row .who{grid-area:who}
   .row .st{grid-area:st;gap:10px}
   .row .st .go{width:26px;height:26px}
@@ -347,7 +343,7 @@ section.block{padding-block:88px 0}
 .d-nav button:hover{background:rgba(0,0,0,.32)}
 .d-nav button:disabled{opacity:.35;cursor:default}
 .d-body{padding:24px 24px 40px;display:grid;gap:22px}
-.d-body .flag{width:38px;height:25px;border-radius:4px;margin-right:10px;vertical-align:middle}
+.d-body .flag{width:36px;height:27px;margin-right:10px;vertical-align:middle}
 .d-body h2{font:800 clamp(44px,8vw,64px)/.9 var(--f-display);text-transform:uppercase}
 .d-body .ev{font:300 italic 20px var(--f-display);color:var(--ink-2);margin-top:8px}
 .spec{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin:0;background:var(--line);border-radius:var(--r-sm);overflow:hidden}
@@ -357,35 +353,6 @@ section.block{padding-block:88px 0}
 .d-cta{display:flex;gap:8px;flex-wrap:wrap}
 .note{font-size:12.5px;color:var(--muted);margin:0}
 
-/* race replay + podium */
-.race{display:grid;gap:12px}
-.race-top{display:flex;align-items:center;gap:10px}
-.rbadge{display:inline-flex;align-items:center;gap:7px;font:700 10.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border-radius:5px;background:var(--panel-2);color:var(--ink-2)}
-.rbadge i{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:blink 1.4s infinite}
-.rbadge.live{background:var(--orange);color:#fff}.rbadge.live i{background:#fff}
-.race-top .eyebrow{margin-left:auto}
-.rclock{font:800 italic 20px var(--f-display)}
-.rbtn{width:38px;height:38px;display:grid;place-items:center;border-radius:8px;background:#fff;color:#051416}
-.rbtn:hover{background:var(--orange);color:#fff}
-#dRace{display:block;width:100%;height:320px;border-radius:14px;background:var(--deep)}
-#rScrub{width:100%;accent-color:var(--orange)}
-.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:end;margin-top:6px}
-.pod{border-radius:14px 14px 0 0;padding:14px 14px 16px;color:#fff;display:grid;gap:4px;text-align:center}
-.pod.p1{background:linear-gradient(180deg,var(--orange),#B84300);min-height:150px}
-.pod.p2{background:linear-gradient(180deg,var(--teal-d),#0E5650);min-height:124px}
-.pod.p3{background:linear-gradient(180deg,var(--yellow),#B88F00);color:#1E1600;min-height:108px}
-.pod .pl{font:700 10px var(--f-body);letter-spacing:.16em;text-transform:uppercase;opacity:.85}
-.pod .pn{font:800 italic 22px var(--f-display)}
-.pod .pk{font:800 italic 30px/1 var(--f-display);font-variant-numeric:tabular-nums}
-.pod .pk small{font:700 11px var(--f-body);letter-spacing:.08em;margin-left:3px;font-style:normal}
-.board{list-style:none;margin:0;padding:0;display:grid;gap:2px}
-.board li{display:grid;grid-template-columns:30px 1fr auto auto;gap:14px;align-items:center;padding:10px 14px;background:var(--panel);font-size:13px}
-.board li:nth-child(odd){background:var(--panel-2)}
-.board .pos{font:800 15px var(--f-display)}
-.board .no{font:800 italic 15px var(--f-display);text-transform:uppercase}
-.board .km{font:800 italic 15px var(--f-display);font-variant-numeric:tabular-nums}
-.board .gap{color:var(--muted);font-size:12px;min-width:48px;text-align:right}
-.board-h{display:flex;justify-content:space-between;padding:0 14px}
 
 /* host (SailGP+ block rhythm) */
 .host{margin-top:110px;position:relative;overflow:hidden;background:var(--deep);border-block:1px solid var(--line)}
@@ -433,10 +400,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
   section.block{padding-block:64px 0}
   .col{height:440px}
   .strip-nav{display:none}
-  .board .gap{display:none}
-  #dRace{height:260px}
   .d-body{padding:20px 16px 32px}
-  .pod .pk{font-size:22px}
 }
 
 /* ---------- SRS: featured series ---------- */
@@ -488,7 +452,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .srs-r{position:relative;display:grid;grid-template-columns:64px 52px minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 18px;border-radius:14px;background:rgba(12,36,39,.85);border:1px solid var(--line);text-align:left;transition:transform .25s,border-color .25s,background .25s;overflow:hidden}
 .srs-r:hover{transform:translateX(6px);border-color:rgba(29,169,225,.5);background:rgba(17,48,52,.95)}
 .srs-r .n{font:800 italic 30px/1 var(--f-display);color:var(--muted)}
-.srs-r .flag{width:46px;height:30px;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.srs-r .flag{width:40px;height:30px}
 .srs-r h3{font:800 20px/1.05 var(--f-display);text-transform:uppercase}
 .srs-r p{margin:3px 0 0;font:400 italic 14px var(--f-display);color:var(--ink-2)}
 .srs-r .when{text-align:right;font:700 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
@@ -517,7 +481,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
   .srs-r{grid-template-columns:40px 40px minmax(0,1fr);gap:12px}
   .srs-r .when{grid-column:3;text-align:left}
   .srs-r .n{font-size:22px}
-  .srs-r .flag{width:36px;height:24px}
+  .srs-r .flag{width:32px;height:24px}
 }
 
 /* ---------- photography ---------- */
@@ -571,12 +535,23 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .rb-srs{background:rgba(29,169,225,.07);backdrop-filter:blur(10px)}
 .d-head{background:rgba(8,28,31,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,150,92,.35);box-shadow:inset 0 -1px 0 rgba(255,95,0,.25)}
 .d-head .cond{color:#FFD9C4}
-.pod{backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-bottom:0}
-.pod.p1{background:linear-gradient(180deg,rgba(255,95,0,.38),rgba(255,95,0,.08))}
-.pod.p2{background:linear-gradient(180deg,rgba(43,212,196,.28),rgba(43,212,196,.06))}
-.pod.p3{background:linear-gradient(180deg,rgba(255,201,6,.3),rgba(255,201,6,.06));color:#fff}
-.rbadge.live{background:rgba(255,95,0,.18);color:#FFD9C4;box-shadow:inset 0 0 0 1px rgba(255,150,92,.45)}
 .d-srs{background:rgba(29,169,225,.06)}
+/* phone race bar: one line, country + countdown (~56 px) */
+@media (max-width:720px){
+  .racebar .wrap{flex-wrap:nowrap;gap:14px;min-height:56px;padding-block:6px}
+  .racebar .rb-ev{width:auto;min-width:0;flex:1;gap:8px}
+  .rb-ev b{font-size:18px;white-space:nowrap}
+  .rb-ev span{font-size:14px;white-space:nowrap}
+  .racebar .rb-srs,.racebar .rb-go,.rb-label{display:none}
+  .rb-cd{gap:6px}.rb-cd div{min-width:26px}.rb-cd b{font-size:19px}.rb-cd i{font-size:16px}
+}
+@media (max-width:480px){
+  .rb-ev span{display:none}
+  .nav .ce-w{display:none}
+  .nav .btn{padding:0 14px}
+  .nav .wrap{gap:12px}
+  .nav-srs{display:none}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 .col-open{visibility:hidden}
@@ -603,7 +578,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
     <a class="nav-live" href="live.html" title="Live tracker: replay of SRS Tapalpa 2026, Task 3"><i></i><b>Live</b><span>Tapalpa replay</span></a>
     <a class="nav-srs" href="#srs" aria-label="Featured series: Sports-Class Racing Series"><span>Featured<br>series</span><img data-srs="mark" alt=""></a>
     <a class="login" href="https://airtribune.com/events/next">Sign in</a>
-    <a class="btn btn-o" href="https://airtribune.com/events/create_event">Create event</a>
+    <a class="btn btn-o" href="https://airtribune.com/events/create_event">Create<span class="ce-w"> event</span></a>
   </div>
 </header>
 
@@ -718,7 +693,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
     <div class="wrap in">
       <div class="seg" id="fType" role="group" aria-label="Filter by type"></div>
       <label class="fsel"><select id="fRegion" aria-label="Filter by region"></select></label>
-      <label class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search site, country…" aria-label="Search rounds"></label>
+      <label class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search" aria-label="Search rounds"></label>
     </div>
   </div>
   <div class="wrap" id="months"></div>
@@ -799,18 +774,18 @@ const RAW = [
  ["SRS St. André-les-Alpes 2027","","St. André-les-Alpes","FR",43.97,6.51,2,"2027-09-12","2027-09-19"],
 ];
 const COUNTRY = {
-  PK:{n:"Pakistan",r:"Asia",c:["#FFFFFF","#01411C","#01411C","#01411C"]},
-  BR:{n:"Brazil",r:"Americas",c:["#009C3B","#FFDF00","#002776"]},
-  ZA:{n:"South Africa",r:"Africa",c:["#007749","#FFB81C","#DE3831","#002395"]},
-  CO:{n:"Colombia",r:"Americas",c:["#FCD116","#FCD116","#003893","#CE1126"]},
-  AU:{n:"Australia",r:"Oceania",c:["#012169","#FFFFFF","#E4002B"]},
-  IN:{n:"India",r:"Asia",c:["#FF9933","#FFFFFF","#138808"]},
-  CR:{n:"Costa Rica",r:"Americas",c:["#002B7F","#FFFFFF","#CE1126","#FFFFFF","#002B7F"]},
-  SI:{n:"Slovenia",r:"Europe",c:["#FFFFFF","#0057B8","#ED1C24"]},
-  GB:{n:"United Kingdom",r:"Europe",c:["#012169","#FFFFFF","#C8102E"]},
-  FR:{n:"France",r:"Europe",c:["#0055A4","#FFFFFF","#EF4135"]},
-  IT:{n:"Italy",r:"Europe",c:["#009246","#FFFFFF","#CE2B37"]},
-  MK:{n:"North Macedonia",r:"Europe",c:["#D20000","#FFE600","#D20000"]},
+  PK:{n:"Pakistan",r:"Asia"},
+  BR:{n:"Brazil",r:"Americas"},
+  ZA:{n:"South Africa",r:"Africa"},
+  CO:{n:"Colombia",r:"Americas"},
+  AU:{n:"Australia",r:"Oceania"},
+  IN:{n:"India",r:"Asia"},
+  CR:{n:"Costa Rica",r:"Americas"},
+  SI:{n:"Slovenia",r:"Europe"},
+  GB:{n:"United Kingdom",r:"Europe"},
+  FR:{n:"France",r:"Europe"},
+  IT:{n:"Italy",r:"Europe"},
+  MK:{n:"North Macedonia",r:"Europe"},
 };
 const ISO3 = {PK:"PAK",BR:"BRA",ZA:"ZAF",CO:"COL",AU:"AUS",IN:"IND",CR:"CRI",SI:"SVN",GB:"GBR",FR:"FRA",IT:"ITA",MK:"MKD"};
 const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -837,8 +812,10 @@ const EV = RAW.map((r,i) => {
   if (/Cup|Copa/.test(name)) tags.push(["","Cup"]);
   if (/Open/.test(name) && type==="open") tags.push(["","Open"]);
   return {i, n:i+1, name, sub, city, cc, lat, lon, tz, s, e, sy,sm,sd,ey,em,ed, start, end, days, type, tags, page:(SRS_PAGE[name]||[])[0], at:`https://airtribune.com/${AT_SLUG[name]}/`, photo:(SRS_PAGE[name]||[])[1],
-    country:COUNTRY[cc].n, region:COUNTRY[cc].r, colors:COUNTRY[cc].c};
+    country:COUNTRY[cc].n, region:COUNTRY[cc].r};
 });
+/* real flags (flag-icons, 4:3 SVG) */
+const flagImg = (e, cls = "flag") => `<img class="${cls}" src="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/flags/4x3/${e.cc.toLowerCase()}.svg" alt="" width="40" height="30" loading="lazy" decoding="async">`;
 EV.forEach(e => e.status = NOW >= e.end ? "past" : NOW >= e.start ? "live" : "upcoming");
 const NEXT = EV.find(e => e.status==="live") || EV.find(e => e.status==="upcoming") || EV[EV.length-1];
 if (NEXT.status==="upcoming") NEXT.status = "next";
@@ -1059,91 +1036,6 @@ function drawTaskMap(svgEl, e, big){
   animate(); svgEl._replay = animate;
 }
 
-/* Option D: live race replay (hero background + details panel) */
-let RACE = null;
-function stopRace(){ if (RACE){ RACE.dead = true; cancelAnimationFrame(RACE.raf); RACE = null; } }
-function startRace(e, opt = {}){
-  const hero = !!opt.hero, svgEl = opt.svg || $("#dRace");
-  if (!hero) stopRace();
-  const bb = svgEl.getBoundingClientRect(), W = Math.round(bb.width) || 520, H = Math.round(bb.height) || 320, seed = e.n*97+13;
-  const sel = d3.select(svgEl).attr("viewBox",`0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid slice");
-  sel.selectAll("*").remove();
-  const chk = addChk(sel);
-  terrain(sel, seed, W, H, hero ? 1.1 : .8);
-  const sx = hero && W > 760 ? W*.42 : 0, SW = W - sx;
-  const stage = sel.append("g").attr("transform", `translate(${sx},0)`);
-  const fit = bestFit(taskFor(e), SW, H, hero ? [70,80] : [50,40]), f = fit.f, task = fit.t;
-  drawCyl(stage, task, f, {alpha: hero ? .75 : .6, big:true, chk});
-  stage.append("path").attr("d", d3.line()(task.route.map(f))).attr("fill","none").attr("stroke","rgba(43,212,196,.45)").attr("stroke-dasharray","3 3");
-  launchMark(stage, f, !hero);
-  const r = rng(seed+9), N = hero ? 12 : 10, used = new Set(), thermalR = (hero ? 4 : 3.2) / f.s;
-  const legs = task.legs, route = task.route, suffix = legs.map((_,k) => d3.sum(legs.slice(k)));
-  const remaining = pt => pt.ti > legs.length ? 0 : dist(pt.p, route[pt.ti]) + (pt.ti < legs.length ? suffix[pt.ti] : 0);
-  const layer = stage.append("g"), labels = stage.append("g");
-  const pilots = d3.range(N).map(k => {
-    let no; do { no = 10 + (r()*190|0); } while (used.has(no)); used.add(no);
-    const sim = simulate(task, seed*13 + k*7, thermalR, .55 + r()*.9);
-    const g = layer.append("g");
-    return { no, pts: sim.pts, P: sim.pts.map(q => f(q.p)), i: 0,
-      full: g.append("path").attr("fill","none").attr("stroke","#FFFFFF").attr("stroke-opacity",.1).attr("stroke-width",1),
-      trail: g.append("path").attr("fill","none").attr("stroke-width", hero ? 2 : 1.6).attr("stroke-linecap","round").attr("stroke-linejoin","round"),
-      dot: g.append("circle").attr("r", hero ? 5 : 4.5).attr("stroke","#03100F").attr("stroke-width",1.8),
-      lab: labels.append("g") };
-  });
-  pilots.forEach(pl => { pl.lab.append("rect").attr("height",16).attr("rx",4); pl.lab.append("text").attr("x",6).attr("y",11.5).attr("font-family",MONO).attr("font-size",10.5).attr("font-weight",800).attr("font-style","italic"); });
-  const firstGlide = pl => { const k = pl.pts.findIndex((q,j) => j>20 && q.v<0 && pl.pts.slice(0,j).some(z=>z.v>0)); return pl.pts[Math.max(0,k)].t; };
-  const tStart = d3.median(pilots, firstGlide) * .9, tEnd = d3.max(pilots, pl => pl.pts.at(-1).t) + 120;
-  const DUR = hero ? 48000 : 26000;
-  const st = { dead:false, raf:0, playing: !reduce, frac: reduce ? .6 : (hero ? .22 : 0), last: performance.now(), boardAt: 0, tick: 0, vis: true };
-  let scrub, clock, board, pod, playBtn;
-  const fmt = sec => { sec = Math.max(0, sec|0); return `+${sec/3600|0}:${String((sec/60|0)%60).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`; };
-  const setPlay = on => { st.playing = on; playBtn.innerHTML = on ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l12-7z"/></svg>'; playBtn.setAttribute("aria-label", on ? "Pause replay" : "Play replay"); };
-  if (!hero){
-    RACE = st; scrub = $("#rScrub"); clock = $("#rClock"); board = $("#rBoard"); pod = $("#rPod"); playBtn = $("#rPlay");
-    setPlay(st.playing);
-    playBtn.onclick = () => { setPlay(!st.playing); st.last = performance.now(); };
-    scrub.oninput = () => { setPlay(false); st.frac = scrub.value/1000; pilots.forEach(pl => pl.i = 0); draw(true); };
-  } else new IntersectionObserver(es => st.vis = es[0].isIntersecting).observe(svgEl);
-  function draw(force){
-    const T = tStart + st.frac*(tEnd - tStart);
-    pilots.forEach(pl => { if (pl.pts[pl.i].t > T) pl.i = 0; while (pl.i < pl.pts.length-1 && pl.pts[pl.i+1].t <= T) pl.i++; pl.rem = remaining(pl.pts[pl.i]); pl.done = pl.i === pl.pts.length-1; });
-    const order = pilots.slice().sort((a,b) => a.rem - b.rem), lead = order[0], placed = [];
-    order.slice().reverse().forEach(pl => {
-      const i = pl.i, isLead = pl === lead, [x,y] = pl.P[i];
-      if (force || (st.tick % 8 === 0)) pl.full.attr("d", d3.line()(pl.P.slice(0, i+1)));
-      pl.trail.attr("d", d3.line()(pl.P.slice(Math.max(0,i-(hero?70:50)), i+1))).attr("stroke", isLead ? "#FF5F00" : "#FFFFFF").attr("stroke-opacity", isLead ? .95 : .5);
-      pl.dot.attr("cx",x).attr("cy",y).attr("fill", isLead ? "#FF5F00" : pl.done ? "#2BD4C4" : "#FFFFFF");
-    });
-    const showN = hero ? 3 : 4;
-    order.forEach((pl,k) => { const [x,y] = pl.P[pl.i], show = k < showN && !placed.some(q => Math.abs(q[0]-x) < 56 && Math.abs(q[1]-y) < 18);
-      pl.lab.attr("display", show ? null : "none"); if (!show) return; placed.push([x,y]);
-      const t = k === 0 ? `P1 #${pl.no}` : `P${k+1} #${pl.no}`, w = t.length*6.4 + 12;
-      pl.lab.attr("transform", `translate(${Math.min(x+9, SW-w-4)},${Math.max(4, y-22)})`);
-      pl.lab.select("rect").attr("width", w).attr("fill", k===0 ? "#FF5F00" : k===1 ? "#1B8F86" : k===2 ? "#FFC906" : "rgba(3,16,15,.9)");
-      pl.lab.select("text").text(t).attr("fill", k===2 ? "#1E1600" : "#FFFFFF"); });
-    if (hero) return;
-    clock.textContent = fmt(T - tStart);
-    scrub.value = Math.round(st.frac*1000);
-    const now = performance.now();
-    if (force || now - st.boardAt > 300){ st.boardAt = now;
-      const kmTxt = pl => pl.done ? "GOAL" : pl.rem.toFixed(1);
-      pod.innerHTML = [1,0,2].map(k => { const pl = order[k]; return pl ? `<div class="pod p${k+1}"><span class="pl">${["1st","2nd","3rd"][k]} place</span><span class="pn">#${pl.no}</span><span class="pk">${kmTxt(pl)}${pl.done ? "" : "<small>KM</small>"}</span></div>` : ""; }).join("");
-      board.innerHTML = order.slice(3,8).map((pl,j) => `<li><span class="pos">${j+4}</span><span class="no">#${pl.no}</span><span class="km">${pl.done ? "GOAL" : pl.rem.toFixed(1)+" km"}</span><span class="gap">+${(pl.rem - lead.rem).toFixed(1)}</span></li>`).join(""); }
-  }
-  function loop(now){
-    if (st.dead) return;
-    if (st.vis && !document.hidden){
-      if (st.playing){ st.frac += (now - st.last)/DUR; if (st.frac > 1){ st.frac = 0; pilots.forEach(pl => { pl.i = 0; pl.full.attr("d",null); }); } }
-      st.tick++; draw(false);
-    }
-    st.last = now;
-    st.raf = requestAnimationFrame(loop);
-  }
-  draw(true);
-  st.raf = requestAnimationFrame(loop);
-  return st;
-}
-
 /* ============ RACE BAR + HERO + CALENDAR STRIP ============ */
 const countries = new Set(EV.map(e=>e.cc)), regions = new Set(EV.map(e=>e.region));
 const CONT = {PK:"Asia",IN:"Asia",BR:"S. America",CO:"S. America",CR:"N. America",ZA:"Africa",AU:"Oceania",SI:"Europe",GB:"Europe",FR:"Europe",IT:"Europe",MK:"Europe"};
@@ -1183,14 +1075,14 @@ tick(); setInterval(tick, 1000);
       ${e.photo ? `<span class="col-bg" style="background-image:linear-gradient(0deg,rgba(8,28,31,.96) 12%,rgba(8,28,31,.3) 60%,rgba(8,28,31,.85)),url('img/${e.photo}.jpg')"></span>` : ""}
       <button class="col-hit" aria-label="Show round ${e.n}: ${e.country}, ${longDate(e)}"></button>
       <span class="col-rnd">Round ${pad(e.n)}</span>
-      <span class="col-flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>
+      ${flagImg(e,"col-flag")}
       ${e.type==="srs" ? srsImg("mark","col-srs","SRS round") : ""}
       <span class="col-venue" style="font-size:${fs}px">${v}</span>
       <span class="col-dates"><b>${pad(e.sd)}</b><span>${MON[e.sm-1]}</span><i>–</i><b>${pad(e.ed)}</b><span>${MON[e.em-1]}</span></span>
       <div class="col-open">
         <div class="co-head"><span class="eyebrow">${e.type==="srs" ? srsImg("mark","srs-inline","SRS") : ""}${e===NEXT ? "Next round" : relDays(e)} · ${e.country}</span><h3>${e.name}</h3><p>${longDate(e)} · ${e.days} days</p></div>
         <svg class="task" data-strip="${e.i}" aria-hidden="true"></svg>
-        <div class="co-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">Event page</a><button class="btn btn-ghost" data-open="${e.i}">Race preview</button>` : `<button class="btn btn-o" data-open="${e.i}">Round details</button><a class="btn btn-ghost" href="${e.at}">Live tracking</a>`}</div>
+        <div class="co-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">Event page</a><button class="btn btn-ghost" data-open="${e.i}">Round details</button>` : `<button class="btn btn-o" data-open="${e.i}">Round details</button><a class="btn btn-ghost" href="${e.at}">Live tracking</a>`}</div>
         <div class="co-time"><div><span>Day 1 local</span><b>09:00 ${tzLabel(e.tz)}</b></div><div><span>Your time</span><b>${localStart(e.start)}</b></div><div><span>Duration</span><b>${e.days} days</b></div></div>
       </div>
     </div>`; }).join("");
@@ -1222,7 +1114,7 @@ tick(); setInterval(tick, 1000);
     .map(([v,l]) => `<div><b>${v}</b><span>${l}</span></div>`).join("");
   $("#srsRounds").innerHTML = S.map(e => `<a class="srs-r ${/Final/.test(e.name)?"final":""}" href="${e.page}" aria-label="${e.name}: event page">
       <span class="n">R${pad(e.n)}</span>
-      <span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>
+      ${flagImg(e)}
       <span><h3>${e.city.split(",").at(-1).trim()}${/Final/.test(e.name)?'<span class="fin">FINAL</span>':""}</h3><p>${e.name}</p></span>
       <span class="when"><b>${dateRange(e)} ${dateMon(e)}</b>${e.status==="past" ? "Completed" : relDays(e)}</span>
     </a>`).join("");
@@ -1403,8 +1295,10 @@ tick(); setInterval(tick, 1000);
 /* ============ ROUNDS: timing-board rows ============ */
 const arrow = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 const typeLabel = e => (e.tags.find(t => t[1]!=="SRS") || [,e.type==="hf"?"Hike & fly":e.type==="srs"?"Race":"Open"])[1];
-const bigDates = e => [`${pad(e.sd)}–${pad(e.ed)}`, e.sm===e.em ? MON[e.sm-1] : `${MON[e.sm-1]}/${MON[e.em-1]}`];
-const flagEl = e => `<span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>`;
+/* same month: "25–29 Nov"; across months: "27 Jan – 03 Feb" (day + month on each side) */
+const bigDates = e => e.sm===e.em ? `<span class="dt"><b>${pad(e.sd)}–${pad(e.ed)}</b><span>${MON[e.sm-1]}</span></span>`
+  : `<span class="dt x"><b>${pad(e.sd)}</b><span>${MON[e.sm-1]}</span><i>–</i><b>${pad(e.ed)}</b><span>${MON[e.em-1]}</span></span>`;
+const flagEl = e => flagImg(e);
 const isFeat = e => e===NEXT;
 function cdText(e){
   if (e.status==="live"){ const d = Math.floor((NOW - e.start)/864e5) + 1; return `Day ${Math.min(d,e.days)} of ${e.days}`; }
@@ -1412,21 +1306,19 @@ function cdText(e){
   return d ? `${d}d ${pad(h)}h ${pad(m)}m` : `${pad(h)}h ${pad(m)}m`;
 }
 function rowHTML(e){
-  const [db, dm] = bigDates(e), t = taskFor(e), feat = isFeat(e), live = e.status==="live";
+  const feat = isFeat(e), live = e.status==="live";
   const srsN = SRS_EV.indexOf(e) + 1;
   const tag = feat ? "div" : "button";
   const label = `Round ${e.n}: ${e.name}, ${longDate(e)}`;
   const run = [e.city, `${e.days} day${e.days>1?"s":""}`, typeLabel(e)].map(x=>`<span>${x}</span>`).join("<i>/</i>");
-  const distTxt = `<b>${t.total.toFixed(1)} km</b><small>${t.cyl.length-2} TP · preview</small>`;
-  const right = e.type==="srs"
-    ? `<span class="ph" style="background-image:url('img/${e.photo}.jpg')"><svg data-glyph="${e.i}" aria-hidden="true"></svg><b>${t.total.toFixed(1)} km<small>${t.cyl.length-2} TP</small></b></span>`
-    : `<span class="dist"><svg data-glyph="${e.i}" aria-hidden="true"></svg><span>${distTxt}</span></span>`;
+  /* no invented task distances: tasks are set on race morning. SRS rows keep their photo. */
+  const right = e.type==="srs" ? `<span class="ph" style="background-image:url('img/${e.photo}.jpg')"></span>` : "";
   const tail = feat
     ? `<span class="cd"><span class="k"><i></i>${live ? "Live now" : "Next round · starts in"}</span><strong class="mono" data-cd="${e.i}">${cdText(e)}</strong>${live ? `<a class="btn btn-o" href="live.html">Watch live</a>` : `<button class="btn btn-o" data-open="${e.i}">Race details</button>`}</span>`
     : `<span class="st"><span>${relDays(e)}</span><span class="go">${arrow}</span></span>`;
   return `<${tag} class="row ${e.type==="srs"?"srs":""} ${feat?"feat":""} ${live?"live":""} ${e.status==="past"?"past":""}" data-i="${e.i}" ${feat?`aria-label="${label}"`:`aria-label="${label}"`}>
     <span class="rn">R${pad(e.n)}</span>
-    <span class="dt"><b>${db}</b><span>${dm}</span></span>
+    ${bigDates(e)}
     <span class="who">
       ${e.type==="srs" ? `<span class="srsln">${srsImg("mark","","SRS")}<span>Sports-Class Racing Series</span>· Round ${srsN} of ${SRS_EV.length}</span>` : ""}
       <span class="l1">${flagEl(e)}<h3>${e.country}</h3><em>${e.name}</em></span>
@@ -1453,7 +1345,6 @@ function routeGlyph(svgEl, e){
   R.slice(1,-1).forEach(p => sel.append("circle").attr("cx",p[0]).attr("cy",p[1]).attr("r",1.8).attr("fill", e.type==="srs" ? "#fff" : "var(--ink-2)"));
   const g = R.at(-1); sel.append("circle").attr("cx",g[0]).attr("cy",g[1]).attr("r",3).attr("fill","var(--orange)");
 }
-document.querySelectorAll("[data-glyph]").forEach(s => routeGlyph(s, EV[+s.dataset.glyph]));
 document.querySelectorAll(".row").forEach(r => r.addEventListener("click", ev => { if (ev.target.closest("a")) return; openRound(+r.dataset.i); }));
 setInterval(() => document.querySelectorAll("[data-cd]").forEach(el => el.textContent = cdText(EV[+el.dataset.cd])), 30000);
 if (PAST.length) $("#doneRow").onclick = () => { showPast = !showPast; $("#doneRow").setAttribute("aria-expanded", showPast); $("#doneLbl").innerHTML = (showPast ? "Hide " : "Show ") + arrow; apply(); };
@@ -1490,17 +1381,9 @@ function openRound(i){
   $("#dPrev").disabled = !prev; $("#dNext").disabled = !nxt;
   $("#dBody").innerHTML = `
     ${e.type==="srs" ? `<div class="d-srs">${srsImg("white","","Sports-Class Racing Series")}<span>Part of the<b>Sports-Class Racing Series</b></span></div>` : ""}
-    <div><span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span><span class="status ${e===NEXT&&e.status!=="live"?"next":e.status}">${e===NEXT&&e.status!=="live"?"Next round":relDays(e)}</span>
+    <div>${flagImg(e)}<span class="status ${e===NEXT&&e.status!=="live"?"next":e.status}">${e===NEXT&&e.status!=="live"?"Next round":relDays(e)}</span>
       <h2 class="disp" id="dCountry" style="margin-top:14px">${e.country}</h2>
       <div class="ev">${e.name}${e.sub?` <span style="color:var(--muted)">· ${e.sub}</span>`:""}</div></div>
-    <div class="race">
-      <div class="race-top"><span class="rbadge ${e.status==="live"?"live":""}"><i></i>${e.status==="live"?"Live":"Race preview · simulated"}</span><span class="eyebrow">Race time</span><span class="mono rclock" id="rClock">+0:00:00</span><button class="rbtn" id="rPlay" aria-label="Pause replay"></button></div>
-      <svg id="dRace" role="img" aria-label="Simulated race replay with ten pilots on the task"></svg>
-      <input type="range" id="rScrub" min="0" max="1000" value="0" aria-label="Scrub race time">
-      <div class="board-h"><span class="eyebrow">Positions · distance to goal</span></div>
-      <div class="podium" id="rPod"></div>
-      <ol class="board" id="rBoard"></ol>
-    </div>
     <dl class="spec">
       <div><dt>Dates</dt><dd>${longDate(e)}</dd></div>
       <div><dt>Duration</dt><dd>${e.days} day${e.days>1?"s":""}</dd></div>
@@ -1513,15 +1396,13 @@ function openRound(i){
     </dl>
     ${e.tags.length?`<div class="tags" style="padding:0">${e.tags.map(([c,t])=>`<span class="tag ${c}">${t}</span>`).join("")}</div>`:""}
     <div class="d-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">${e.type==="srs" ? "SRS event page" : "Event page"}</a>` : `<a class="btn btn-red" href="${e.at}">Event page</a>`}<a class="btn btn-line" href="${e.at}">Live tracking</a></div>
-    <p class="note">Dates and venue from the Airtribune listing. The task and race are simulated for this concept; real tasks are set each morning by the meet director and tracked live on Airtribune.</p>`;
+    <p class="note">Dates and venue from the Airtribune listing. Tasks are set each morning by the meet director and tracked live on Airtribune.</p>`;
   $("#drawer").classList.add("on"); $("#scrim").classList.add("on"); $("#drawer").setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
-  requestAnimationFrame(() => startRace(e));
   $("#dClose").focus({preventScroll:true});
   try { history.replaceState(null,"","#round-"+pad(e.n)); } catch(_){}
 }
 function closeRound(){
-  stopRace();
   $("#drawer").classList.remove("on"); $("#scrim").classList.remove("on"); $("#drawer").setAttribute("aria-hidden","true");
   document.body.style.overflow = ""; cur = -1;
   try { history.replaceState(null,"",location.pathname+location.search); } catch(_){}

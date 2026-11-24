@@ -58,12 +58,12 @@ a{color:inherit;text-decoration:none}
 .side.left{border-right:1px solid var(--line)}
 .side.right{border-left:1px solid var(--line)}
 .side-h{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg-2);border-bottom:1px solid var(--line)}
-.side-h h2{margin:0;font:800 italic 15px var(--f-display);text-transform:uppercase}
+.side-h h2{margin:0;font:800 italic 15px var(--f-display);text-transform:uppercase;white-space:nowrap}
 
 /* leaderboard */
 .lb{position:relative}
 .lb-cols{position:sticky;top:45px;z-index:2;background:var(--bg-2);display:grid;grid-template-columns:26px 10px minmax(0,1fr) 66px 58px;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line)}
-.row{position:absolute;left:0;right:0;height:52px;display:grid;grid-template-columns:26px 10px minmax(0,1fr) 66px 58px;gap:8px;align-items:center;padding:0 12px;border-bottom:1px solid var(--line);transition:transform .45s cubic-bezier(.3,.8,.2,1),background .2s;cursor:pointer;text-align:left;width:100%}
+.row{position:absolute;left:0;right:0;height:52px;background:var(--bg-2);display:grid;grid-template-columns:26px 10px minmax(0,1fr) 66px 58px;gap:8px;align-items:center;padding:0 12px;border-bottom:1px solid var(--line);transition:transform .45s cubic-bezier(.3,.8,.2,1),background .2s;cursor:pointer;text-align:left;width:100%}
 .phase{display:inline-flex;align-items:center;gap:6px}
 .phase i{width:6px;height:6px;border-radius:50%;background:var(--yellow)}
 .phase[data-p="race"] i{background:var(--live)}.phase[data-p="goal"] i,.phase[data-p="final"] i{background:var(--teal)}
@@ -75,8 +75,9 @@ a{color:inherit;text-decoration:none}
 .row .chg.up{color:#39D98A}.row .chg.dn{color:#FF5A5A}
 .pil{display:flex;align-items:center;gap:9px;min-width:0}
 .sw{width:4px;height:30px;border-radius:2px;flex:none}
-.pil .fl{width:14px;height:10px;border-radius:2px;overflow:hidden;display:inline-flex;flex:none;vertical-align:-1px;margin-right:5px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
-.pil .fl i{flex:1}
+.fl{display:inline-block;flex:none;overflow:hidden;border-radius:1px}
+.fl img{display:block;width:100%;height:100%;object-fit:cover}
+.pil .fl{width:13px;height:10px;vertical-align:-1px;margin-right:5px}
 .pil b{display:block;font:800 italic 15px/1 var(--f-display);text-transform:uppercase}
 .pil small{display:block;font:600 11px var(--f-body);color:var(--muted);margin-top:4px}
 .row .d .gl{color:var(--teal)}
@@ -103,13 +104,13 @@ a{color:inherit;text-decoration:none}
 .leg b{color:#fff;font:800 italic 14px var(--f-display);letter-spacing:0}
 .toast:empty{display:none}
 .toast{position:absolute;z-index:4;left:50%;top:16px;transform:translate(-50%,-140%);padding:10px 16px;border-radius:8px;background:var(--orange);color:#fff;font:800 italic 15px var(--f-display);text-transform:uppercase;box-shadow:0 20px 40px -12px rgba(0,0,0,.6);transition:transform .5s cubic-bezier(.3,.8,.2,1);white-space:nowrap}
-.toast.on{transform:translate(-50%,0)}
+.toast{opacity:0;visibility:hidden;transition:transform .5s cubic-bezier(.3,.8,.2,1),opacity .3s,visibility 0s .5s}
+.toast.on{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .5s cubic-bezier(.3,.8,.2,1),opacity .2s}
 
 /* telemetry card */
 .tele{position:absolute;z-index:3;right:14px;bottom:14px;width:300px;border-radius:14px;background:rgba(3,16,15,.9);backdrop-filter:blur(10px);border:1px solid var(--line-2);overflow:hidden;box-shadow:0 24px 50px -20px rgba(0,0,0,.8)}
 .tele-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
-.tele-h .fl{width:30px;height:20px;border-radius:3px;overflow:hidden;display:flex;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
-.tele-h .fl i{flex:1}
+.tele-h .fl{width:28px;height:21px}
 .tele-h b{font:800 italic 18px var(--f-display);text-transform:uppercase}
 .tele-h .p{margin-left:auto;font:800 italic 22px var(--f-display);color:var(--orange)}
 .tele-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line)}
@@ -284,6 +285,7 @@ a{color:inherit;text-decoration:none}
 .cine-bar .who{flex-direction:row;align-items:center;gap:10px;background:rgba(255,255,255,.04)}
 .cine-bar .who .pp{font:900 italic 24px var(--f-display);color:var(--orange)}
 .cine-bar .who b{font:800 italic 18px var(--f-display);text-transform:uppercase}
+.cine-bar .fl{width:24px;height:18px}
 .cine-bar .lbl{font-size:9px}
 .cine-bar .v{font:800 italic 19px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
 .cine-bar .v small{font:600 10px var(--f-body);font-style:normal;color:var(--muted);margin-left:2px}
@@ -298,11 +300,14 @@ a{color:inherit;text-decoration:none}
   .app.cine .top .t-brand{flex-basis:auto;border-bottom:0}
   .app.cine .top .t-brand p{display:none}
   .app.cine .bottom .stripwrap{display:none}
-  .app.cine .cine-board{top:128px;left:10px;width:200px}
+  .app.cine .cine-board{top:128px;left:10px;width:220px}
+  .cb-row b small{display:none}
+  .app.cine #cineBtn{display:none}
   .app.cine .t-base,.app.cine .top > div:nth-child(2){display:none!important}
   .app.cine .toast{top:auto;bottom:150px;font-size:13px}
   .cb-row{height:30px}
-  .app.cine .cine-bar{bottom:10px;left:10px;right:10px;transform:none;max-width:none;overflow-x:auto}
+  .app.cine .cine-bar{bottom:10px;left:10px;right:auto;transform:none;max-width:calc(100% - 20px);overflow:hidden}
+  .cine-bar .x{display:none!important}
   .cine-bar > div{padding:6px 10px}
   .cine-bar .v{font-size:15px}
   .app.cine .cine-exit{top:128px;bottom:auto;right:10px}
@@ -343,9 +348,9 @@ a{color:inherit;text-decoration:none}
 
   <div class="main">
     <div class="sheet" id="sheet" data-state="peek" data-tab="lb">
-    <div class="sheet-head" id="sheetHead"><span class="grip"></span><div class="tabs" role="tablist"><button role="tab" data-tab="lb" aria-selected="true">Leaderboard<span class="phase lbl" data-p="pre" id="phaseM"><i></i><span>Start</span></span></button><button role="tab" data-tab="feed" aria-selected="false">Race feed</button></div></div>
+    <div class="sheet-head" id="sheetHead"><span class="grip"></span><div class="tabs" role="tablist"><button role="tab" data-tab="lb" aria-selected="true">Leaderboard</button><button role="tab" data-tab="feed" aria-selected="false">Race feed</button></div></div>
     <aside class="side left" aria-label="Leaderboard">
-      <div class="side-h"><h2>Leaderboard</h2><span class="lbl phase" data-p="pre" id="phase"><i></i><span>Start gaggle · by height</span></span></div>
+      <div class="side-h"><h2 id="phase" data-p="pre">Start gaggle</h2></div>
       <div class="lb-cols lbl"><span>Pos</span><span></span><span>Pilot</span><span style="text-align:right" id="colV">Height</span><span style="text-align:right" id="colG">Gap</span></div>
       <div class="lb" id="lb"></div>
     </aside>
@@ -525,9 +530,8 @@ const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFC83D","#FF8A3D","#F0432B"]).c
 
 
 /* ---------- race setup (real pilots, real tracks) ---------- */
-const FLAGS = {HUN:["#CE2939","#FFFFFF","#477050"], MEX:["#006847","#FFFFFF","#CE1126"], USA:["#B22234","#FFFFFF","#3C3B6E"], BRA:["#009C3B","#FFDF00","#002776"],
-  DEU:["#000000","#DD0000","#FFCE00"], ARG:["#74ACDF","#FFFFFF","#74ACDF"], LTU:["#FDB913","#006A44","#C1272D"], GBR:["#012169","#FFFFFF","#C8102E"],
-  ESP:["#AA151B","#F1BF00","#AA151B"], CHE:["#D52B1E","#FFFFFF","#D52B1E"], KAZ:["#00AFCA","#FEC50C","#00AFCA"], CAN:["#D80621","#FFFFFF","#D80621"]};
+/* real flags (flag-icons, 4:3 SVG via jsDelivr), keyed by the IOC/ISO3 code Airtribune gives */
+const ISO2 = {HUN:"hu", MEX:"mx", USA:"us", BRA:"br", DEU:"de", ARG:"ar", LTU:"lt", GBR:"gb", ESP:"es", CHE:"ch", KAZ:"kz", CAN:"ca", FRA:"fr", ITA:"it", SVN:"si", AUT:"at", COL:"co", POL:"pl", CZE:"cz", JPN:"jp"};
 const COLS = ["#1DA9E1","#FFC906","#2BD4C4","#FF4D4D","#9B7BFF","#00B87A","#FF6FAE","#8FB3C9","#9BE15D","#4F6BFF",
   "#FF9A3C","#E8EEF0","#C77DFF","#5EEAD4","#F472B6","#A3E635","#60A5FA","#FCA5A5","#FDE68A","#94A3B8"];
 const SEED = 6*97 + 13;                          // seed for the stylised relief only
@@ -536,7 +540,7 @@ const GOAL_ELEV = T3.tps.at(-1)[6];
 const START_CLOCK = (+T3.ev.gate.slice(0,2))*3600 + (+T3.ev.gate.slice(3,5))*60;   // start gate 12:15 local (UTC-6)
 const fmtT = s => { s = Math.round(s); const n = s < 0, a = Math.abs(s); return `${n ? "−" : "+"}${a/3600|0}:${String((a/60|0)%60).padStart(2,"0")}:${String(a%60).padStart(2,"0")}`; };
 const fmtClock = s => { s = (START_CLOCK + s)|0; return `${String((s/3600|0)%24).padStart(2,"0")}:${String((s/60|0)%60).padStart(2,"0")}`; };
-const flagHTML = f => f.map(c => `<i style="background:${c}"></i>`).join("");
+const flagHTML = c => ISO2[c] ? `<img src="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/flags/4x3/${ISO2[c]}.svg" alt="" decoding="async">` : "";
 const tpName = k => k === 1 ? "SSS" : k === BASE_TASK.route.length-1 ? "Goal" : BASE_TASK.cyl[k-1].name;
 $("#tTitle").textContent = `SRS ${T3.ev.place} 2026`;
 $("#tSub").textContent = `Task 3 · ${T3.ev.dist.toFixed(1)} km race to goal · ${T3.ev.date.replace(/^\w+ /,"")}`;
@@ -547,7 +551,7 @@ if (T3.wind){ const dirs = ["N","NE","E","SE","S","SW","W","NW"];
   $("#windArrow").setAttribute("transform", `rotate(${(T3.wind.from_deg + 180) % 360} 20 20)`); }
 
 const PILOTS = T3.pilots.map((pd,k) => ({k, no: pd.id, name: pd.n, sur: pd.n.split(" ").filter(w => w === w.toUpperCase() && /\p{L}/u.test(w)).join(" ") || pd.n,
-  nat: {c: pd.c, f: FLAGS[pd.c] || ["#6E8A8D","#B7C9CB","#6E8A8D"]}, col: COLS[k % COLS.length], wing: pd.gl.split("/")[0],
+  nat: {c: pd.c}, col: COLS[k % COLS.length], wing: pd.gl.split("/")[0],
   rank: pd.rk, time: pd.tm, score: pd.sc, tg: pd.tg, pts: decodeTrack(pd)}));
 
 /* ---------- race analysis (computed once from the real tracks) ----------
@@ -644,25 +648,16 @@ const EVENTS = (() => {
 /* race stage at time T: before the gate / racing / pilots arriving in goal / all in, official result */
 const phaseAt = T => T < 0 ? "pre" : PILOTS.every(P => P.goalT <= T) ? "final" : PILOTS.some(P => P.goalT <= T) ? "goal" : "race";
 const PHASE = {
-  pre:   {head:"Start gaggle · by height", m:"Before start", v:"Height", g:"Gap", chip:"Highest"},
-  race:  {head:"Racing · distance flown", m:"Racing", v:"Flown", g:"Gap", chip:"Leader"},
-  goal:  {head:"Arrivals · goal order", m:"Arrivals", v:"Flown", g:"Gap", chip:"First in goal"},
-  final: {head:"Official result · by score", m:"Result", v:"Score", g:"Time", chip:"Day winner"}};
+  pre:   {head:"Start gaggle", m:"Before start", v:"Height", g:"Gap", chip:"Highest"},
+  race:  {head:"Race", m:"Racing", v:"Flown", g:"Gap", chip:"Leader"},
+  goal:  {head:"Goal order", m:"Arrivals", v:"Flown", g:"Gap", chip:"First in goal"},
+  final: {head:"Result", m:"Result", v:"Score", g:"Time", chip:"Day winner"}};
 const OFFICIAL = PILOTS.slice().sort((a,b) => a.rank - b.rank);
 function rankAt(T, phase){
   if (phase === "pre") return PILOTS.slice().sort((a,b) => b._alt - a._alt);
   if (phase === "final") return OFFICIAL.slice();
   return PILOTS.slice().sort((a,b) => { const ad = a.goalT <= T, bd = b.goalT <= T;
     if (ad && bd) return a.goalT - b.goalT; if (ad !== bd) return ad ? -1 : 1; return b._prog - a._prog; });
-}
-// steady ordering between refreshes: a pilot only passes another when clearly ahead (15 m higher / 50 m further)
-const ahead = (phase, T) => phase === "pre" ? (a,b) => a._alt > b._alt + 15 : phase === "final" ? () => false : (a,b) => {
-  const ad = a.goalT <= T, bd = b.goalT <= T; if (ad || bd) return ad && (!bd || a.goalT < b.goalT); return a._prog > b._prog + .05; };
-function settle(prev, better){
-  const o = prev.slice();
-  for (let pass = 0, sw = true; sw && pass < N; pass++){ sw = false;
-    for (let i = 0; i < o.length-1; i++) if (better(o[i+1], o[i])){ [o[i], o[i+1]] = [o[i+1], o[i]]; sw = true; } }
-  return o;
 }
 // leaderboard value + gap cell for pilot P at position i
 function cells(P, i, order, phase, T){
@@ -692,8 +687,12 @@ function build(){
   world.append("path").attr("d", d3.line()(task.route.map(f))).attr("fill","none").attr("stroke","rgba(43,212,196,.5)").attr("stroke-dasharray","4 4").attr("stroke-width",1.2);
   const trails = world.append("g");
   const screen = svg.append("g");
-  const tpLabels = task.route.slice(1).map((p,k,a) => ({p: f(p), name: tpName(k+1), flip: a[k+1] && dist(p, a[k+1]) < 3}));
-  const tpL = screen.append("g").selectAll("text").data(tpLabels).join("text").attr("class","tp-lab").attr("text-anchor", d => d.flip ? "end" : null).text(d => d.name);
+  // one label per place: a turnpoint within 3 km of the next one shares its label ("Amacueca · Goal")
+  const tpLabels = [];
+  task.route.slice(1).forEach((p,k,a) => { const prev = tpLabels.at(-1);
+    if (prev && dist(a[k-1], p) < 3) prev.name += " · " + tpName(k+1); else tpLabels.push({p: f(p), name: tpName(k+1)}); });
+  tpLabels.forEach(d => d.w = d.name.length*6.6 + 6);
+  const tpL = screen.append("g").selectAll("text").data(tpLabels).join("text").attr("class","tp-lab").text(d => d.name);
   const launch = f([0,0]);
   const launchEl = screen.append("path").attr("fill","#FFC906").attr("stroke","#03100F").attr("stroke-width",1.4);
   const dots = screen.append("g"), bubL = screen.append("g"), tags = screen.append("g");
@@ -737,7 +736,7 @@ function buildBoard(){
   const lb = $("#lb"); lb.style.height = (PILOTS.length*ROW_H) + "px";
   lb.innerHTML = M.pilots.map(pl => `<button class="row" data-k="${pl.k}" title="${pl.name} · ${pl.nat.c} · ${pl.wing}" style="transform:translateY(${pl.k*ROW_H}px)">
     <span class="pos">${pl.k+1}</span><span class="chg"></span>
-    <span class="pil"><span class="sw" style="background:${pl.col}"></span><span><b>${pl.short}</b><small><span class="fl">${flagHTML(pl.nat.f)}</span>${pl.nat.c} · ${pl.wing}</small></span></span>
+    <span class="pil"><span class="sw" style="background:${pl.col}"></span><span><b>${pl.short}</b><small><span class="fl">${flagHTML(pl.nat.c)}</span>${pl.nat.c} · ${pl.wing}</small></span></span>
     <span class="d">0</span><span class="g">—</span></button>`).join("");
   M.rows = [...lb.querySelectorAll(".row")];
   M.rows.forEach(r => r.addEventListener("click", () => select(+r.dataset.k, true)));
@@ -776,7 +775,7 @@ function buildTimeline(){
   M.marks = marks; M.markEls = [...box.querySelectorAll(".tlm")];
   M.markEls.forEach(b => b.onclick = () => { const e = marks[+b.dataset.i]; jump(e.t - (e.mark === "gate" ? 30 : 20)); if (e.k !== undefined) select(e.k, true); });
 }
-function jump(t){ st.frac = Math.max(0, Math.min(1, fracOf(t))); M.lastT = null; frame(true); }
+function jump(t){ clearToast(); st.frac = Math.max(0, Math.min(1, fracOf(t))); M.lastT = null; frame(true); }
 
 /* ---------- selection, camera, toast ---------- */
 function select(k, manual){
@@ -787,6 +786,7 @@ function select(k, manual){
 function setCam(c){ st.cam = c; if (c !== "free") st.view.zoom = 1; document.querySelectorAll("[data-cam]").forEach(b => b.setAttribute("aria-pressed", b.dataset.cam === c)); }
 let toastTimer;
 function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 2600); }
+function clearToast(){ clearTimeout(toastTimer); $("#toast").classList.remove("on"); }
 
 /* ---------- frame ---------- */
 function interp(pl, T){
@@ -806,7 +806,8 @@ function frame(force){
 
   // one ranking snapshot, refreshed with the board, used everywhere (board, map tags, chip, strip, broadcast)
   const now = performance.now(), ui = force || now - (M.uiAt||0) > 2000 || phase !== M.phase;
-  if (ui){ M.uiAt = now; M.order = force || phase !== M.phase ? rankAt(T, phase) : settle(M.order, ahead(phase, T)); }
+  // strict order from this snapshot (every 2 s), so the board never contradicts its own gaps; tags and "highest" use the same values
+  if (ui){ M.uiAt = now; M.order = rankAt(T, phase); M.pilots.forEach(pl => pl.sAlt = pl._alt); M.hi = d3.max(M.pilots, p => p.done ? 0 : p._alt); }
   const order = M.order, lead = order[0];
   if (st.sel === null || (st.cine && st.cineAuto && st.sel !== lead.k)) select(lead.k, false);
 
@@ -828,7 +829,10 @@ function frame(force){
   const scr = p => { const dx = (p[0]-c.fx)*c.s, dy = (p[1]-c.fy)*c.s; return [cx + dx*co - dy*si, cy + dx*si + dy*co]; };
   M.scrInv = (sx, sy) => { const dx = sx - cx, dy = sy - cy; return [c.fx + (dx*co + dy*si)/c.s, c.fy + (-dx*si + dy*co)/c.s]; };
   const needle = document.getElementById("compassN"); if (needle) needle.style.transform = `rotate(${c.r}deg)`;
-  M.tpL.attr("x", d => scr(d.p)[0] + 10).attr("y", d => scr(d.p)[1] - 8);
+  // waypoint labels stay inside the view and are obstacles for the pilot tags below
+  const tpRects = [];
+  M.tpL.each(function(d){ const q = scr(d.p), x = Math.max(6, Math.min(M.W - d.w - 6, q[0] + 10)), y = Math.max(16, q[1] - 8);
+    this.setAttribute("x", x); this.setAttribute("y", y); tpRects.push([x - 2, y - 12, x + d.w, y + 4]); });
   const L = scr(M.launch), ls = 7; M.launchEl.attr("d", `M${L[0]},${L[1]-ls} L${L[0]+ls*.9},${L[1]+ls*.6} L${L[0]-ls*.9},${L[1]+ls*.6}Z`);
 
   // pilots: trails + screen positions
@@ -844,7 +848,7 @@ function frame(force){
   order.forEach(pl => { if (used.has(pl.k) || pl.k === st.sel || pl.done) return;
     const mem = order.filter(q => !used.has(q.k) && q.k !== st.sel && !q.done && Math.hypot(q.sx - pl.sx, q.sy - pl.sy) < 22);
     if (mem.length >= 3){ mem.forEach(q => used.add(q.k)); clusters.push(mem); } });
-  const tagText = (pl, p) => phase === "pre" ? `${pl.short} ${fmtAlt(pl._alt)} m` : `P${p+1} ${pl.short}`;
+  const tagText = (pl, p) => phase === "pre" ? `${pl.short} ${fmtAlt(pl.sAlt)} m` : `P${p+1} ${pl.short}`;
   const labels = [];   // [tag, anchorX, anchorY, radius, priority]
   M.pilots.forEach(pl => {
     const isSel = pl.k === st.sel, isLead = pl === lead, inC = used.has(pl.k), p = posOf.get(pl.k);
@@ -862,12 +866,12 @@ function frame(force){
     b.g.attr("display", null).attr("transform", `translate(${x},${y})`);
     b.c.attr("r", r).attr("stroke", best === lead ? "#FF5F00" : "rgba(255,255,255,.85)");
     b.n.text(mem.length);
-    b.tag.set(phase === "pre" ? `Gaggle ${mem.length} · top ${fmtAlt(best._alt)} m` : `P${p+1} ${best.short} +${mem.length-1}`, best === lead ? "#FF5F00" : "rgba(3,16,15,.88)");
+    b.tag.set(phase === "pre" ? `Gaggle ${mem.length} · top ${fmtAlt(best.sAlt)} m` : `P${p+1} ${best.short} +${mem.length-1}`, best === lead ? "#FF5F00" : "rgba(3,16,15,.88)");
     labels.push([b.tag, x, y, r + 2, p - .5]);
   });
   // label placement: try four spots round each anchor, skip a label that would overlap one already placed
   labels.sort((a,b) => a[4] - b[4]);
-  const placed = [];
+  const placed = tpRects.slice();
   labels.forEach(([tag, x, y, r, pr]) => {
     const w = tag.w, spots = [[r-2, -r-14], [-w-r+2, -r-14], [r-2, r-2], [-w-r+2, r-2]];
     let ok = null;
@@ -890,20 +894,24 @@ function frame(force){
   else { $("#tLegL").textContent = "In goal"; $("#tLeg").textContent = `${inGoal} of ${N}`; }
   $("#sGoal").textContent = inGoal; $("#sAir").textContent = M.pilots.length - inGoal;
   $("#ovLead").textContent = lead.short; $("#ovLeadL").textContent = PHASE[phase].chip;
-  const hi = d3.max(M.pilots, p => p.done ? 0 : p.now.alt); $("#tBase").textContent = hi ? `${fmtAlt(hi)} m` : "—";
+  $("#tBase").textContent = M.hi ? `${fmtAlt(M.hi)} m` : "—";
   $("#scrub").value = Math.round(st.frac*1000);
 
   // slower UI: board, feed, telemetry
   if (ui){
     if (phase !== M.phase){ M.phase = phase; const P = PHASE[phase];
-      ["#phase", "#phaseM"].forEach(s => { const el = $(s); el.dataset.p = phase; el.lastChild.textContent = s === "#phase" ? P.head : P.m; });
+      const ph = $("#phase"); ph.dataset.p = phase; ph.textContent = P.head;
       $("#colV").textContent = P.v; $("#colG").textContent = P.g; }
-    order.forEach((pl,i) => { const r = M.rows[pl.k], prev = M.prevPos[pl.k];
+    let nMoved = 0;
+    order.forEach((pl,i) => { const r = M.rows[pl.k], prev = M.prevPos[pl.k], moved = prev !== undefined && prev !== i;
+      r.style.transition = force ? "none" : "";
+      r.style.transitionDelay = moved && !force ? `${Math.min(nMoved++, 6)*60}ms` : "0ms";
+      r.style.zIndex = moved ? (prev > i ? 3 : 2) : 1;
       r.style.transform = `translateY(${i*ROW_H}px)`; r.classList.toggle("p1", i===0); r.classList.toggle("goal", pl.done);
       r.querySelector(".pos").textContent = i+1;
       const ch = r.querySelector(".chg");
-      if (prev !== undefined && prev !== i && M.prevPhase === phase){ ch.textContent = prev > i ? "▲" : "▼"; ch.className = "chg " + (prev > i ? "up" : "dn"); pl.chgAt = now; }
-      else if (!pl.chgAt || now - pl.chgAt > 4000){ ch.textContent = ""; ch.className = "chg"; }
+      if (moved && !force && M.prevPhase === phase){ ch.textContent = prev > i ? "▲" : "▼"; ch.className = "chg " + (prev > i ? "up" : "dn"); pl.chgAt = now; }
+      else if (force || !pl.chgAt || now - pl.chgAt > 4000){ ch.textContent = ""; ch.className = "chg"; if (force) pl.chgAt = 0; }
       M.prevPos[pl.k] = i;
       const cl = cells(pl, i, order, phase, T);
       r.querySelector(".d").innerHTML = cl.v; r.querySelector(".g").textContent = cl.g;
@@ -917,7 +925,7 @@ function frame(force){
     }
     M.markEls.forEach((b,i) => b.classList.toggle("past", M.marks[i].t <= T));
     const s = M.pilots[st.sel], sp = posOf.get(s.k), n = s.now;
-    $("#teFlag").innerHTML = flagHTML(s.nat.f); $("#teName").textContent = `${s.short} · ${s.nat.c}`; $("#tePos").textContent = `P${sp+1}`;
+    $("#teFlag").innerHTML = flagHTML(s.nat.c); $("#teName").textContent = `${s.short} · ${s.nat.c}`; $("#tePos").textContent = `P${sp+1}`;
     $("#teAlt").innerHTML = `${fmtAlt(n.alt)}<small>m</small>`;
     const v = s.done ? 0 : n.v; $("#teVar").innerHTML = `${v>=0?"+":""}${v.toFixed(1)}<small>m/s</small>`;
     const vb = $("#teVarBar"), w = Math.min(50, Math.abs(v)/4*50); vb.style.width = w + "%"; vb.style.left = v >= 0 ? "50%" : (50-w) + "%"; vb.style.background = v >= 0 ? "#FF5F00" : "#2BD4C4";
@@ -931,11 +939,11 @@ function frame(force){
       $("#cineBoard").innerHTML = order.slice(0,5).map((pl,i) => { const cl = cells(pl, i, order, phase, T);
         return `<div class="cb-row"><span class="p">${i+1}</span><span class="c" style="background:${pl.col}"></span><b>${pl.short}<small>${pl.nat.c}</small></b><span class="g">${i===0 ? cl.v.replace(/<[^>]+>/g," ").trim() : cl.g}</span></div>`; }).join("");
       const vv = s.done ? 0 : n.v;
-      $("#cineBar").innerHTML = `<div class="who"><span class="pp">P${sp+1}</span><span class="fl" style="width:28px;height:18px;border-radius:3px;overflow:hidden;display:flex">${flagHTML(s.nat.f)}</span><b>${s.short}</b></div>`
+      $("#cineBar").innerHTML = `<div class="who"><span class="pp">P${sp+1}</span><span class="fl">${flagHTML(s.nat.c)}</span><b>${s.short}</b></div>`
         + `<div><span class="lbl">Altitude</span><span class="v">${fmtAlt(n.alt)}<small>m</small></span></div>`
         + `<div><span class="lbl">Vario</span><span class="v ${vv>=0?"up":"dn"}">${vv>=0?"+":""}${vv.toFixed(1)}<small>m/s</small></span></div>`
-        + `<div><span class="lbl">Speed</span><span class="v">${s.done?0:Math.round(n.gs)}<small>km/h</small></span></div>`
-        + `<div><span class="lbl">To goal</span><span class="v">${s.done ? "GOAL" : s.rem.toFixed(1)}${s.done?"":"<small>km</small>"}</span></div>`;
+        + `<div class="x"><span class="lbl">Speed</span><span class="v">${s.done?0:Math.round(n.gs)}<small>km/h</small></span></div>`
+        + `<div class="x"><span class="lbl">To goal</span><span class="v">${s.done ? "GOAL" : s.rem.toFixed(1)}${s.done?"":"<small>km</small>"}</span></div>`;
     }
     // barogram
     const bsv = d3.select("#baro"), bw = Math.round($("#baro").getBoundingClientRect().width) || 300, bh = 54;
@@ -966,12 +974,14 @@ playBtn.onclick = () => { if (st.frac >= 1){ st.frac = 0; M.lastT = null; } setP
 document.querySelectorAll("[data-sp]").forEach(b => b.onclick = () => { st.speed = +b.dataset.sp; document.querySelectorAll("[data-sp]").forEach(x => x.setAttribute("aria-pressed", x===b)); });
 document.querySelectorAll("[data-cam]").forEach(b => b.onclick = () => setCam(b.dataset.cam));
 document.querySelectorAll("[data-tilt]").forEach(b => b.onclick = () => st.view.setTilt(b.dataset.tilt === "1" ? 42 : 0));
-$("#scrub").oninput = e => { st.frac = e.target.value/1000; M.lastT = null; frame(true); };
+$("#scrub").oninput = e => { clearToast(); st.frac = e.target.value/1000; M.lastT = null; frame(true); };
 addEventListener("keydown", e => { if (e.key === " " && e.target === document.body){ e.preventDefault(); playBtn.click(); } });
+// a pointer click must not leave focus on a button or slider, or B / Space / arrows stop reaching the page
+addEventListener("pointerup", e => { const c = e.target.closest && e.target.closest("button, input[type=range], [role=tab]"); if (c) setTimeout(() => c.blur(), 0); }, true);
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const sel = st.sel; build(); select(sel, false); frame(true); }, 200); });
 
 function setCine(on){
-  st.cine = on; st.cineAuto = true;
+  clearToast(); st.cine = on; st.cineAuto = true;
   document.querySelector(".app").classList.toggle("cine", on);
   $("#cineBtn").setAttribute("aria-pressed", on);
   if (on){ st.tiltBefore = st.view.tiltT; st.view.setTilt(42); } else if (st.tiltBefore != null) st.view.setTilt(st.tiltBefore);
@@ -1150,7 +1160,7 @@ build(); frame(true);
 
 /* ---------- phone: leaderboard / feed as a bottom sheet (drag or tap the handle) ---------- */
 (function(){
-  const sh = $("#sheet"), head = $("#sheetHead"), PEEK = 150, states = ["peek","half","full"];
+  const sh = $("#sheet"), head = $("#sheetHead"), PEEK = 196, states = ["peek","half","full"];
   sh.style.setProperty("--peek", PEEK + "px");
   const offset = (s, h) => s === "full" ? 0 : s === "half" ? h*.45 : h - PEEK;
   let y0 = null, base = 0, h = 0, moved = false, cur = 0;

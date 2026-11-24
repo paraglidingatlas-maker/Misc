@@ -75,9 +75,9 @@ onsite = ('<div class="tb-h"><span class="eyebrow">On site</span><span>As listed
 
 # ---------- Getting there ----------
 travel = ('<div class="tb-h"><span class="eyebrow">Fly in</span><span>Distance to Panchgani</span></div><ol class="board2">'
-          '<li class="jr"><span class="code" aria-hidden="true">PNQ</span><span class="city">Pune<small>International · 2.5–3 h by road</small></span>'
+          '<li class="jr"><span class="code" aria-hidden="true">PNQ</span><span class="city">Pune<small>International · 2.5–3&nbsp;h by road</small></span>'
           '<span class="track"><i data-w="47%"></i></span><span class="val">120<small>km</small></span></li>'
-          '<li class="jr"><span class="code" aria-hidden="true">BOM</span><span class="city">Mumbai<small>Chhatrapati Shivaji Maharaj · ~6 h</small></span>'
+          '<li class="jr"><span class="code" aria-hidden="true">BOM</span><span class="city">Mumbai<small>Chhatrapati Shivaji Maharaj · ~6&nbsp;h</small></span>'
           '<span class="track"><i data-w="100%"></i></span><span class="val">255<small>km</small></span></li></ol>'
           + board([("Taxi", "Ola · Uber", "Ola Outstation or Uber Intercity from either airport; about €30 from Pune, €60 from Mumbai for two with gliders"),
                    ("By train", "Pune", "About 3.5 h from Mumbai, then bus or taxi for the last 120 km"),
@@ -146,7 +146,7 @@ rep = {
   "HERO": "pink-forest", "HEROPOS": "50% 45%", "PHOTO2": "gin-field",
   "ROUNDLABEL": "British Paragliding Open · 8th edition", "STATUS": "Confirmed", "STATUSCLS": "ok",
   "VENUE": "Panchgani", "COUNTRY": "India", "DATES": "23 Feb – 2 Mar 2027", "EVNAME": "8th British Winter Open", "TASKS": "7",
-  "BAND": "".join(f"<div><b>{esc(v)}</b><span>{esc(l)}</span></div>" for v, l in BAND),
+  "BANDN": str(len(BAND)), "BAND": "".join(f"<div><b>{esc(v)}</b><span>{esc(l)}</span></div>" for v, l in BAND),
   "VENUEHEAD": "Winter racing in the Sahyadri",
   "BLURB": "Keep your race form through the northern winter: a week of tasks over India's Table Land, straight after the PWC at the same venue.",
   "STORY": "".join(f"<p>{esc(x)}</p>" for x in STORY),

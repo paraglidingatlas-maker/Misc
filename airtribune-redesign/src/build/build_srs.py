@@ -149,14 +149,32 @@ def short_incl(x):
     for k,v in SHORT_INCL.items():
         if x.startswith(k): return v
     return x
-def short_req(reqs):
-    out=[]; ippi=None
+REQ_SHORT = [(r"An FAI IPPI (\d)", lambda m: f"FAI IPPI {m.group(1)}"), (r"An FAI Sporting", "FAI Sporting Licence"),
+  (r"Medical", "Medical & travel insurance"), (r"Third party", "Third-party liability"), (r"A mobile phone", "Mobile phone"),
+  (r"A paraglider certified", None), (r"Recently repacked", "Repacked reserve"), (r"Helmet", "Certified helmet"),
+  (r"Harness", "Harness with back protection"), (r"2M Radio", "2 m radio · 143.900 MHz"), (r"Compliance with all SRS", "SRS rules")]
+def short_req(reqs, glider):
+    """You-bring list from the round's own REQUIRED list; the glider line follows the official class rule (summary page)."""
+    out = []
     for r in reqs:
-        m=re.search(r"IPPI (\d)", r)
-        if m and "licence" in r.lower() and "Sporting" not in r: ippi=m.group(1); continue
-    if ippi: out.append(f"FAI IPPI {ippi}")
-    out += ["FAI Sporting Licence","Medical & travel insurance","Third-party liability","Mobile phone","EN-C or below","Repacked reserve","Certified helmet","Harness with back protection","2 m radio · 143.900 MHz"]
+        for pat, v in REQ_SHORT:
+            m = re.match(pat, r)
+            if not m: continue
+            if v is None: v = f"Glider: {glider[0]}" if glider else None
+            elif callable(v): v = v(m)
+            if v and v not in out: out.append(v)
+            break
     return out
+def glider_class(t):
+    """Allowed / not-allowed wing classes from the ✅ / ❌ lines above 'FAI Status' on the summary page; None if unspecified."""
+    seg = t[:t.find("FAI Status")]
+    ok = re.findall(r"✅\s*(.+)", seg); no = re.findall(r"❌\s*(.+)", seg)
+    if not ok and not no: return None
+    a = re.sub(r"\s*allowed$", "", ok[-1].strip()).replace(" & ", " and ") if ok else ""
+    n = re.sub(r"\s*(wings\s*)?prohibited$", "", no[-1].strip()) if no else ""
+    parts = [x.strip() for x in n.split("&") if x.strip()]
+    n = ("No " + (", ".join(parts[:-1]) + " or " + parts[-1] if len(parts) > 1 else parts[0]) + " wings") if parts else ""
+    return (a, n)
 
 
 TRAVEL2 = {
@@ -198,8 +216,8 @@ def words(items, cls=""):
     out=[]
     for x,neg in items:
         out.append(f'<span class="w no">{esc(x)}</span>' if neg else f'<span class="w">{esc(x)}</span>')
-    return f'<p class="words">' + '<i>/</i>'.join(out) + '</p>'
-def entry_block(e, nums, incl, reqs, det):
+    return f'<p class="words">' + '&nbsp;<i>/</i> '.join(out) + '</p>'
+def entry_block(e, nums, incl, reqs, det, glider):
     sel = "Selection by WPRS on Sports wings" if "WPRS" in det else "Selection by the organisers"
     figs = [("Entry fee", f"€{nums['fee']}", "Per pilot, by PayPal once accepted"),
             ("Membership", "€45", "Per season, covers every SRS round"),
@@ -207,13 +225,14 @@ def entry_block(e, nums, incl, reqs, det):
             ("Refund window", "45 days", "Cancel before for a full refund less €60")]
     h = f'<div class="tb-h"><span class="eyebrow">Entry</span><span>{esc(e["evname"])}</span></div>'
     h += '<div class="ground figs4">' + "".join(f'<div class="gs"><span class="k">{k}</span><span class="big">{esc(v)}</span><span class="sm">{esc(sm)}</span></div>' for k,v,sm in figs) + '</div>'
-    inc = [short_incl(x) for x in incl]; need = short_req(reqs)
+    inc = [short_incl(x) for x in incl]; need = short_req(reqs, glider)
     h += '<div class="runs">'
     h += f'<div class="run"><div class="run-h"><span class="k">Included</span><span class="n">{len(inc)}</span></div>{words([(x,False) for x in inc])}</div>'
-    needw = '<p class="words">' + '<i>/</i>'.join((f'<b class="w">{esc(x)}</b>' if x.startswith("FAI") or x=="EN-C or below" else f'<span class="w">{esc(x)}</span>') for x in need) + '</p>'
+    needw = '<p class="words">' + '&nbsp;<i>/</i> '.join((f'<b class="w">{esc(x)}</b>' if x.startswith(("FAI","Glider")) else f'<span class="w">{esc(x)}</span>') for x in need) + '</p>'
     h += f'<div class="run need"><div class="run-h"><span class="k">You bring</span><span class="n">{len(need)}</span></div>{needw}</div>'
     h += '</div>'
-    h += f'<p class="tnote"><b>Sports class</b><span>EN-C and below, including 2-liner Cs. No CCC or EN-D.</span><a class="btn btn-o" href="https://airtribune.com/{e["at"]}/">Register on Airtribune</a></p>'
+    rule = f'<b>Glider class</b><span>{esc(glider[0][0].upper() + glider[0][1:])}{". " + esc(glider[1]) if glider[1] else ""}.</span>' if glider else ""
+    h += f'<p class="tnote">{rule}<a class="btn btn-o" href="https://airtribune.com/{e["at"]}/">Register on Airtribune</a></p>'
     return h
 def onsite_block(e, feats):
     h = f'<div class="tb-h"><span class="eyebrow">On site</span><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0">'
@@ -283,9 +302,14 @@ for e in EVENTS:
     trav = travel(det)
     e["dates"] = fmt_dates(e)
 
-    band = [(nums["fee"] and f"€{nums['fee']}", "Entry fee"), (e["tasks"], "Racing tasks"), (nums["max"], "Max pilots"),
-            (nums["registered"] or "Soon", "Registered" if nums["registered"] else "Entries open"), (nums["countries"] or "—", "Countries"), ("CAT 2", "FAI status")]
-    band_html = "".join(f"<div><b>{esc(str(v if v is not None else '—'))}</b><span>{l}</span></div>" for v,l in band)
+    glider = glider_class(summ)
+    # only facts that exist: no 'Soon' or '—' cells; confirmed vs registered said plainly
+    reg = ([(nums["confirmed"], f"Confirmed · {nums['registered']} registered")] if nums["confirmed"] else
+           [(nums["registered"], "Registered · none confirmed yet")] if nums["registered"] else [])
+    band = [(nums["fee"] and f"€{nums['fee']}", "Entry fee"), (e["tasks"], "Racing tasks"), (nums["max"], "Places")] + reg + \
+           ([(nums["countries"], "Countries")] if nums["countries"] else []) + [("CAT 2", "FAI status")]
+    band = [(v,l) for v,l in band if v]
+    band_html = "".join(f"<div><b>{esc(str(v))}</b><span>{l}</span></div>" for v,l in band)
 
     # event days
     a = dt.date.fromisoformat(e["start"]); b = dt.date.fromisoformat(e["end"]); n = (b-a).days + 1
@@ -333,15 +357,15 @@ for e in EVENTS:
       "HERO": e["hero"], "HEROPOS": e["heropos"], "PHOTO2": e["photo2"],
       "ROUNDLABEL": esc(e["label"]), "STATUS": e["status"], "STATUSCLS": "wsf" if e.get("wsf") else ("ok" if e["status"]=="Confirmed" else "prov"),
       "VENUE": esc(e["venue"]), "COUNTRY": esc(e["country"]), "DATES": e["dates"], "EVNAME": esc(e["evname"]), "TASKS": str(e["tasks"]),
-      "BAND": band_html, "VENUEHEAD": esc(e["venuehead"]), "BLURB": esc(e["blurb"]),
+      "BAND": band_html, "BANDN": str(len(band)), "VENUEHEAD": esc(e["venuehead"]), "BLURB": esc(e["blurb"]),
       "INTRO": "".join(f"<p>{p}</p>" for p in e["intro"]),
       "BULLETS": "".join(f'<span class="feat"><i></i>{esc(b)}</span>' for b in e["bullets"]),
       "SITEHEAD": esc(e["sitehead"]), "SITETILES": "".join(f'<div><span class="eyebrow">{esc(k)}</span><b>{esc(v)}</b></div>' for k,v in e["tiles"]),
       "SITE": "".join(f"<p>{esc(p)}</p>" for p in e["site"]), "CALLOUT": callout,
       "DAYS": "".join(days), "SCHED": sched, "FEE": str(nums["fee"]),
-      "INCLUDED": "".join(f"<span>{esc(short_incl(x))}</span>" for x in incl), "REQUIRED": "".join(f"<span>{esc(x)}</span>" for x in short_req(req)),
-      "FEATURES": onsite_block(e, feats), "ENTRY": entry_block(e, nums, incl, req, det), "PLACE": esc(e["place"]), "CARD1": cc["cards"][0], "CARD2": cc["cards"][1], "CARD3": cc["cards"][2],
-      "RACELINE": f"{e['tasks']} racing tasks · €{nums['fee']} entry · {nums['max']} pilots max.", "TRIPLINE": esc(cc["trip"]),
+      "INCLUDED": "".join(f"<span>{esc(short_incl(x))}</span>" for x in incl), "REQUIRED": "".join(f"<span>{esc(x)}</span>" for x in short_req(req, glider)),
+      "FEATURES": onsite_block(e, feats), "ENTRY": entry_block(e, nums, incl, req, det, glider), "PLACE": esc(e["place"]), "CARD1": cc["cards"][0], "CARD2": cc["cards"][1], "CARD3": cc["cards"][2],
+      "RACELINE": f"{e['tasks']} racing tasks · €{nums['fee']} entry · {nums['max']} places.", "TRIPLINE": esc(cc["trip"]),
       "STORY": "".join(f"<p>{esc(x)}</p>" for x in cc["story"]),
       "SCHEDULE": "".join(f"<li><b>{esc(a)}</b><span>{esc(b)}</span></li>" for a,b in cc["sched"]),
       "SITESHORT": esc(cc["siteshort"]), "PRIZES": prizes, "TRAVEL": trav_html, "RAIL": rail,

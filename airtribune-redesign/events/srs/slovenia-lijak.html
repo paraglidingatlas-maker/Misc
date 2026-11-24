@@ -82,7 +82,7 @@ p{margin:0}
 
 /* fact band */
 .band{background:var(--deep);border-block:1px solid var(--line)}
-.band .wrap{display:grid;grid-template-columns:repeat(6,1fr)}
+.band .wrap{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
 .band div{padding:22px 10px;text-align:center;border-right:1px solid var(--line)}
 .band div:last-child{border-right:0}
 .band b{display:block;font:800 italic 30px/1 var(--f-display);font-variant-numeric:tabular-nums}
@@ -182,9 +182,12 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 
 @media (max-width:1000px){
   .two,.lists{grid-template-columns:minmax(0,1fr)}
-  .band .wrap{grid-template-columns:repeat(3,1fr)}
+  .band .wrap{grid-auto-flow:row;grid-template-columns:repeat(3,1fr)}
+  .band .wrap.n4{grid-template-columns:repeat(4,1fr)}
   .band div:nth-child(3){border-right:0}
   .band div:nth-child(-n+3){border-bottom:1px solid var(--line)}
+  .band .wrap.n4 div:nth-child(n){border-bottom:0;border-right:1px solid var(--line)}
+  .band .wrap.n4 div:last-child{border-right:0}
   .prizes{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rail{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
   .nav nav{display:none}
@@ -193,8 +196,8 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 @media (max-width:640px){
   .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
   .nav .srsb{display:none}
-  .band .wrap{grid-template-columns:repeat(2,1fr)}
-  .band div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)}
+  .band .wrap,.band .wrap.n4{grid-template-columns:repeat(2,1fr)}
+  .band div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
   .band div:nth-child(2n){border-right:0!important}
   .terms{grid-template-columns:minmax(0,1fr)}
   .cdbar > div{border-right:0;margin-right:0;padding-right:0;width:100%}
@@ -202,7 +205,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .credit{left:16px;right:auto;bottom:8px}
   .taskbox svg{height:260px}
   .prize{padding:18px;min-height:120px}
-  .prize b{font-size:19px;overflow-wrap:anywhere}
+  .prize b{font-size:clamp(15px,4.3vw,19px);overflow-wrap:normal;hyphens:manual}
 }
 
 /* ---------- glass system: translucent, hazy surfaces instead of solid fills ---------- */
@@ -345,6 +348,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 .run.need .words b{color:#fff;font-weight:900}
 .tnote .btn{margin-left:auto}
 .words .w{white-space:nowrap}
+.words{overflow-wrap:break-word}
 #p-entry .tnote,#p-travel .tnote{width:100%;max-width:none}
 .tnote{flex-wrap:wrap;align-items:center}
 @media (max-width:900px){
@@ -357,6 +361,13 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .words .w{white-space:normal}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:640px){
+  /* distance board: value fits beside the city; unit on its own line */
+  .jr{grid-template-columns:78px minmax(0,1fr) auto}
+  .jr .code{font-size:32px}
+  .jr .val{font-size:28px}
+  .jr .val small{display:block;margin:4px 0 0;text-align:right}
+}
 </style>
 </head>
 <body>
@@ -392,7 +403,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   <span class="credit">© Aninder Singh · Paragliding Atlas</span>
 </section>
 
-<div class="band"><div class="wrap"><div><b>€320</b><span>Entry fee</span></div><div><b>6</b><span>Racing tasks</span></div><div><b>100</b><span>Max pilots</span></div><div><b>278</b><span>Registered</span></div><div><b>48</b><span>Countries</span></div><div><b>CAT 2</b><span>FAI status</span></div></div></div>
+<div class="band"><div class="wrap n6"><div><b>€320</b><span>Entry fee</span></div><div><b>6</b><span>Racing tasks</span></div><div><b>100</b><span>Places</span></div><div><b>33</b><span>Confirmed · 278 registered</span></div><div><b>48</b><span>Countries</span></div><div><b>CAT 2</b><span>FAI status</span></div></div></div>
 <div class="wrap"><p class="asof">Registration numbers from Airtribune on 24 Nov 2026.</p></div>
 
 <section class="intro" aria-labelledby="iH">
@@ -408,7 +419,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 
 <section class="trio" aria-label="Race, follow and travel">
   <div class="wrap">
-    <article class="pc"><img src="../img/pink-close.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Race</h3><p>6 racing tasks · €320 entry · 100 pilots max.</p><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register</a></div></article>
+    <article class="pc"><img src="../img/pink-close.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Race</h3><p>6 racing tasks · €320 entry · 100 places.</p><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register</a></div></article>
     <article class="pc"><img src="../img/orange-blur.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Follow live</h3><p>Every pilot is tracked live on Airtribune, task by task.</p><a class="btn btn-o" href="../live.html">Live tracking</a></div></article>
     <article class="pc"><img src="../img/gin-field.jpg" alt="" loading="lazy"><div class="pc-b"><h3>Plan your trip</h3><p>Trieste airport is about 50 km away; Ljubljana around 100 km.</p><a class="btn btn-o" href="#info" data-open-tab="travel">Getting there</a></div></article>
   </div>
@@ -447,9 +458,9 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
       <div class="col-r"><div class="taskbox"><svg id="task" aria-hidden="true"></svg><p>Illustrative task shape, not an official task.</p></div></div>
     </div>
 
-    <div class="panel" role="tabpanel" id="p-entry" aria-labelledby="t-entry" hidden><div class="tb-h"><span class="eyebrow">Entry</span><span>SRS Slovenia 2027</span></div><div class="ground figs4"><div class="gs"><span class="k">Entry fee</span><span class="big">€320</span><span class="sm">Per pilot, by PayPal once accepted</span></div><div class="gs"><span class="k">Membership</span><span class="big">€45</span><span class="sm">Per season, covers every SRS round</span></div><div class="gs"><span class="k">Field</span><span class="big">100</span><span class="sm">Pilots max · Selection by WPRS on Sports wings</span></div><div class="gs"><span class="k">Refund window</span><span class="big">45 days</span><span class="sm">Cancel before for a full refund less €60</span></div></div><div class="runs"><div class="run"><div class="run-h"><span class="k">Included</span><span class="n">10</span></div><p class="words"><span class="w">Transport to launch</span><i>/</i><span class="w">Daily retrieves</span><i>/</i><span class="w">Lunch packs</span><i>/</i><span class="w">Live trackers</span><i>/</i><span class="w">Tasking &amp; scoring</span><i>/</i><span class="w">T-shirt &amp; souvenirs</span><i>/</i><span class="w">Bad-weather activity discounts</span><i>/</i><span class="w">Event benefits</span><i>/</i><span class="w">Social evenings</span><i>/</i><span class="w">Prize draws</span></p></div><div class="run need"><div class="run-h"><span class="k">You bring</span><span class="n">10</span></div><p class="words"><b class="w">FAI IPPI 5</b><i>/</i><b class="w">FAI Sporting Licence</b><i>/</i><span class="w">Medical &amp; travel insurance</span><i>/</i><span class="w">Third-party liability</span><i>/</i><span class="w">Mobile phone</span><i>/</i><b class="w">EN-C or below</b><i>/</i><span class="w">Repacked reserve</span><i>/</i><span class="w">Certified helmet</span><i>/</i><span class="w">Harness with back protection</span><i>/</i><span class="w">2 m radio · 143.900 MHz</span></p></div></div><p class="tnote"><b>Sports class</b><span>EN-C and below, including 2-liner Cs. No CCC or EN-D.</span><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register on Airtribune</a></p></div>
+    <div class="panel" role="tabpanel" id="p-entry" aria-labelledby="t-entry" hidden><div class="tb-h"><span class="eyebrow">Entry</span><span>SRS Slovenia 2027</span></div><div class="ground figs4"><div class="gs"><span class="k">Entry fee</span><span class="big">€320</span><span class="sm">Per pilot, by PayPal once accepted</span></div><div class="gs"><span class="k">Membership</span><span class="big">€45</span><span class="sm">Per season, covers every SRS round</span></div><div class="gs"><span class="k">Field</span><span class="big">100</span><span class="sm">Pilots max · Selection by WPRS on Sports wings</span></div><div class="gs"><span class="k">Refund window</span><span class="big">45 days</span><span class="sm">Cancel before for a full refund less €60</span></div></div><div class="runs"><div class="run"><div class="run-h"><span class="k">Included</span><span class="n">10</span></div><p class="words"><span class="w">Transport to launch</span>&nbsp;<i>/</i> <span class="w">Daily retrieves</span>&nbsp;<i>/</i> <span class="w">Lunch packs</span>&nbsp;<i>/</i> <span class="w">Live trackers</span>&nbsp;<i>/</i> <span class="w">Tasking &amp; scoring</span>&nbsp;<i>/</i> <span class="w">T-shirt &amp; souvenirs</span>&nbsp;<i>/</i> <span class="w">Bad-weather activity discounts</span>&nbsp;<i>/</i> <span class="w">Event benefits</span>&nbsp;<i>/</i> <span class="w">Social evenings</span>&nbsp;<i>/</i> <span class="w">Prize draws</span></p></div><div class="run need"><div class="run-h"><span class="k">You bring</span><span class="n">11</span></div><p class="words"><b class="w">FAI IPPI 5</b>&nbsp;<i>/</i> <b class="w">FAI Sporting Licence</b>&nbsp;<i>/</i> <span class="w">Medical &amp; travel insurance</span>&nbsp;<i>/</i> <span class="w">Third-party liability</span>&nbsp;<i>/</i> <span class="w">Mobile phone</span>&nbsp;<i>/</i> <b class="w">Glider: CSC wings only</b>&nbsp;<i>/</i> <span class="w">Repacked reserve</span>&nbsp;<i>/</i> <span class="w">Certified helmet</span>&nbsp;<i>/</i> <span class="w">Harness with back protection</span>&nbsp;<i>/</i> <span class="w">2 m radio · 143.900 MHz</span>&nbsp;<i>/</i> <span class="w">SRS rules</span></p></div></div><p class="tnote"><b>Glider class</b><span>CSC wings only. No CCC, EN-D or non-CSC wings.</span><a class="btn btn-o" href="https://airtribune.com/srs-2027-1/">Register on Airtribune</a></p></div>
 
-    <div class="panel" role="tabpanel" id="p-onsite" aria-labelledby="t-onsite" hidden><div class="tb-h"><span class="eyebrow">On site</span><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0"><div class="run"><div class="run-h"><span class="k">Safety</span><span class="n">6</span></div><p class="words"><span class="w">Live trackers supplied</span><i>/</i><span class="w">Helicopter rescue</span><i>/</i><span class="w">Medic on takeoff</span><i>/</i><span class="w">Good phone coverage</span><i>/</i><span class="w">Radio coverage</span><i>/</i><span class="w">Live trackers mandatory</span></p></div><div class="run"><div class="run-h"><span class="k">Organisation</span><span class="n">5</span></div><p class="words"><span class="w">Launch Transport</span><i>/</i><span class="w">Retrieve included</span><i>/</i><span class="w">Toilets on takeoff</span><i>/</i><span class="w">Tracklogs managed</span><i>/</i><span class="w">Airtribune blogging</span></p></div><div class="run"><div class="run-h"><span class="k">Benefits</span><span class="n">2</span></div><p class="words"><span class="w">Lunch packs</span><i>/</i><span class="w">Free gift</span></p></div><div class="run"><div class="run-h"><span class="k">Environment</span><span class="n">1</span></div><p class="words"><span class="w">Plastic reduction</span></p></div></div></div>
+    <div class="panel" role="tabpanel" id="p-onsite" aria-labelledby="t-onsite" hidden><div class="tb-h"><span class="eyebrow">On site</span><span>As listed by the organisers</span></div><div class="runs" style="margin-top:0"><div class="run"><div class="run-h"><span class="k">Safety</span><span class="n">6</span></div><p class="words"><span class="w">Live trackers supplied</span>&nbsp;<i>/</i> <span class="w">Helicopter rescue</span>&nbsp;<i>/</i> <span class="w">Medic on takeoff</span>&nbsp;<i>/</i> <span class="w">Good phone coverage</span>&nbsp;<i>/</i> <span class="w">Radio coverage</span>&nbsp;<i>/</i> <span class="w">Live trackers mandatory</span></p></div><div class="run"><div class="run-h"><span class="k">Organisation</span><span class="n">5</span></div><p class="words"><span class="w">Launch Transport</span>&nbsp;<i>/</i> <span class="w">Retrieve included</span>&nbsp;<i>/</i> <span class="w">Toilets on takeoff</span>&nbsp;<i>/</i> <span class="w">Tracklogs managed</span>&nbsp;<i>/</i> <span class="w">Airtribune blogging</span></p></div><div class="run"><div class="run-h"><span class="k">Benefits</span><span class="n">2</span></div><p class="words"><span class="w">Lunch packs</span>&nbsp;<i>/</i> <span class="w">Free gift</span></p></div><div class="run"><div class="run-h"><span class="k">Environment</span><span class="n">1</span></div><p class="words"><span class="w">Plastic reduction</span></p></div></div></div>
 
     <div class="panel" role="tabpanel" id="p-travel" aria-labelledby="t-travel" hidden>
       <div class="tb-h"><span class="eyebrow">Fly in</span><span>Distance to Lijak</span></div><ol class="board2"><li class="jr"><span class="code" aria-hidden="true">TRS</span><span class="city">Trieste<small>Friuli Venezia Giulia</small></span><span class="track"><i data-w="33%"></i></span><span class="val">50<small>km</small></span></li><li class="jr"><span class="code" aria-hidden="true">LJU</span><span class="city">Ljubljana<small>Jože Pučnik</small></span><span class="track"><i data-w="73%"></i></span><span class="val">100–120<small>km</small></span></li><li class="jr"><span class="code" aria-hidden="true">VCE</span><span class="city">Venice<small>Marco Polo or Treviso</small></span><span class="track"><i data-w="100%"></i></span><span class="val">~150<small>km</small></span></li></ol><div class="ground"><div class="gs"><span class="k">By car</span><span class="big">1h15</span><span class="sm">From Ljubljana, up to 1 h 40 with traffic</span></div><div class="gs"><span class="k">By car</span><span class="big">45′</span><span class="sm">From Trieste airport, up to an hour</span></div><div class="gs"><span class="k">By train</span><span class="big">Nova Gorica</span><span class="sm">Then a taxi or transfer to Lijak</span></div></div><p class="tnote"><b>Parking</b><span>The take-off road is private. Park on the main road and walk up.</span></p>
