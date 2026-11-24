@@ -143,7 +143,7 @@ rep = {
   "TITLE": "Panchgani · 8th British Winter Open",
   "DESC": "8th British Winter Open: 23 Feb – 2 Mar 2027, Panchgani, India. Seven tasks, £300 entry, 120 pilots. Past editions and task replays from Airtribune.",
   "REG": AT, "REGSHORT": "airtribune.com/bwo2027",
-  "HERO": "gin-field", "HEROPOS": "50% 45%", "PHOTO2": "gin-field",
+  "HERO": "pink-forest", "HEROPOS": "50% 45%", "PHOTO2": "gin-field",
   "ROUNDLABEL": "British Paragliding Open · 8th edition", "STATUS": "Confirmed", "STATUSCLS": "ok",
   "VENUE": "Panchgani", "COUNTRY": "India", "DATES": "23 Feb – 2 Mar 2027", "EVNAME": "8th British Winter Open", "TASKS": "7",
   "BAND": "".join(f"<div><b>{esc(v)}</b><span>{esc(l)}</span></div>" for v, l in BAND),

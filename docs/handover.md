@@ -32,8 +32,6 @@ Sources are in `airtribune-redesign/src/`:
 
 ## Decisions the owner made
 
-- **No repeated photos across the site** (24 Nov 2026): each photo is used in one place only. Calendar: orange-pod (hero), pink-forest (SRS section), pod-closeup (feature). Event heroes: Lijak pink-blur, Montclar white-blur, Gemona orange-blur, Krushevo pink-close, St André coral-terraces, BWO gin-field. Other blocks on event pages (venue card, 01/02/03 cards, season rail) are typographic. New pages need new photos (ask the owner).
-
 - Dark, SailGP/race-series look; racing orange `#FF5F00`; deep teal-black base.
 - Buttons solid orange (glass buttons were rejected).
 - Typographic, broadcast-style info blocks (distance board, headline figures, slash-separated word runs) instead of boxed icon cards.

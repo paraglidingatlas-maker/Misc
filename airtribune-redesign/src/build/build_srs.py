@@ -38,7 +38,7 @@ EVENTS = [
              "The landing at Col Saint-Jean (1,335 m) is a large grass field at the entrance to the Montclar ski resort. Evening convergence there can lift you back to 2,000 m or higher."],
        callout=None, daylabels={}, taskfrom=0),
   dict(slug="world-sports-final-gemona", at="srs-2027-wsf", label="SRS 2027 · World Sports Final", status="Confirmed", venue="Gemona", country="Italy",
-       place="Bordano, Gemona", start="2027-07-17", end="2027-07-24", tz=2, tasks=7, seed=24*97+13, hero="orange-blur", heropos="40% 50%", photo2="orange-blur",
+       place="Bordano, Gemona", start="2027-07-17", end="2027-07-24", tz=2, tasks=7, seed=24*97+13, hero="pod-closeup", heropos="40% 50%", photo2="orange-blur",
        evname="1st SRS World Sports Final", wsf=True,
        blurb="Who will be the SRS Master for 2027? An SRS favourite, one of the best competition venues in Europe.",
        bullets=["Transport by minibus","Grass launch","Ridge & flatland flying","Temperatures high 20s","Tasks typically 70–100 km"],
@@ -53,7 +53,7 @@ EVENTS = [
        callout=None, daylabels={0:"Registration & practice", 7:"Last task · prize giving"}, taskfrom=1,
        sched=[("08:30","HQ opens"),("09:00","Morning briefing at HQ"),("09:30","Transport to take-off"),("10:30","Task & safety committees"),("11:15","Pilot & task briefing"),("11:30","Take-off window opens"),("16:00","Scoring office opens"),("19:00","Provisional results")]),
   dict(slug="north-macedonia-krushevo", at="srs-2027-3", label="SRS 2027 · Round 3 of 4", status="Confirmed", venue="Krushevo", country="North Macedonia",
-       place="Krushevo", start="2027-08-22", end="2027-08-29", tz=2, tasks=7, seed=25*97+13, hero="pink-close", heropos="60% 40%", photo2="pink-close",
+       place="Krushevo", start="2027-08-22", end="2027-08-29", tz=2, tasks=7, seed=25*97+13, hero="orange-pod", heropos="60% 40%", photo2="pink-close",
        evname="SRS North Macedonia 2027",
        blurb="Krushevo offers a quality of venue unmatched by any other for its large task area, reliable weather and professional team.",
        bullets=["Transport by coach","AstroTurf launch","Flatland flying","Temperatures low 30s","Tasks typically 70–100 km"],
@@ -319,7 +319,7 @@ for e in EVENTS:
     for o in EVENTS:
         cur = o is e
         rail += (f'<a class="rc {"cur" if cur else ""}" href="{o["slug"]}.html" aria-label="{esc(o["evname"])}{", this page" if cur else ""}">'
-                 f'<span class="t"><span>{esc(o["label"].replace("SRS 2027 · ",""))}</span><b>{esc(o["venue"])}</b><em>{fmt_dates(o) if "dates" not in o else o["dates"]}</em></span></a>')
+                 f'<img src="../img/{o["hero"]}.jpg" alt="" loading="lazy"><span class="t"><span>{esc(o["label"].replace("SRS 2027 · ",""))}</span><b>{esc(o["venue"])}</b><em>{fmt_dates(o) if "dates" not in o else o["dates"]}</em></span></a>')
 
     callout = ""
     if e["callout"]:
