@@ -80,7 +80,8 @@ h1,h2,h3,h4{margin:0;text-wrap:balance}
 .rb-go:hover{color:var(--orange)}
 
 /* hero */
-.hero{position:relative;height:clamp(520px,72vh,700px);overflow:hidden;background:var(--deep)}
+.hero{position:relative;min-height:clamp(600px,80vh,780px);overflow:hidden;background:var(--deep);display:flex}
+.hero > .wrap{flex:1;padding-block:44px}
 #heroRace{position:absolute;inset:0;width:100%;height:100%;display:block}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,16,15,.96) 0%,rgba(3,16,15,.78) 32%,rgba(3,16,15,.1) 62%,rgba(3,16,15,0) 100%),linear-gradient(0deg,rgba(3,16,15,.9) 0%,transparent 35%);pointer-events:none}
 .hero .wrap{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;gap:22px}
@@ -314,7 +315,7 @@ section.block{padding-block:88px 0}
 
 /* footer */
 footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(--deep)}
-.f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;padding-bottom:36px;border-bottom:1px solid var(--line)}
+.f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:32px;padding-bottom:36px;border-bottom:1px solid var(--line)}
 .f-grid h4{margin:0 0 12px;font:800 italic 15px var(--f-display);color:var(--orange)}
 .f-grid a{display:block;padding:3px 0}
 .f-grid a:hover{color:#fff}
@@ -352,6 +353,108 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
   .d-body{padding:20px 16px 32px}
   .pod .pk{font-size:22px}
 }
+
+/* ---------- SRS: featured series ---------- */
+:root{--srs-blue:#1DA9E1;--srs-red:#E31E2D;--srs-grad:linear-gradient(90deg,var(--srs-blue),#7C5BB0 55%,var(--srs-red))}
+.nav-srs{display:flex;align-items:center;gap:10px;padding:5px 12px 5px 10px;border-radius:8px;border:1px solid var(--line-2);transition:border-color .2s,background .2s}
+.nav-srs:hover{border-color:var(--srs-blue);background:rgba(29,169,225,.08)}
+.nav-srs span{font:700 9.5px/1.15 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.nav-srs img{height:24px;display:block}
+.rb-srs{display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:8px;background:rgba(29,169,225,.08);border:1px solid rgba(29,169,225,.35);font:700 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.rb-srs img{height:20px;display:block}
+.rb-srs b{color:#fff}
+.rb-srs:hover{border-color:var(--srs-blue)}
+.racebar .rb-go{margin-left:0}
+.racebar .rb-srs{margin-left:auto}
+.infocard .series{display:flex;align-items:center;gap:14px;margin-top:18px;padding-top:16px;border-top:1px solid #E3E9EA}
+.infocard .series img{height:46px;display:block}
+.infocard .series span{font:600 12.5px/1.35 var(--f-body);color:#4a5f61}
+.infocard .series a{color:#051416;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+.srs-sec{position:relative;overflow:hidden;background:radial-gradient(90% 120% at 0% 0%,#0B2A33 0%,var(--deep) 60%);border-bottom:1px solid var(--line)}
+.srs-sec::before,.srs-sec::after{content:"";position:absolute;border-radius:50%;border-style:solid;border-color:transparent;pointer-events:none}
+.srs-sec::before{width:1400px;height:1400px;left:-520px;top:-300px;border-width:26px;border-top-color:rgba(29,169,225,.22);border-left-color:rgba(29,169,225,.1);transform:rotate(-8deg)}
+.srs-sec::after{width:1500px;height:1500px;left:-200px;top:-380px;border-width:18px;border-top-color:rgba(227,30,45,.2);border-right-color:rgba(227,30,45,.08);transform:rotate(16deg)}
+.srs-sec .wrap{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:56px;align-items:center;padding-block:84px}
+.srs-logo-big{width:min(340px,80%);display:block;margin-bottom:22px}
+.srs-sec .eyebrow{color:var(--srs-blue)}
+.srs-sec h2{font:900 italic clamp(34px,4vw,54px)/.95 var(--f-display);text-transform:uppercase;margin:10px 0 14px}
+.srs-sec p{color:var(--ink-2);margin:0 0 22px;max-width:460px}
+.srs-kpis{display:flex;gap:28px;margin-bottom:26px;flex-wrap:wrap}
+.srs-kpis b{display:block;font:800 italic 34px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.srs-kpis span{font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.srs-acts{display:flex;gap:10px;flex-wrap:wrap}
+.btn-srs{background:var(--srs-grad);color:#fff}
+.btn-srs:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.srs-rounds{display:grid;gap:10px}
+.srs-r{position:relative;display:grid;grid-template-columns:64px 52px minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 18px;border-radius:14px;background:rgba(12,36,39,.85);border:1px solid var(--line);text-align:left;transition:transform .25s,border-color .25s,background .25s;overflow:hidden}
+.srs-r::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--srs-grad)}
+.srs-r:hover{transform:translateX(6px);border-color:rgba(29,169,225,.5);background:rgba(17,48,52,.95)}
+.srs-r .n{font:800 italic 30px/1 var(--f-display);color:var(--muted)}
+.srs-r .flag{width:46px;height:30px;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.srs-r h3{font:800 20px/1.05 var(--f-display);text-transform:uppercase}
+.srs-r p{margin:3px 0 0;font:400 italic 14px var(--f-display);color:var(--ink-2)}
+.srs-r .when{text-align:right;font:700 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.srs-r .when b{display:block;font:800 italic 20px var(--f-display);color:#fff;letter-spacing:0}
+.srs-r.final{border-color:rgba(227,30,45,.45)}
+.srs-r.final .n{color:var(--srs-red)}
+.srs-r .fin{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:4px;background:var(--srs-red);color:#fff;font:800 9.5px var(--f-body);letter-spacing:.12em;vertical-align:3px}
+
+.col.srs::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--srs-grad)}
+.col.srs{background:linear-gradient(180deg,rgba(29,169,225,.07),transparent 40%)}
+.col-srs{position:absolute;top:62px;left:58px;width:86px;display:block}
+.col.on .col-srs{opacity:0}
+.co-head .srs-inline{height:22px;vertical-align:-5px;margin-right:8px}
+.card.srs{box-shadow:inset 0 3px 0 0 transparent}
+.card.srs::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--srs-grad);z-index:1}
+.card.srs.is-next{box-shadow:inset 0 0 0 2px var(--orange)}
+.date .srs-inline{height:22px;margin-left:auto;align-self:center}
+.chip img{height:15px;display:block}
+.keys img{height:16px;display:block}
+.pin.srs circle.c{stroke:var(--srs-blue);stroke-width:2.6}
+.pin.srs .srs-ring{fill:none;stroke:var(--srs-red);stroke-width:1.6}
+.maplegend .srsk{width:12px;height:12px;border-radius:50%;border:2.5px solid var(--srs-blue);box-shadow:0 0 0 2px var(--srs-red) inset}
+.d-srs{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:rgba(29,169,225,.08);border:1px solid rgba(29,169,225,.3)}
+.d-srs img{height:54px;display:block}
+.d-srs span{font:700 11px/1.4 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.d-srs b{display:block;color:#fff;font:800 italic 16px var(--f-display);letter-spacing:0;text-transform:uppercase}
+.f-srs img{width:150px;display:block;margin:4px 0 10px}
+@media (max-width:1000px){ .srs-sec .wrap{grid-template-columns:minmax(0,1fr)} .nav-srs span{display:none} }
+@media (max-width:720px){
+  .nav-srs{display:none}
+  .racebar .rb-srs{margin-left:0}
+  .srs-r{grid-template-columns:40px 40px minmax(0,1fr);gap:12px}
+  .srs-r .when{grid-column:3;text-align:left}
+  .srs-r .n{font-size:22px}
+  .srs-r .flag{width:36px;height:24px}
+}
+
+/* ---------- photography ---------- */
+.hero-photo{position:absolute;inset:0;background:url("img/orange-pod.jpg") 72% 88%/cover no-repeat;animation:kb 30s ease-out both}
+@keyframes kb{from{transform:scale(1.14)}to{transform:scale(1)}}
+.hero::after{background:linear-gradient(90deg,rgba(3,16,15,.92) 0%,rgba(3,16,15,.62) 34%,rgba(3,16,15,.05) 66%),linear-gradient(0deg,rgba(3,16,15,.95) 0%,transparent 40%)!important}
+.livetag{font-weight:600;letter-spacing:.08em;background:none;border:0;color:rgba(255,255,255,.6)}
+.livetag i{display:none}
+.srs-sec{background:linear-gradient(90deg,var(--deep) 0%,rgba(3,16,15,.94) 42%,rgba(3,16,15,.55) 100%),url("img/pink-forest.jpg") right center/cover no-repeat}
+.srs-r{background:rgba(5,20,22,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.col.srs .col-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.55;transition:opacity .4s}
+.col.srs:hover .col-bg{opacity:.75}
+.col.srs.on .col-bg{opacity:.3}
+.col > .col-rnd,.col > .col-venue,.col > .col-flag,.col > .col-dates,.col > .col-open,.col > .col-srs{z-index:1}
+.col > .col-hit{z-index:2}
+.feature{position:relative;margin-top:110px;min-height:clamp(520px,78vh,760px);display:flex;align-items:flex-end;overflow:hidden}
+.feature .bg{position:absolute;inset:0;background:url("img/pod-closeup.jpg") 40% 50%/cover no-repeat;transform:scale(1.06);transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
+.feature:hover .bg{transform:scale(1)}
+.feature::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,16,15,.85) 0%,transparent 45%)}
+.feature .wrap{position:relative;z-index:1;width:100%;padding-block:48px}
+.fcard{max-width:520px;background:#fff;color:#051416;border-radius:18px;padding:26px 28px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.fcard .meta{display:flex;gap:10px;align-items:center;margin-bottom:12px;font:700 11px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:#4a5f61}
+.fcard img{height:34px}
+.fcard h3{font:800 30px/1.05 var(--f-display);letter-spacing:-.01em;margin-bottom:10px}
+.fcard p{margin:0 0 18px;color:#3c5052}
+.fcred{position:absolute;z-index:1;right:max(32px,env(safe-area-inset-right,0px));bottom:14px;font:600 10.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.host{background:linear-gradient(90deg,rgba(3,16,15,.96) 30%,rgba(3,16,15,.7)),url("img/coral-terraces.jpg") center/cover no-repeat}
+@media (max-width:720px){ .srs-sec{background:linear-gradient(0deg,var(--deep) 0%,rgba(3,16,15,.9) 55%,rgba(3,16,15,.6) 100%),url("img/pink-forest.jpg") center top/cover no-repeat} .fcard{padding:22px} .fcard h3{font-size:24px} .fcred{display:none} }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 .col-open{visibility:hidden}
@@ -375,6 +478,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <a href="#host">Host</a>
     </nav>
     <span class="sp"></span>
+    <a class="nav-srs" href="#srs" aria-label="Featured series: Sports-Class Racing Series"><span>Featured<br>series</span><img data-srs="mark" alt=""></a>
     <a class="login" href="https://airtribune.com/events/next">Sign in</a>
     <a class="btn btn-o" href="https://airtribune.com/events/create_event">Create event</a>
   </div>
@@ -390,13 +494,14 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <div><b id="cdM">00</b><small>MIN</small></div><i>:</i>
       <div><b id="cdS">00</b><small>SEC</small></div>
     </div>
+    <a class="rb-srs" href="#srs" id="rbSrs"><img data-srs="mark" alt="SRS"><span>Next SRS round <b id="rbSrsTxt"></b></span></a>
     <button class="rb-go" id="rbOpen">Round details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m9 18 6-6-6-6"/></svg></button>
   </div>
 </div>
 
 <main id="top">
 <section class="hero" aria-labelledby="h1">
-  <svg id="heroRace" aria-hidden="true"></svg>
+  <div class="hero-photo" role="img" aria-label="Racing paraglider over forest at SRS Tapalpa 2026"></div>
   <div class="wrap">
     <span class="eyebrow">Paragliding · Season 2026/27</span>
     <h1 class="up" id="h1"><span>World</span><span>calendar</span><em>2026/27</em></h1>
@@ -405,12 +510,27 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <div class="meta"><span class="chip-dk"><i></i>Next round</span><span id="hcDates"></span></div>
       <h3 id="hcName"></h3>
       <button class="btn btn-o" id="hcOpen">Round details</button>
+      <div class="series"><img data-srs="color" alt="Sports-Class Racing Series"><span>Featured series this season:<br><a href="#srs" id="hcSrs">5 SRS rounds</a></span></div>
     </div>
   </div>
-  <span class="livetag"><i></i>Race preview · simulated</span>
+  <span class="livetag">Photo: Aninder Singh / Paragliding Atlas · SRS Tapalpa 2026</span>
 </section>
 
 <div class="band"><div class="wrap" id="stats"></div></div>
+
+<section class="srs-sec" id="srs" aria-labelledby="srsH">
+  <div class="wrap">
+    <div>
+      <img class="srs-logo-big" data-srs="white" alt="Sports-Class Racing Series">
+      <span class="eyebrow">Featured series · 2027</span>
+      <h2 id="srsH">Paragliding racing for a new generation</h2>
+      <p id="srsLede"></p>
+      <div class="srs-kpis" id="srsKpis"></div>
+      <div class="srs-acts"><button class="btn btn-srs" id="srsFilter">Show SRS rounds</button><a class="btn btn-ghost" href="https://sportsracingseries.org/">sportsracingseries.org</a></div>
+    </div>
+    <div class="srs-rounds" id="srsRounds"></div>
+  </div>
+</section>
 
 <section class="block" id="calendar" aria-labelledby="calH">
   <div class="wrap">
@@ -435,10 +555,23 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
     <div class="mapbox" id="mapbox">
       <svg id="map" viewBox="0 0 1200 560" role="img" aria-label="World map of the season's rounds"></svg>
       <div class="tip" id="tip"></div>
-      <div class="maplegend"><span><i></i>Season route</span><span><em></em>Next round</span></div>
+      <div class="maplegend"><span><i></i>Season route</span><span><em></em>Next round</span><span><b class="srsk"></b>SRS round</span></div>
     </div>
     <div class="travel" id="travel"></div>
   </div>
+</section>
+
+<section class="feature" aria-labelledby="featH">
+  <div class="bg" role="img" aria-label="Pilot in a racing pod harness, SRS Tapalpa 2026"></div>
+  <div class="wrap">
+    <div class="fcard">
+      <div class="meta"><img data-srs="color" alt="SRS"><span>17–24 Jul 2027 · Gemona, Italy</span></div>
+      <h3 id="featH">The first SRS World Sports Final</h3>
+      <p>Who will be the SRS Master for 2027? Seven racing tasks at one of Europe's best competition venues.</p>
+      <a class="btn btn-o" href="srs/world-sports-final-gemona.html">Event page</a>
+    </div>
+  </div>
+  <span class="fcred">Photo: Aninder Singh / Paragliding Atlas</span>
 </section>
 
 <section class="block" id="timeline" aria-labelledby="tlH">
@@ -448,7 +581,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <p>Each bar runs from the first to the last competition day. Overlapping rounds stack.</p>
     </div>
     <div class="gantt-scroll" tabindex="0" aria-label="Season timeline, scrolls sideways"><svg id="gantt"></svg></div>
-    <div class="keys"><span><i style="background:var(--orange)"></i>Sports-class Racing Series</span><span><i style="background:var(--teal)"></i>Hike &amp; fly</span><span><i style="background:#3B5A5E"></i>Open, cup &amp; national</span><span><i style="background:var(--yellow);width:3px;border-radius:0"></i>Today</span></div>
+    <div class="keys"><span><img data-srs="mark" alt="SRS"><i style="background:var(--srs-grad)"></i>Sports-Class Racing Series</span><span><i style="background:var(--teal)"></i>Hike &amp; fly</span><span><i style="background:#3B5A5E"></i>Open, cup &amp; national</span><span><i style="background:var(--yellow);width:3px;border-radius:0"></i>Today</span></div>
   </div>
 </section>
 
@@ -485,6 +618,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <div><a class="logo" href="#top" style="padding:0"><svg viewBox="0 0 32 32" aria-hidden="true" style="width:26px;height:26px"><path d="M4 21C9 10 23 10 28 21" fill="none" stroke="#FF5F00" stroke-width="3.2" stroke-linecap="round"/><path d="M10 21l6 6 6-6" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Airtribune</b></a><p style="max-width:300px;margin-top:12px">Competition hosting and live tracking for paragliding, hang gliding and outdoor sport.</p></div>
       <div><h4>Explore</h4><a href="#calendar">Calendar</a><a href="#tour">The tour</a><a href="#timeline">Timeline</a><a href="#rounds">All rounds</a></div>
       <div><h4>Organisers</h4><a href="https://airtribune.com/events/create_event">Create event</a><a href="https://airtribune.com/competition-hosting-and-live-tracking">Hosting &amp; tracking</a></div>
+      <div class="f-srs"><h4>Featured series</h4><a href="https://sportsracingseries.org/"><img data-srs="white" alt="Sports-Class Racing Series"></a></div>
       <div><h4>Legal</h4><a href="https://airtribune.com/docs/privacy">Privacy policy</a><a href="https://airtribune.com/docs/terms">Terms of service</a></div>
     </div>
     <div class="f-bottom"><span>Unofficial concept · Event data from airtribune.com/events/next</span><span>Tasks, tracks and races are simulated</span></div>
@@ -505,6 +639,10 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 </aside>
 
 <script>
+/* SRS logo: original from sportsracingseries.org; white-lettered and compact versions derived for dark backgrounds (img/) */
+const SRS = {white:"img/srs-full-white.png", color:"img/srs-full-color.png", mark:"img/srs-mark-white.png"};
+document.querySelectorAll("[data-srs]").forEach(i => i.src = SRS[i.dataset.srs]);
+const srsImg = (kind, cls, alt="") => `<img class="${cls}" src="${SRS[kind]}" alt="${alt}">`;
 /* ============ DATA — airtribune.com/events/next (2026 + 2027 lists) ============ */
 const RAW = [
  ["FM Punjab Cup Pakistan 26","","Chakral, Punjab","PK",33.00,72.50,5,"2026-11-25","2026-11-29"],
@@ -552,6 +690,7 @@ const ISO3 = {PK:"PAK",BR:"BRA",ZA:"ZAF",CO:"COL",AU:"AUS",IN:"IND",CR:"CRI",SI:
 const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const MONTH_FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
+const SRS_PAGE = {"SRS Slovenia 2027":["srs/slovenia-lijak.html","pink-blur"],"SRS France, Montclar 2027":["srs/france-montclar.html","white-blur"],"1st SRS World Sports Final":["srs/world-sports-final-gemona.html","pod-closeup"],"SRS North Macedonia 2027":["srs/north-macedonia-krushevo.html","orange-pod"],"SRS St. André-les-Alpes 2027":["srs/france-st-andre.html","coral-terraces"]};
 const NOW = Date.now();
 const ymd = s => s.split("-").map(Number);
 const EV = RAW.map((r,i) => {
@@ -569,7 +708,7 @@ const EV = RAW.map((r,i) => {
   if (/Final/.test(name)) tags.push(["","Final"]);
   if (/Cup|Copa/.test(name)) tags.push(["","Cup"]);
   if (/Open/.test(name) && type==="open") tags.push(["","Open"]);
-  return {i, n:i+1, name, sub, city, cc, lat, lon, tz, s, e, sy,sm,sd,ey,em,ed, start, end, days, type, tags,
+  return {i, n:i+1, name, sub, city, cc, lat, lon, tz, s, e, sy,sm,sd,ey,em,ed, start, end, days, type, tags, page:(SRS_PAGE[name]||[])[0], photo:(SRS_PAGE[name]||[])[1],
     country:COUNTRY[cc].n, region:COUNTRY[cc].r, colors:COUNTRY[cc].c};
 });
 EV.forEach(e => e.status = NOW >= e.end ? "past" : NOW >= e.start ? "live" : "upcoming");
@@ -904,22 +1043,23 @@ function tick(){
   v.forEach((x,k) => { if (cdEls[k].textContent !== x){ cdEls[k].textContent = x; if(!reduce){ cdEls[k].classList.remove("tick"); void cdEls[k].offsetWidth; cdEls[k].classList.add("tick"); } } });
 }
 tick(); setInterval(tick, 1000);
-requestAnimationFrame(() => startRace(NEXT, {svg: $("#heroRace"), hero: true}));
 
 (function(){
   const strip = $("#strip");
   const localStart = t => new Date(t).toLocaleString("en-GB", {weekday:"short", hour:"2-digit", minute:"2-digit"});
   strip.innerHTML = EV.map(e => { const v = e.city.split(",")[0], fs = Math.min(30, Math.floor(250/(v.length*.66)));
-    return `<div class="col ${e.status==="past"?"past":""}" data-i="${e.i}">
+    return `<div class="col ${e.status==="past"?"past":""} ${e.type==="srs"?"srs":""}" data-i="${e.i}">
+      ${e.photo ? `<span class="col-bg" style="background-image:linear-gradient(0deg,rgba(8,28,31,.96) 12%,rgba(8,28,31,.3) 60%,rgba(8,28,31,.85)),url('img/${e.photo}.jpg')"></span>` : ""}
       <button class="col-hit" aria-label="Show round ${e.n}: ${e.country}, ${longDate(e)}"></button>
       <span class="col-rnd">Round ${pad(e.n)}</span>
       <span class="col-flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>
+      ${e.type==="srs" ? srsImg("mark","col-srs","SRS round") : ""}
       <span class="col-venue" style="font-size:${fs}px">${v}</span>
       <span class="col-dates"><b>${pad(e.sd)}</b><span>${MON[e.sm-1]}</span><i>–</i><b>${pad(e.ed)}</b><span>${MON[e.em-1]}</span></span>
       <div class="col-open">
-        <div class="co-head"><span class="eyebrow">${e===NEXT ? "Next round" : relDays(e)} · ${e.country}</span><h3>${e.name}</h3><p>${longDate(e)} · ${e.days} days</p></div>
+        <div class="co-head"><span class="eyebrow">${e.type==="srs" ? srsImg("mark","srs-inline","SRS") : ""}${e===NEXT ? "Next round" : relDays(e)} · ${e.country}</span><h3>${e.name}</h3><p>${longDate(e)} · ${e.days} days</p></div>
         <svg class="task" data-strip="${e.i}" aria-hidden="true"></svg>
-        <div class="co-cta"><button class="btn btn-o" data-open="${e.i}">Round details</button><a class="btn btn-ghost" href="https://airtribune.com/events/next">Live tracking</a></div>
+        <div class="co-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">Event page</a><button class="btn btn-ghost" data-open="${e.i}">Race preview</button>` : `<button class="btn btn-o" data-open="${e.i}">Round details</button><a class="btn btn-ghost" href="live.html">Live tracking</a>`}</div>
         <div class="co-time"><div><span>Day 1 local</span><b>09:00 ${tzLabel(e.tz)}</b></div><div><span>Your time</span><b>${localStart(e.start)}</b></div><div><span>Duration</span><b>${e.days} days</b></div></div>
       </div>
     </div>`; }).join("");
@@ -939,6 +1079,25 @@ requestAnimationFrame(() => startRace(NEXT, {svg: $("#heroRace"), hero: true}));
   $("#stPrev").onclick = () => activate(active-1, "smooth");
   $("#stNext").onclick = () => activate(active+1, "smooth");
   activate(NEXT.i, "auto");
+})();
+
+/* ============ SRS SPOTLIGHT ============ */
+(function(){
+  const S = EV.filter(e => e.type==="srs"), upcoming = S.filter(e => e.status!=="past"), nx = upcoming[0];
+  const days = e => Math.max(0, Math.ceil((e.start - Date.now())/864e5));
+  const sc = new Set(S.map(e=>e.cc));
+  $("#srsLede").textContent = `The Sports-Class Racing Series has ${S.length} rounds on this calendar, from ${S[0].country} in ${MONTH_FULL[S[0].sm-1]} to the last round at ${S.at(-1).city} in ${MONTH_FULL[S.at(-1).sm-1]}, with the first World Sports Final at Gemona in July.`;
+  $("#srsKpis").innerHTML = [[S.length,"SRS rounds"],[sc.size,"Countries"],[d3.sum(S,e=>e.days),"Race days"],[nx ? days(nx) : 0, nx ? "Days to next SRS" : "Series complete"]]
+    .map(([v,l]) => `<div><b>${v}</b><span>${l}</span></div>`).join("");
+  $("#srsRounds").innerHTML = S.map(e => `<a class="srs-r ${/Final/.test(e.name)?"final":""}" href="${e.page}" aria-label="${e.name}: event page">
+      <span class="n">R${pad(e.n)}</span>
+      <span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>
+      <span><h3>${e.city.split(",").at(-1).trim()}${/Final/.test(e.name)?'<span class="fin">FINAL</span>':""}</h3><p>${e.name}</p></span>
+      <span class="when"><b>${dateRange(e)} ${dateMon(e)}</b>${e.status==="past" ? "Completed" : relDays(e)}</span>
+    </a>`).join("");
+  $("#srsFilter").onclick = () => { const c = document.querySelector('#fType .chip[data-v="srs"]'); if (c) c.click(); document.getElementById("rounds").scrollIntoView({behavior: reduce ? "auto" : "smooth"}); };
+  if (nx){ $("#rbSrsTxt").textContent = `${nx.country} · ${days(nx)} days`; $("#hcSrs").textContent = `${S.length} SRS rounds, starting ${nx.country} ${dateRange(nx)} ${dateMon(nx)}`; }
+  else $("#rbSrs").hidden = true;
 })();
 
 /* ============ MAP ============ */
@@ -965,10 +1124,11 @@ requestAnimationFrame(() => startRace(NEXT, {svg: $("#heroRace"), hero: true}));
   }
   const tip = $("#tip"), box = $("#mapbox");
   const pins = svg.append("g").selectAll("g").data(groups).join("g")
-    .attr("class", g => "pin" + (g.evs.includes(NEXT)?" is-next":"") + (g.evs.every(e=>e.status==="past")?" past":""))
+    .attr("class", g => "pin" + (g.evs.includes(NEXT)?" is-next":"") + (g.evs.every(e=>e.status==="past")?" past":"") + (g.evs.some(e=>e.type==="srs")?" srs":""))
     .attr("transform", g => `translate(${g.p})`).attr("tabindex",0).attr("role","button")
     .attr("aria-label", g => g.evs.map(e=>`Round ${e.n}, ${e.name}`).join("; "));
   pins.filter(g => g.evs.includes(NEXT)).append("circle").attr("class","halo").attr("r",10);
+  pins.filter(g => g.evs.some(e=>e.type==="srs")).append("circle").attr("class","srs-ring").attr("r", g => (g.evs.length>1 ? 12 : 10) + 3.5);
   pins.append("circle").attr("class","c").attr("r", g => g.evs.length>1 ? 12 : 10);
   pins.append("text").text(g => g.evs.length>1 ? g.evs.length+"×" : g.evs[0].n);
   pins.on("mouseenter focus", function(ev, g){
@@ -1030,7 +1190,9 @@ requestAnimationFrame(() => startRace(NEXT, {svg: $("#heroRace"), hero: true}));
     mg.append("line").attr("x1",xa).attr("x2",xa).attr("y1",0).attr("y2",H).attr("stroke","rgba(255,255,255,.07)");
     mg.append("text").attr("x",xa+10).attr("y",24).text(MONTH_FULL[m.getUTCMonth()].slice(0,3) + (m.getUTCMonth()===0||k===0 ? " ’" + String(m.getUTCFullYear()).slice(2) : ""));
   });
-  const col = e => e.type==="srs" ? "#FF5F00" : e.type==="hf" ? "#2BD4C4" : "#3B5A5E";
+  const gdef = svg.append("defs").append("linearGradient").attr("id","srsGrad");
+  gdef.append("stop").attr("offset",0).attr("stop-color","#1DA9E1"); gdef.append("stop").attr("offset",1).attr("stop-color","#E31E2D");
+  const col = e => e.type==="srs" ? "url(#srsGrad)" : e.type==="hf" ? "#2BD4C4" : "#3B5A5E";
   const bars = svg.append("g").selectAll("g").data(EV).join("g").attr("class","g-bar").attr("tabindex",0).attr("role","button")
     .attr("aria-label", e => `Round ${e.n}, ${e.name}, ${longDate(e)}`)
     .attr("transform", e => `translate(${x(e.gs)},${top + e.lane*laneH})`);
@@ -1059,10 +1221,10 @@ $("#months").innerHTML = byMonth.map(([k,evs]) => `
   <section class="month" data-month="${k}">
     <div class="month-h"><h3 class="disp">${MONTH_FULL[(k%100)-1]} <span style="font:inherit;color:var(--muted)">${Math.floor(k/100)}</span></h3><span class="mcount">${evs.length} round${evs.length>1?"s":""}</span></div>
     <div class="grid">${evs.map((e,j) => `
-      <button class="card ${e.status==="past"?"past":""} ${e===NEXT?"is-next":""}" data-i="${e.i}" style="--i:${j}" aria-label="Round ${e.n}: ${e.name}, ${longDate(e)}">
+      <button class="card ${e.status==="past"?"past":""} ${e===NEXT?"is-next":""} ${e.type==="srs"?"srs":""}" data-i="${e.i}" style="--i:${j}" aria-label="Round ${e.n}: ${e.name}, ${longDate(e)}">
         <span class="c-top"><span class="rnd"><span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span>Round <b>${e.n}</b></span><span class="status ${e===NEXT&&e.status!=="live"?"next":e.status}">${e===NEXT&&e.status!=="live"?"Next up":e.status==="live"?"Live":e.status==="past"?"Done":relDays(e)}</span></span>
         <span class="c-main">
-          <span class="date"><b>${dateRange(e)}</b><span>${MONTH_FULL[(e.sm===e.em?e.sm:e.em)-1].slice(0,3)}</span></span>
+          <span class="date"><b>${dateRange(e)}</b><span>${MONTH_FULL[(e.sm===e.em?e.sm:e.em)-1].slice(0,3)}</span>${e.type==="srs" ? srsImg("mark","srs-inline","SRS round") : ""}</span>
           <span><h4 class="disp">${e.country}</h4><div class="ev">${e.name}</div></span>
         </span>
         <svg class="task" data-task="${e.i}" aria-hidden="true"></svg>
@@ -1075,7 +1237,7 @@ document.querySelectorAll(".card").forEach(c => c.addEventListener("mouseenter",
 document.querySelectorAll(".card").forEach(c => c.addEventListener("click", () => openRound(+c.dataset.i)));
 
 /* filters */
-const types = [["all","All"],["srs","SRS"],["hf","Hike & fly"],["open","Open & cups"]];
+const types = [["all","All"],["srs",srsImg("mark","","SRS")],["hf","Hike & fly"],["open","Open & cups"]];
 const regs = [["all","All regions"], ...["Americas","Europe","Oceania","Asia","Africa"].filter(r=>regions.has(r)).map(r=>[r,r])];
 let fT = "all", fR = "all";
 const mkChips = (host, list, get, set, countFn) => { host.innerHTML = list.map(([v,l]) => `<button class="chip" data-v="${v}" aria-pressed="${v===get()}">${l} <span class="n">${countFn(v)}</span></button>`).join("");
@@ -1102,6 +1264,7 @@ function openRound(i){
   $("#dRound").textContent = `Round ${pad(e.n)} / ${EV.length}`;
   $("#dPrev").disabled = !prev; $("#dNext").disabled = !nxt;
   $("#dBody").innerHTML = `
+    ${e.type==="srs" ? `<div class="d-srs">${srsImg("white","","Sports-Class Racing Series")}<span>Part of the<b>Sports-Class Racing Series</b></span></div>` : ""}
     <div><span class="flag" aria-hidden="true">${e.colors.map(c=>`<i style="background:${c}"></i>`).join("")}</span><span class="status ${e===NEXT&&e.status!=="live"?"next":e.status}">${e===NEXT&&e.status!=="live"?"Next round":relDays(e)}</span>
       <h2 class="disp" id="dCountry" style="margin-top:14px">${e.country}</h2>
       <div class="ev">${e.name}${e.sub?` <span style="color:var(--muted)">· ${e.sub}</span>`:""}</div></div>
@@ -1124,7 +1287,7 @@ function openRound(i){
       <div><dt>Next round</dt><dd>${nxt ? `${rn(nxt)} · ${nxt.country}` : "Season finale"}</dd></div>
     </dl>
     ${e.tags.length?`<div class="tags" style="padding:0">${e.tags.map(([c,t])=>`<span class="tag ${c}">${t}</span>`).join("")}</div>`:""}
-    <div class="d-cta"><a class="btn btn-red" href="https://airtribune.com/events/next">Event page</a><a class="btn btn-line" href="https://airtribune.com/events/next">Live tracking</a></div>
+    <div class="d-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">SRS event page</a>` : `<a class="btn btn-red" href="https://airtribune.com/events/next">Event page</a>`}<a class="btn btn-line" href="live.html">Live tracking</a></div>
     <p class="note">Dates and venue from the Airtribune listing. The task and race are simulated for this concept; real tasks are set each morning by the meet director and tracked live on Airtribune.</p>`;
   $("#drawer").classList.add("on"); $("#scrim").classList.add("on"); $("#drawer").setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";

@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>St André · SRS 2027</title>
+<meta name="description" content="SRS St. André les Alpes 2027: 12–19 Sep 2027, St André les Alpes, France. St André offers big Alpine air in a classic venue. A mix of flatland options to the west, ridges to the north and alpine adventures to the south.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..900;1,300..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Layout: SRS round page. Full-bleed photo hero with countdown bar → fact band → venue story → flying site + task → entry → safety → prizes → travel → season rail. Single committed dark look shared with the season calendar. */
+:root{
+  --bg:#051416; --bg-2:#081C1F; --panel:#0C2427; --panel-2:#113034; --deep:#03100F;
+  --ink:#FFFFFF; --ink-2:#B7C9CB; --muted:#6E8A8D; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
+  --orange:#FF5F00; --yellow:#FFC906; --teal:#2BD4C4;
+  --srs-blue:#1DA9E1; --srs-red:#E31E2D; --srs-grad:linear-gradient(90deg,var(--srs-blue),#7C5BB0 55%,var(--srs-red));
+  --r:16px; --f-display:"Archivo",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:70;background:var(--deep)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:6px}
+img{max-width:100%;display:block}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.up{font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:.92}
+.eyebrow{font:700 11px/1.2 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 24px;border-radius:8px;font:700 12px var(--f-body);letter-spacing:.14em;text-transform:uppercase;transition:background .2s,transform .2s,border-color .2s}
+.btn-o{background:var(--orange);color:#fff}.btn-o:hover{background:#ff7420;transform:translateY(-1px)}
+.btn-ghost{border:1.5px solid rgba(255,255,255,.75);color:#fff}.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+
+/* nav */
+.concept{background:var(--deep);color:var(--ink-2);font-size:12px;border-bottom:1px solid var(--line)}
+.concept .wrap{display:flex;gap:10px;align-items:center;padding-block:6px;flex-wrap:wrap}
+.concept b{font:800 10px var(--f-body);letter-spacing:.12em;padding:2px 8px;border-radius:4px;background:var(--orange);color:#fff}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(3,16,15,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo b{font:900 italic 20px var(--f-display);text-transform:uppercase}
+.logo svg{width:26px;height:26px}
+.nav nav{display:flex;gap:4px;margin-left:8px}
+.nav nav a{padding:8px 12px;font:700 12px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.nav nav a:hover{color:#fff}
+.nav .sp{margin-left:auto}
+.nav .srsb img{height:28px}
+.nav .btn{height:40px;padding:0 18px}
+
+/* hero */
+.hero{position:relative;min-height:clamp(620px,92vh,900px);display:flex;align-items:flex-end;overflow:hidden;background:var(--deep)}
+.hero-img{position:absolute;inset:0;background-size:cover;background-position:var(--pos,50% 50%);animation:kb 26s ease-out both}
+@keyframes kb{from{transform:scale(1.12)}to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,16,15,1) 0%,rgba(3,16,15,.86) 22%,rgba(3,16,15,.2) 58%,rgba(3,16,15,.55) 100%),linear-gradient(90deg,rgba(3,16,15,.7) 0%,transparent 55%)}
+.hero .wrap{position:relative;z-index:1;width:100%;padding-block:120px 36px}
+.hero-srs{width:150px;margin-bottom:22px}
+.hero .eyebrow{color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:5px;font:800 10.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase}
+.chip.ok{background:var(--teal);color:#03100F}
+.chip.prov{background:var(--yellow);color:#1E1600}
+.chip.wsf{background:var(--srs-grad);color:#fff}
+.hero h1{font-size:clamp(64px,12vw,176px);margin:14px 0 10px;line-height:.84}
+.hero .sub{font:300 italic clamp(20px,2.4vw,30px)/1.2 var(--f-display);color:var(--ink-2)}
+.hero .sub b{font-weight:800;color:#fff}
+.hero-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.cdbar{display:flex;align-items:stretch;gap:0;margin-top:36px;border-top:1px solid var(--line-2);flex-wrap:wrap}
+.cdbar > div{padding:16px 28px 0 0;margin-right:28px;border-right:1px solid var(--line)}
+.cdbar > div:last-child{border-right:0}
+.cd{display:flex;gap:12px;align-items:flex-start}
+.cd span{text-align:center;min-width:40px}
+.cd b{display:block;font:700 30px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.cd small{font:700 9px var(--f-body);letter-spacing:.14em;color:var(--muted)}
+.cd i{font-style:normal;font:600 24px/1.1 var(--f-display);color:var(--muted)}
+.cdbar .v{display:block;margin-top:6px;font:800 italic 22px var(--f-display);text-transform:uppercase}
+.credit{position:absolute;z-index:1;right:max(32px,env(safe-area-inset-right,0px));bottom:14px;font:600 10.5px var(--f-body);letter-spacing:.08em;color:rgba(255,255,255,.55);text-transform:uppercase}
+
+/* fact band */
+.band{background:var(--deep);border-block:1px solid var(--line)}
+.band .wrap{display:grid;grid-template-columns:repeat(6,1fr)}
+.band div{padding:22px 10px;text-align:center;border-right:1px solid var(--line)}
+.band div:last-child{border-right:0}
+.band b{display:block;font:800 italic 30px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.band span{display:block;margin-top:8px;font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.asof{font:500 12px var(--f-body);color:var(--muted);text-align:right;padding:8px 0 0}
+
+/* sections */
+section.s{padding-block:96px 0}
+.sh{margin-bottom:34px;display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.sh h2{font-size:clamp(38px,5vw,64px)}
+.sh .eyebrow{color:var(--orange);margin-bottom:12px;display:block}
+.two{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:start}
+.quote{font:300 italic clamp(24px,2.6vw,34px)/1.25 var(--f-display);color:#fff;margin-bottom:26px;padding-left:20px;border-left:4px solid;border-image:var(--srs-grad) 1}
+.prose p{color:var(--ink-2);margin-bottom:16px;max-width:62ch}
+.prose p strong{color:#fff}
+.photo{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;background:var(--panel)}
+.photo img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.photo:hover img{transform:scale(1.04)}
+.photo figcaption{position:absolute;left:14px;bottom:12px;font:600 10.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:22px}
+.feat{display:flex;gap:10px;align-items:center;padding:13px 14px;border-radius:10px;background:var(--panel);font-weight:600;font-size:14px}
+.feat i{flex:none;width:8px;height:8px;border-radius:2px;background:var(--orange);transform:rotate(45deg)}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:28px}
+.tiles div{background:var(--panel);padding:18px 20px}
+.tiles b{display:block;margin-top:8px;font:800 italic 22px/1.15 var(--f-display);text-transform:uppercase}
+.taskbox{border-radius:var(--r);overflow:hidden;background:var(--deep);border:1px solid var(--line)}
+.taskbox svg{display:block;width:100%;height:340px}
+.taskbox p{padding:12px 16px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line)}
+.callout{margin-top:22px;padding:16px 18px;border-radius:12px;background:rgba(255,201,6,.08);border:1px solid rgba(255,201,6,.35);color:var(--ink-2);font-size:14.5px}
+.callout b{color:var(--yellow);display:block;font:800 italic 14px var(--f-display);text-transform:uppercase;margin-bottom:6px}
+.callout ul{margin:6px 0 0;padding-left:18px}
+
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.day{padding:16px;border-radius:12px;background:var(--panel);border-top:3px solid var(--line-2)}
+.day.task{border-top-color:var(--orange)}
+.day .d{font:800 italic 30px/1 var(--f-display)}
+.day .w{font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.day .l{font:600 12.5px var(--f-body);color:var(--ink-2);margin-top:10px}
+.sched{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.sched li{list-style:none;display:flex;gap:14px;padding:12px 16px;border-radius:10px;background:var(--panel);font-size:14px;color:var(--ink-2)}
+.sched li b{font:800 italic 15px var(--f-display);color:#fff;min-width:54px}
+.sched ul{margin:0;padding:0;display:contents}
+
+.lists{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--panel);border-radius:var(--r);padding:26px 28px}
+.card h3{font:800 italic 20px var(--f-display);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.card h3 i{width:10px;height:10px;border-radius:2px;transform:rotate(45deg);background:var(--teal)}
+.card.req h3 i{background:var(--orange)}
+.card ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.card li{display:flex;gap:12px;color:var(--ink-2);font-size:14.5px;line-height:1.45}
+.card li::before{content:"";flex:none;width:6px;height:6px;margin-top:8px;border-radius:50%;background:var(--muted)}
+.terms{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.terms div{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px}
+.terms b{display:block;font:800 italic 26px/1 var(--f-display);margin-bottom:6px}
+.terms span{color:var(--ink-2);font-size:13.5px}
+
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:var(--panel);font-weight:600;font-size:14px}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.pill.no i{background:#FF5A5A}
+.pgroup{margin-bottom:22px}
+.pgroup .eyebrow{display:block;margin-bottom:10px}
+
+.prizes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.prize{border-radius:var(--r);padding:22px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between}
+.prize:nth-child(1){background:linear-gradient(160deg,var(--orange),#A33D00)}
+.prize:nth-child(2){background:linear-gradient(160deg,var(--srs-red),#7A0F18)}
+.prize:nth-child(3){background:linear-gradient(160deg,var(--srs-blue),#0B5B7C)}
+.prize:nth-child(4){background:linear-gradient(160deg,var(--teal),#0E6B63);color:#03100F}
+.prize b{font:900 italic 26px/1 var(--f-display);text-transform:uppercase}
+.prize span{font-size:13.5px;opacity:.9}
+.draws{margin-top:14px;display:grid;gap:8px}
+.draws div{padding:14px 18px;border-radius:10px;background:var(--panel);color:var(--ink-2)}
+.draws b{color:#fff}
+
+.travel{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.travel .card h3 i{background:var(--srs-blue)}
+.travel p{color:var(--ink-2);font-size:14.5px;margin-bottom:10px}
+
+/* season rail */
+.rail{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.rc{position:relative;display:block;aspect-ratio:3/4;border-radius:var(--r);overflow:hidden;background:var(--panel)}
+.rc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transition:opacity .3s,transform .8s}
+.rc:hover img{opacity:.8;transform:scale(1.05)}
+.rc::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,16,15,.95),transparent 60%)}
+.rc .t{position:absolute;z-index:1;left:14px;right:14px;bottom:14px}
+.rc .t span{font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.rc .t b{display:block;font:800 22px/1 var(--f-display);text-transform:uppercase;margin:6px 0 4px}
+.rc .t em{font:400 italic 13px var(--f-display);color:var(--ink-2)}
+.rc.cur{box-shadow:inset 0 0 0 2px var(--orange)}
+.rc.cur::before{content:"You are here";position:absolute;z-index:2;top:12px;left:12px;padding:3px 8px;border-radius:4px;background:var(--orange);font:800 9.5px var(--f-body);letter-spacing:.12em;text-transform:uppercase}
+
+footer{margin-top:110px;padding-block:44px;background:var(--deep);border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{display:grid;gap:10px}
+footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
+
+@media (max-width:1000px){
+  .two,.lists{grid-template-columns:minmax(0,1fr)}
+  .band .wrap{grid-template-columns:repeat(3,1fr)}
+  .band div:nth-child(3){border-right:0}
+  .band div:nth-child(-n+3){border-bottom:1px solid var(--line)}
+  .prizes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rail{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .nav nav{display:none}
+  .photo{aspect-ratio:4/3}
+}
+@media (max-width:640px){
+  .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .nav .srsb{display:none}
+  .band .wrap{grid-template-columns:repeat(2,1fr)}
+  .band div{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)}
+  .band div:nth-child(2n){border-right:0!important}
+  .terms{grid-template-columns:minmax(0,1fr)}
+  .cdbar > div{border-right:0;margin-right:0;padding-right:0;width:100%}
+  .card{padding:22px 20px}
+  .credit{left:16px;right:auto;bottom:8px}
+  .taskbox svg{height:260px}
+  .prize{padding:18px;min-height:120px}
+  .prize b{font-size:19px;overflow-wrap:anywhere}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="concept"><div class="wrap"><b>CONCEPT</b><span>Unofficial Airtribune redesign. Not affiliated with or endorsed by Airtribune or the Sports-Class Racing Series. Event details from the official pages, listed at the bottom.</span></div></div>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="../index.html" aria-label="Airtribune season calendar">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 21C9 10 23 10 28 21" fill="none" stroke="#FF5F00" stroke-width="3.2" stroke-linecap="round"/><path d="M10 21l6 6 6-6" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <b>Airtribune</b>
+    </a>
+    <nav aria-label="Page sections"><a href="../index.html">← Calendar</a><a href="#venue">Venue</a><a href="#site">Flying site</a><a href="#entry">Entry</a><a href="#travel">Travel</a></nav>
+    <span class="sp"></span>
+    <a class="srsb" href="../index.html#srs" aria-label="Sports-Class Racing Series rounds"><img src="../img/srs-mark-white.png" alt=""></a>
+    <a class="btn btn-o" href="https://airtribune.com/srs-2027-4/">Register</a>
+  </div>
+</header>
+
+<main>
+<section class="hero" aria-labelledby="h1">
+  <div class="hero-img" style="background-image:url('../img/coral-terraces.jpg');--pos:50% 50%" role="img" aria-label="Paraglider racing at SRS Tapalpa 2026"></div>
+  <div class="wrap">
+    <img class="hero-srs" src="../img/srs-full-white.png" alt="Sports-Class Racing Series">
+    <div class="eyebrow">SRS 2027 · Round 4 of 4 <span class="chip ok">Confirmed</span></div>
+    <h1 class="up" id="h1">St André</h1>
+    <p class="sub"><b>France</b> · 12–19 Sep 2027</p>
+    <div class="hero-acts"><a class="btn btn-o" href="https://airtribune.com/srs-2027-4/">Details &amp; registration</a><a class="btn btn-ghost" href="../live.html">Live tracking</a></div>
+    <div class="cdbar">
+      <div><span class="eyebrow" id="cdLabel">Starts in</span><div class="cd" role="timer" aria-live="off"><span><b id="cdD">--</b><small>DAYS</small></span><i>:</i><span><b id="cdH">--</b><small>HRS</small></span><i>:</i><span><b id="cdM">--</b><small>MIN</small></span><i>:</i><span><b id="cdS">--</b><small>SEC</small></span></div></div>
+      <div><span class="eyebrow">Event</span><span class="v">SRS St. André les Alpes 2027</span></div>
+      <div><span class="eyebrow">Tasks</span><span class="v">7 racing tasks</span></div>
+    </div>
+  </div>
+  <span class="credit">Photo: Aninder Singh / Paragliding Atlas · SRS Tapalpa 2026</span>
+</section>
+
+<div class="band"><div class="wrap"><div><b>€370</b><span>Entry fee</span></div><div><b>7</b><span>Racing tasks</span></div><div><b>120</b><span>Max pilots</span></div><div><b>Soon</b><span>Entries open</span></div><div><b>—</b><span>Countries</span></div><div><b>CAT 2</b><span>FAI status</span></div></div></div>
+<div class="wrap"><p class="asof">Registration numbers from Airtribune on 24 Nov 2026.</p></div>
+
+<section class="s" id="venue" aria-labelledby="vH">
+  <div class="wrap two">
+    <div>
+      <div class="sh"><div><span class="eyebrow">The venue</span><h2 class="up" id="vH">Big alpine air</h2></div></div>
+      <p class="quote">St André offers big Alpine air in a classic venue. A mix of flatland options to the west, ridges to the north and alpine adventures to the south.</p>
+      <div class="prose"><p>The last round of the 2027 series. St André les Alpes is one of the classic venues of European racing, with routes in every direction from its mountain, Le Chalvet.</p><p>The classic route climbs north towards Briançon, the Verdon valley or Allos. The 115 km out-and-return to Fort Dormillouse is a favourite; to the south, the out-and-return to Col de Bleyne.</p></div>
+      <div class="feats"><span class="feat"><i></i>Transport by minibus</span><span class="feat"><i></i>Rocky launch</span><span class="feat"><i></i>Alpine, ridge &amp; flatland flying</span><span class="feat"><i></i>Temperatures high 20s</span><span class="feat"><i></i>Tasks typically 60–100 km</span></div>
+    </div>
+    <figure class="photo" style="margin:0"><img src="../img/pink-forest.jpg" alt="Paraglider in a racing glide" loading="lazy"><figcaption>SRS Tapalpa 2026 · Aninder Singh / Paragliding Atlas</figcaption></figure>
+  </div>
+</section>
+
+<section class="s" id="site" aria-labelledby="sH">
+  <div class="wrap">
+    <div class="sh"><div><span class="eyebrow">Flying site</span><h2 class="up" id="sH">Le Chalvet</h2></div></div>
+    <div class="tiles"><div><span class="eyebrow">Take-offs</span><b>3 within 1 km</b></div><div><span class="eyebrow">Faces</span><b>S · SE · SW/W</b></div><div><span class="eyebrow">Road</span><b>7 km · 20–25 min</b></div><div><span class="eyebrow">Parking</span><b>90 cars</b></div></div>
+    <div class="two">
+      <div class="prose"><p>There are three take-offs within a 1 km radius: the S and SE launches sit together, with the SW/W launch a short distance away. A narrow tarmac road climbs 7 km to them, about 20–25 minutes by car, and a shuttle bus runs from July to September from near the school.</p><p>St André is not a free-flying site. It is managed jointly by the Association St Andréenne de Vol Libre and the Aérogliss paragliding school; the land is rented and landing is under a special agreement.</p><div class="callout"><b>Before you fly here</b><ul><li>Contact the Aérogliss school before flying. Their base is next to the lakeside landing field.</li><li>Aérogliss: +33 4 92 89 11 30 · divers@aerogliss.com</li></ul></div></div>
+      <div class="taskbox"><svg id="task" aria-hidden="true"></svg><p>Illustrative task shape for this round, not an official task. Real tasks are set each morning by the meet director.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="days" aria-labelledby="dH">
+  <div class="wrap">
+    <div class="sh"><div><span class="eyebrow">Event days</span><h2 class="up" id="dH">12–19 Sep 2027</h2></div></div>
+    <div class="days"><div class="day task"><div class="d">12</div><div class="w">Sun · Sep</div><div class="l">Race day</div></div><div class="day task"><div class="d">13</div><div class="w">Mon · Sep</div><div class="l">Race day</div></div><div class="day task"><div class="d">14</div><div class="w">Tue · Sep</div><div class="l">Race day</div></div><div class="day task"><div class="d">15</div><div class="w">Wed · Sep</div><div class="l">Race day</div></div><div class="day task"><div class="d">16</div><div class="w">Thu · Sep</div><div class="l">Race day</div></div><div class="day task"><div class="d">17</div><div class="w">Fri · Sep</div><div class="l">Race day</div></div><div class="day task"><div class="d">18</div><div class="w">Sat · Sep</div><div class="l">Race day</div></div><div class="day task"><div class="d">19</div><div class="w">Sun · Sep</div><div class="l">Race day</div></div></div>
+    
+  </div>
+</section>
+
+<section class="s" id="entry" aria-labelledby="eH">
+  <div class="wrap">
+    <div class="sh"><div><span class="eyebrow">Entry</span><h2 class="up" id="eH">€370 entry</h2></div><a class="btn btn-o" href="https://airtribune.com/srs-2027-4/">Register on Airtribune</a></div>
+    <div class="lists">
+      <div class="card"><h3><i></i>Your entry includes</h3><ul><li>Daily transport to launch for all tasks</li><li>Retrieves daily</li><li>Daily lunch packs</li><li>Trackers, for safety and scoring</li><li>Typical tasking/scoring services</li><li>T-shirt &amp; other souvenirs as we are able</li><li>Discounts for alternative activities in the event of bad weather</li><li>Other event benefits, as they are made available</li><li>Access to social evenings</li><li>Entry to any prize draws</li></ul></div>
+      <div class="card req"><h3><i></i>You must bring</h3><ul><li>An FAI IPPI 4 licence</li><li>An FAI Sporting Licence (Don&#x27;t confuse this with an IPPI card)</li><li>Medical/Travel insurance</li><li>Third party liability insurance (usually from your National Organisation)</li><li>A mobile phone</li><li>A paraglider certified as EN-C or below and with a speed limiterbetween the A &amp; B risers if it is a 2-liner glider</li><li>Recently repacked reserve parachute</li><li>Helmet, certified for paragliding use</li><li>Harness with certified back protection (Check rules for harness and gliders restrictions)</li><li>2M Radio capable of 143.900 Mhz FM and with TOT set to the minimum setting,</li><li>Compliance with all SRS rules, published before the event</li></ul></div>
+    </div>
+    <div class="terms">
+      <div><b>Sports class</b><span>No CCC or EN-D wings. EN-C and below, including 2-liner Cs. Pilots with Sports-wing competition experience get priority.</span></div>
+      <div><b>€45 / season</b><span>SRS membership, paid once per season after your first SRS entry is accepted.</span></div>
+      <div><b>45 days</b><span>Cancel 45+ days out: refund less a €60 admin fee. Under 45 days: 75%. Under 10 days: no refund.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="onsite" aria-labelledby="oH">
+  <div class="wrap">
+    <div class="sh"><div><span class="eyebrow">On site</span><h2 class="up" id="oH">Safety &amp; organisation</h2></div></div>
+    <div class="pgroup"><span class="eyebrow">Safety</span><div class="pills"><span class="pill "><i></i>Live trackers supplied</span><span class="pill "><i></i>Helicopter rescue</span><span class="pill "><i></i>Medic on takeoff</span><span class="pill "><i></i>Good phone coverage</span><span class="pill "><i></i>Radio coverage</span><span class="pill "><i></i>Live trackers mandatory</span></div></div><div class="pgroup"><span class="eyebrow">Organisation</span><div class="pills"><span class="pill "><i></i>Launch Transport</span><span class="pill "><i></i>Retrieve included</span><span class="pill "><i></i>Toilets on takeoff</span><span class="pill "><i></i>Tracklogs managed</span><span class="pill "><i></i>Airtribune blogging</span></div></div><div class="pgroup"><span class="eyebrow">Environment</span><div class="pills"><span class="pill "><i></i>Plastic reduction</span></div></div>
+  </div>
+</section>
+
+
+
+<section class="s" id="travel" aria-labelledby="tH">
+  <div class="wrap">
+    <div class="sh"><div><span class="eyebrow">Getting there</span><h2 class="up" id="tH">Travel to St André</h2></div></div>
+    <div class="travel"><div class="card"><h3><i></i>Getting there</h3><p>Travel details are not published yet. Check the official event page for St André.</p></div></div>
+  </div>
+</section>
+
+<section class="s" aria-labelledby="rH">
+  <div class="wrap">
+    <div class="sh"><div><span class="eyebrow">Sports-Class Racing Series</span><h2 class="up" id="rH">The 2027 season</h2></div><a class="btn btn-ghost" href="../index.html#srs">Season calendar</a></div>
+    <div class="rail"><a class="rc " href="slovenia-lijak.html" aria-label="SRS Slovenia 2027"><img src="../img/pink-blur.jpg" alt="" loading="lazy"><span class="t"><span>Round 1 of 4</span><b>Lijak</b><em>15–21 Mar 2027</em></span></a><a class="rc " href="france-montclar.html" aria-label="SRS France, Montclar 2027"><img src="../img/white-blur.jpg" alt="" loading="lazy"><span class="t"><span>Round 2 of 4</span><b>St Jean Montclar</b><em>20–27 Jun 2027</em></span></a><a class="rc " href="world-sports-final-gemona.html" aria-label="1st SRS World Sports Final"><img src="../img/pod-closeup.jpg" alt="" loading="lazy"><span class="t"><span>World Sports Final</span><b>Gemona</b><em>17–24 Jul 2027</em></span></a><a class="rc " href="north-macedonia-krushevo.html" aria-label="SRS North Macedonia 2027"><img src="../img/orange-pod.jpg" alt="" loading="lazy"><span class="t"><span>Round 3 of 4</span><b>Krushevo</b><em>22–29 Aug 2027</em></span></a><a class="rc cur" href="france-st-andre.html" aria-label="SRS St. André les Alpes 2027, this page"><img src="../img/coral-terraces.jpg" alt="" loading="lazy"><span class="t"><span>Round 4 of 4</span><b>St André</b><em>12–19 Sep 2027</em></span></a></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Sources, retrieved 24 Nov 2026: <a href="https://sportsracingseries.org/events/">sportsracingseries.org/events</a> · <a href="https://airtribune.com/srs-2027-4/">airtribune.com/srs-2027-4</a></span>
+    <span>Photos: Aninder Singh / Paragliding Atlas, SRS Tapalpa 2026. SRS logo © Sports-Class Racing Series.</span>
+    <span>Unofficial concept, not affiliated with Airtribune or the SRS. Check the official event page before you book or travel.</span>
+  </div>
+</footer>
+
+<script>
+const EVT = {"start": "2027-09-12", "end": "2027-09-19", "tz": 2, "seed": 2535};
+const $ = s => document.querySelector(s);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* countdown to day 1, 09:00 local (estimate) */
+const pad = n => String(n).padStart(2,"0");
+const [y,m,d] = EVT.start.split("-").map(Number), [ey,em,ed] = EVT.end.split("-").map(Number);
+const t0 = Date.UTC(y,m-1,d,9) - EVT.tz*3600e3, t1 = Date.UTC(ey,em-1,ed+1) - EVT.tz*3600e3;
+function tick(){ const now = Date.now(), live = now >= t0 && now < t1, target = live ? t1 : t0; let s = Math.max(0, Math.floor((target - now)/1000));
+  $("#cdLabel").textContent = now >= t1 ? "Event finished" : live ? "Racing now · ends in" : "Starts in · 09:00 local";
+  [s/86400|0,(s/3600|0)%24,(s/60|0)%60,s%60].forEach((v,k) => document.getElementById(["cdD","cdH","cdM","cdS"][k]).textContent = pad(v)); }
+tick(); setInterval(tick, 1000);
+const rng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+function noise(seed, w, h){
+  const r = rng(seed), oc = [[4,1],[8,.5],[16,.25]].map(([n,a]) => ({n,a,g:Array.from({length:(n+2)*(n+2)}, r)}));
+  const sm = t => t*t*(3-2*t), v = new Float64Array(w*h);
+  for (let y=0;y<h;y++) for (let x=0;x<w;x++){ let s=0;
+    for (const {n,a,g} of oc){ const N=n+2, fx=x/w*n, fy=y/h*n*.6, ix=fx|0, iy=fy|0, tx=sm(fx-ix), ty=sm(fy-iy), G=(i,j)=>g[j*N+i];
+      s += a*((G(ix,iy)*(1-tx)+G(ix+1,iy)*tx)*(1-ty)+(G(ix,iy+1)*(1-tx)+G(ix+1,iy+1)*tx)*ty); }
+    v[y*w+x]=s; }
+  return v;
+}
+const dist = (a,b) => Math.hypot(a[0]-b[0], a[1]-b[1]);
+const MONO = "Inter, system-ui, sans-serif";
+let UID = 0;
+function addChk(sel){
+  const id = "chk" + (++UID), pat = sel.append("defs").append("pattern").attr("id",id).attr("width",5).attr("height",5).attr("patternUnits","userSpaceOnUse");
+  pat.append("rect").attr("width",5).attr("height",5).attr("fill","#fff");
+  pat.append("rect").attr("width",2.5).attr("height",2.5).attr("fill","#03100F"); pat.append("rect").attr("x",2.5).attr("y",2.5).attr("width",2.5).attr("height",2.5).attr("fill","#03100F");
+  return id;
+}
+function terrain(sel, seed, W, H, alpha=1){
+  const cell = 10, gw = Math.ceil(W/cell)+1, gh = Math.ceil(H/cell)+1, vals = noise(seed, gw, gh), ex = d3.extent(vals);
+  const cs = d3.contours().size([gw,gh]).thresholds(d3.range(12).map(k => ex[0]+(ex[1]-ex[0])*(k+.5)/12))(vals);
+  sel.append("g").selectAll("path").data(cs).join("path").attr("d", d3.geoPath(d3.geoIdentity().scale(cell)))
+    .attr("fill", (d,k) => `rgba(43,212,196,${0.007*k*alpha})`)
+    .attr("stroke",(d,k)=>k%4===0?`rgba(160,230,222,${.12*alpha})`:`rgba(160,230,222,${.05*alpha})`).attr("stroke-width",.8);
+}
+
+/* ---------------- task generation (km space) ---------------- */
+function makeTask(seed){
+  const r = rng(seed);
+  const TO = [0,0];
+  const sss = {c:[0,0], r:[3,4,5,6][r()*4|0], type:"sss", name:"SSS"};
+  const rad = () => [0.4,0.4,1,1,2,3][r()*6|0];
+  const shape = r(), tps = [];
+  let goalC;
+  if (shape < .4){            // triangle back towards take-off
+    const h0 = r()*Math.PI*2, R = 13 + r()*9, cx = R*Math.cos(h0), cy = R*Math.sin(h0), n = 3;
+    let a = h0 + Math.PI + (r()-.5)*.5;
+    for (let k=0;k<n;k++){ a += (2*Math.PI/n)*(0.8+r()*.4); tps.push({c:[cx + R*Math.cos(a), cy + R*Math.sin(a)], r:rad()}); }
+    goalC = [(r()-.5)*6, (r()-.5)*6 + 4];
+  } else if (shape < .7){     // out and return with a dog-leg
+    const h = r()*Math.PI*2, L = 24 + r()*14;
+    tps.push({c:[8*Math.cos(h+1.4), 8*Math.sin(h+1.4)], r:rad()});
+    tps.push({c:[L*Math.cos(h), L*Math.sin(h)], r:rad()});
+    tps.push({c:[L*.55*Math.cos(h-.35), L*.55*Math.sin(h-.35)], r:rad()});
+    goalC = [L*.15*Math.cos(h+.5), L*.15*Math.sin(h+.5)];
+  } else {                    // open-distance zig-zag
+    let cur = [0,0], h = r()*Math.PI*2; const n = 3 + (r()*2|0);
+    for (let k=0;k<n;k++){ h += (k%2 ? 1 : -1)*(0.5 + r()*.8); const L = 10 + r()*12; cur = [cur[0]+L*Math.cos(h), cur[1]+L*Math.sin(h)]; tps.push({c:cur.slice(), r:rad()}); }
+    h += (r()-.5); goalC = [cur[0]+ (8+r()*8)*Math.cos(h), cur[1] + (8+r()*8)*Math.sin(h)];
+  }
+  tps.forEach((t,k) => { t.type = "tp"; t.name = "TP"+(k+1); });
+  const goal = {c:goalC, r: r()<.55 ? 0 : 0.4, type:"goal", name:"GOAL"};
+  goal.line = goal.r === 0;
+  const cyl = [sss, ...tps, goal];
+  // optimised route: TO -> edge of SSS -> touch each TP -> goal
+  const P = cyl.map(c => c.c.slice());
+  const segClosest = (a,b,c) => { const dx=b[0]-a[0], dy=b[1]-a[1], L=dx*dx+dy*dy||1, t=Math.max(0,Math.min(1,((c[0]-a[0])*dx+(c[1]-a[1])*dy)/L)); return [a[0]+t*dx, a[1]+t*dy]; };
+  for (let it=0; it<40; it++) for (let i=0;i<cyl.length;i++){
+    const c = cyl[i], prev = i===0 ? TO : P[i-1], next = P[i+1];
+    if (!c.r){ P[i] = c.c.slice(); continue; }
+    if (!next){ const a = Math.atan2(prev[1]-c.c[1], prev[0]-c.c[0]); P[i] = [c.c[0]+c.r*Math.cos(a), c.c[1]+c.r*Math.sin(a)]; continue; }
+    if (c.type !== "sss"){ const q = segClosest(prev,next,c.c); if (dist(q,c.c) <= c.r){ P[i] = q; continue; } }
+    let best = Infinity, bp;
+    for (let k=0;k<180;k++){ const a = k/180*Math.PI*2, x = [c.c[0]+c.r*Math.cos(a), c.c[1]+c.r*Math.sin(a)], f = dist(prev,x)+dist(x,next); if (f<best){ best=f; bp=x; } }
+    P[i] = bp;
+  }
+  const route = [TO, ...P];
+  const legs = route.slice(1).map((p,k) => dist(route[k], p));
+  return {TO, cyl, route, legs, total: legs.slice(1).reduce((a,b)=>a+b,0)};
+}
+
+/* ---------------- flight simulation (km, metres, seconds) ---------------- */
+function simulate(task, seed, thermalR, skill=1){
+  const r = rng(seed);
+  const launch = 1250 + r()*500, base0 = launch + 800 + r()*600, floor = launch - 400;
+  const baseAt = t => base0 + 420*Math.min(1, t/12600);
+  const wind = [(r()-.5)*.06, (r()-.5)*.06];
+  let pos = task.TO.slice(), alt = launch, t = 0, ti = 1, since = 0, nextTh = 0, head = 0, waited = false;
+  const pts = [{p:pos.slice(), alt, t, v:0}];
+  const targets = task.route.slice(1);
+  const circle = (turns, climbFn) => {
+    const dir = r()<.5 ? 1 : -1, tgt = targets[ti-1] || pos;
+    const a0 = Math.atan2(pos[1]-tgt[1], pos[0]-tgt[0]) + Math.PI/2*dir;
+    const c = [pos[0] - thermalR*Math.cos(a0), pos[1] - thermalR*Math.sin(a0)];
+    for (let s=1;s<=turns*14;s++){
+      const a = a0 + dir*s/14*Math.PI*2, rr = thermalR*(0.85 + .25*Math.sin(s*.9));
+      c[0] += wind[0]*thermalR*.6; c[1] += wind[1]*thermalR*.6;
+      pos = [c[0] + rr*Math.cos(a), c[1] + rr*Math.sin(a)];
+      const v = climbFn(s); alt = Math.min(baseAt(t), alt + v*26/14); t += 26/14;
+      pts.push({p:pos.slice(), alt, t, v, ti, gs: 30 + 6*Math.sin(s*.7)});
+    }
+  };
+  for (let guard=0; guard<6000; guard++){
+    const tgt = targets[ti-1]; if (!tgt) break;
+    if (dist(pos,tgt) < .35){ ti++; if (ti > targets.length) break; continue; }
+    const top = baseAt(t) - 60 - r()*380;
+    if ((alt < floor + 300 || since > nextTh) && alt < top - 150){
+      const climb = (0.9 + r()*2.4) * skill, turns = Math.max(2, Math.min(18, Math.ceil((top - alt)/(climb*26))));
+      circle(turns, () => climb*(0.75+.5*r()));
+      since = 0; nextTh = 6 + r()*12;
+      if (!waited){ waited = true; const wait = 3 + (r()*4|0);   // hold under base until the start gate opens
+        circle(wait, s => Math.sin(s/5)*.9 + (r()-.5)*.6); }
+    } else {
+      const step = .5, want = Math.atan2(tgt[1]-pos[1], tgt[0]-pos[0]);
+      head = want + (r()-.5)*.35;
+      pos = [pos[0] + step*Math.cos(head), pos[1] + step*Math.sin(head)];
+      const ld = 8 + 2*skill + (r()-.5)*2, spd = 30 + 14*skill;
+      alt -= step*1000/ld; t += step/(spd/3600); since += step;
+      pts.push({p:pos.slice(), alt, t, v:-(spd/3.6)/ld, ti, gs: spd});
+    }
+  }
+  return {pts, launch, base: baseAt(t)};
+}
+
+/* ---------------- fit km → px ---------------- */
+function rotateTask(task, th){
+  const c = Math.cos(th), sn = Math.sin(th), R = p => [p[0]*c - p[1]*sn, p[0]*sn + p[1]*c];
+  return {...task, cyl: task.cyl.map(q => ({...q, c:R(q.c)})), route: task.route.map(R)};
+}
+function bestFit(task, W, H, pad){
+  let best = null;
+  for (let k=0;k<36;k++){ const t = rotateTask(task, k*Math.PI/36), f = fitter(t, W, H, pad); if (!best || f.s > best.f.s) best = {t, f}; }
+  return best;
+}
+function fitter(task, W, H, pad){
+  const xs = [], ys = [];
+  task.cyl.forEach(c => { xs.push(c.c[0]-c.r, c.c[0]+c.r); ys.push(c.c[1]-c.r, c.c[1]+c.r); });
+  xs.push(0); ys.push(0);
+  const [x0,x1] = d3.extent(xs), [y0,y1] = d3.extent(ys);
+  const s = Math.min((W-2*pad[0])/(x1-x0), (H-2*pad[1])/(y1-y0));
+  const ox = (W - (x1-x0)*s)/2 - x0*s, oy = (H - (y1-y0)*s)/2 - y0*s;
+  const f = p => [ox + p[0]*s, oy + p[1]*s]; f.s = s; return f;
+}
+function chip(sel, W, H, text, small){
+  const fs = small ? 10 : 11, w = text.length*fs*.56 + 18;
+  const g = sel.append("g").attr("transform", `translate(${W-w-8},${8})`);
+  g.append("rect").attr("width",w).attr("height",fs+11).attr("rx",(fs+11)/2).attr("fill","rgba(3,16,15,.85)").attr("stroke","rgba(255,255,255,.14)");
+  g.append("text").attr("x",9).attr("y",fs+4.5).text(text).attr("fill","#FFFFFF").attr("font-family",MONO).attr("font-size",fs).attr("font-weight",600);
+}
+function drawCyl(sel, task, f, o){
+  const g = sel.append("g").attr("opacity", o.alpha ?? 1);
+  task.cyl.forEach(c => {
+    const [x,y] = f(c.c);
+    if (c.line){
+      const prev = task.route.at(-2), last = task.route.at(-1), a = Math.atan2(last[1]-prev[1], last[0]-prev[0])*180/Math.PI;
+      const L = Math.max(o.big?22:14, .4*f.s);
+      g.append("rect").attr("x",-2.5).attr("y",-L/2).attr("width",5).attr("height",L).attr("fill",`url(#${o.chk||"chk"})`).attr("transform",`translate(${x},${y}) rotate(${a})`);
+      return;
+    }
+    const R = Math.max(c.r*f.s, c.type==="goal"?3:2.5);
+    g.append("circle").attr("cx",x).attr("cy",y).attr("r",R)
+      .attr("fill", c.type==="sss" ? "rgba(43,212,196,.05)" : c.type==="goal" ? "rgba(255,255,255,.08)" : "rgba(43,212,196,.09)")
+      .attr("stroke", c.type==="goal" ? "#FFFFFF" : "#2BD4C4").attr("stroke-width", o.big?1.2:1).attr("stroke-dasharray", c.type==="sss" ? "4 3" : null);
+    if (o.labels){
+      const cen = d3.polygonCentroid(task.cyl.map(q=>f(q.c)).concat(task.cyl.length<3?[[x+1,y+1]]:[])), ang = Math.atan2(y-cen[1], x-cen[0]) || -.8;
+      let lx = x + Math.cos(ang)*(R+10), ly = y + Math.sin(ang)*(R+10) + 3, anc = Math.cos(ang) < -.3 ? "end" : Math.cos(ang) > .3 ? "start" : "middle";
+      const svgW = +sel.attr("viewBox").split(" ")[2];
+      if (anc==="end" && lx < 110){ anc = "start"; lx = x + R + 8; } if (anc==="start" && lx > svgW-110){ anc = "end"; lx = x - R - 8; }
+      g.append("text").attr("x", lx).attr("y", ly).attr("text-anchor", anc)
+        .attr("paint-order","stroke").attr("stroke","#03100F").attr("stroke-width",3).text(c.type==="tp" ? `${c.name} · ${c.r} km` : c.type==="sss" ? `SSS exit · ${c.r} km` : "GOAL")
+        .attr("fill","#B7C9CB").attr("font-family",MONO).attr("font-size",10.5).attr("font-weight",600);
+    }
+  });
+  if (o.labels && task.cyl.at(-1).line){ const [x,y] = f(task.cyl.at(-1).c); g.append("text").attr("x",x+10).attr("y",y+18).text("Goal line").attr("fill","#FFFFFF").attr("font-family",MONO).attr("font-size",10).attr("font-weight",700); }
+  return g;
+}
+function launchMark(sel, f, big){
+  const [x,y] = f([0,0]), s = big?7:5;
+  sel.append("path").attr("d",`M${x},${y-s} L${x+s*.9},${y+s*.6} L${x-s*.9},${y+s*.6}Z`).attr("fill","#FFC906").attr("stroke","#03100F").attr("stroke-width",1.4);
+  if (big) sel.append("text").attr("x",x-10).attr("y",y+21).text("Take-off").attr("text-anchor","middle").attr("fill","#FFC906").attr("font-family",MONO).attr("font-size",10.5).attr("font-weight",600).attr("paint-order","stroke").attr("stroke","#03100F").attr("stroke-width",3);
+}
+const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFC83D","#FF8A3D","#F0432B"]).clamp(true);
+
+
+/* illustrative task, same generator and seed as the season calendar */
+(function(){
+  const svgEl = $("#task"), bb = svgEl.getBoundingClientRect(), W = Math.round(bb.width) || 600, H = Math.round(bb.height) || 340;
+  const sel = d3.select(svgEl).attr("viewBox",`0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid slice");
+  const chk = addChk(sel), seed = EVT.seed;
+  terrain(sel, seed, W, H, 1.1);
+  const fit = bestFit(makeTask(seed), W, H, [60,46]), f = fit.f, task = fit.t;
+  drawCyl(sel, task, f, {labels:true, big:true, chk});
+  const R = task.route.map(f);
+  sel.append("path").attr("d", d3.line()(R)).attr("fill","none").attr("stroke","#03100F").attr("stroke-width",5).attr("opacity",.7);
+  const route = sel.append("path").attr("d", d3.line()(R)).attr("fill","none").attr("stroke","#FFFFFF").attr("stroke-width",2);
+  launchMark(sel, f, true);
+  chip(sel, W, H, `${task.total.toFixed(1)} km · ${task.cyl.length-2} turnpoints`, false);
+  if (!reduce){ const L = route.node().getTotalLength(); route.attr("stroke-dasharray",L).attr("stroke-dashoffset",L);
+    new IntersectionObserver((es,o) => { if (es[0].isIntersecting){ route.transition().duration(1800).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0); o.disconnect(); } }).observe(svgEl); }
+})();
+</script>
+</body>
+</html>

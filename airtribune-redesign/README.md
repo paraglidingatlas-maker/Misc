@@ -5,12 +5,17 @@ An unofficial design concept for [airtribune.com](https://airtribune.com), the l
 | Page | Path | Based on |
 |---|---|---|
 | Season calendar | [`events/`](events/) | airtribune.com/events/next |
+| Live tracker | [`events/live.html`](events/live.html) | SailGP-style race viewer, simulated SRS task |
+| SRS event pages | [`events/srs/`](events/srs/) | sportsracingseries.org/events and each round's Airtribune page |
 | Live feed | [`feed/`](feed/) | airtribune.com/feed |
 | Thumbnail study | [`thumbnails/`](thumbnails/) | Design options for the calendar cards |
 
 Each page is a single self-contained HTML file. Open `index.html` in a browser, or serve the folder with any static host (for example GitHub Pages). Libraries (D3, TopoJSON, world outlines from Datamaps) and fonts load from public CDNs.
 
 ## Data
+
+- SRS event pages: details from sportsracingseries.org/events and airtribune.com/srs-2027-1, -2, -wsf, -3, -4, retrieved 24 Nov 2026.
+- Photos: Aninder Singh / Paragliding Atlas, SRS Tapalpa 2026. SRS logo © Sports-Class Racing Series.
 
 - Event names, dates and venues come from the public Airtribune listings (November 2026).
 - Venue coordinates and time zones are approximate.
