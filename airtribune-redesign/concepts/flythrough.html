@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3D Fly-through · SRS Tapalpa Task 3</title>
+<meta name="description" content="Prototype: the real SRS Tapalpa 2026 Task 3 replayed in 3D, satellite imagery draped over terrain, tracks at GPS altitude.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..900;1,300..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+:root{
+  --bg:#051416; --deep:#03100F; --panel:#0C2427;
+  --ink:#FFFFFF; --ink-2:#B7C9CB; --muted:#7F9A9D; --line:rgba(255,255,255,.12);
+  --orange:#FF5F00; --srs:#1DA9E1;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif;
+  --gut:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-body);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#map{position:fixed;inset:0}
+.top,.board,.pilot,.proto,.credit,.tl{text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.maplibregl-ctrl-attrib{background:rgba(3,16,15,.55)!important;color:var(--ink-2)!important;font-size:10px}
+.maplibregl-ctrl-attrib a{color:var(--ink-2)!important}
+.maplibregl-ctrl-attrib-button{filter:invert(1)}
+
+/* scrims keep type legible over imagery without boxing it */
+.scrim{position:fixed;left:0;right:0;pointer-events:none;z-index:1}
+.scrim.top{top:0;height:210px;background:linear-gradient(180deg,rgba(3,16,15,.88) 30%,rgba(3,16,15,0))}
+.scrim.bot{bottom:0;height:320px;background:linear-gradient(0deg,rgba(3,16,15,.94) 35%,rgba(3,16,15,0))}
+.scrim.left{top:0;bottom:0;left:0;right:auto;width:520px;background:linear-gradient(90deg,rgba(3,16,15,.82) 55%,rgba(3,16,15,0))}
+
+/* ---------- top: title + view controls ---------- */
+.top{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding:22px var(--gut) 0}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.back{font-size:20px;color:var(--ink-2);text-decoration:none;padding:4px 2px}
+.back:hover{color:var(--ink)}
+.brand [data-brand]{width:34px;height:34px;display:block;flex:none}
+.brand img{height:30px;width:auto;flex:none}
+.brand .sep{width:1px;height:34px;background:var(--line);flex:none}
+.title h1{font-family:var(--f-display);font-weight:800;font-size:26px;line-height:1;letter-spacing:-.02em}
+.title p{margin-top:6px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.title p b{color:var(--ink);font-weight:600}
+.views{display:flex;gap:28px;align-items:baseline;padding-top:6px}
+.vgrp{display:flex;align-items:baseline;gap:14px}
+.vgrp > span{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.vgrp button{font-family:var(--f-display);font-size:15px;font-weight:600;color:rgba(255,255,255,.5);padding:4px 0;transition:color .15s}
+.vgrp button:hover{color:var(--ink)}
+.vgrp button[aria-pressed="true"]{color:var(--ink);font-weight:800}
+.proto{position:fixed;top:78px;right:var(--gut);z-index:5;font-size:11px;color:var(--muted);text-align:right;max-width:320px;line-height:1.45}
+
+/* ---------- left: race order ---------- */
+.board{position:fixed;left:var(--gut);top:112px;z-index:4;width:340px}
+.board h2{font-family:var(--f-display);font-size:13px;font-weight:700;color:var(--ink-2);display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.board h2 span{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:500}
+.rows{list-style:none}
+.rows li{display:grid;grid-template-columns:26px 1fr 58px 64px;align-items:baseline;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;font-size:13px;font-variant-numeric:tabular-nums}
+.rows li:hover .nm{color:var(--ink)}
+.rows .ps{font-family:var(--f-display);font-weight:800;color:var(--ink-2)}
+.rows .nm{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rows .nm b{color:var(--ink);font-weight:700;letter-spacing:.01em}
+.rows .nm i{font-style:normal;color:var(--muted);font-size:11px;margin-left:6px}
+.rows .al,.rows .dg{text-align:right;color:var(--ink-2)}
+.rows .dg{color:var(--ink)}
+.rows li.sel .ps,.rows li.sel .nm b,.rows li.sel .dg{color:var(--orange)}
+.board .more{font-size:11px;color:var(--muted);margin-top:8px}
+
+/* ---------- bottom: selected pilot numbers ---------- */
+.pilot{position:fixed;left:var(--gut);bottom:96px;z-index:4;display:flex;align-items:flex-end;gap:44px;right:var(--gut)}
+.pname .pos{font-family:var(--f-display);font-weight:800;font-size:15px;color:var(--orange)}
+.pname h3{font-family:var(--f-display);font-weight:800;font-size:40px;line-height:.95;letter-spacing:-.025em;margin-top:4px;white-space:nowrap}
+.pname p{font-size:13px;color:var(--ink-2);margin-top:8px;white-space:nowrap}
+.nums{display:flex;gap:34px;margin-left:auto}
+.num b{display:block;font-family:var(--f-display);font-weight:800;font-size:40px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.num b small{font-size:15px;font-weight:600;color:var(--ink-2);margin-left:3px;letter-spacing:0}
+.num span{display:block;font-size:12px;color:var(--muted);margin-top:6px;white-space:nowrap}
+.num.up b{color:#7CE0A5}
+.num.dn b{color:#FF8A7A}
+
+/* ---------- bottom: timeline ---------- */
+.tl{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;gap:18px;padding:18px var(--gut) 26px}
+.play{background:var(--orange);color:#fff;font-weight:700;font-size:14px;height:40px;min-width:96px;padding:0 18px;border-radius:4px;display:flex;align-items:center;justify-content:center;gap:9px;flex:none}
+.play:hover{background:#ff7420}
+.play svg{width:12px;height:12px;fill:#fff}
+.clock{font-family:var(--f-display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;flex:none;width:104px}
+.clock small{display:block;font-family:var(--f-body);font-size:11px;font-weight:500;color:var(--muted);margin-top:2px}
+.track{position:relative;flex:1;height:40px;cursor:pointer;touch-action:none;min-width:0}
+.track .rail{position:absolute;left:0;right:0;top:19px;height:2px;background:rgba(255,255,255,.18)}
+.track .done{position:absolute;left:0;top:19px;height:2px;background:var(--ink)}
+.track .knob{position:absolute;top:12px;width:2px;height:16px;background:var(--orange);margin-left:-1px}
+.track .tick{position:absolute;top:28px;font-size:10px;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+.track .tick::before{content:"";position:absolute;left:50%;top:-8px;width:1px;height:6px;background:rgba(255,255,255,.35)}
+.track .tick.g{color:var(--ink-2)}
+.speeds{display:flex;gap:12px;flex:none}
+.speeds button{font-family:var(--f-display);font-weight:600;font-size:14px;color:rgba(255,255,255,.5);font-variant-numeric:tabular-nums}
+.speeds button[aria-pressed="true"]{color:var(--ink);font-weight:800}
+.credit{position:fixed;right:var(--gut);bottom:6px;z-index:4;font-size:10px;color:rgba(255,255,255,.45);text-align:right}
+.loading{position:fixed;inset:0;display:grid;place-items:center;z-index:9;background:var(--bg);transition:opacity .6s;font-family:var(--f-display);font-weight:700;color:var(--ink-2);letter-spacing:.02em}
+.loading.off{opacity:0;pointer-events:none}
+.mobonly{display:none}
+
+/* ---------- phone ---------- */
+@media (max-width:760px){
+  :root{--gut:16px}
+  .scrim.left{display:none}
+  .scrim.top{height:170px}
+  .top{flex-direction:column;gap:12px;padding-top:14px}
+  .brand{gap:10px}
+  .brand [data-brand]{width:28px;height:28px}
+  .brand img{height:24px}
+  .brand .sep{height:28px}
+  .title h1{font-size:20px}
+  .title p{font-size:11.5px;margin-top:4px}
+  .title p .hide-s{display:none}
+  .title{min-width:0}
+  .title p{overflow:hidden;text-overflow:ellipsis}
+  .title p .hide-m{display:none}
+  .views{gap:18px;padding-top:0;width:100%;justify-content:space-between}
+  .vgrp{gap:11px}
+  .vgrp > span{display:none}
+  .vgrp button{font-size:13.5px}
+  .proto{display:none}
+  .board{display:none;top:auto;bottom:150px;left:var(--gut);right:var(--gut);width:auto;background:rgba(3,16,15,.94);padding:14px 16px;border-radius:6px;max-height:52vh;overflow:auto}
+  body.list .board{display:block}
+  body.list .pilot{visibility:hidden}
+  .pilot{bottom:84px;flex-direction:column;align-items:stretch;gap:14px}
+  .pname h3{font-size:28px}
+  .pname p{font-size:11.5px;white-space:normal}
+  .nums{margin-left:0;gap:0;justify-content:space-between}
+  .num b{font-size:24px}
+  .num b small{font-size:11px}
+  .num span{font-size:10.5px}
+  .num.hide-s{display:none}
+  .tl{gap:12px;padding:12px var(--gut) calc(18px + env(safe-area-inset-bottom))}
+  .play{min-width:0;width:44px;padding:0}
+  .play .lbl{display:none}
+  .clock{font-size:17px;width:70px}
+  .clock small{display:none}
+  .speeds{gap:9px}
+  .speeds button{font-size:13px}
+  .speeds .hide-s{display:none}
+  .track .tick{font-size:9px}
+  .track .tick.hide-s{display:none}
+  .credit{left:var(--gut);bottom:3px;font-size:8.5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mobonly{display:inline}
+  .listbtn{font-family:var(--f-display);font-size:13.5px;font-weight:700;color:var(--ink);position:absolute;right:0;top:0}
+  .pname{position:relative}
+}
+</style>
+</head>
+<body>
+<div id="map" aria-label="3D map of the task: satellite imagery on terrain with the pilots' tracks"></div>
+<div class="scrim top"></div><div class="scrim left"></div><div class="scrim bot"></div>
+
+<header class="top">
+  <div class="brand">
+    <a class="back" href="../events/live.html" aria-label="Back to the live tracker">←</a>
+    <span data-brand="tile" role="img" aria-label="Airtribune"></span>
+    <img src="../events/img/srs-full-white.png" alt="Sports-Class Racing Series">
+    <span class="sep"></span>
+    <div class="title">
+      <h1>Tapalpa · Task 3 in 3D</h1>
+      <p><b>SRS <span class="hide-m">Advance Edition </span>2026</b> <span class="hide-s">· Tue 10 Nov 2026 ·</span> 58.7 km race to goal</p>
+    </div>
+  </div>
+  <div class="views">
+    <div class="vgrp" role="group" aria-label="Camera">
+      <span>Camera</span>
+      <button data-cam="follow" aria-pressed="true">Follow</button>
+      <button data-cam="course" aria-pressed="false">Course</button>
+      <button data-cam="orbit" aria-pressed="false">Orbit</button>
+      <button data-cam="free" aria-pressed="false">Free</button>
+    </div>
+    <div class="vgrp" role="group" aria-label="Map">
+      <span>Map</span>
+      <button data-base="sat" aria-pressed="true">Satellite</button>
+      <button data-base="dark" aria-pressed="false">Dark</button>
+    </div>
+  </div>
+</header>
+<p class="proto">Prototype. Real tracks from the official IGC files, drawn at their GPS altitude over real terrain (no exaggeration).</p>
+
+<aside class="board" aria-label="Race order">
+  <h2>Race order <span id="boardClock"></span></h2>
+  <ol class="rows" id="rows"></ol>
+  <p class="more"></p>
+</aside>
+
+<section class="pilot" aria-live="polite">
+  <div class="pname">
+    <div class="pos" id="pPos"></div>
+    <h3 id="pName"></h3>
+    <p id="pMeta"></p>
+    <button class="listbtn mobonly" id="listBtn" aria-expanded="false">Race order</button>
+  </div>
+  <div class="nums">
+    <div class="num"><b id="nAlt"></b><span>Altitude, GPS</span></div>
+    <div class="num"><b id="nAgl"></b><span>Above ground</span></div>
+    <div class="num" id="vBox"><b id="nVar"></b><span>Climb, 20 s</span></div>
+    <div class="num hide-s"><b id="nGs"></b><span>Ground speed</span></div>
+    <div class="num"><b id="nGoal"></b><span id="nGoalL">To goal</span></div>
+  </div>
+</section>
+
+<p class="credit">Imagery © Esri, Maxar, Earthstar Geographics · Terrain AWS Terrain Tiles (Mapzen, SRTM) · Task, results and tracks Airtribune · MapLibre, deck.gl</p>
+
+<nav class="tl" aria-label="Replay">
+  <button class="play" id="play" aria-label="Pause"><svg viewBox="0 0 12 12" id="playIco"><rect x="1" y="0" width="3.6" height="12"/><rect x="7.4" y="0" width="3.6" height="12"/></svg><span class="lbl" id="playLbl">Pause</span></button>
+  <div class="clock" id="clock">12:15:00<small id="clockSub">Start gate</small></div>
+  <div class="track" id="track" role="slider" aria-label="Replay time" tabindex="0"><div class="rail"></div><div class="done" id="done"></div><div class="knob" id="knob"></div></div>
+  <div class="speeds" role="group" aria-label="Replay speed">
+    <button data-sp="10" aria-pressed="false" class="hide-s">10×</button>
+    <button data-sp="30" aria-pressed="true">30×</button>
+    <button data-sp="60" aria-pressed="false">60×</button>
+    <button data-sp="120" aria-pressed="false">120×</button>
+  </div>
+</nav>
+<div class="loading" id="loading">Loading terrain</div>
+
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
+<script src="flythrough-data.js"></script>
+<script>
+/* ================= data ================= */
+const D = window.FT, TO = D.tps[0];
+const LAT0 = TO.lat * Math.PI / 180, KX = 111.32 * Math.cos(LAT0), KY = 110.574;
+const toLL = (xm, ym) => [TO.lon + xm / 1000 / KX, TO.lat + ym / 1000 / KY];
+const toXY = (lon, lat) => [(lon - TO.lon) * KX, (lat - TO.lat) * KY]; // km
+const GATE = 12 * 3600 + 15 * 60;
+const fmtClock = t => { let s = Math.round(GATE + t); const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60; s %= 60; return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`; };
+const hypot = Math.hypot;
+
+const pilots = D.pilots.map(p => {
+  const T = [], X = [], Y = [], A = [], d = p.d;
+  let t = 0, x = 0, y = 0, a = 0;
+  for (let j = 0; j < d.length; j += 4) { t += d[j]; x += d[j + 1]; y += d[j + 2]; a += d[j + 3]; T.push(t); X.push(x / 1000); Y.push(y / 1000); A.push(a); }
+  const path = T.map((_, i) => [...toLL(X[i] * 1000, Y[i] * 1000), A[i]]);
+  const parts = p.n.split(" "), sur = parts.filter(w => w === w.toUpperCase() && /[A-Z]/.test(w));
+  return { ...p, T, X, Y, A, path, short: (sur[0] || parts.at(-1)), first: parts.filter(w => !sur.includes(w)).join(" "), end: T.at(-1) };
+});
+const T0 = -1200, T1 = Math.max(...pilots.map(p => p.end)) + 60;
+
+/* cylinders (km, local) and the optimised route (same method as the live tracker) */
+const cyl = D.tps.slice(1).map(t => ({ ...t, c: toXY(t.lon, t.lat) }));
+const route = (() => {
+  const TOp = [0, 0], P = cyl.map(c => c.c.slice()), dist = (a, b) => hypot(a[0] - b[0], a[1] - b[1]);
+  const segC = (a, b, c) => { const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy || 1, t = Math.max(0, Math.min(1, ((c[0] - a[0]) * dx + (c[1] - a[1]) * dy) / L)); return [a[0] + t * dx, a[1] + t * dy]; };
+  for (let it = 0; it < 40; it++) for (let i = 0; i < cyl.length; i++) {
+    const c = cyl[i], prev = i === 0 ? TOp : P[i - 1], next = P[i + 1];
+    if (!next) { const a = Math.atan2(prev[1] - c.c[1], prev[0] - c.c[0]); P[i] = [c.c[0] + c.r * Math.cos(a), c.c[1] + c.r * Math.sin(a)]; continue; }
+    if (c.ss !== "SS") { const q = segC(prev, next, c.c); if (dist(q, c.c) <= c.r) { P[i] = q; continue; } }
+    let best = Infinity, bp;
+    for (let k = 0; k < 360; k++) { const a = k / 360 * Math.PI * 2, x = [c.c[0] + c.r * Math.cos(a), c.c[1] + c.r * Math.sin(a)], f = dist(prev, x) + dist(x, next); if (f < best) { best = f; bp = x; } }
+    P[i] = bp;
+  }
+  const rest = P.map((_, i) => P.slice(i).reduce((s, p, k, arr) => s + (k ? dist(arr[k - 1], p) : 0), 0));
+  return { P, rest, dist };
+})();
+
+function idxAt(p, t) { // last fix index with T <= t
+  const T = p.T; if (t <= T[0]) return 0; if (t >= p.end) return T.length - 1;
+  let lo = 0, hi = T.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (T[m] <= t) lo = m; else hi = m; } return lo;
+}
+function stateAt(p, t) {
+  const i = idxAt(p, t), j = Math.min(i + 1, p.T.length - 1), span = p.T[j] - p.T[i], f = span > 0 ? Math.max(0, Math.min(1, (t - p.T[i]) / span)) : 0;
+  const x = p.X[i] + (p.X[j] - p.X[i]) * f, y = p.Y[i] + (p.Y[j] - p.Y[i]) * f, alt = p.A[i] + (p.A[j] - p.A[i]) * f;
+  const back = idxAt(p, t - 20), fw = idxAt(p, t + 10), dt = Math.max(1, p.T[fw] - p.T[back]);
+  const vario = (p.A[fw] - p.A[back]) / dt, gs = hypot(p.X[fw] - p.X[back], p.Y[fw] - p.Y[back]) / dt * 3600;
+  const h0 = idxAt(p, t - 45), h1 = idxAt(p, t + 45);
+  const heading = Math.atan2(p.X[h1] - p.X[h0], p.Y[h1] - p.Y[h0]) * 180 / Math.PI;
+  const k = p.tg.filter(g => g <= t).length, inGoal = t >= p.end;
+  const toGoal = inGoal ? 0 : route.dist([x, y], route.P[Math.min(k, route.P.length - 1)]) + route.rest[Math.min(k, route.P.length - 1)];
+  return { x, y, alt, vario, gs, heading, k, inGoal, toGoal, ll: toLL(x * 1000, y * 1000) };
+}
+
+/* ================= map ================= */
+const SAT = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
+const circle = (c, rKm, n = 160) => Array.from({ length: n + 1 }, (_, i) => { const a = i / n * Math.PI * 2; return toLL((c[0] + rKm * Math.cos(a)) * 1000, (c[1] + rKm * Math.sin(a)) * 1000); });
+const ringsGeo = { type: "FeatureCollection", features: cyl.map(c => ({ type: "Feature", properties: { goal: c.ss === "ES" ? 1 : 0 }, geometry: { type: "LineString", coordinates: circle(c.c, c.r) } })) };
+const routeGeo = { type: "Feature", geometry: { type: "LineString", coordinates: [[TO.lon, TO.lat], ...route.P.map(p => toLL(p[0] * 1000, p[1] * 1000))] } };
+
+const map = new maplibregl.Map({
+  container: "map",
+  style: {
+    version: 8,
+    sources: {
+      sat: { type: "raster", tiles: [SAT], tileSize: 256, maxzoom: 18, attribution: "Imagery © Esri, Maxar, Earthstar Geographics" },
+      dem: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 14, encoding: "terrarium", attribution: "Terrain: AWS Terrain Tiles (Mapzen, SRTM)" },
+      hs: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 14, encoding: "terrarium" },
+      rings: { type: "geojson", data: ringsGeo },
+      route: { type: "geojson", data: routeGeo },
+      shadow: { type: "geojson", data: { type: "FeatureCollection", features: [] } }
+    },
+    layers: [
+      { id: "bg", type: "background", paint: { "background-color": "#0A1E21" } },
+      { id: "sat", type: "raster", source: "sat", paint: { "raster-saturation": -0.12, "raster-contrast": 0.06, "raster-brightness-max": 0.92 } },
+      { id: "hill", type: "hillshade", source: "hs", layout: { visibility: "none" }, paint: { "hillshade-shadow-color": "#020B0B", "hillshade-highlight-color": "#6FA3A8", "hillshade-accent-color": "#0C2A2D", "hillshade-exaggeration": 0.9, "hillshade-illumination-direction": 315 } },
+      { id: "rings", type: "line", source: "rings", paint: { "line-color": ["case", ["==", ["get", "goal"], 1], "#FF5F00", "#FFFFFF"], "line-width": 2, "line-opacity": 0.85 } },
+      { id: "route", type: "line", source: "route", paint: { "line-color": "#FFFFFF", "line-width": 1.4, "line-opacity": 0.6, "line-dasharray": [3, 3] } },
+      { id: "shadow", type: "line", source: "shadow", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#000000", "line-width": 3, "line-opacity": 0.45, "line-blur": 1.5 } }
+    ],
+    terrain: { source: "dem", exaggeration: 1 },
+    sky: { "sky-color": "#6E9CB9", "horizon-color": "#C9D7DC", "fog-color": "#B4C5CB", "sky-horizon-blend": 0.6, "horizon-fog-blend": 0.35, "fog-ground-blend": 0.35, "atmosphere-blend": 0.8 }
+  },
+  center: [TO.lon, TO.lat], zoom: 12, pitch: 65, bearing: 160, maxPitch: 85,
+  attributionControl: false, antialias: true, fadeDuration: 0
+});
+const SKIES = {
+  sat: { "sky-color": "#6E9CB9", "horizon-color": "#C9D7DC", "fog-color": "#B4C5CB", "sky-horizon-blend": 0.6, "horizon-fog-blend": 0.35, "fog-ground-blend": 0.35, "atmosphere-blend": 0.8 },
+  dark: { "sky-color": "#03100F", "horizon-color": "#0F3236", "fog-color": "#0A2326", "sky-horizon-blend": 0.5, "horizon-fog-blend": 0.5, "fog-ground-blend": 0.25, "atmosphere-blend": 0 }
+};
+
+/* ================= deck.gl overlay: tracks at GPS altitude ================= */
+const { MapboxOverlay, TripsLayer, ScatterplotLayer, TextLayer, LineLayer, SolidPolygonLayer, PathLayer } = deck;
+const overlay = new MapboxOverlay({ interleaved: true, layers: [] });
+map.addControl(overlay);
+
+const TOP = Math.ceil((Math.max(...pilots.flatMap(p => p.A)) + 250) / 100) * 100; // wall height, m MSL
+const BASE = 1200; // below the lowest ground in the task area
+function ringPoly(c, rKm, wKm) { // thin ring = polygon with a hole, extruded into a translucent wall
+  const o = circle(c.c, rKm + wKm / 2, 120).map(p => [...p, BASE]), i = circle(c.c, Math.max(0.01, rKm - wKm / 2), 120).reverse().map(p => [...p, BASE]);
+  return [o, i];
+}
+const walls = cyl.map(c => ({ poly: ringPoly(c, c.r, Math.max(0.025, c.r * 0.004)), goal: c.ss === "ES", code: c.code }));
+const marks = [
+  { ll: [TO.lon, TO.lat, TO.elev + 60], t: `Take-off · ${TO.name}`, s: `${TO.elev.toLocaleString("en")} m` },
+  ...cyl.map((c, i) => ({ ll: [c.lon, c.lat, c.elev + 60], t: c.ss === "ES" ? `Goal · ${c.name}` : `${c.ss === "SS" ? "Start" : "TP " + (i + 1)} · ${c.name}`, s: `${c.r >= 1 ? c.r + " km" : c.r * 1000 + " m"} ${c.check === "Exit" ? "exit" : "cylinder"}` }))
+];
+
+let selected = pilots[0].id, leader = pilots[0].id, now = -60, playing = true, speed = 30, cam = "follow", base = "sat";
+const ORANGE = [255, 95, 0], WHITE = [255, 255, 255], SRS = [29, 169, 225];
+
+function labelled(st) {
+  const want = st.filter(s => s.p.id === selected || s.p.id === leader || s.pos <= 3)
+    .sort((a, b) => (b.p.id === selected) - (a.p.id === selected) || a.pos - b.pos);
+  return declutter(want.map(s => ({ s, pos: [...s.ll, s.alt], w: (String(s.pos).length + s.p.short.length + 1) * 9 + 14 })), []).map(b => (b.s.box = b.box, b.s));
+}
+// screen-space de-cluttering: keep a label only if its box does not hit one already kept (boxes are estimates)
+let pilotBoxes = [];
+function declutter(items, taken) {
+  const vp = overlay._deck && overlay._deck.getViewports()[0], kept = [];
+  for (const it of items) {
+    if (!vp) { kept.push(it); continue; }
+    const [x, y] = vp.project(it.pos); it.box = [x - it.w / 2, y - 34, x + it.w / 2, y - 8];
+    const hit = b => !(b[2] < it.box[0] || b[0] > it.box[2] || b[3] < it.box[1] || b[1] > it.box[3]);
+    if (![...taken, ...kept.map(k => k.box)].some(hit)) kept.push(it);
+  }
+  return kept;
+}
+function layers(st) {
+  const sel = pilots.find(p => p.id === selected);
+  return [
+    new SolidPolygonLayer({ id: "walls", data: walls, getPolygon: d => d.poly, extruded: true, getElevation: TOP - BASE, getFillColor: d => d.goal ? [...ORANGE, 70] : [255, 255, 255, 16], material: false, parameters: { depthMask: false } }),
+    new TripsLayer({ id: "trails", data: pilots.filter(p => p.id !== selected), getPath: p => p.path, getTimestamps: p => p.T, getColor: p => p.id === leader ? SRS : WHITE, opacity: 0.75, widthUnits: "pixels", getWidth: p => p.id === leader ? 2.4 : 1.4, capRounded: true, jointRounded: true, trailLength: 420, currentTime: now, fadeTrail: true, updateTriggers: { getColor: leader, getWidth: leader } }),
+    new TripsLayer({ id: "selTrail", data: [sel], getPath: p => p.path, getTimestamps: p => p.T, getColor: ORANGE, widthUnits: "pixels", getWidth: 3.2, capRounded: true, jointRounded: true, trailLength: 1e5, currentTime: now, fadeTrail: false }),
+    new LineLayer({ id: "drop", data: st.filter(s => s.p.id === selected && s.ground != null), getSourcePosition: s => [...s.ll, s.alt], getTargetPosition: s => [...s.ll, s.ground], getColor: [255, 255, 255, 150], getWidth: 1, widthUnits: "pixels" }),
+    new ScatterplotLayer({ id: "heads", data: st, getPosition: s => [...s.ll, s.alt], getFillColor: s => s.p.id === selected ? ORANGE : s.p.id === leader ? SRS : WHITE, getLineColor: [3, 16, 15, 220], stroked: true, lineWidthMinPixels: 1.5, radiusUnits: "pixels", getRadius: s => s.p.id === selected ? 7 : 4.5, billboard: true, updateTriggers: { getFillColor: [selected, leader], getRadius: selected } }),
+    new TextLayer({ id: "names", data: (pilotBoxes = labelled(st)), getPosition: s => [...s.ll, s.alt], getText: s => `${s.pos} ${s.p.short}`, getSize: s => s.p.id === selected ? 14 : 12, getColor: s => s.p.id === selected ? WHITE : [255, 255, 255, 220], fontFamily: "Inter, system-ui, sans-serif", fontWeight: 700, getPixelOffset: [0, -16], background: true, getBackgroundColor: s => s.p.id === selected ? ORANGE : [3, 16, 15, 200], backgroundPadding: [6, 3], billboard: true, characterSet: "auto", updateTriggers: { getSize: selected, getColor: selected, getBackgroundColor: selected } }),
+    new TextLayer({ id: "marks", data: declutter(marks.map(m => ({ ...m, pos: m.ll, w: m.t.length * 7 + 14 })), pilotBoxes.map(s => s.box).filter(Boolean)), getPosition: d => d.ll, getText: d => d.t, getSize: 12, getColor: [255, 255, 255, 235], fontFamily: "Inter, system-ui, sans-serif", fontWeight: 600, getPixelOffset: [0, -10], background: true, getBackgroundColor: [3, 16, 15, 170], backgroundPadding: [6, 3], billboard: true, characterSet: "auto" })
+  ];
+}
+
+function groundAt(ll) { // absolute terrain height (m MSL) from loaded DEM tiles; null until a tile covers the point
+  if (!map.terrain) return null;
+  const g = map.terrain.getElevationForLngLatZoom(maplibregl.LngLat.convert(ll), map.transform.tileZoom);
+  return g > 0 ? g : null;
+}
+
+/* ================= UI ================= */
+const $ = id => document.getElementById(id);
+const rowsEl = $("rows");
+let lastBoard = "";
+function nameRow(p) { return `<b>${p.short}</b> ${p.first.split(" ")[0]}<i>${p.c}</i>`; }
+
+function computeStates(t) {
+  const st = pilots.map(p => ({ p, ...stateAt(p, t) }));
+  // race order: goal first by finish time; then most turnpoints; then least distance to goal. Before the gate: by altitude.
+  st.sort((a, b) => t < 0 ? b.alt - a.alt : (a.inGoal && b.inGoal) ? a.p.end - b.p.end : a.inGoal !== b.inGoal ? (a.inGoal ? -1 : 1) : a.toGoal - b.toGoal);
+  st.forEach((s, i) => { s.pos = i + 1; s.ground = groundAt(s.ll); });
+  return st;
+}
+
+function renderBoard(st, t) {
+  const n = innerWidth < 760 ? 20 : Math.max(5, Math.min(20, Math.floor((innerHeight - 400) / 29)));
+  const show = st.filter(s => s.pos <= n || s.p.id === selected);
+  rowsEl.parentElement.querySelector(".more").textContent = n < 20 ? `Top ${n} of the 20 tracked finishers. Choose a pilot to follow.` : "Top 20 finishers tracked. Choose a pilot to follow.";
+  const html = show.map(s => `<li data-id="${s.p.id}" class="${s.p.id === selected ? "sel" : ""}"><span class="ps">${s.pos}</span><span class="nm">${nameRow(s.p)}</span><span class="al">${Math.round(s.alt).toLocaleString("en")} m</span><span class="dg">${s.inGoal ? "Goal" : t < 0 ? "–" : s.toGoal.toFixed(1) + " km"}</span></li>`).join("");
+  if (html !== lastBoard) { rowsEl.innerHTML = html; lastBoard = html; }
+  $("boardClock").textContent = t < 0 ? "Before the start gate" : fmtClock(t);
+}
+
+function renderPilot(s, t) {
+  const p = s.p;
+  $("pPos").textContent = t < 0 ? `${p.c} · finished ${ordinal(p.rk)}` : s.inGoal ? `In goal · ${ordinal(p.rk)} on the day` : `P${s.pos} of the top 20 now · ${p.c}`;
+  $("pName").textContent = p.n;
+  $("pMeta").textContent = `${p.gl} · official time ${p.tm} · ${p.sc.toFixed(1)} points`;
+  $("nAlt").innerHTML = `${Math.round(s.alt).toLocaleString("en")}<small>m</small>`;
+  $("nAgl").innerHTML = s.ground != null ? `${Math.max(0, Math.round(s.alt - s.ground)).toLocaleString("en")}<small>m</small>` : "–";
+  $("nVar").innerHTML = `${s.vario >= 0 ? "+" : "−"}${Math.abs(s.vario).toFixed(1)}<small>m/s</small>`;
+  $("vBox").className = "num " + (s.vario > 0.4 ? "up" : s.vario < -1.2 ? "dn" : "");
+  $("nGs").innerHTML = `${Math.round(s.gs)}<small>km/h</small>`;
+  $("nGoal").innerHTML = s.inGoal ? `${p.fin.slice(0, 5)}<small>in goal</small>` : `${s.toGoal.toFixed(1)}<small>km</small>`;
+  $("nGoalL").textContent = s.inGoal ? "Finish, local" : t < 0 ? "Task, optimised" : "To goal, optimised";
+}
+const ordinal = n => n + (["th", "st", "nd", "rd"][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || "th");
+
+/* timeline */
+const trackEl = $("track");
+const pct = t => (t - T0) / (T1 - T0) * 100;
+function ticks() {
+  trackEl.querySelectorAll(".tick").forEach(e => e.remove());
+  const sel = pilots.find(p => p.id === selected), add = (t, txt, cls = "") => { const e = document.createElement("span"); e.className = "tick " + cls; e.style.left = pct(t) + "%"; e.textContent = txt; trackEl.appendChild(e); };
+  add(0, "Gate 12:15", "g");
+  sel.tg.slice(1, -1).forEach((t, i) => { if (pct(sel.end) - pct(t) > 3) add(t, `TP${i + 2}`, "hide-s"); });
+  add(sel.end, "Goal", "g");
+}
+function setTime(t) { now = Math.max(T0, Math.min(T1, t)); }
+function scrub(e) { const r = trackEl.getBoundingClientRect(); setTime(T0 + (e.clientX - r.left) / r.width * (T1 - T0)); }
+trackEl.addEventListener("pointerdown", e => { trackEl.setPointerCapture(e.pointerId); scrub(e); trackEl.onpointermove = scrub; });
+trackEl.addEventListener("pointerup", () => trackEl.onpointermove = null);
+trackEl.addEventListener("keydown", e => { if (e.key === "ArrowRight") setTime(now + 60); if (e.key === "ArrowLeft") setTime(now - 60); });
+
+function setPlaying(v) {
+  playing = v;
+  $("playLbl").textContent = v ? "Pause" : "Play";
+  $("play").setAttribute("aria-label", v ? "Pause" : "Play");
+  $("playIco").innerHTML = v ? '<rect x="1" y="0" width="3.6" height="12"/><rect x="7.4" y="0" width="3.6" height="12"/>' : '<path d="M1 0 L11 6 L1 12 Z"/>';
+}
+$("play").onclick = () => { if (!playing && now >= T1) now = T0; setPlaying(!playing); };
+document.querySelectorAll("[data-sp]").forEach(b => b.onclick = () => { speed = +b.dataset.sp; document.querySelectorAll("[data-sp]").forEach(x => x.setAttribute("aria-pressed", x === b)); });
+rowsEl.addEventListener("click", e => { const li = e.target.closest("li"); if (!li) return; select(li.dataset.id); document.body.classList.remove("list"); $("listBtn").setAttribute("aria-expanded", "false"); });
+$("listBtn").onclick = () => { const on = document.body.classList.toggle("list"); $("listBtn").setAttribute("aria-expanded", on); };
+function select(id) { selected = id; lastBoard = ""; ticks(); if (cam === "free") setCam("follow"); }
+document.addEventListener("keydown", e => { if (e.key === " " && e.target === document.body) { e.preventDefault(); $("play").click(); } });
+
+/* camera */
+let camBearing = 160, orbitA = 0;
+function setCam(m) {
+  cam = m;
+  document.querySelectorAll("[data-cam]").forEach(x => x.setAttribute("aria-pressed", x.dataset.cam === m));
+  if (m === "course") {
+    const pts = cyl.flatMap(c => circle(c.c, Math.min(c.r, 8), 24)).concat([[TO.lon, TO.lat]]);
+    const b = pts.reduce((b, p) => b.extend(p), new maplibregl.LngLatBounds(pts[0], pts[0]));
+    const narrow = innerWidth < 760;
+    map.fitBounds(b, { pitch: narrow ? 50 : 58, bearing: -12, padding: narrow ? { top: 150, bottom: 230, left: 10, right: 10 } : { top: 140, bottom: 220, left: 380, right: 60 }, duration: 2200 });
+  }
+}
+document.querySelectorAll("[data-cam]").forEach(b => b.onclick = () => setCam(b.dataset.cam));
+const stopFollow = e => { if (e.originalEvent && (cam === "follow" || cam === "orbit")) setCam("free"); };
+map.on("dragstart", stopFollow); map.on("rotatestart", stopFollow); map.on("pitchstart", stopFollow); map.on("wheel", e => stopFollow(e));
+
+/* base map */
+function setBase(b) {
+  base = b;
+  document.querySelectorAll("[data-base]").forEach(x => x.setAttribute("aria-pressed", x.dataset.base === b));
+  map.setLayoutProperty("sat", "visibility", b === "sat" ? "visible" : "none");
+  map.setLayoutProperty("hill", "visibility", b === "dark" ? "visible" : "none");
+  map.setPaintProperty("bg", "background-color", b === "dark" ? "#06191B" : "#0A1E21");
+  map.setPaintProperty("route", "line-color", b === "dark" ? "#FF5F00" : "#FFFFFF");
+  map.setSky(SKIES[b]);
+}
+document.querySelectorAll("[data-base]").forEach(b => b.onclick = () => setBase(b.dataset.base));
+
+const lerpAng = (a, b, k) => { let d = ((b - a + 540) % 360) - 180; return a + d * k; };
+let last = performance.now(), shadowAt = 0, uiAt = 0;
+function frame(ts) {
+  const dt = Math.min(0.1, (ts - last) / 1000); last = ts;
+  if (playing) { now += dt * speed; if (now >= T1) { now = T1; setPlaying(false); } }
+  const st = computeStates(now), s = st.find(x => x.p.id === selected);
+  leader = now >= 0 ? st[0].p.id : null;
+  overlay.setProps({ layers: layers(st) });
+
+  if (cam === "follow" || cam === "orbit") {
+    const narrow = innerWidth < 760;
+    if (cam === "follow") camBearing = lerpAng(camBearing, s.heading, Math.min(1, dt * 0.9));
+    else { orbitA = (orbitA + dt * 9) % 360; camBearing = lerpAng(camBearing, s.heading + orbitA, 1); }
+    // chase camera: the map centre is the ground point on the line of sight through the pilot,
+    // so the pilot sits mid-screen; zoom puts the camera a fixed distance behind the pilot.
+    const pitch = cam === "orbit" ? 66 : 74, pr = pitch * Math.PI / 180, br = camBearing * Math.PI / 180;
+    const h = Math.max(150, s.alt - (s.ground ?? s.alt - 700)), ahead = Math.min(h * Math.tan(pr), 6000);
+    const cx = s.x + ahead / 1000 * Math.sin(br), cy = s.y + ahead / 1000 * Math.cos(br);
+    const camDist = (narrow ? 3400 : 2600) + h / Math.cos(pr);
+    const zoom = Math.log2(map.transform.cameraToCenterDistance * 40075016.7 * Math.cos(LAT0) / (512 * camDist));
+    map.jumpTo({ center: toLL(cx * 1000, cy * 1000), bearing: camBearing, pitch, zoom });
+  }
+  if (ts - shadowAt > 250) { // ground shadow of the selected track, draped on the terrain
+    shadowAt = ts; const p = s.p, i = idxAt(p, now);
+    map.getSource("shadow").setData({ type: "Feature", geometry: { type: "LineString", coordinates: p.path.slice(0, i + 1).map(q => [q[0], q[1]]).concat([s.ll]) } });
+  }
+  if (ts - uiAt > 120) {
+    uiAt = ts; renderBoard(st, now); renderPilot(s, now);
+    $("clock").firstChild.nodeValue = fmtClock(now);
+    $("clockSub").textContent = now < 0 ? `${Math.ceil(-now / 60)} min to gate` : `Race +${Math.floor(now / 3600)}:${String(Math.floor(now / 60) % 60).padStart(2, "0")}`;
+    $("done").style.width = pct(now) + "%"; $("knob").style.left = pct(now) + "%";
+    trackEl.setAttribute("aria-valuetext", fmtClock(now));
+  }
+  requestAnimationFrame(frame);
+}
+
+map.once("style.load", () => {
+  ticks();
+  // demo-friendly start: a minute before the gate, so the field is in the air and about to leave
+  const hash = new URLSearchParams(location.hash.slice(1));
+  if (hash.get("t")) now = +hash.get("t");
+  if (hash.get("cam")) setCam(hash.get("cam"));
+  if (hash.get("base")) setBase(hash.get("base"));
+  if (hash.get("pilot")) select(hash.get("pilot"));
+  if (hash.get("paused")) setPlaying(false);
+  requestAnimationFrame(frame);
+  map.once("idle", () => $("loading").classList.add("off"));
+});
+setTimeout(() => $("loading").classList.add("off"), 5000);
+</script>
+<script src="../assets/brand.js" defer></script>
+</body>
+</html>

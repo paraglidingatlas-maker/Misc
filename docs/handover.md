@@ -41,7 +41,19 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
-## NEXT: 3D fly-through prototype, satellite on terrain (owner chose this, 25 Nov 2026)
+## DONE: 3D fly-through prototype, satellite on terrain (built 25 Nov 2026, awaiting owner review)
+
+Page: `airtribune-redesign/concepts/flythrough.html` (public once on main: …/airtribune-redesign/concepts/flythrough.html). Not linked from live.html yet; the ← goes to the live tracker.
+- Data: `concepts/flythrough-data.js`, built by `python3 -I src/build/build_flythrough_data.py` (run from `airtribune-redesign/`) from `src/data/srs-task3/task3.json` (real Task 3, top-20 IGC tracks, every fix, metres from take-off, delta-encoded).
+- Stack: MapLibre 4.7.1 (Esri World Imagery raster + AWS terrarium DEM terrain, exaggeration 1, sky/fog), deck.gl 9.0.38 `MapboxOverlay` interleaved (TripsLayer trails at GPS altitude, orange full trail for the followed pilot, SRS-blue leader, drop line to the ground, translucent cylinder walls, take-off/TP/goal labels). Draped ground: cylinder rings, dashed optimised route, shadow of the followed track.
+- Camera: Follow (chase cam ~2.6 km behind, heading averaged over ±45 s so thermalling does not spin the view), Course (fitBounds, pitch 58), Orbit, Free (any drag switches to Free). Satellite / Dark (hillshade in site colours). Replay 10–120×, scrubber with gate/TP/goal ticks. Race order board (click a pilot to follow; phone: "Race order" opens a sheet).
+- URL hash for demos/screenshots: `#t=1500&cam=course&base=dark&pilot=1709&paused=1` (t = seconds from the 12:15 gate).
+- AGL uses the loaded DEM tiles (`map.terrain.getElevationForLngLatZoom`), so it is approximate (SRTM ~30 m).
+- Production note for the owner: Esri imagery tiles are keyless test use only; Airtribune would need a licensed satellite provider/key (MapTiler, Mapbox, Esri with a key).
+- Screenshots need software WebGL in this container (SwiftShader): Playwright with `--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader`, serve files via `page.route` (a local http.server was refused by the permission classifier), and wait ~15 s + `map.areTilesLoaded()`.
+
+### Original plan (kept for reference)
+
 
 Owner shared a screen recording of xcstats.app (tilted 3D vector map, sky/haze, tracks at real altitude) and chose **satellite imagery draped over 3D terrain** as the background. Build it as a **separate prototype page** (`airtribune-redesign/concepts/flythrough.html`), not in live.html, until the owner approves.
 

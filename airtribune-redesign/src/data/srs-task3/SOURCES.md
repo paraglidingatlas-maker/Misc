@@ -35,3 +35,8 @@ Task 3 was flown on Tue 10 Nov 2026 ("Task T6.3 (Sports)", official).
 - SSS open time / task deadline as published, and the task's wind/weather briefing.
 - Tracks of pilots ranked below 20 are in the zip but not used (kept the page light).
 - The background relief on the map is stylised, not real terrain.
+
+## Also used by
+
+- `concepts/flythrough.html` (3D fly-through prototype) via `src/build/build_flythrough_data.py` → `concepts/flythrough-data.js`
+  (all fixes of the 20 tracks, not downsampled further). Terrain there is real (AWS Terrain Tiles, SRTM-based), imagery Esri World Imagery.
