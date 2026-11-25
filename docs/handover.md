@@ -41,6 +41,15 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
+## NOW: expert "key moments" analysis of Tapalpa Task 3 (owner said "ok", 25 Nov 2026)
+
+Owner asked whether we can analyse tracklogs like an expert paragliding coach and commentate on the big moves. Agreed first step: a **key-moments analysis of SRS Tapalpa 2026 Task 3** for the owner to review (the owner is a pilot; they check tone and calls before anything is published).
+- Data: `src/data/srs-task3/task3.json` (top-20 tracks, all fixes, local km from take-off, t = s from the 12:15 gate, tags = SSS/TP/goal times; see SOURCES.md). The IGC zip with all 106 tracks is listed in SOURCES.md if more are needed.
+- Measure per pilot and leg: thermals (location, avg climb, entry/exit height, time to centre, leaving early/late vs the gaggle), glides (L/D, speed, height lost per km), deviation from the optimised route and gaggle splits, start timing, leading vs following, TP tagging efficiency, final-glide commit point and goal arrival height; time gained/lost per leg vs the winner and the gaggle.
+- Known swing to explain: Abel Varga was 10th (30.6 km to go) at 13:11:40 and 1st, 2.7 km clear, at 13:26:40 (seen in the 3D replay's race order).
+- Limits to state plainly: no wind (only the ~1.5 km/h drift estimate), no airspeed or speed-bar data (bar use is inferred), reasons are inferences.
+- Output first: a Python analysis script in `src/data/srs-task3/` plus a readable "Key moments" review (time, pilot, what happened, time gained, the evidence) for the owner. Later, if approved: broadcast captions in `concepts/flythrough.html` that jump the camera to each moment, and a short race report.
+
 ## NOW: organiser photos on the event pages (owner said "yes", 25 Nov 2026)
 
 Owner asked why Panchgani (BWO) and the other event pages don't show photos from their own Airtribune pages. Reason: the pages were built before the owner approved organiser photos (25 Nov). They all reuse the owner's SRS Tapalpa 2026 set (`events/img/orange-pod.jpg`, `coral-terraces.jpg`, `pink-forest.jpg`, `pod-closeup.jpg`, `white-blur.jpg`, ...). The later chat fetched only ONE organiser photo per event for the calendar strip (`events/img/places/<slug>.jpg`, picks in `SOURCES.json`); the rest of the galleries were only in that chat's scratchpad and are gone.
