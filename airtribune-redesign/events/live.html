@@ -117,6 +117,13 @@ a{color:inherit;text-decoration:none}
 .tele-h .fl{width:28px;height:21px}
 .tele-h b{font:800 italic 18px var(--f-display);text-transform:uppercase}
 .tele-h .p{margin-left:auto;font:800 italic 22px var(--f-display);color:var(--orange)}
+/* pilot data card: closed until a pilot is clicked; × or Esc closes it */
+.tele.off{display:none}
+.tele .x,.maphint .x{flex:none;width:28px;height:28px;margin-right:-6px;display:grid;place-items:center;font:400 22px/1 var(--f-body);color:var(--ink-2);border-radius:2px}
+.tele .x:hover,.maphint .x:hover{color:#fff;background:rgba(255,255,255,.08)}
+.maphint{display:flex;align-items:center;gap:10px}
+.maphint .x{width:22px;height:22px;font-size:18px;margin-right:-6px}
+.maphint.gone{pointer-events:none}
 .tele-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line)}
 .tele-g div{background:rgba(3,16,15,.95);padding:10px 12px}
 .tele-g b{display:block;margin-top:4px;font:800 italic 20px/1 var(--f-display);font-variant-numeric:tabular-nums}
@@ -367,13 +374,13 @@ a{color:inherit;text-decoration:none}
       <div class="map-ov tl"><span class="leg"><span>Task</span><b id="ovTask">107.9 km</b></span><span class="leg"><span id="ovLeadL">Leader</span><b id="ovLead">—</b></span></div>
       <div class="toast" id="toast"></div>
       <button class="compass" id="compass" aria-label="Reset map to north up" title="North up"><svg viewBox="0 0 40 40" aria-hidden="true"><g id="compassN"><path d="M20 5 L25 20 L20 17 L15 20Z" fill="#FF5F00"/><path d="M20 35 L25 20 L20 23 L15 20Z" fill="rgba(255,255,255,.55)"/><text x="20" y="4" text-anchor="middle" font-size="6" font-weight="800" fill="#fff" font-family="Inter, sans-serif">N</text></g></svg></button>
-      <div class="maphint" id="maphint">Drag to move · Scroll or double-click to zoom · Shift- or right-drag to rotate and tilt · N north · R reset</div>
+      <div class="maphint" id="maphint"><span>Drag to move · Scroll or double-click to zoom · Shift- or right-drag to rotate and tilt · N north · R reset</span><button class="x" id="hintClose" aria-label="Hide map help">×</button></div>
       <div class="cine-board" id="cineBoard" aria-label="Top five"></div>
       <div class="cine-bar" id="cineBar" aria-live="off"></div>
       <div class="cine-bug" data-brand aria-label="Airtribune"></div>
       <button class="cine-exit" id="cineExit" aria-label="Exit broadcast view">Exit broadcast <kbd>Esc</kbd></button>
-      <div class="tele" id="tele" aria-live="off">
-        <div class="tele-h"><span class="fl" id="teFlag"></span><b id="teName">—</b><span class="p" id="tePos">P1</span></div>
+      <div class="tele off" id="tele" aria-live="off">
+        <div class="tele-h"><span class="fl" id="teFlag"></span><b id="teName">—</b><span class="p" id="tePos">P1</span><button class="x" id="teClose" aria-label="Close pilot data">×</button></div>
         <div class="tele-g">
           <div><span class="lbl">Altitude</span><b class="num" id="teAlt">0<small>m</small></b></div>
           <div><span class="lbl">Vario</span><b class="num" id="teVar">0<small>m/s</small></b><div class="vario"><i id="teVarBar"></i></div></div>
@@ -780,10 +787,11 @@ function jump(t){ clearToast(); st.frac = Math.max(0, Math.min(1, fracOf(t))); M
 
 /* ---------- selection, camera, toast ---------- */
 function select(k, manual){
-  st.sel = k; if (manual) st.cineAuto = false;
+  st.sel = k; if (manual){ st.cineAuto = false; $("#tele").classList.remove("off"); }
   if (manual && st.cam !== "follow") setCam("follow");
   M.rows.forEach(r => r.classList.toggle("sel", +r.dataset.k === k));
 }
+$("#teClose").addEventListener("click", e => { e.stopPropagation(); $("#tele").classList.add("off"); });
 function setCam(c){ st.cam = c; if (c !== "free") st.view.zoom = 1; document.querySelectorAll("[data-cam]").forEach(b => b.setAttribute("aria-pressed", b.dataset.cam === c)); }
 let toastTimer;
 function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 2600); }
@@ -991,7 +999,7 @@ function setCine(on){
 }
 $("#cineBtn").onclick = () => setCine(!st.cine);
 $("#cineExit").onclick = () => setCine(false);
-addEventListener("keydown", e => { if (e.key === "Escape" && st.cine) setCine(false); if ((e.key === "b" || e.key === "B") && e.target === document.body) setCine(!st.cine); });
+addEventListener("keydown", e => { if (e.key === "Escape" && !st.cine && !$("#tele").classList.contains("off")){ $("#tele").classList.add("off"); return; } if (e.key === "Escape" && st.cine) setCine(false); if ((e.key === "b" || e.key === "B") && e.target === document.body) setCine(!st.cine); });
 setPlay(st.playing);
 build(); frame(true);
 /* ---------- Google Earth style navigation ----------
@@ -1004,7 +1012,8 @@ build(); frame(true);
   const D = 1400, TMAX = 60, ZMIN = .5, ZMAX = 10;
   V.tilt = 0; V.tiltT = 0;
   let start = null, moved = false, coast = null, zanim = null, samples = [], lastTap = null;
-  const hint = $("#maphint"); setTimeout(() => hint.classList.add("gone"), 7000);
+  const hint = $("#maphint"), hideHint = () => hint.classList.add("gone"); setTimeout(hideHint, 7000);
+  $("#hintClose").addEventListener("click", hideHint); stage.addEventListener("pointerdown", hideHint, {once:true}); stage.addEventListener("wheel", hideHint, {once:true, passive:true});
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   // smallest scale at which the tilted plane still covers the whole view (its far corners stay off screen)
   const tScale = t => { const w = wrap.clientWidth, h = wrap.clientHeight, a = t*Math.PI/180, c = Math.cos(a), s = Math.sin(a);
