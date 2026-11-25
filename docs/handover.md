@@ -41,6 +41,19 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
+## NEXT: 3D fly-through prototype, satellite on terrain (owner chose this, 25 Nov 2026)
+
+Owner shared a screen recording of xcstats.app (tilted 3D vector map, sky/haze, tracks at real altitude) and chose **satellite imagery draped over 3D terrain** as the background. Build it as a **separate prototype page** (`airtribune-redesign/concepts/flythrough.html`), not in live.html, until the owner approves.
+
+Plan:
+- MapLibre GL JS (`cdn.jsdelivr.net/npm/maplibre-gl@4.7.1`) with a raster-dem terrain source from AWS Terrain Tiles (terrarium encoding, `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png`, keyless), `sky` + fog for the horizon.
+- Satellite: Esri World Imagery raster tiles (`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`, keyless; attribution "Esri, Maxar, Earthstar Geographics"). Fine for the prototype; for production Airtribune needs a licensed provider/key (MapTiler or Mapbox satellite). Tell the owner.
+- Tracks: deck.gl (`unpkg.com/deck.gl@9.0.38`) via `MapboxOverlay` (interleaved): PathLayer/TripsLayer with z = GPS altitude (m MSL), animated trail for the selected pilot and the leader; task cylinders as translucent extruded rings; take-off and goal markers.
+- Data: real SRS Tapalpa 2026 Task 3 (20 IGC tracks, task, results) in `airtribune-redesign/src/data/srs-task3/task3.json` (see SOURCES.md there; live-tracker.html embeds the same via embed_task3.py).
+- Camera: follow mode flying behind the pilot (pitch 60–75°, bearing along the track), course overview, free orbit; timeline scrubber + play speed like live.html; a dark-map toggle in the site colours as an alternative.
+- All four hosts above returned 200 from this container (25 Nov 2026), so Playwright screenshots should render.
+- Check at 1440 and 390, screenshot fly-through frames, send to the owner.
+
 ## DONE 25 Nov 2026 (later in the same chat)
 - Concept banner removed from every page (owner: officially hired); footers keep sources, credits and "check the official event page"; root page text updated. CLAUDE.md updated.
 - Calendar strip: each column has a place photo (organisers' photos from its Airtribune event page, `events/img/places/<slug>.jpg`, BWO uses the owner's Panchgani lake shot) that fades in on hover/focus; SRS columns crossfade from their race photo to the venue; the open column shows its photo behind the details, which sit at the bottom. The generated task map in the open column is gone (it was invented data). Photos load when the strip nears the viewport.
