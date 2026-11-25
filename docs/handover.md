@@ -41,6 +41,10 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
+## ALSO OPEN (25 Nov 2026, same chat)
+- Done and live: the Gemona photo fades into the page (no hard band); the live tracker's pilot data card opens only when a pilot is clicked and closes with × or Esc; the map help strip has a × and hides on the first drag/scroll.
+- Owner asked: place photos on hover in the calendar strip (SailGP style), a more immersive tour, and a whole-page immersion review. The review is in `docs/design-audit/immersion.md` (ranked techniques). **Blocked on place photos**: Commons/Wikipedia rate-limit this container (429); Unsplash search needs a key. Waiting for the owner to choose: their own photos (Website repo, assets branch), an Unsplash API key, or links they pick.
+
 ## NOW: rethink the calendar hero (owner asked 25 Nov 2026: "the home page hero need rethink, try using some other concept")
 
 Assumed to mean the hero of the season calendar (events/index.html, source `src/season-calendar.html`, markup at `<section class="hero"`), because the site root is only a list of the concepts. **Confirm this with the owner first.**
