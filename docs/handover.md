@@ -1,6 +1,6 @@
 # Handover: Airtribune redesign concept
 
-Last updated 24 Nov 2026 by the chat "Design audit batch 2" (after "Design audit batch 1") (after "Tour map plan A + design audit") (after "Live view navigation + tour review") (after "BWO import") (after "Rounds redesign + real Task 3") (follows "Airtribune logo rollout").
+Last updated 25 Nov 2026 by the chat "Design audit batch 2" (after "Design audit batch 1") (after "Tour map plan A + design audit") (after "Live view navigation + tour review") (after "BWO import") (after "Rounds redesign + real Task 3") (follows "Airtribune logo rollout").
 
 ## Live
 
@@ -40,6 +40,19 @@ Sources are in `airtribune-redesign/src/`:
 - **Logo is final: Heritage (study direction No. 1)**: red triangle + blue square, lowercase wordmark with triangle dots on the i's. Live on every page, the favicon, the live-tracker top bar (tile) and the broadcast-view corner bug. The owner briefly picked Thermal/Pinwheel with a switch, then settled on Heritage; the switch was removed.
 
 
+
+## NOW: rethink the calendar hero (owner asked 25 Nov 2026: "the home page hero need rethink, try using some other concept")
+
+Assumed to mean the hero of the season calendar (events/index.html, source `src/season-calendar.html`, markup at `<section class="hero"`), because the site root is only a list of the concepts. **Confirm this with the owner first.**
+
+Current hero: the race bar above it (next round, country, countdown), a full-bleed `orange-pod` photo with a slow zoom, the label "Paragliding · Season 2026/27", the big "World calendar 2026/27" title, a short intro, and a frosted info card (next round, dates, Round details button, Live tracker replay link). Below it is the stat band with count-ups. Audit findings that apply (docs/design-audit/cal.json): cal-09 (next round shown three times above the fold), cal-28 (slow zoom, glass card over the photo's subject), cal-33 (card inside a card), cal-07 (stat rows repeat each other), cal-02 (city as the headline).
+
+Way of working (same as batch 3, which this merges into): **don't change the live page first.** Build 2–3 distinct concepts as static mockups in `airtribune-redesign/concepts/` (e.g. hero-a.html, hero-b.html, hero-c.html, reusing the page's fonts, colours and photos), screenshot each at 1440 and 390 px, and send them to the owner. Only after the owner picks one, roll it into `src/season-calendar.html`, rebuild with `python3 src/build/build_pages.py`, check, and commit to main. Keep the owner decisions: solid orange buttons, SRS logo prominent, Heritage logo, the concept label, photo credits, a SailGP-style look.
+
+Direction ideas to start from (the owner said "some other concept", so they should differ clearly from today's photo + title + card):
+- A. Broadcast title card: the next round is the headline (city in huge type, dates, a live countdown on one line, one orange button), the photo full-bleed behind it, no card and no repeated race bar.
+- B. The season is the headline: a typographic month-by-month run of all 26 rounds (city names, SRS rounds in blue, the next round in orange) fills the hero; the photo is secondary or a strip.
+- C. Live first: the hero is the Tapalpa Task 3 replay itself (map + top-5 ribbon, autoplaying muted), with the title and "Watch replay" over it.
 
 ## NOW: fix the design audit, batches 1 and 2 (owner said "Ok", 24 Nov 2026)
 
