@@ -1,7 +1,9 @@
 """Build one page per SRS 2027 event from the scraped official pages.
 Run: python3 build_srs.py <scraped-json-dir> <helpers.js> <site-dir>
 """
-import json, sys, re, html, datetime as dt
+import json, sys, re, html, os, datetime as dt
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import photos
 
 SRC, HELPERS, SITE = sys.argv[1], sys.argv[2], sys.argv[3]
 TPL = open(__file__.replace("build_srs.py", "srs-template.html")).read()
@@ -343,7 +345,7 @@ for e in EVENTS:
     for o in EVENTS:
         cur = o is e
         rail += (f'<a class="rc {"cur" if cur else ""}" href="{o["slug"]}.html" aria-label="{esc(o["evname"])}{", this page" if cur else ""}">'
-                 f'<img src="../img/{o["hero"]}.jpg" alt="" loading="lazy"><span class="t"><span>{esc(o["label"].replace("SRS 2027 · ",""))}</span><b>{esc(o["venue"])}</b><em>{fmt_dates(o) if "dates" not in o else o["dates"]}</em></span></a>')
+                 f'<img src="../img/{photos.PHOTOS[o["at"]]["hero"][0]}.jpg" alt="" loading="lazy"><span class="t"><span>{esc(o["label"].replace("SRS 2027 · ",""))}</span><b>{esc(o["venue"])}</b><em>{fmt_dates(o) if "dates" not in o else o["dates"]}</em></span></a>')
 
     callout = ""
     if e["callout"]:
@@ -371,6 +373,8 @@ for e in EVENTS:
       "SITESHORT": esc(cc["siteshort"]), "PRIZES": prizes, "TRAVEL": trav_html, "RAIL": rail,
       "EVTJSON": json.dumps({k: e[k] for k in ("start","end","tz","seed")}), "HELPERS": helpers,
     }
+    ph = photos.fields(e["at"], e["venue"])
+    rep.update(ph); rep["CARD3"] = ph.pop("TRIP"); rep.pop("TRIP")
     for k, v in rep.items(): out = out.replace("{{"+k+"}}", v)
     assert "{{" not in out, re.findall(r"\{\{\w+\}\}", out)
     open(f"{SITE}/srs/{e['slug']}.html", "w").write(out)

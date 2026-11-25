@@ -1,28 +1,399 @@
 {
- "fm-punjab-cup-pakistan-26": "fm-punjab-cup-pakistan-26__g08.jpg",
- "rs-paragliding-championship-encantado": "rs-paragliding-championship-encantado__g02.jpg",
- "rs-paragliding-championship-final-sapiranga": "rs-paragliding-championship-final-sapiranga__g02.jpg",
- "porterville-open-2026": "porterville-open-2026__g05.jpg",
- "records-en-el-horizonte": "records-en-el-horizonte__g06.jpg",
- "opennacional2027": "opennacional2027__g12.jpg",
- "copa-niviuk-2027-iv-edicion": "copa-niviuk-2027-iv-edicion__s03.jpg",
- "manilla-pg-sports-tdd-2027": "manilla-pg-sports-tdd-2027__g03.jpg",
- "copadelasamericas2027": "copadelasamericas2027__g13.jpg",
- "2nd-copa-dedalos-piedechinche-2027-powered-sup-air": "2nd-copa-dedalos-piedechinche-2027-powered-sup-air__g04.jpg",
- "bright-open-2027": "bright-open-2027__s00.jpg",
- "corryong-pg-open-2027": "corryong-pg-open-2027__g04.jpg",
- "bwo2027": "lake-wide.jpg",
- "open-paragliding-costa-rica-2027": "open-paragliding-costa-rica-2027__g12.jpg",
- "andes-tour-hike-and-fly-challenge": "andes-tour-hike-and-fly-challenge__s04.jpg",
- "vv-open-2027": "vv-open-2027__s00.jpg",
- "corryong-sports-cup-2027": "corryong-sports-cup-2027__g03.jpg",
- "srs-2027-1": "srs-2027-1__g04.jpg",
- "glencoe-scottish-national-2027": "glencoe-scottish-national-2027__g03.jpg",
- "x-scotia-hike-and-fly-2027": "glencoe-scottish-national-2027__g01.jpg",
- "no2027": "no2027__s00.jpg",
- "srs-2027-2": "srs-2027-2__g11.jpg",
- "oco2027": "oco2027__g02.jpg",
- "srs-2027-wsf": "srs-2027-wsf__s01.jpg",
- "srs-2027-3": "srs-2027-3__s00.jpg",
- "srs-2027-4": "srs-2027-4__s00.jpg"
+ "calendar_picks": {
+  "fm-punjab-cup-pakistan-26": "fm-punjab-cup-pakistan-26__g08.jpg",
+  "rs-paragliding-championship-encantado": "rs-paragliding-championship-encantado__g02.jpg",
+  "rs-paragliding-championship-final-sapiranga": "rs-paragliding-championship-final-sapiranga__g02.jpg",
+  "porterville-open-2026": "porterville-open-2026__g05.jpg",
+  "records-en-el-horizonte": "records-en-el-horizonte__g06.jpg",
+  "opennacional2027": "opennacional2027__g12.jpg",
+  "copa-niviuk-2027-iv-edicion": "copa-niviuk-2027-iv-edicion__s03.jpg",
+  "manilla-pg-sports-tdd-2027": "manilla-pg-sports-tdd-2027__g03.jpg",
+  "copadelasamericas2027": "copadelasamericas2027__g13.jpg",
+  "2nd-copa-dedalos-piedechinche-2027-powered-sup-air": "2nd-copa-dedalos-piedechinche-2027-powered-sup-air__g04.jpg",
+  "bright-open-2027": "bright-open-2027__s00.jpg",
+  "corryong-pg-open-2027": "corryong-pg-open-2027__g04.jpg",
+  "bwo2027": "lake-wide.jpg",
+  "open-paragliding-costa-rica-2027": "open-paragliding-costa-rica-2027__g12.jpg",
+  "andes-tour-hike-and-fly-challenge": "andes-tour-hike-and-fly-challenge__s04.jpg",
+  "vv-open-2027": "vv-open-2027__s00.jpg",
+  "corryong-sports-cup-2027": "corryong-sports-cup-2027__g03.jpg",
+  "srs-2027-1": "srs-2027-1__g04.jpg",
+  "glencoe-scottish-national-2027": "glencoe-scottish-national-2027__g03.jpg",
+  "x-scotia-hike-and-fly-2027": "glencoe-scottish-national-2027__g01.jpg",
+  "no2027": "no2027__s00.jpg",
+  "srs-2027-2": "srs-2027-2__g11.jpg",
+  "oco2027": "oco2027__g02.jpg",
+  "srs-2027-wsf": "srs-2027-wsf__s01.jpg",
+  "srs-2027-3": "srs-2027-3__s00.jpg",
+  "srs-2027-4": "srs-2027-4__s00.jpg"
+ },
+ "files": {
+  "retrieved": "2026-11-25",
+  "note": "Organisers' own uploads on each Airtribune event page (cover = slideshow, gallery = contest photo), resized to max 1600 px, JPEG q80. Used on the event pages via src/build/photos.py.",
+  "events": {
+   "bwo2027": [
+    {
+     "file": "bwo2027/s00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/QU1jzVA1ZHQJ.jpeg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "bwo2027/s01.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/wT9HP2sIq3jw.jpeg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "bwo2027/s02.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/pZYMA7eQK9kv.jpeg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "bwo2027/s03.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/PKKleQIyzd6m.jpeg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    }
+   ],
+   "srs-2027-1": [
+    {
+     "file": "srs-2027-1/s00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/10/FTMeEopO8kmf.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-1/g00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/9LVmZ751XnSN.jpg",
+     "kind": "gallery",
+     "size": [
+      960,
+      1280
+     ]
+    },
+    {
+     "file": "srs-2027-1/g01.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/fk5hYVfSNdTE.jpg",
+     "kind": "gallery",
+     "size": [
+      960,
+      1280
+     ]
+    },
+    {
+     "file": "srs-2027-1/g02.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/hagvsd8sDm1T.jpg",
+     "kind": "gallery",
+     "size": [
+      960,
+      1280
+     ]
+    },
+    {
+     "file": "srs-2027-1/g03.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/GEswmyksG8im.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      960
+     ]
+    },
+    {
+     "file": "srs-2027-1/g04.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/4NYZPUCO8kGG.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      960
+     ]
+    },
+    {
+     "file": "srs-2027-1/g05.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/2oEmCrt64RxH.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      960
+     ]
+    },
+    {
+     "file": "srs-2027-1/g06.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/o4zJunZhKr5q.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      960
+     ]
+    }
+   ],
+   "srs-2027-2": [
+    {
+     "file": "srs-2027-2/s00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/10/eV9EHaDR3EwP.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-2/s01.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/10/ps65Z9E298P8.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-2/g00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/HmUp0d7b8d72.jpg",
+     "kind": "gallery",
+     "size": [
+      708,
+      531
+     ]
+    },
+    {
+     "file": "srs-2027-2/g01.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/jOKsPxfkmxHI.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      576
+     ]
+    },
+    {
+     "file": "srs-2027-2/g02.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/yqY9iPFjsE1d.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      871
+     ]
+    },
+    {
+     "file": "srs-2027-2/g03.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/UruCRYFs44P8.jpeg",
+     "kind": "gallery",
+     "size": [
+      1024,
+      768
+     ]
+    },
+    {
+     "file": "srs-2027-2/g04.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/c4suvSjTBX0p.jpeg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      576
+     ]
+    },
+    {
+     "file": "srs-2027-2/g05.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/aHpxj9BCBaKQ.jpeg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      720
+     ]
+    },
+    {
+     "file": "srs-2027-2/g06.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/M1Jcwb9xKi6W.jpeg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      720
+     ]
+    },
+    {
+     "file": "srs-2027-2/g07.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/GGkivQlfVtBc.jpeg",
+     "kind": "gallery",
+     "size": [
+      1024,
+      768
+     ]
+    },
+    {
+     "file": "srs-2027-2/g08.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/dNvEny6Kr56O.jpeg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      720
+     ]
+    },
+    {
+     "file": "srs-2027-2/g09.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/AdazIV5Oxefp.jpeg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      576
+     ]
+    },
+    {
+     "file": "srs-2027-2/g10.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/BvziMnJOPCXE.jpg",
+     "kind": "gallery",
+     "size": [
+      853,
+      1280
+     ]
+    }
+   ],
+   "srs-2027-3": [
+    {
+     "file": "srs-2027-3/s00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/10/mY4IJuj57dJB.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-3/s01.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/10/C4Y231EkWiyT.jpeg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-3/g00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/pmlav5xtnGfR.jpg",
+     "kind": "gallery",
+     "size": [
+      960,
+      1280
+     ]
+    },
+    {
+     "file": "srs-2027-3/g01.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/71QL276QoyjM.jpg",
+     "kind": "gallery",
+     "size": [
+      720,
+      1280
+     ]
+    },
+    {
+     "file": "srs-2027-3/g02.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/Cgec9eS1d2SW.jpg",
+     "kind": "gallery",
+     "size": [
+      960,
+      1280
+     ]
+    },
+    {
+     "file": "srs-2027-3/g03.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/h7QQJUjAi7Yc.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      597
+     ]
+    },
+    {
+     "file": "srs-2027-3/g04.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/zZ4oFtPEHTrD.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      720
+     ]
+    },
+    {
+     "file": "srs-2027-3/g05.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/HwB4unTdU7Uy.jpg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      960
+     ]
+    },
+    {
+     "file": "srs-2027-3/g06.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/contest/photo/2026/10/Mb6AUkZCqt0X.jpeg",
+     "kind": "gallery",
+     "size": [
+      1280,
+      597
+     ]
+    }
+   ],
+   "srs-2027-4": [
+    {
+     "file": "srs-2027-4/s00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/10/hX1cxoMZocjy.jpeg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    }
+   ],
+   "srs-2027-wsf": [
+    {
+     "file": "srs-2027-wsf/s00.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/ZI4Nlt7qq3oQ.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-wsf/s01.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/5lrfZNL259Sn.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-wsf/s02.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/PYFcavyBpu9L.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    },
+    {
+     "file": "srs-2027-wsf/s03.jpg",
+     "source": "https://airtribune.fra1.digitaloceanspaces.com/media/slideshow/photo/2026/08/mtUDpy2MFyz0.jpg",
+     "kind": "cover",
+     "size": [
+      940,
+      380
+     ]
+    }
+   ]
+  }
+ }
 }

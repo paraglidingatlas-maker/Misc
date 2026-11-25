@@ -3,7 +3,9 @@ Run from airtribune-redesign/:  python3 src/build/build_bwo.py
 Inputs: src/data/bwo/bwo.json (from src/data/bwo/extract_bwo.py) and the event text on airtribune.com/bwo2027/
 (summarised by hand below; retrieved 24 Nov 2026). Writes events/bwo/british-winter-open.html.
 """
-import html, json, re, os
+import html, json, re, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import photos
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TPL = open(f"{ROOT}/src/build/srs-template.html").read()
@@ -143,7 +145,6 @@ rep = {
   "TITLE": "Panchgani · 8th British Winter Open",
   "DESC": "8th British Winter Open: 23 Feb – 2 Mar 2027, Panchgani, India. Seven tasks, £300 entry, 120 pilots. Past editions and task replays from Airtribune.",
   "REG": AT, "REGSHORT": "airtribune.com/bwo2027",
-  "HERO": "pink-forest", "HEROPOS": "50% 45%", "PHOTO2": "coral-terraces",
   "ROUNDLABEL": "British Paragliding Open · 8th edition", "STATUS": "Confirmed", "STATUSCLS": "ok",
   "VENUE": "Panchgani", "COUNTRY": "India", "DATES": "23 Feb – 2 Mar 2027", "EVNAME": "8th British Winter Open", "TASKS": "7",
   "BANDN": str(len(BAND)), "BAND": "".join(f"<div><b>{esc(v)}</b><span>{esc(l)}</span></div>" for v, l in BAND),
@@ -155,12 +156,14 @@ rep = {
   "SITETILES": "".join(f'<div><span class="eyebrow">{esc(k)}</span><b>{esc(v)}</b></div>' for k, v in SITE_TILES),
   "SITESHORT": esc(SITESHORT), "CALLOUT": CALLOUT,
   "ENTRY": entry, "FEATURES": onsite, "TRAVEL": travel, "PRIZES": prizes, "RAIL": "",
-  "PLACE": "Panchgani, Maharashtra", "CARD1": "white-blur", "CARD2": "orange-blur", "CARD3": "pod-closeup",
+  "PLACE": "Panchgani, Maharashtra", "CARD1": "white-blur", "CARD2": "orange-blur",
   "RACELINE": "Seven tasks · £300 entry · 120 pilots max, selected by WPRS.",
   "TRIPLINE": "Fly to Pune (120 km) or Mumbai (255 km), then a taxi. HQ rooms from about €35.",
   "EVTJSON": json.dumps({"start": "2027-02-23", "end": "2027-03-02", "tz": 5.5, "seed": 13 * 97 + 13}),
   "HELPERS": HELPERS,
 }
+_ph = photos.fields("bwo2027", "Panchgani")
+rep.update(_ph); rep["CARD3"] = rep.pop("TRIP")
 out = TPL
 for k, v in rep.items():
     out = out.replace("{{" + k + "}}", v)
@@ -214,7 +217,7 @@ EDITS = [
   ('<p>Illustrative task shape, not an official task.</p>', '<p>Illustrative task shape, not an official task. Waypoint files are on the Airtribune page.</p>'),
   ('Sources, retrieved 24 Nov 2026: <a href="https://sportsracingseries.org/events/">sportsracingseries.org/events</a> · <a href="' + AT + '">airtribune.com/bwo2027</a>',
    f'Sources, retrieved 24 Nov 2026: <a href="{AT}">airtribune.com/bwo2027</a> (event, pilot list) · past results and replays on airtribune.com ({", ".join(e["slug"] for e in D["editions"])})'),
-  ('SRS logo © Sports-Class Racing Series.', 'Not taken at Panchgani.'),
+  ('Racing photos: Aninder Singh / Paragliding Atlas, SRS Tapalpa 2026. SRS logo © Sports-Class Racing Series.', 'Racing photos: Aninder Singh / Paragliding Atlas, SRS Tapalpa 2026 (not taken at Panchgani).'),
 ]
 for a, b in EDITS:
     assert a in out, a[:90]

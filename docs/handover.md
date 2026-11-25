@@ -50,15 +50,13 @@ Owner asked whether we can analyse tracklogs like an expert paragliding coach an
 - Limits to state plainly: no wind (only the ~1.5 km/h drift estimate), no airspeed or speed-bar data (bar use is inferred), reasons are inferences.
 - Output first: a Python analysis script in `src/data/srs-task3/` plus a readable "Key moments" review (time, pilot, what happened, time gained, the evidence) for the owner. Later, if approved: broadcast captions in `concepts/flythrough.html` that jump the camera to each moment, and a short race report.
 
-## NOW: organiser photos on the event pages (owner said "yes", 25 Nov 2026)
+## DONE: organiser photos on the event pages (25 Nov 2026, live on main)
 
-Owner asked why Panchgani (BWO) and the other event pages don't show photos from their own Airtribune pages. Reason: the pages were built before the owner approved organiser photos (25 Nov). They all reuse the owner's SRS Tapalpa 2026 set (`events/img/orange-pod.jpg`, `coral-terraces.jpg`, `pink-forest.jpg`, `pod-closeup.jpg`, `white-blur.jpg`, ...). The later chat fetched only ONE organiser photo per event for the calendar strip (`events/img/places/<slug>.jpg`, picks in `SOURCES.json`); the rest of the galleries were only in that chat's scratchpad and are gone.
-
-Agreed plan:
-1. Re-fetch cover + gallery from each Airtribune event page (cover = `slideshow/photo`, gallery = `contest/photo` image URLs in the page HTML) for BWO (`bwo2027`) and the 2027 editions behind the five SRS pages (Slovenia Lijak, France Montclar, France St André, North Macedonia Krushevo, World Sports Final Gemona; slugs `srs-2027-1..4`, `srs-2027-wsf` — confirm which is which on Airtribune). Save into `events/img/places/<slug>/` (resize to ~1600 px long edge, JPEG q≈80), log every file with its source URL in `SOURCES.json`.
-2. Use each event's own venue photos in its page's hero and place/on-site sections (via `src/build/build_srs.py` / `build_bwo.py`, which share `srs-template.html`; don't hand-edit the built pages). Keep the owner's Tapalpa racing photos where the content is about racing, with their credit; credit organiser photos as "Photo: event organiser, via Airtribune".
-3. For BWO the calendar strip uses the owner's Panchgani lake shot; `places/bwo2027.jpg` exists too. Check with the owner whether the page hero should be their lake shot or the organiser's.
-4. Rebuild, check 1440 and 390 px with Playwright (no console errors, no horizontal scroll), screenshot heroes for the owner, commit and push to main.
+- Fetched every cover (`slideshow/photo`) and gallery (`contest/photo`) image from the six Airtribune pages into `events/img/places/<slug>/` (`s00..` = cover, `g00..` = gallery; max 1600 px, q80). Source URL of every file: `events/img/places/SOURCES.json` → `files.events` (the calendar strip picks moved to `calendar_picks`). Slugs: srs-2027-1 Lijak, -2 Montclar, -3 Krushevo, -4 St André, -wsf Gemona/Bordano, bwo2027 Panchgani.
+- Which photo goes where: `src/build/photos.py` (used by `build_srs.py` and `build_bwo.py`). Organiser photos: hero, intro figure, "Plan your trip" card, a photo on the Flying site tab, and an "On the hill" strip under the cards (four photos). The "Race" and "Follow live" cards keep the owner's Tapalpa racing photos. Credits: hero/figures say "Photo: event organiser, via Airtribune"; footer names both.
+- St André has only one cover photo on Airtribune, and Gemona and BWO have only covers (940×380, soft on large screens). So those pages have no strip and no site photo, and St André's intro figure is still the owner's photo. Re-run the fetch if organisers add more (script was ad hoc: grep the page HTML for `/media/(slideshow|contest)/photo/`, skip `CACHE/` thumbnails).
+- Owner said all photos may come from the Airtribune page, so the BWO hero is now the organiser's aerial (s02). The calendar strip still uses the owner's lake shot.
+- Also fixed: the hero title overflowed on phones for long names (KRUSHEVO, PANCHGANI); minimum size is now 40 px.
 
 ## DONE: 3D fly-through prototype, satellite on terrain (built 25 Nov 2026, awaiting owner review)
 
