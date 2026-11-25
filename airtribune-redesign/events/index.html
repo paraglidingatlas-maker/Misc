@@ -485,9 +485,9 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .col > .col-rnd,.col > .col-venue,.col > .col-flag,.col > .col-dates,.col > .col-open,.col > .col-srs{z-index:1}
 .col > .col-hit{z-index:2}
 .feature{position:relative;margin-top:110px;min-height:clamp(520px,78vh,760px);display:flex;align-items:flex-end;overflow:hidden}
-.feature .bg{position:absolute;inset:0;background:url("img/pod-closeup.jpg") 40% 50%/cover no-repeat;transform:scale(1.06);transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
-.feature:hover .bg{transform:scale(1)}
-.feature::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,16,15,.85) 0%,transparent 45%)}
+/* photo fades into the page above and below instead of starting as a hard-edged band */
+.feature .bg{position:absolute;inset:0;background:url("img/pod-closeup.jpg") 40% 50%/cover no-repeat;-webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 14%,#000 38%,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 14%,#000 38%,#000 78%,transparent 100%)}
+.feature::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,20,22,.7) 0%,transparent 45%),linear-gradient(90deg,rgba(5,20,22,.55) 0%,transparent 55%);pointer-events:none}
 .feature .wrap{position:relative;z-index:1;width:100%;padding-block:48px}
 .fcard{max-width:520px;background:#fff;color:#051416;border-radius:18px;padding:26px 28px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
 .fcard .meta{display:flex;gap:10px;align-items:center;margin-bottom:12px;font:500 13px var(--f-body);color:#4a5f61}
