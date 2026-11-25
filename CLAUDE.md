@@ -20,8 +20,9 @@ Do not wait to be asked. Say in one line that you are switching and why.
 
 ## Project conventions (Airtribune redesign concept)
 
-- Everything here is an **unofficial concept**: keep the "Concept · not affiliated with Airtribune" label on every page.
+- The owner is **officially hired by Airtribune** for this project (owner, 25 Nov 2026): no "concept / not affiliated" banner or footer wording. Keep factual notes where data is illustrative (feed, thumbnail study).
 - Photos are by Aninder Singh / Paragliding Atlas (SRS Tapalpa 2026): always credit them. SRS logo © Sports-Class Racing Series.
+- Event place photos (`events/img/places/<airtribune-slug>.jpg`) are the organisers' own uploads on each Airtribune event page; the owner approved using them (25 Nov 2026). Picks and sources: `events/img/places/SOURCES.json`.
 - Buttons are **solid orange** (`#FF5F00`, white text). Do not make them translucent or glassy; the owner rejected that. Cards may be frosted glass.
 - Layout references the owner likes: SailGP (sailgp.com) event and calendar pages; typographic, broadcast-style information instead of boxed cards with icons.
 - Check every page at 1440 px and 390 px wide with Playwright before pushing; no console errors, no horizontal scroll.

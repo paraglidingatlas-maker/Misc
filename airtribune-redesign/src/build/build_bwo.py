@@ -196,7 +196,6 @@ CSS = '''
 '''
 
 EDITS = [
-  ("Not affiliated with or endorsed by Airtribune or the Sports-Class Racing Series.", "Not affiliated with or endorsed by Airtribune or the BHPA."),
   ("/* Layout: SRS round page.", "/* Layout: British Winter Open page (built from the SRS round template)."),
   ("@media (prefers-reduced-motion:reduce)", CSS + "@media (prefers-reduced-motion:reduce)"),
   ('<a class="srsb" href="../index.html#srs" aria-label="Sports-Class Racing Series rounds"><img src="../img/srs-mark-white.png" alt=""></a>\n', ""),
@@ -216,7 +215,6 @@ EDITS = [
   ('Sources, retrieved 24 Nov 2026: <a href="https://sportsracingseries.org/events/">sportsracingseries.org/events</a> · <a href="' + AT + '">airtribune.com/bwo2027</a>',
    f'Sources, retrieved 24 Nov 2026: <a href="{AT}">airtribune.com/bwo2027</a> (event, pilot list) · past results and replays on airtribune.com ({", ".join(e["slug"] for e in D["editions"])})'),
   ('SRS logo © Sports-Class Racing Series.', 'Not taken at Panchgani.'),
-  ('Unofficial concept, not affiliated with Airtribune or the SRS.', 'Unofficial concept, not affiliated with Airtribune, the BHPA or the PWCA.'),
 ]
 for a, b in EDITS:
     assert a in out, a[:90]

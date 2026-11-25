@@ -41,6 +41,12 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
+## DONE 25 Nov 2026 (later in the same chat)
+- Concept banner removed from every page (owner: officially hired); footers keep sources, credits and "check the official event page"; root page text updated. CLAUDE.md updated.
+- Calendar strip: each column has a place photo (organisers' photos from its Airtribune event page, `events/img/places/<slug>.jpg`, BWO uses the owner's Panchgani lake shot) that fades in on hover/focus; SRS columns crossfade from their race photo to the venue; the open column shows its photo behind the details, which sit at the bottom. The generated task map in the open column is gone (it was invented data). Photos load when the strip nears the viewport.
+- Live tracker: zoom goes down to about 50 m across the view (5–10 m scale bar); a scale bar (bottom-left, top-left on phone) shows the real distance; follow camera locks to the pilot when zoomed in.
+- Photos still unused: the other organiser photos per event are in the session scratchpad only; re-run the fetch (event pages: `slideshow/photo` = cover, `contest/photo` = gallery) if more are needed for the tour/rounds immersion work.
+
 ## ALSO OPEN (25 Nov 2026, same chat)
 - Done and live: the Gemona photo fades into the page (no hard band); the live tracker's pilot data card opens only when a pilot is clicked and closes with × or Esc; the map help strip has a × and hides on the first drag/scroll.
 - Owner asked: place photos on hover in the calendar strip (SailGP style), a more immersive tour, and a whole-page immersion review. The review is in `docs/design-audit/immersion.md` (ranked techniques). **Blocked on place photos**: Commons/Wikipedia rate-limit this container (429); Unsplash search needs a key. Waiting for the owner to choose: their own photos (Website repo, assets branch), an Unsplash API key, or links they pick.

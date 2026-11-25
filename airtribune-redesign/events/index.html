@@ -136,6 +136,7 @@ section.block{padding-block:88px 0}
 .col.on .col-flag,.col.on .col-dates{opacity:0}
 .col-open{position:absolute;left:56px;top:18px;width:var(--ow);display:grid;gap:14px;opacity:0;transform:translateX(12px);transition:opacity .35s,transform .45s;pointer-events:none}
 .col.on .col-open{opacity:1;transform:none;pointer-events:auto;transition-delay:.15s}
+.col-open{top:auto;bottom:22px}
 .co-head .eyebrow{color:var(--orange)}
 .co-head h3{font:800 22px/1.05 var(--f-display);text-transform:uppercase;margin-top:6px}
 .co-head p{margin:6px 0 0;font:300 italic 17px var(--f-display);color:var(--ink-2)}
@@ -479,11 +480,17 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .livetag i{display:none}
 .srs-sec{background:linear-gradient(90deg,var(--deep) 0%,rgba(3,16,15,.94) 42%,rgba(3,16,15,.55) 100%),url("img/pink-forest.jpg") right center/cover no-repeat}
 .srs-r{background:rgba(5,20,22,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.col.srs .col-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.55;transition:opacity .4s}
-.col.srs:hover .col-bg{opacity:.75}
-.col.srs.on .col-bg{opacity:.3}
+.col.srs .col-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.55;transition:opacity .5s}
+.col-place{position:absolute;inset:0;background:var(--deep) center/cover no-repeat;opacity:0;transition:opacity .6s ease}
+.col-place::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,28,31,.95) 8%,rgba(8,28,31,.35) 55%,rgba(8,28,31,.75))}
+.col:hover .col-place,.col:focus-within .col-place{opacity:1}
+.col.srs:hover .col-bg,.col.srs:focus-within .col-bg,.col.srs.on .col-bg{opacity:0}
+.col.on .col-place{opacity:1}
+.col.on .col-place::after{background:linear-gradient(90deg,rgba(8,28,31,.92) 0%,rgba(8,28,31,.7) 45%,rgba(8,28,31,.35)),linear-gradient(0deg,rgba(8,28,31,.9) 0%,transparent 50%)}
+@media (hover:none){ .col:hover .col-place{opacity:0} .col.on .col-place{opacity:1} }
 .col > .col-rnd,.col > .col-venue,.col > .col-flag,.col > .col-dates,.col > .col-open,.col > .col-srs{z-index:1}
 .col > .col-hit{z-index:2}
+.col > .col-place,.col > .col-bg{z-index:0}
 .feature{position:relative;margin-top:110px;min-height:clamp(520px,78vh,760px);display:flex;align-items:flex-end;overflow:hidden}
 /* photo fades into the page above and below instead of starting as a hard-edged band */
 .feature .bg{position:absolute;inset:0;background:url("img/pod-closeup.jpg") 40% 50%/cover no-repeat;-webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 14%,#000 38%,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 14%,#000 38%,#000 78%,transparent 100%)}
@@ -544,7 +551,6 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
 .strip-nav:disabled{opacity:.3;cursor:default}
 </style>
 
-<div class="concept"><div class="wrap"><b>CONCEPT</b><span>Unofficial redesign of airtribune.com/events/next. Not affiliated with or endorsed by Airtribune. Tasks and race replays are simulated.</span></div></div>
 
 <header class="nav">
   <div class="wrap">
@@ -707,7 +713,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <div class="f-srs"><h4>Featured series</h4><a href="https://sportsracingseries.org/"><img data-srs="white" alt="Sports-Class Racing Series"></a></div>
       <div><h4>Legal</h4><a href="https://airtribune.com/docs/privacy">Privacy policy</a><a href="https://airtribune.com/docs/terms">Terms of service</a></div>
     </div>
-    <div class="f-bottom"><span>Unofficial concept · Event data from airtribune.com/events/next</span><span>Tasks, tracks and races are simulated</span></div>
+    <div class="f-bottom"><span>Event data and event photos from each event page on airtribune.com</span><span>Photos © Aninder Singh · Paragliding Atlas</span></div>
   </div>
 </footer>
 
@@ -1057,6 +1063,7 @@ tick(); setInterval(tick, 1000);
   const localStart = t => new Date(t).toLocaleString("en-GB", {weekday:"short", hour:"2-digit", minute:"2-digit"});
   strip.innerHTML = EV.map(e => { const v = e.city.split(",")[0], fs = Math.min(30, Math.floor(250/(v.length*.66)));
     return `<div class="col ${e.status==="past"?"past":""} ${e.type==="srs"?"srs":""}" data-i="${e.i}">
+      <span class="col-place" data-bg="img/places/${AT_SLUG[e.name]}.jpg" aria-hidden="true"></span>
       ${e.photo ? `<span class="col-bg" style="background-image:linear-gradient(0deg,rgba(8,28,31,.96) 12%,rgba(8,28,31,.3) 60%,rgba(8,28,31,.85)),url('img/${e.photo}.jpg')"></span>` : ""}
       <button class="col-hit" aria-label="Show round ${e.n}: ${e.country}, ${longDate(e)}"></button>
       <span class="col-rnd">Round ${pad(e.n)}</span>
@@ -1066,18 +1073,19 @@ tick(); setInterval(tick, 1000);
       <span class="col-dates"><b>${pad(e.sd)}</b><span>${MON[e.sm-1]}</span><i>–</i><b>${pad(e.ed)}</b><span>${MON[e.em-1]}</span></span>
       <div class="col-open">
         <div class="co-head"><span class="eyebrow">${e.type==="srs" ? srsImg("mark","srs-inline","SRS") : ""}${e===NEXT ? "Next round" : relDays(e)} · ${e.country}</span><h3>${e.name}</h3><p>${longDate(e)} · ${e.days} days</p></div>
-        <svg class="task" data-strip="${e.i}" aria-hidden="true"></svg>
         <div class="co-cta">${e.page ? `<a class="btn btn-o" href="${e.page}">Event page</a><button class="btn btn-ghost" data-open="${e.i}">Round details</button>` : `<button class="btn btn-o" data-open="${e.i}">Round details</button><a class="btn btn-ghost" href="${e.at}">Live tracking</a>`}</div>
         <div class="co-time"><div><span>Day 1 local</span><b>09:00 ${tzLabel(e.tz)}</b></div><div><span>Your time</span><b>${localStart(e.start)}</b></div><div><span>Duration</span><b>${e.days} days</b></div></div>
       </div>
     </div>`; }).join("");
-  strip.querySelectorAll("svg[data-strip]").forEach(sv => drawTaskMap(sv, EV[+sv.dataset.strip], true));
+  /* place photos (organisers' photos from each Airtribune event page) load once the strip is near the viewport */
+  new IntersectionObserver((en, ob) => { if (!en.some(x => x.isIntersecting)) return; ob.disconnect();
+    strip.querySelectorAll(".col-place[data-bg]").forEach(s => { s.style.backgroundImage = `url('${s.dataset.bg}')`; });
+  }, {rootMargin:"600px 0px"}).observe(strip);
   const cols = [...strip.querySelectorAll(".col")];
   let active = -1;
   function activate(i, behavior){
     if (i < 0 || i >= EV.length) return; active = i;
     cols.forEach((c,k) => c.classList.toggle("on", k===i));
-    const sv = cols[i].querySelector("svg.task"); if (sv._replay) sv._replay();
     const ow = Math.min(420, innerWidth*.74) + 74, target = i*150 - (strip.clientWidth - ow)/2;
     strip.scrollTo({left: Math.max(0, target), behavior: reduce ? "auto" : behavior});
     $("#stPrev").disabled = i===0; $("#stNext").disabled = i===EV.length-1;
