@@ -41,9 +41,19 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
+## NOW: organiser photos on the event pages (owner said "yes", 25 Nov 2026)
+
+Owner asked why Panchgani (BWO) and the other event pages don't show photos from their own Airtribune pages. Reason: the pages were built before the owner approved organiser photos (25 Nov). They all reuse the owner's SRS Tapalpa 2026 set (`events/img/orange-pod.jpg`, `coral-terraces.jpg`, `pink-forest.jpg`, `pod-closeup.jpg`, `white-blur.jpg`, ...). The later chat fetched only ONE organiser photo per event for the calendar strip (`events/img/places/<slug>.jpg`, picks in `SOURCES.json`); the rest of the galleries were only in that chat's scratchpad and are gone.
+
+Agreed plan:
+1. Re-fetch cover + gallery from each Airtribune event page (cover = `slideshow/photo`, gallery = `contest/photo` image URLs in the page HTML) for BWO (`bwo2027`) and the 2027 editions behind the five SRS pages (Slovenia Lijak, France Montclar, France St André, North Macedonia Krushevo, World Sports Final Gemona; slugs `srs-2027-1..4`, `srs-2027-wsf` — confirm which is which on Airtribune). Save into `events/img/places/<slug>/` (resize to ~1600 px long edge, JPEG q≈80), log every file with its source URL in `SOURCES.json`.
+2. Use each event's own venue photos in its page's hero and place/on-site sections (via `src/build/build_srs.py` / `build_bwo.py`, which share `srs-template.html`; don't hand-edit the built pages). Keep the owner's Tapalpa racing photos where the content is about racing, with their credit; credit organiser photos as "Photo: event organiser, via Airtribune".
+3. For BWO the calendar strip uses the owner's Panchgani lake shot; `places/bwo2027.jpg` exists too. Check with the owner whether the page hero should be their lake shot or the organiser's.
+4. Rebuild, check 1440 and 390 px with Playwright (no console errors, no horizontal scroll), screenshot heroes for the owner, commit and push to main.
+
 ## DONE: 3D fly-through prototype, satellite on terrain (built 25 Nov 2026, awaiting owner review)
 
-Page: `airtribune-redesign/concepts/flythrough.html` (public once on main: …/airtribune-redesign/concepts/flythrough.html). Not linked from live.html yet; the ← goes to the live tracker.
+Page: `airtribune-redesign/concepts/flythrough.html`, live at https://paraglidingatlas-maker.github.io/Misc/airtribune-redesign/concepts/flythrough.html (merged to main 25 Nov; owner offered a "3D" button from live.html once approved). Not linked from live.html yet; the ← goes to the live tracker.
 - Data: `concepts/flythrough-data.js`, built by `python3 -I src/build/build_flythrough_data.py` (run from `airtribune-redesign/`) from `src/data/srs-task3/task3.json` (real Task 3, top-20 IGC tracks, every fix, metres from take-off, delta-encoded).
 - Stack: MapLibre 4.7.1 (Esri World Imagery raster + AWS terrarium DEM terrain, exaggeration 1, sky/fog), deck.gl 9.0.38 `MapboxOverlay` interleaved (TripsLayer trails at GPS altitude, orange full trail for the followed pilot, SRS-blue leader, drop line to the ground, translucent cylinder walls, take-off/TP/goal labels). Draped ground: cylinder rings, dashed optimised route, shadow of the followed track.
 - Camera: Follow (chase cam ~2.6 km behind, heading averaged over ±45 s so thermalling does not spin the view), Course (fitBounds, pitch 58), Orbit, Free (any drag switches to Free). Satellite / Dark (hillshade in site colours). Replay 10–120×, scrubber with gate/TP/goal ticks. Race order board (click a pilot to follow; phone: "Race order" opens a sheet).
