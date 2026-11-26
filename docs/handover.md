@@ -41,14 +41,14 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
-## NOW: expert "key moments" analysis of Tapalpa Task 3 (owner said "ok", 25 Nov 2026)
+## DONE (awaiting owner review): expert "key moments" analysis of Tapalpa Task 3 (26 Nov 2026)
 
-Owner asked whether we can analyse tracklogs like an expert paragliding coach and commentate on the big moves. Agreed first step: a **key-moments analysis of SRS Tapalpa 2026 Task 3** for the owner to review (the owner is a pilot; they check tone and calls before anything is published).
-- Data: `src/data/srs-task3/task3.json` (top-20 tracks, all fixes, local km from take-off, t = s from the 12:15 gate, tags = SSS/TP/goal times; see SOURCES.md). The IGC zip with all 106 tracks is listed in SOURCES.md if more are needed.
-- Measure per pilot and leg: thermals (location, avg climb, entry/exit height, time to centre, leaving early/late vs the gaggle), glides (L/D, speed, height lost per km), deviation from the optimised route and gaggle splits, start timing, leading vs following, TP tagging efficiency, final-glide commit point and goal arrival height; time gained/lost per leg vs the winner and the gaggle.
-- Known swing to explain: Abel Varga was 10th (30.6 km to go) at 13:11:40 and 1st, 2.7 km clear, at 13:26:40 (seen in the 3D replay's race order).
-- Limits to state plainly: no wind (only the ~1.5 km/h drift estimate), no airspeed or speed-bar data (bar use is inferred), reasons are inferences.
-- Output first: a Python analysis script in `src/data/srs-task3/` plus a readable "Key moments" review (time, pilot, what happened, time gained, the evidence) for the owner. Later, if approved: broadcast captions in `concepts/flythrough.html` that jump the camera to each moment, and a short race report.
+Review page for the owner (private): https://claude.ai/artifact/9VDf1zcmDsh12PpV5PnpxL. Source `airtribune-redesign/docs/task3-key-moments/index.html` (artifact source, no doctype; not a site page).
+- Scripts in `airtribune-redesign/src/data/srs-task3/`: `t3lib.py` (IGC reader, geometry, optimised distance to go), `t3load.py` (1 s grid, tags, circling/thermals, per-thermal wind fit, distance to go every 5 s), `analyse_task3.py` (run: `python3 -I analyse_task3.py <unzipped-igc-dir> [cache.pkl]`, ~20 s; IGC zip URL in SOURCES.md, not committed). Output: `analysis/key_moments.json`, `analysis/tables.md`.
+- IGC columns 41-45 labelled WSP/WDI are really ground speed/track; 46-49 = ground elevation (used for AGL, coarse).
+- Findings: race decided at 5 km to go (Varga/Quintanilla/Luebberke took a 2.0–2.4 m/s thermal 1.2 km north of the gaggle's 0.8–1.2 m/s one, left 3 min earlier); Varga skipped the gaggle thermal at 27.7 km (led 13:14:50–13:26, max 1.6 km) but the gaggle caught him by 13:26:40; Siegel/Nazander 11 km final glide; Quintanilla's 73 s climb 1.5 km out; Takats (~3.5 min) and Andreliunas (~2 min) circled just outside the 200 m goal cylinder; Sigel/McClurg low save.
+- **Replay bug found:** concepts/flythrough.html (and probably live-tracker) ranks by distance to a fixed touch point of the full-task route (`route.P[k]` + `route.rest`), not re-optimised from each pilot; on TP3's 31 km cylinder this showed Varga "2.7 km clear" at 13:26:40 when the field was level. Owner to decide whether to fix.
+- Open: owner checks tone and the calls marked "to check"/"inference"; then picks moments for broadcast captions in the fly-through and maybe a short race report.
 
 ## DONE: organiser photos on the event pages (25 Nov 2026, live on main)
 

@@ -40,3 +40,10 @@ Task 3 was flown on Tue 10 Nov 2026 ("Task T6.3 (Sports)", official).
 
 - `concepts/flythrough.html` (3D fly-through prototype) via `src/build/build_flythrough_data.py` → `concepts/flythrough-data.js`
   (all fixes of the 20 tracks, not downsampled further). Terrain there is real (AWS Terrain Tiles, SRTM-based), imagery Esri World Imagery.
+
+## Key-moments analysis (26 Nov 2026)
+
+`analyse_task3.py` (with `t3lib.py`, `t3load.py`) reads the full 1 s IGC archive above (all 106 files) and writes
+`analysis/key_moments.json` and `analysis/tables.md`. In these files the I-record columns WSP/WDI hold ground speed and
+ground track (they match values computed from the fixes); GND is the ground elevation. Wind is fitted from ground speed
+around each circle, not measured. Computed goal arrival heights match the official "Height" column to within 2 m.
