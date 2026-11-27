@@ -50,6 +50,18 @@ Review page for the owner (private): https://claude.ai/artifact/9VDf1zcmDsh12PpV
 - **Replay bug found:** concepts/flythrough.html (and probably live-tracker) ranks by distance to a fixed touch point of the full-task route (`route.P[k]` + `route.rest`), not re-optimised from each pilot; on TP3's 31 km cylinder this showed Varga "2.7 km clear" at 13:26:40 when the field was level. Owner to decide whether to fix.
 - Open: owner checks tone and the calls marked "to check"/"inference"; then picks moments for broadcast captions in the fly-through and maybe a short race report.
 
+## DONE: drag to move (27 Nov 2026, live on main)
+- `assets/drag.js` (loaded by the calendar and the event pages): any element with `data-drag` scrolls sideways when grabbed with the mouse, with a throw and snap on release; a drag swallows the click so links still work on a plain click. Touch and trackpads keep native scrolling. Used on the calendar strip (`#strip`), the season timeline (`.gantt-scroll`) and the event-page "On the hill" strip (`.gal-row`, set in `src/build/photos.py`).
+- Tour maps (calendar, `panZoom()` in `src/season-calendar.html`): d3.zoom on both maps. Drag to move (works at the default zoom too, out to the whole world / Europe from Scotland to Sicily); Ctrl/⌘ + scroll or trackpad pinch to zoom (plain scroll still scrolls the page); +/− and reset buttons top-right; two fingers on phones, one finger once zoomed in. Labels and dots follow the map; dots shrink as you zoom. Hint line in the map key.
+
+## NEXT CANDIDATE: skyways overlay (owner asked 27 Nov 2026; owner said commercial use is their responsibility)
+- Only open tracklog-based source found: KK7 Thermal & Skyways (licence block names M. von Känel). `thermal.kk7.cz` is down from here; **`thermal.kk7.ch` works** (200 from this container).
+- Tiles (TMS, 256 px): `https://thermal.kk7.ch/tiles/skyways_all_all/{z}/{x}/{y}.png?src=<hostname>` (maxzoom 13; MapLibre `scheme:"tms"`) and `thermals_all_all` (maxzoom 12). Month/time filters: `skyways_{all|jan|apr|jul|oct}_{all|04|07|10}`.
+- Hotspots GeoJSON: `https://thermal.kk7.ch/api/hotspots/geojson/all_all/{S},{W},{N},{E}?limit=N` (no `src` here). WMTS: `/api/wmts/WMTSCapabilities.xml?src=example.com`.
+- Usage rules: send `?src=<hostname>` and a Referer, only fetch visible tiles, ≤10 req/s, credit "thermal.kk7.ch CC BY-NC-SA 4.0". Licence is NonCommercial; the owner said they will handle permission.
+- Everything else (flyXC, XCMaps, WhereToFly, Logfly) reuses KK7; Paragliding Map/WeGlide hotspots are paid; ThermiXC/Skysight are forecasts.
+- Natural places: live tracker and 3D fly-through (Tapalpa has skyway data), event-page Flying site tab.
+
 ## DONE: organiser photos on the event pages (25 Nov 2026, live on main)
 
 - Fetched every cover (`slideshow/photo`) and gallery (`contest/photo`) image from the six Airtribune pages into `events/img/places/<slug>/` (`s00..` = cover, `g00..` = gallery; max 1600 px, q80). Source URL of every file: `events/img/places/SOURCES.json` → `files.events` (the calendar strip picks moved to `calendar_picks`). Slugs: srs-2027-1 Lijak, -2 Montclar, -3 Krushevo, -4 St André, -wsf Gemona/Bordano, bwo2027 Panchgani.

@@ -82,7 +82,7 @@ def fields(at, venue):
     if p["gallery"]:
         figs = "".join(f'<figure><img src="../img/{f}.jpg" alt="{esc(a)}" loading="lazy"></figure>' for f, a in p["gallery"])
         gal = (f'<section class="gal" aria-labelledby="gH"><div class="wrap"><div class="sh"><div><span class="eyebrow">{esc(venue)} · from the organisers</span><h2 class="up" id="gH">On the hill</h2></div></div>'
-               f'<div class="gal-row">{figs}</div><p class="gal-note">Photos: event organiser, from the Airtribune event page.</p></div></section>')
+               f'<div class="gal-row" data-drag>{figs}</div><p class="gal-note">Photos: event organiser, from the Airtribune event page.</p></div></section>')
     rep["GALLERY"] = gal
     rep["PHOTOCREDITS"] = ("Venue photos: event organiser, via the Airtribune event page. "
                            "Racing photos: Aninder Singh / Paragliding Atlas, SRS Tapalpa 2026.")

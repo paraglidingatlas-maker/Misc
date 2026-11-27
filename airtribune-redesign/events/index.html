@@ -186,6 +186,17 @@ section.block{padding-block:88px 0}
 .tm-pop .d{white-space:nowrap;color:#4a5f61;font-variant-numeric:tabular-nums}
 .tm-pop .x{color:#4a5f61}
 .tm-pop .s{color:#0F7FAF;font-weight:700;margin-right:4px}
+.tm svg{cursor:grab;-webkit-user-select:none;user-select:none}
+.tm.panning svg{cursor:grabbing}
+.tm .zl *{vector-effect:non-scaling-stroke}
+.tm-ctl{position:absolute;right:12px;top:12px;z-index:3;display:flex;flex-direction:column;gap:4px}
+.tm-ctl button{width:34px;height:34px;display:grid;place-items:center;border-radius:2px;background:#fff;color:#051416;font:700 18px/1 var(--f-body)}
+.tm-ctl button:hover,.tm-ctl button:focus-visible{background:var(--orange);color:#fff}
+.tm-ctl [data-z="reset"]{font-size:15px;display:none}
+.tm.zoomed .tm-ctl [data-z="reset"]{display:grid}
+.tm-key .hint{margin-left:auto;color:var(--muted)}
+.tm-key .hint .t{display:none}
+@media (hover:none){ .tm-key .hint .m{display:none} .tm-key .hint .t{display:inline} }
 .tm-key{display:flex;gap:22px;flex-wrap:wrap;padding:14px 0 0;font-size:12px;color:var(--ink-2)}
 .tm-key span{display:flex;align-items:center;gap:7px}
 .tm-key i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--deep)}
@@ -631,7 +642,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
   </div>
   <div class="strip-wrap">
     <button class="strip-nav prev" id="stPrev" aria-label="Previous round"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m15 18-6-6 6-6"/></svg></button>
-    <div class="strip" id="strip" aria-label="Season rounds"></div>
+    <div class="strip" id="strip" data-drag aria-label="Season rounds"></div>
     <button class="strip-nav next" id="stNext" aria-label="Next round"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m9 18 6-6-6-6"/></svg></button>
   </div>
 </section>
@@ -647,7 +658,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <figure class="tm tm-e" id="tmE"><figcaption class="tm-cap">Alps &amp; Balkans <span>· SRS route in white</span></figcaption><svg id="mapEu" role="img" aria-label="Europe: venues and the SRS route"></svg><div class="tm-labels"></div></figure>
       <div class="tm-pop" id="tip" role="dialog" aria-label="Rounds at this venue"></div>
     </div>
-    <div class="tm-key"><span><i class="k-past"></i>Raced</span><span><i class="k-next"></i>Next round</span><span><i class="k-up"></i>Coming up</span><span><i class="k-srs"></i>SRS round</span></div>
+    <div class="tm-key"><span><i class="k-past"></i>Raced</span><span><i class="k-next"></i>Next round</span><span><i class="k-up"></i>Coming up</span><span><i class="k-srs"></i>SRS round</span><span class="hint"><span class="m">Drag to move · Ctrl/⌘ + scroll or +/− to zoom</span><span class="t">Zoom with +/− or two fingers, then drag</span></span></div>
     <div class="travel" id="travel"></div>
   </div>
 </section>
@@ -671,7 +682,7 @@ footer{padding-block:56px 40px;color:var(--ink-2);font-size:14px;background:var(
       <h2 class="up" id="tlH">Season at a glance</h2>
       <p>Each bar runs from the first to the last competition day. Overlapping rounds stack.</p>
     </div>
-    <div class="gantt-scroll" tabindex="0" aria-label="Season timeline, scrolls sideways"><svg id="gantt"></svg></div>
+    <div class="gantt-scroll" data-drag tabindex="0" aria-label="Season timeline, scrolls sideways"><svg id="gantt"></svg></div>
     <div class="keys"><span><img data-srs="mark" alt="SRS"><i style="background:var(--srs-blue)"></i>Sports-Class Racing Series</span><span><i style="box-shadow:inset 0 0 0 1.2px #fff"></i>Hike &amp; fly</span><span><i style="background:#3B5A5E"></i>Open, cup &amp; national</span><span><i style="background:#fff;width:1px;border-radius:0"></i>Today</span></div>
   </div>
 </section>
@@ -1188,15 +1199,45 @@ tick(); setInterval(tick, 1000);
       let x = area.side==="l" ? lx - w : lx, y = ly - h/2;
       x = Math.max(6, Math.min(x, W - w - 6)); y = Math.max(30, Math.min(y, H - h - 6));
       el.style.left = x+"px"; el.style.top = y+"px";
+      el._a = area.off ? null : [lx, ly]; el._o = [x - lx, y - ly];
       el.onclick = ev => { ev.stopPropagation(); el.getAttribute("aria-expanded")==="true" ? closePop() : openPop(area, el, fig); };
     });
   }
   function dots(svg, proj, r){
     const g = svg.append("g");
     const [vw,vh] = [+svg.attr("viewBox").split(" ")[2], +svg.attr("viewBox").split(" ")[3]];
-    venues(EV).forEach(v => { const [x,y] = proj([v[0].lon, v[0].lat]); const st = dotState(v); if (x<0||y<0||x>vw||y>vh) return;
+    venues(EV).forEach(v => { const [x,y] = proj([v[0].lon, v[0].lat]); const st = dotState(v); if (!isFinite(x)||!isFinite(y)) return;
       g.append("circle").attr("class",`dot ${st}${v.some(e=>e.type==="srs")?" srs":""}`).attr("cx",x).attr("cy",y).attr("r", st==="next"||st==="live" ? r+1.5 : r); });
     return g;
+  }
+  /* Drag to move, zoom with Ctrl/⌘ + wheel (trackpad pinch), two fingers or the +/− buttons.
+     Plain wheel and one-finger swipes keep scrolling the page until the map is zoomed in. */
+  function panZoom(fig, svg, W, H, ext){
+    const node = svg.node(), lay = fig.querySelector(".tm-labels");
+    const zl = svg.append("g").attr("class","zl");
+    [...node.childNodes].forEach(n => { if (n !== zl.node()) zl.node().appendChild(n); });
+    const dts = zl.selectAll(".dot").each(function(){ this._r = +this.getAttribute("r"); });
+    let k = 1;
+    const zm = d3.zoom().scaleExtent([1,8]).extent([[0,0],[W,H]]).translateExtent(ext)
+      .wheelDelta(ev => Math.max(-.4, Math.min(.4, -ev.deltaY * (ev.deltaMode === 1 ? .05 : ev.deltaMode ? 1 : .002) * (Math.abs(ev.deltaY) < 40 ? 6 : 1))))
+      .filter(ev => ev.type === "wheel" ? (ev.ctrlKey || ev.metaKey) : ev.type.startsWith("touch") ? (ev.touches.length > 1 || k > 1) : !ev.button)
+      .on("start", ev => { if (ev.sourceEvent) closePop(); fig.classList.add("panning"); })
+      .on("zoom", ev => { const t = ev.transform; k = t.k; zl.attr("transform", t);
+        dts.attr("r", function(){ return this._r / Math.sqrt(t.k); });
+        lay.querySelectorAll(".tl").forEach(el => { if (!el._a) return; const [ax, ay] = t.apply(el._a);
+          el.style.left = (ax + el._o[0]) + "px"; el.style.top = (ay + el._o[1]) + "px"; });
+        node.style.touchAction = t.k > 1.01 ? "none" : "pan-y";
+        fig.classList.toggle("zoomed", t.k > 1.01 || Math.abs(t.x) > 1 || Math.abs(t.y) > 1); })
+      .on("end", () => fig.classList.remove("panning"));
+    svg.property("__zoom", d3.zoomIdentity).call(zm).on("dblclick.zoom", null);
+    node.style.touchAction = "pan-y"; fig.classList.remove("zoomed");
+    let c = fig.querySelector(".tm-ctl");
+    if (!c){ c = document.createElement("div"); c.className = "tm-ctl";
+      c.innerHTML = '<button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Reset map">↺</button>';
+      fig.appendChild(c); }
+    c.onclick = ev => { const b = ev.target.closest("button"); if (!b) return; ev.stopPropagation(); closePop();
+      const s = svg.transition().duration(reduce ? 0 : 350);
+      b.dataset.z === "reset" ? s.call(zm.transform, d3.zoomIdentity) : s.call(zm.scaleBy, b.dataset.z === "in" ? 1.8 : 1/1.8); };
   }
   function draw(){
     closePop();
@@ -1210,6 +1251,8 @@ tick(); setInterval(tick, 1000);
     svg.append("g").selectAll("path").data(land).join("path").attr("class", d => "country" + (hosts.has(d.id)?" host":"")).attr("d", gp);
     labels(fw, AREAS, proj, W, H);
     dots(svg, proj, W < 500 ? 2.6 : 3.4);
+    const sb = gp.bounds({type:"Sphere"});
+    panZoom(fw, svg, W, H, [[Math.min(sb[0][0],0), Math.min(sb[0][1],0)], [Math.max(sb[1][0],W), Math.max(sb[1][1],H)]]);
 
     /* Europe: the Alps up close, with the SRS route */
     const fe = $("#tmE"), We = fe.clientWidth, He = W >= We*1.2 ? H : Math.round(We*.72);
@@ -1227,6 +1270,8 @@ tick(); setInterval(tick, 1000);
       .transition().delay(400 + k*500).duration(700).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0).on("end",function(){ d3.select(this).attr("stroke-dasharray",null); }); });
     labels(fe, AREAS_EU, pe, We, He);
     dots(se, pe, We < 500 ? 3.4 : 4);
+    const a = pe([-11,59.5]), b = pe([33,34]);
+    panZoom(fe, se, We, He, [[Math.min(a[0],0), Math.min(a[1],0)], [Math.max(b[0],We), Math.max(b[1],He)]]);
   }
   let seen = false;
   new IntersectionObserver((es,o) => { if (es[0].isIntersecting && !seen){ seen = true; draw(); draw.played = true; o.disconnect(); } }, {rootMargin:"200px"}).observe(box);
@@ -1413,4 +1458,5 @@ function fromHash(){ const m = location.hash.match(/^#round-(\d+)$/); if (m){ co
 addEventListener("hashchange", fromHash); fromHash();
 </script>
 <script src="../assets/brand.js" defer></script>
+<script src="../assets/drag.js" defer></script>
 </html>
