@@ -287,9 +287,10 @@ function stateAt(p, t) {
 
 /* ================= map ================= */
 const SAT = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
-// KK7 Thermal & Skyways (thermal.kk7.ch, CC BY-NC-SA 4.0): TMS tiles from public tracklogs; send ?src=<our hostname>, MapLibre only fetches tiles in view
-const KK7SRC = encodeURIComponent(/\./.test(location.hostname) ? location.hostname : "paraglidingatlas-maker.github.io");
-const KK7 = l => `https://thermal.kk7.ch/tiles/${l}_all_all/{z}/{x}/{y}.png?src=${KK7SRC}`;
+// KK7 Thermal & Skyways (thermal.kk7.ch, CC BY-NC-SA 4.0), imported once and recoloured by src/build/bake_kk7.py:
+// one image per layer over the Task 3 area, so the page never asks KK7 at runtime
+const SKYBOX = [[-103.90, 20.40], [-103.05, 20.40], [-103.05, 19.50], [-103.90, 19.50]];
+const KK7 = l => ({ type: "image", url: `../events/img/sky/tapalpa-${l}.webp`, coordinates: SKYBOX });
 const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
 const circle = (c, rKm, n = 160) => Array.from({ length: n + 1 }, (_, i) => { const a = i / n * Math.PI * 2; return toLL((c[0] + rKm * Math.cos(a)) * 1000, (c[1] + rKm * Math.sin(a)) * 1000); });
 const ringsGeo = { type: "FeatureCollection", features: cyl.map(c => ({ type: "Feature", properties: { goal: c.ss === "ES" ? 1 : 0 }, geometry: { type: "LineString", coordinates: circle(c.c, c.r) } })) };
@@ -303,8 +304,8 @@ const map = new maplibregl.Map({
       sat: { type: "raster", tiles: [SAT], tileSize: 256, maxzoom: 18, attribution: "Imagery © Esri, Maxar, Earthstar Geographics" },
       dem: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 14, encoding: "terrarium", attribution: "Terrain: AWS Terrain Tiles (Mapzen, SRTM)" },
       hs: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 14, encoding: "terrarium" },
-      skyways: { type: "raster", tiles: [KK7("skyways")], scheme: "tms", tileSize: 256, maxzoom: 13 },
-      thermals: { type: "raster", tiles: [KK7("thermals")], scheme: "tms", tileSize: 256, maxzoom: 12 },
+      skyways: KK7("skyways"),
+      thermals: KK7("thermals"),
       rings: { type: "geojson", data: ringsGeo },
       route: { type: "geojson", data: routeGeo },
       shadow: { type: "geojson", data: { type: "FeatureCollection", features: [] } }
@@ -313,8 +314,8 @@ const map = new maplibregl.Map({
       { id: "bg", type: "background", paint: { "background-color": "#0A1E21" } },
       { id: "sat", type: "raster", source: "sat", paint: { "raster-saturation": -0.12, "raster-contrast": 0.06, "raster-brightness-max": 0.92 } },
       { id: "hill", type: "hillshade", source: "hs", layout: { visibility: "none" }, paint: { "hillshade-shadow-color": "#020B0B", "hillshade-highlight-color": "#6FA3A8", "hillshade-accent-color": "#0C2A2D", "hillshade-exaggeration": 0.9, "hillshade-illumination-direction": 315 } },
-      { id: "skyways", type: "raster", source: "skyways", paint: { "raster-opacity": 0.85, "raster-brightness-min": 0.3 } },
-      { id: "thermals", type: "raster", source: "thermals", layout: { visibility: "none" }, paint: { "raster-opacity": 0.85 } },
+      { id: "skyways", type: "raster", source: "skyways", paint: { "raster-opacity": 0.9, "raster-fade-duration": 0 } },
+      { id: "thermals", type: "raster", source: "thermals", layout: { visibility: "none" }, paint: { "raster-opacity": 0.9, "raster-fade-duration": 0 } },
       { id: "rings", type: "line", source: "rings", paint: { "line-color": ["case", ["==", ["get", "goal"], 1], "#FF5F00", "#FFFFFF"], "line-width": 2, "line-opacity": 0.85 } },
       { id: "route", type: "line", source: "route", paint: { "line-color": "#FFFFFF", "line-width": 1.4, "line-opacity": 0.6, "line-dasharray": [3, 3] } },
       { id: "shadow", type: "line", source: "shadow", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#000000", "line-width": 3, "line-opacity": 0.45, "line-blur": 1.5 } }

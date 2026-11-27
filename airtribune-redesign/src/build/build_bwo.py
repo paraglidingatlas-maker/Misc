@@ -159,7 +159,7 @@ rep = {
   "PLACE": "Panchgani, Maharashtra", "CARD1": "white-blur", "CARD2": "orange-blur",
   "RACELINE": "Seven tasks · £300 entry · 120 pilots max, selected by WPRS.",
   "TRIPLINE": "Fly to Pune (120 km) or Mumbai (255 km), then a taxi. HQ rooms from about €35.",
-  "EVTJSON": json.dumps({"start": "2027-02-23", "end": "2027-03-02", "tz": 5.5, "seed": 13 * 97 + 13, "ll": [17.92, 73.82], "venue": "Panchgani"}),
+  "EVTJSON": json.dumps({"start": "2027-02-23", "end": "2027-03-02", "tz": 5.5, "seed": 13 * 97 + 13, "ll": [17.92, 73.82], "at": "bwo2027", "venue": "Panchgani"}),
   "HELPERS": HELPERS,
 }
 _ph = photos.fields("bwo2027", "Panchgani")

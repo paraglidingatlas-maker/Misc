@@ -509,7 +509,8 @@ function tick(){ const now = Date.now(), live = now >= t0 && now < t1, target = 
 tick(); setInterval(tick, 1000);
 {{HELPERS}}
 /* venue map: shaded relief (AWS terrarium elevation tiles) with KK7 skyways or thermals on top.
-   KK7 rules: send ?src=<our hostname>, fetch only the tiles shown, stay under 10 requests a second. */
+   KK7 (thermal.kk7.ch, CC BY-NC-SA 4.0) is imported once and recoloured by src/build/bake_kk7.py: one 1536 x 640 px
+   z11 image per layer, centred on the venue's world pixel, so the page never asks KK7 at runtime. */
 let taskDrawn = false;
 function drawTask(){ if (taskDrawn) return; taskDrawn = true;
   const box = $("#skymap"), cv = box.querySelector("canvas"), W = box.clientWidth, H = box.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
@@ -519,9 +520,7 @@ function drawTask(){ if (taskDrawn) return; taskDrawn = true;
   const wx = (lon + 180)/360*N*TS, wy = (1 - Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*N*TS;   // venue in world pixels
   const ox = wx - W/2, oy = wy - H/2, tx0 = Math.floor(ox/TS), tx1 = Math.floor((ox + W)/TS), ty0 = Math.floor(oy/TS), ty1 = Math.floor((oy + H)/TS);
   const tiles = []; for (let x = tx0; x <= tx1; x++) for (let y = ty0; y <= ty1; y++) tiles.push([x, y]);
-  const SRC = encodeURIComponent(/\./.test(location.hostname) ? location.hostname : "paraglidingatlas-maker.github.io");
-  let sent = []; const slot = () => new Promise(res => { const go = () => { const t = performance.now(); sent = sent.filter(s => t - s < 1000); if (sent.length < 8){ sent.push(t); res(); } else setTimeout(go, 130); }; go(); });
-  const load = (url, kk7) => (kk7 ? slot() : Promise.resolve()).then(() => new Promise(res => { const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => res(im); im.onerror = () => res(null); im.src = url; }));
+  const load = url => new Promise(res => { const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => res(im); im.onerror = () => res(null); im.src = url; });
   // relief: decode elevation, hillshade from the north-west, tint in the site colours
   const relief = document.createElement("canvas"); relief.width = W; relief.height = H;
   const rel = Promise.all(tiles.map(([x, y]) => load(`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${Z}/${x}/${y}.png`).then(im => ({x, y, im})))).then(rs => {
@@ -539,30 +538,13 @@ function drawTask(){ if (taskDrawn) return; taskDrawn = true;
       const k = (y*W + x)*4; o[k] = 4 + 60*h; o[k+1] = 22 + 104*h; o[k+2] = 24 + 104*h; o[k+3] = 255; }
     relief.getContext("2d").putImageData(out, 0, 0);
   });
-  // KK7 colours the least-flown lines dark blue, which disappears on dark ground: lift blue-dominant pixels
-  // towards a light sky blue (cyan, green, yellow and red are left as they are) and firm up faint alpha.
-  // thermals: read the strength from KK7's blue→red scale (hue) and redraw it as pale amber → orange → red
-  function kk7Heat(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
-    const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), c = mx - mn;
-    let h = 240; if (c > .04) h = mx === r ? 60*(((g - b)/c + 6) % 6) : mx === g ? 60*((b - r)/c + 2) : 60*((r - g)/c + 4);
-    if (h > 300) h = 0;                                    // magenta-ish tips count as strongest
-    const v = Math.max(0, Math.min(1, (240 - h)/240)), k = v < .5 ? v*2 : (v - .5)*2;
-    const A = v < .5 ? [255,205,130] : [255,125,35], B = v < .5 ? [255,125,35] : [215,25,25];
-    d[i] = A[0] + (B[0] - A[0])*k; d[i+1] = A[1] + (B[1] - A[1])*k; d[i+2] = A[2] + (B[2] - A[2])*k;
-    d[i+3] = Math.min(255, d[i+3]*(1.2 + .6*v)); } }
-  function kk7Lift(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
-    const r = d[i], g = d[i+1], b = d[i+2], t = Math.max(0, b - Math.max(r, g))/255;
-    d[i] = r + 120*t; d[i+1] = g + 170*t; d[i+3] = Math.min(255, d[i+3]*1.5); } }
-  const lift = (im, heat) => { if (!im) return null; const c = document.createElement("canvas"); c.width = im.width; c.height = im.height; const x = c.getContext("2d"); x.drawImage(im, 0, 0);
-    try { const d = x.getImageData(0, 0, c.width, c.height); (heat ? kk7Heat : kk7Lift)(d.data); x.putImageData(d, 0, 0); } catch(e){} return c; };
-  const cache = {};
-  const layer = name => cache[name] || (cache[name] = Promise.all(tiles.map(([x, y]) =>
-    load(`https://thermal.kk7.ch/tiles/${name}_all_all/${Z}/${x}/${N - 1 - y}.png?src=${SRC}`, true).then(im => ({x, y, im: lift(im, name === "thermals")})))));
+  const SX = Math.round(wx) - 768, SY = Math.round(wy) - 320, cache = {};      // baked image's top-left in world pixels
+  const layer = name => cache[name] || (cache[name] = load(`../img/sky/${EVT.at}-${name}.webp`));
   let mode = "skyways";
-  const paint = () => rel.then(() => (mode ? layer(mode) : Promise.resolve([]))).then(rs => {
+  const paint = () => rel.then(() => (mode ? layer(mode) : null)).then(im => {
     ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.fillStyle = "#03100F"; ctx.fillRect(0, 0, W, H); ctx.drawImage(relief, 0, 0);
     ctx.globalAlpha = .92;
-    rs.forEach(r => r.im && ctx.drawImage(r.im, r.x*TS - ox, r.y*TS - oy, TS, TS));
+    if (im) ctx.drawImage(im, SX - ox, SY - oy);
     ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
     // venue marker + name
     const cx = W/2, cy = H/2; ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI*2); ctx.fillStyle = "#FF5F00"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#fff"; ctx.stroke();

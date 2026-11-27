@@ -374,7 +374,7 @@ for e in EVENTS:
       "STORY": "".join(f"<p>{esc(x)}</p>" for x in cc["story"]),
       "SCHEDULE": "".join(f"<li><b>{esc(a)}</b><span>{esc(b)}</span></li>" for a,b in cc["sched"]),
       "SITESHORT": esc(cc["siteshort"]), "PRIZES": prizes, "TRAVEL": trav_html, "RAIL": rail,
-      "EVTJSON": json.dumps({**{k: e[k] for k in ("start","end","tz","seed")}, "ll": VENUE_LL[e["at"]], "venue": e["venue"]}), "HELPERS": helpers,
+      "EVTJSON": json.dumps({**{k: e[k] for k in ("start","end","tz","seed")}, "ll": VENUE_LL[e["at"]], "at": e["at"], "venue": e["venue"]}), "HELPERS": helpers,
     }
     ph = photos.fields(e["at"], e["venue"])
     rep.update(ph); rep["CARD3"] = ph.pop("TRIP"); rep.pop("TRIP")

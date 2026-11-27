@@ -746,7 +746,7 @@ function build(){
   });
   const cy = PHONE.matches ? (104 + H - 150)/2 : H*.5;   // phone: centre between the telemetry card and the sheet
   M = {W, H, cy, svg, world, f, task, pilots, tpL, tpLabels, launch, launchEl, bubbles, tStart: T_START, tEnd: T_END, cumDist: ROUTE.map((_,k) => d3.sum(LEGS.slice(0,k))),
-       route: ROUTE, suffix: SUFFIX, skyG, sky: {layers: new Map(), z: null}, cam: {fx:W/2, fy:H/2, s:1, r:0}, order: pilots.slice(), phase: null};
+       route: ROUTE, suffix: SUFFIX, skyG, sky: {mode: null}, cam: {fx:W/2, fy:H/2, s:1, r:0}, order: pilots.slice(), phase: null};
   buildBoard(); buildStrip(); buildTimeline();
 }
 function mkTag(parent, col){
@@ -826,72 +826,21 @@ function interp(pl, T){
 }
 const overlap = (a,b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
 /* ---------- skyways / thermals overlay ----------
-   KK7 Thermal & Skyways tiles (thermal.kk7.ch, CC BY-NC-SA 4.0, built from public tracklogs). TMS, 256 px.
-   Usage rules: send ?src=<our hostname> (browser sends the Referer), fetch only tiles in view, stay under 10 requests/s. */
-const SKY = {mode: "skyways", host: "https://thermal.kk7.ch/tiles/", src: /\./.test(location.hostname) ? location.hostname : "paraglidingatlas-maker.github.io",
-  max: {skyways: 13, thermals: 12}, at: 0, queue: [], sent: []};
-const tileLon = (x, n) => x/n*360 - 180, tileLat = (y, n) => Math.atan(Math.sinh(Math.PI*(1 - 2*y/n)))*180/Math.PI;
-// KK7 colours the least-flown lines dark blue, which disappears on dark ground: lift blue-dominant pixels
-// towards a light sky blue (cyan, green, yellow and red are left as they are) and firm up faint alpha.
-// thermals: read the strength from KK7's blue→red scale (hue) and redraw it as pale amber → orange → red
-function kk7Heat(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
-  const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), c = mx - mn;
-  let h = 240; if (c > .04) h = mx === r ? 60*(((g - b)/c + 6) % 6) : mx === g ? 60*((b - r)/c + 2) : 60*((r - g)/c + 4);
-  if (h > 300) h = 0;                                    // magenta-ish tips count as strongest
-  const v = Math.max(0, Math.min(1, (240 - h)/240)), k = v < .5 ? v*2 : (v - .5)*2;
-  const A = v < .5 ? [255,205,130] : [255,125,35], B = v < .5 ? [255,125,35] : [215,25,25];
-  d[i] = A[0] + (B[0] - A[0])*k; d[i+1] = A[1] + (B[1] - A[1])*k; d[i+2] = A[2] + (B[2] - A[2])*k;
-  d[i+3] = Math.min(255, d[i+3]*(1.2 + .6*v)); } }
-function kk7Lift(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
-  const r = d[i], g = d[i+1], b = d[i+2], t = Math.max(0, b - Math.max(r, g))/255;
-  d[i] = r + 120*t; d[i+1] = g + 170*t; d[i+3] = Math.min(255, d[i+3]*1.5); } }
-const skyImg = url => new Promise(res => { const im = new Image(); im.crossOrigin = "anonymous";
-  im.onload = () => { const cv = document.createElement("canvas"); cv.width = im.width; cv.height = im.height; const x = cv.getContext("2d"); x.drawImage(im, 0, 0);
-    try { const d = x.getImageData(0, 0, cv.width, cv.height); (/thermals_/.test(url) ? kk7Heat : kk7Lift)(d.data); x.putImageData(d, 0, 0); cv.toBlob(b => res(b ? URL.createObjectURL(b) : url)); } catch(e){ res(url); } };
-  im.onerror = () => res(null); im.src = url; });
-const skyDrop = el => { const h = el.getAttribute("href"); if (h && h.startsWith("blob:")) URL.revokeObjectURL(h); el.remove(); };
-function skyUpdate(c){
-  const now = performance.now(), S = M.sky;
-  // drain the request queue: at most 8 new tiles a second
-  SKY.sent = SKY.sent.filter(t => now - t < 1000);
-  while (SKY.queue.length && SKY.sent.length < 8){ const q = SKY.queue.shift(); if (q.el.isConnected){ const el = q.el; skyImg(q.url).then(u => { if (u && el.isConnected) el.setAttribute("href", u); else if (u && u.startsWith("blob:")) URL.revokeObjectURL(u); }); SKY.sent.push(now); } }
-  if (now - SKY.at < 300) return; SKY.at = now;
-  if (!SKY.mode){ S.layers.forEach(l => { l.selectAll("image").each(function(){ skyDrop(this); }); l.remove(); }); S.layers.clear(); SKY.queue = []; S.z = null; return; }
-  // view in map space: screen corners (extra room above for the 3D tilt), then km, then lat/lon
-  const f = M.f, s = f.s, o = f([0,0]), up = st.view.tilt > .05 ? M.H*.7 : 0;
-  const cs = [[0,-up],[M.W,-up],[0,M.H],[M.W,M.H]].map(([x,y]) => M.scrInv(x, y)).map(([x,y]) => [(x - o[0])/s, (y - o[1])/s]);
-  const xs = cs.map(q => q[0]), ys = cs.map(q => q[1]);
-  const W0 = LON0 + d3.min(xs)/KX, E0 = LON0 + d3.max(xs)/KX, N0 = LAT0 - d3.min(ys)/KY, S0 = LAT0 - d3.max(ys)/KY;
-  // tile zoom so one tile pixel is about one screen pixel
-  const pxPerKm = s*c.s, kmTile0 = 40075*Math.cos(LAT0*Math.PI/180);
-  const z = Math.max(6, Math.min(SKY.max[SKY.mode], Math.round(Math.log2(pxPerKm*kmTile0/256)))), n = 2**z;
-  const key = SKY.mode + "/" + z;
-  const x0 = Math.floor((W0 + 180)/360*n), x1 = Math.floor((E0 + 180)/360*n);
-  const yOf = lat => Math.floor((1 - Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*n);
-  const y0 = yOf(N0), y1 = yOf(S0);
-  if ((x1 - x0 + 1)*(y1 - y0 + 1) > 120) return;          // safety: never ask for a huge block
-  let L = S.layers.get(key);
-  if (!L){ L = M.skyG.append("g").attr("data-k", key); L.tiles = new Map(); S.layers.set(key, L); }
-  L.raise();
-  // keep the previous zoom underneath until the new tiles have had time to arrive, then drop it
-  if (S.z !== key){ const old = [...S.layers.keys()].filter(k => k !== key); setTimeout(() => old.forEach(k => { if (M.sky.z !== k && M.sky.layers.has(k)){ M.sky.layers.get(k).selectAll("image").each(function(){ skyDrop(this); }); M.sky.layers.get(k).remove(); M.sky.layers.delete(k); } }), 1500); S.z = key; }
-  const want = new Set();
-  for (let x = x0; x <= x1; x++) for (let y = y0; y <= y1; y++){
-    const id = x + "/" + y; want.add(id); if (L.tiles.has(id)) continue;
-    const a = f(proj(tileLat(y, n), tileLon(x, n))), b = f(proj(tileLat(y + 1, n), tileLon(x + 1, n)));
-    const el = L.append("image").attr("x", a[0]).attr("y", a[1]).attr("width", b[0] - a[0]).attr("height", b[1] - a[1]).attr("preserveAspectRatio","none").node();
-    L.tiles.set(id, el);
-    SKY.queue.push({el, d: Math.hypot((a[0] + b[0])/2 - c.fx, (a[1] + b[1])/2 - c.fy), url: `${SKY.host}${SKY.mode}_all_all/${z}/${x}/${n - 1 - y}.png?src=${encodeURIComponent(SKY.src)}`});
-  }
-  SKY.queue.sort((p, q) => p.d - q.d);          // nearest the camera first
-  // forget tiles far out of view so the page does not keep hundreds of images
-  if (L.tiles.size > 160) L.tiles.forEach((el, id) => { if (!want.has(id)){ skyDrop(el); L.tiles.delete(id); } });
+   KK7 Thermal & Skyways (thermal.kk7.ch, CC BY-NC-SA 4.0, built from public tracklogs), imported once and recoloured
+   by src/build/bake_kk7.py: one image per layer over the Task 3 area, on a plain lat/lon grid like this map's frame,
+   so it is a single <image> and the page never asks KK7 at runtime. */
+const SKY = {mode: "skyways", box: {s: 19.50, n: 20.40, w: -103.90, e: -103.05}, url: l => `img/sky/tapalpa-${l}.webp`};
+function skyUpdate(){
+  const S = M.sky; if (S.mode === SKY.mode) return; S.mode = SKY.mode;
+  M.skyG.selectAll("image").remove(); if (!SKY.mode) return;
+  const B = SKY.box, a = M.f(proj(B.n, B.w)), b = M.f(proj(B.s, B.e));
+  M.skyG.append("image").attr("href", SKY.url(SKY.mode)).attr("x", a[0]).attr("y", a[1]).attr("width", b[0] - a[0]).attr("height", b[1] - a[1]).attr("preserveAspectRatio", "none");
 }
 function setSky(mode){
-  SKY.mode = mode; SKY.queue = [];
+  SKY.mode = mode;
   document.querySelectorAll("[data-sky]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sky === mode));
   $("#skyCredit").hidden = !mode;
-  if (M){ M.sky.layers.forEach(l => { l.selectAll("image").each(function(){ skyDrop(this); }); l.remove(); }); M.sky.layers.clear(); M.sky.z = null; SKY.at = 0; }
+  if (M) skyUpdate();
 }
 document.querySelectorAll("[data-sky]").forEach(b => b.addEventListener("click", () => setSky(b.dataset.sky)));
 
