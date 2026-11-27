@@ -141,7 +141,7 @@ a{color:inherit;text-decoration:none}
 .feed p b{color:#fff;font:800 italic 13.5px var(--f-display);text-transform:uppercase}
 .feed li.lead p{color:#fff}
 .feed .tag{display:inline-block;margin-right:6px;font:800 10px var(--f-body);letter-spacing:.1em;vertical-align:1px;color:var(--muted)}
-.feed .tag.lead{color:var(--orange)}.feed .tag.goal{color:#fff}
+.feed .tag.lead,.feed .tag.gag{color:var(--orange)}.feed .tag.goal{color:#fff}
 
 /* bottom: course strip + controls */
 .bottom{background:var(--bg-2);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center}
@@ -164,6 +164,24 @@ a{color:inherit;text-decoration:none}
 .side.right{grid-column:3;grid-row:1}
 .concept .short{display:none}
 
+/* gaggles: panel under the task chips, outlines on the map, final-glide banner */
+.gagp{list-style:none;margin:2px 0 0;padding:8px 0;border-radius:8px;background:rgba(3,16,15,.82);border:1px solid var(--line-2);backdrop-filter:blur(8px);min-width:236px}
+.gagp[hidden]{display:none}
+.gagp li{display:grid;grid-template-columns:8px 1fr auto auto;align-items:baseline;gap:0 10px;padding:3px 12px}
+.gagp li i{width:8px;height:8px;border-radius:2px;background:rgba(255,255,255,.7);align-self:center}
+.gagp li[data-k="lead"] i,.gagp li[data-k="front"] i{background:var(--orange)}
+.gagp li[data-k="strag"] i{background:transparent;border:1px solid rgba(255,255,255,.5)}
+.gagp li b{font:700 10.5px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.gagp li b em{display:block;font:800 italic 13px var(--f-display);letter-spacing:0;text-transform:uppercase;color:#fff;margin-top:1px;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.gagp li span{font:800 italic 15px var(--f-display);color:#fff}
+.gagp li time{font:600 11.5px var(--f-body);color:var(--ink-2);font-variant-numeric:tabular-nums;min-width:38px;text-align:right}
+.gag-h{display:block;font:700 10px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 12px 4px}
+.hull{pointer-events:none}
+.fglide{position:absolute;z-index:3;left:50%;top:14px;transform:translateX(-50%);display:flex;align-items:baseline;gap:12px;padding:9px 16px;border-radius:8px;background:rgba(3,16,15,.88);border:1px solid var(--line-2);border-left:4px solid var(--orange);white-space:nowrap}
+.fglide[hidden]{display:none}
+.fglide span{font:800 10.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+.fglide b{font:800 italic 18px var(--f-display);text-transform:uppercase;color:#fff}
+.fglide em{font:600 12.5px var(--f-body);font-style:normal;color:var(--ink-2)}
 /* gaggle bubbles on the map */
 .bub{cursor:pointer}
 .bub text.n{font:800 italic 12px var(--f-display)}
@@ -230,6 +248,9 @@ a{color:inherit;text-decoration:none}
   .tele-g div:nth-child(3),.tele-g div:nth-child(5),.tele-g div:nth-child(6),.vario,#baro,.tele-f{display:none}
   .tele-g b{font-size:16px;margin-top:2px}
   .map-ov.tl{display:none}
+  .fglide{top:auto;bottom:calc(var(--peek,196px) + 76px);gap:8px;padding:7px 12px}
+  .fglide b{font-size:15px}
+  .fglide em{font-size:11.5px}
   .toast{top:112px;font-size:13px}
   .bottom{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}
   .bottom .ctl{display:contents}
@@ -377,7 +398,8 @@ a{color:inherit;text-decoration:none}
     </div>
     <section class="mapwrap" id="mapwrap" aria-label="Live map">
       <div class="mapstage"><svg id="map" role="img" aria-label="Live map of the task with pilot positions"></svg></div>
-      <div class="map-ov tl"><span class="leg"><span>Task</span><b id="ovTask">107.9 km</b></span><span class="leg"><span id="ovLeadL">Leader</span><b id="ovLead">—</b></span></div>
+      <div class="map-ov tl"><span class="leg"><span>Task</span><b id="ovTask">107.9 km</b></span><span class="leg"><span id="ovLeadL">Leader</span><b id="ovLead">—</b></span><ol class="gagp" id="gag" aria-label="Gaggles" hidden></ol></div>
+      <div class="fglide" id="fglide" hidden aria-live="polite"><span>Final glide</span><b id="fgName">—</b><em id="fgInfo"></em></div>
       <div class="toast" id="toast"></div>
       <button class="compass" id="compass" aria-label="Reset map to north up" title="North up"><svg viewBox="0 0 40 40" aria-hidden="true"><g id="compassN"><path d="M20 5 L25 20 L20 17 L15 20Z" fill="#FF5F00"/><path d="M20 35 L25 20 L20 23 L15 20Z" fill="rgba(255,255,255,.55)"/><text x="20" y="4" text-anchor="middle" font-size="6" font-weight="800" fill="#fff" font-family="Inter, sans-serif">N</text></g></svg></button>
       <div class="maphint" id="maphint"><span>Drag to move · Scroll or double-click to zoom · Shift- or right-drag to rotate and tilt · N north · R reset</span><button class="x" id="hintClose" aria-label="Hide map help">×</button></div>
@@ -601,6 +623,51 @@ function at(P, T){
 }
 const legName = q => q.ti < 2 ? "on the way out of the start" : `on the leg to ${tpName(Math.min(q.ti, ROUTE.length-1))}`;
 
+/* ---------- gaggles (computed once from the real tracks) ----------
+   Every 10 s: pilots racing (out of the start, not yet in goal) are linked when they are within 1.5 km of each other
+   and 400 m in height; links are averaged over ±30 s so a pilot passing through does not flicker, then chained into
+   groups. Groups are named in race order: anyone ahead of the first gaggle of 3+ is "Out front", then the lead gaggle,
+   the chase group, middle and trailing groups; loose pilots behind the lead gaggle are stragglers.
+   Final glide: from the end of a pilot's last climb (60 s average over +0.5 m/s, 100 m gained at least) within 20 km of goal. */
+const GAG = (() => {
+  const STEP = 10, n = Math.floor(T_END/STEP) + 1, R = 1.5, DZ = 400, W = 3;
+  const act = [], raw = [];
+  for (let s = 0; s < n; s++){ const T = s*STEP, q = PILOTS.map(P => at(P, T));
+    act.push(PILOTS.map((P,i) => P.goalT > T && q[i].ti >= 2));
+    const A = new Uint8Array(N*N);
+    for (let i = 0; i < N; i++) if (act[s][i]) for (let j = i+1; j < N; j++) if (act[s][j] && dist(q[i].p, q[j].p) < R && Math.abs(q[i].alt - q[j].alt) < DZ) A[i*N + j] = 1;
+    raw.push({T, q, A}); }
+  const steps = raw.map(({T, q}, s) => {
+    const par = d3.range(N), f = i => par[i] === i ? i : (par[i] = f(par[i]));
+    for (let i = 0; i < N; i++) if (act[s][i]) for (let j = i+1; j < N; j++) if (act[s][j]){
+      let on = 0, c = 0; for (let u = Math.max(0, s - W); u <= Math.min(n - 1, s + W); u++) if (act[u][i] && act[u][j]){ c++; on += raw[u].A[i*N + j]; }
+      if (c && on/c >= .5) par[f(i)] = f(j); }
+    const g = new Map(); PILOTS.forEach((P,i) => { if (act[s][i]) { const r = f(i); if (!g.has(r)) g.set(r, []); g.get(r).push(P); } });
+    const groups = [...g.values()].map(m => m.sort((a,b) => at(a,T).rem - at(b,T).rem)).sort((a,b) => at(a[0],T).rem - at(b[0],T).rem);
+    // name them
+    const big = groups.filter(m => m.length >= 3), li = groups.indexOf(big[0]), out = [];
+    const front = li > 0 ? groups.slice(0, li).flat() : li < 0 ? groups.slice(0, 1).flat() : [];
+    if (front.length) out.push({kind:"front", name:"Out front", mem:front});
+    big.forEach((m,k) => out.push({kind: k === 0 ? "lead" : k === 1 ? "chase" : k === big.length - 1 ? "trail" : "mid",
+      name: k === 0 ? "Lead gaggle" : k === 1 ? "Chase group" : k === big.length - 1 ? "Trailing group" : "Middle group", mem:m}));
+    const loose = groups.slice(Math.max(li, li < 0 ? 1 : 0)).filter(m => m.length < 3).flat();
+    if (loose.length) out.push({kind:"strag", name:"Stragglers", mem:loose.sort((a,b) => at(a,T).rem - at(b,T).rem)});
+    const of = new Map(); out.forEach(G => G.mem.forEach(P => of.set(P.k, G)));
+    return {T, groups: out, of};
+  });
+  // final glide start per pilot
+  const fg = PILOTS.map(P => { const a = P.pts; let best = null, i = 0;
+    while (i + 6 < a.length && a[i + 6].t <= P.goalT){
+      if ((a[i+6].alt - a[i].alt)/(a[i+6].t - a[i].t) > .5){ let j = i; while (j + 6 < a.length && a[j+6].t <= P.goalT && (a[j+6].alt - a[j].alt)/(a[j+6].t - a[j].t) > .5) j++;
+        const top = a.slice(i, j + 7).reduce((m,q) => q.alt > m.alt ? q : m, a[i]);
+        if (top.alt - a[i].alt >= 100) best = top; i = j + 1; } else i++; }
+    return best && best.rem <= 20 ? best.t : null; });
+  const atT = T => steps[Math.max(0, Math.min(n - 1, Math.round(T/STEP)))];
+  return {steps, atT, fg};
+})();
+// how long ago someone was where progress x is now (time gap to the head of the race)
+const gapTo = (x, T) => { let t = Infinity; PILOTS.forEach(P => { const u = timeAtProg(P, x); if (u !== null && u < t) t = u; }); return t === Infinity ? 0 : Math.max(0, T - t); };
+
 const EVENTS = (() => {
   const E = [], who = P => `<b>${P.short}</b>`, nm = k => BASE_TASK.cyl[k-1] ? BASE_TASK.cyl[k-1].name : "";
   const push = (t, type, html, o={}) => E.push({t, type, html, ...o});
@@ -653,6 +720,31 @@ const EVENTS = (() => {
   let best = 0;
   climbs.forEach(c => { if (c.r > best + .3){ best = c.r;
     push(c.t, "climb", `<span class="tag climb">CLIMB</span>${who(c.P)} averages +${c.r.toFixed(1)} m/s over two minutes ${c.t < 0 ? "in the start gaggle" : legName(c.q)}: strongest climb so far.`, {k:c.P.k}); } });
+  // gaggle moments: breakaways, the lead gaggle catching them, splits and regroupings (must hold for a minute)
+  { const st = GAG.steps, sig = x => ({front: (x.groups.find(G => G.kind === "front") || {mem:[]}).mem, nBig: x.groups.filter(G => !["front","strag"].includes(G.kind)).length, x});
+    let brkT = null, split = false; const S = st.map(sig), hold = (s, test) => S.slice(s, s + 13).every(test), lastAt = {};
+    const ok = (type, T) => { if (T - (lastAt[type] ?? -1e9) < 300) return false; lastAt[type] = T; return true; };
+    for (let s = 13; s < S.length; s++){ const a = S[s-1], b = S[s], T = st[s].T;
+      if (PILOTS.some(P => P.goalT <= T)) break;
+      const lg = b.x.groups.find(G => G.kind === "lead");
+      const ahead = lg && b.front.length ? at(lg.mem[0],T).rem - at(b.front[0],T).rem : 0;
+      if (!a.front.length && b.front.length && ahead >= .5 && hold(s, v => v.front.length) && ok("brk", T)){ brkT = T;
+        push(T, "gag", `<span class="tag gag">GAGGLE</span>${b.front.slice(0,3).map(who).join(" and ")} ${b.front.length > 1 ? "break" : "breaks"} away from the lead gaggle${ahead > .2 ? `, ${ahead.toFixed(1)} km ahead` : ""} ${legName(at(b.front[0],T))}.`, {k:b.front[0].k, toast: b.front.length === 1 ? `${b.front[0].short} breaks away` : null});
+      } else if (a.front.length && !b.front.length && brkT !== null && hold(s, v => !v.front.length) && lg && ok("catch", T)){ brkT = null;
+        push(T, "gag", `<span class="tag gag">GAGGLE</span>The lead gaggle reels in ${a.front.slice(0,3).map(who).join(" and ")}: ${lg.mem.length} pilots together again.`);
+      }
+      if (b.nBig > a.nBig && hold(s, v => v.nBig >= b.nBig) && ok("split", T)){
+        const ch = b.x.groups.find(G => G.kind === "chase"), gap = ch ? gapTo(at(ch.mem[0],T).bp, T) - gapTo(at(lg.mem[0],T).bp, T) : 0;
+        if (lg && ch && gap >= 45 && (split = true)) push(T, "gag", `<span class="tag gag">SPLIT</span>${lg.mem.length < ch.mem.length ? `${who(lg.mem[0])} and ${lg.mem.length - 1} more pull clear of the main gaggle of ${ch.mem.length}, ${fmtGap(gap)} behind them.` : `The gaggle splits: ${who(lg.mem[0])} leads ${lg.mem.length}; a chase group of ${ch.mem.length} with ${who(ch.mem[0])} is ${fmtGap(gap)} back.`}`, {k:lg.mem[0].k});
+      } else if (split && b.nBig < a.nBig && b.nBig === 1 && hold(s, v => v.nBig <= b.nBig) && lg && ok("merge", T)){ split = false;
+        push(T, "gag", `<span class="tag gag">GAGGLE</span>The groups join up: the lead gaggle is ${lg.mem.length} pilots with ${who(lg.mem[0])} at the front.`);
+      }
+    }
+    // final glide of the eventual first pilot in goal
+    const first = PILOTS.slice().sort((a,b) => a.goalT - b.goalT)[0], f0 = GAG.fg[first.k];
+    if (f0 !== null){ const q = at(first, f0), behind = PILOTS.filter(P => P !== first && GAG.fg[P.k] !== null && GAG.fg[P.k] <= f0 + 120).length;
+      push(f0, "gag", `<span class="tag gag">FINAL GLIDE</span>${who(first)} leaves the last climb at ${fmtAlt(q.alt)} m, ${q.rem.toFixed(1)} km out, and goes for goal.${behind ? ` ${behind} more set off on glide within two minutes.` : ""}`, {k:first.k, toast:`${first.short} on final glide`}); }
+  }
   // highest point of the race
   let hi = {alt:0};
   PILOTS.forEach(P => P.pts.forEach(q => { if (q.t >= 0 && q.t < P.goalT && q.alt > hi.alt) hi = {alt:q.alt, t:q.t, P, q}; }));
@@ -714,7 +806,8 @@ function build(){
   const tpL = screen.append("g").selectAll("text").data(tpLabels).join("text").attr("class","tp-lab").text(d => d.name);
   const launch = f([0,0]);
   const launchEl = screen.append("path").attr("fill","#FFFFFF").attr("stroke","#03100F").attr("stroke-width",1.4);
-  const dots = screen.append("g"), bubL = screen.append("g"), tags = screen.append("g");
+  const hullL = screen.append("g").attr("class","hull"), dots = screen.append("g"), bubL = screen.append("g"), tags = screen.append("g");
+  const hulls = d3.range(6).map(() => ({p: hullL.append("path").attr("stroke-linejoin","round").attr("stroke-linecap","round").attr("display","none"), tag: mkTag(tags, "#fff")}));
   const pilots = PILOTS.map(P => {
     const g = trails.append("g");
     const pl = Object.assign(P, {P: P.pts.map(q => f(q.p)), i: 0,
@@ -738,7 +831,7 @@ function build(){
     return b;
   });
   const cy = PHONE.matches ? (104 + H - 150)/2 : H*.5;   // phone: centre between the telemetry card and the sheet
-  M = {W, H, cy, svg, world, f, task, pilots, tpL, tpLabels, launch, launchEl, bubbles, tStart: T_START, tEnd: T_END, cumDist: ROUTE.map((_,k) => d3.sum(LEGS.slice(0,k))),
+  M = {W, H, cy, svg, world, f, task, pilots, tpL, tpLabels, launch, launchEl, bubbles, hulls, tStart: T_START, tEnd: T_END, cumDist: ROUTE.map((_,k) => d3.sum(LEGS.slice(0,k))),
        route: ROUTE, suffix: SUFFIX, skyG, sky: {mode: null}, cam: {fx:W/2, fy:H/2, s:1, r:0}, order: pilots.slice(), phase: null};
   buildBoard(); buildStrip(); buildTimeline();
 }
@@ -893,6 +986,19 @@ function frame(force){
   order.forEach(pl => { if (used.has(pl.k) || pl.k === st.sel || pl.done) return;
     const mem = order.filter(q => !used.has(q.k) && q.k !== st.sel && !q.done && Math.hypot(q.sx - pl.sx, q.sy - pl.sy) < 22);
     if (mem.length >= 3){ mem.forEach(q => used.add(q.k)); clusters.push(mem); } });
+  // named gaggles (lead, chase, middle, trailing): a soft outline round the members, labelled when no bubble names it
+  const GS = phase === "pre" ? null : GAG.atT(T), named = GS ? GS.groups.filter(G => !["front","strag"].includes(G.kind)) : [];
+  const bubbled = new Set(clusters.map(m => m[0].k));
+  M.hulls.forEach((h,j) => { const G = named[j];
+    if (!G){ h.p.attr("display","none"); h.tag.g.attr("display","none"); return; }
+    const pts = G.mem.map(P => [M.pilots[P.k].sx, M.pilots[P.k].sy]), hull = pts.length >= 3 ? d3.polygonHull(pts) : null, ring = hull || pts;
+    const col = G.kind === "lead" ? "#FF5F00" : "#FFFFFF";
+    h.p.attr("display", null).attr("d", "M" + ring.join("L") + (hull ? "Z" : "")).attr("fill", hull ? col : "none").attr("fill-opacity", .1)
+      .attr("stroke", col).attr("stroke-opacity", .16).attr("stroke-width", 30);
+    if (G.mem.some(P => bubbled.has(P.k))){ h.tag.g.attr("display","none"); return; }
+    const top = ring.reduce((m,q) => q[1] < m[1] ? q : m, ring[0]);
+    h.tag.set(`${G.name} · ${G.mem.length}`, G.kind === "lead" ? "#FF5F00" : "rgba(3,16,15,.88)");
+    h.lab = [h.tag, top[0], top[1] - 8, 6, 20 + j]; });
   const tagText = (pl, p) => phase === "pre" ? `${pl.short} ${fmtAlt(pl.sAlt)} m` : `P${p+1} ${pl.short}`;
   const labels = [];   // [tag, anchorX, anchorY, radius, priority]
   M.pilots.forEach(pl => {
@@ -911,9 +1017,11 @@ function frame(force){
     b.g.attr("display", null).attr("transform", `translate(${x},${y})`);
     b.c.attr("r", r).attr("stroke", best === lead ? "#FF5F00" : "rgba(255,255,255,.85)");
     b.n.text(mem.length);
-    b.tag.set(phase === "pre" ? `Gaggle ${mem.length} · top ${fmtAlt(best.sAlt)} m` : `P${p+1} ${best.short} +${mem.length-1}`, best === lead ? "#FF5F00" : "rgba(3,16,15,.88)");
+    const G = GS && GS.of.get(best.k), gn = G && !["front","strag"].includes(G.kind) && mem.includes(G.mem[0]) ? G.name + " · " : "";
+    b.tag.set(phase === "pre" ? `Gaggle ${mem.length} · top ${fmtAlt(best.sAlt)} m` : `${gn}P${p+1} ${best.short} +${mem.length-1}`, best === lead ? "#FF5F00" : "rgba(3,16,15,.88)");
     labels.push([b.tag, x, y, r + 2, p - .5]);
   });
+  M.hulls.forEach((h,j) => { if (named[j] && h.lab && h.tag.g.attr("display") !== "none" && !named[j].mem.some(P => bubbled.has(P.k))) labels.push(h.lab); h.lab = null; });
   // label placement: try four spots round each anchor, skip a label that would overlap one already placed
   labels.sort((a,b) => a[4] - b[4]);
   const placed = tpRects.slice();
@@ -947,6 +1055,16 @@ function frame(force){
     if (phase !== M.phase){ M.phase = phase; const P = PHASE[phase];
       const ph = $("#phase"); ph.dataset.p = phase; ph.textContent = P.head;
       $("#colV").textContent = P.v; $("#colG").textContent = P.g; }
+    // gaggle panel and final-glide banner
+    const gp = $("#gag"), GSu = phase === "race" || phase === "goal" ? GAG.atT(T) : null;
+    if (GSu && GSu.groups.length){ const head = GSu.groups[0].mem[0], g0 = gapTo(at(head, T).bp, T);
+      gp.innerHTML = `<span class="gag-h">Gaggles</span>` + GSu.groups.slice(0, 5).map((G,i) => { const h = G.mem[0], gap = gapTo(at(h, T).bp, T) - g0;
+        return `<li data-k="${G.kind}"><i></i><b>${G.name}<em>${G.kind === "front" || G.kind === "strag" ? G.mem.slice(0,2).map(P => P.short).join(", ") + (G.mem.length > 2 ? " …" : "") : h.short}</em></b><span>${G.mem.length}</span><time>${i ? "+" + fmtGap(gap) : "Leads"}</time></li>`; }).join("");
+      gp.hidden = false; } else gp.hidden = true;
+    const fl = order[0], f0 = fl && !fl.done && phase !== "pre" ? GAG.fg[fl.k] : null;
+    if (f0 !== null && T >= f0){ const beh = M.pilots.filter(pl => pl !== fl && !pl.done && GAG.fg[pl.k] !== null && T >= GAG.fg[pl.k]).length;
+      $("#fgName").textContent = fl.short; $("#fgInfo").textContent = `${fl.rem.toFixed(1)} km to goal · ${beh ? `${beh} on glide behind` : "nobody on glide behind yet"}`; $("#fglide").hidden = false; }
+    else $("#fglide").hidden = true;
     let nMoved = 0;
     order.forEach((pl,i) => { const r = M.rows[pl.k], prev = M.prevPos[pl.k], moved = prev !== undefined && prev !== i;
       r.style.transition = force ? "none" : "";
