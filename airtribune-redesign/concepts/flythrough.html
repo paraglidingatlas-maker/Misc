@@ -21,6 +21,7 @@
 html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-body);overflow:hidden;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #map{position:fixed;inset:0}
+#windfx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 .top,.board,.pilot,.proto,.credit,.tl{text-shadow:0 1px 3px rgba(0,0,0,.55)}
 .maplibregl-ctrl-attrib{background:rgba(3,16,15,.55)!important;color:var(--ink-2)!important;font-size:10px}
 .maplibregl-ctrl-attrib a{color:var(--ink-2)!important}
@@ -165,6 +166,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 </head>
 <body>
 <div id="map" aria-label="3D map of the task: satellite imagery on terrain with the pilots' tracks"></div>
+<canvas id="windfx" aria-hidden="true"></canvas>
 <div class="scrim top"></div><div class="scrim left"></div><div class="scrim bot"></div>
 
 <header class="top">
@@ -196,6 +198,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <button data-sky="" aria-pressed="false">Off</button>
       <button data-sky="skyways" aria-pressed="true">Skyways</button>
       <button data-sky="thermals" aria-pressed="false">Thermals</button>
+    </div>
+    <div class="vgrp" role="group" aria-label="Wind animation">
+      <span>Wind</span>
+      <button data-wind="1" aria-pressed="false">On</button>
+      <button data-wind="0" aria-pressed="true">Off</button>
     </div>
   </div>
 </header>
@@ -512,6 +519,53 @@ function aloftAt(sec) {
   return { kmh: a[1] + (b[1] - a[1]) * u, from: (a[2] + d * u + 360) % 360 };
 }
 const DIR16 = d => ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"][Math.round(d / 22.5) % 16];
+/* wind field for the wind animation: 5 x 5 ECMWF IFS 0.25° grid points over the task area, hourly, local time;
+   [u, v] = km/h toward east / north. Written by src/build/bake_wind.py (do not edit by hand); null = use ALOFT only. */
+/*WINDGRID*/
+const WINDGRID = {"src":"ECMWF IFS 0.25°","lvl":"3,200 m (700 hPa)","lat":[19.5,19.75,20.0,20.25,20.5],"lon":[-104.0,-103.75,-103.5,-103.25,-103.0],"h0":10,"h":[[[[-5.5,13.7],[-4.4,8.6],[-1.2,3.1],[-3.7,5.0],[-6.9,6.9]],[[-5.0,11.8],[-3.1,6.1],[-1.8,4.3],[-3.8,6.8],[-3.7,4.3]],[[-3.0,9.9],[-2.5,4.3],[-1.2,4.9],[-1.9,6.2],[-0.6,1.2]],[[-1.2,8.7],[-1.2,4.9],[-0.0,5.0],[1.8,4.3],[1.8,1.2]],[[-0.0,8.7],[-0.0,6.2],[1.2,4.3],[1.8,4.3],[1.8,1.2]]],[[[-7.6,14.2],[-5.6,7.4],[-0.6,2.5],[-5.0,5.6],[-8.7,9.3]],[[-6.8,11.8],[-3.7,5.0],[-1.8,4.3],[-4.9,6.8],[-4.9,6.8]],[[-5.0,9.9],[-1.9,3.7],[-0.6,5.6],[-3.1,6.9],[-1.9,3.7]],[[-1.2,8.7],[-1.2,4.9],[-0.0,6.8],[0.7,7.5],[0.6,5.6]],[[0.6,8.7],[-0.0,6.8],[0.6,6.2],[0.7,7.5],[0.6,5.6]]],[[[-8.6,14.3],[-6.2,6.8],[-0.6,1.9],[-5.6,5.6],[-10.0,11.1]],[[-7.4,11.8],[-3.7,4.3],[-1.2,3.7],[-5.5,6.8],[-5.6,8.6]],[[-5.5,10.0],[-1.2,3.1],[-0.0,6.2],[-3.8,8.1],[-2.5,6.2]],[[-1.2,8.7],[-0.6,5.0],[-0.0,7.4],[0.6,9.3],[-0.0,8.1]],[[1.9,8.7],[0.7,7.5],[-0.0,7.4],[0.6,9.3],[-0.0,8.1]]],[[[-8.7,12.5],[-6.2,6.2],[-0.6,0.6],[-5.0,4.3],[-8.6,11.8]],[[-7.4,10.6],[-3.7,3.7],[-1.3,2.5],[-5.0,5.6],[-4.4,8.6]],[[-5.6,9.3],[-1.3,2.5],[-0.0,5.6],[-2.5,8.7],[-1.2,7.5]],[[-0.0,8.1],[-0.0,4.3],[-0.0,6.2],[2.5,9.3],[-0.0,7.4]],[[3.8,8.1],[1.2,7.5],[0.6,6.2],[2.5,9.3],[-0.0,7.4]]],[[[-8.1,9.9],[-5.6,5.6],[-1.2,-0.6],[-3.7,3.1],[-6.7,11.2]],[[-6.8,9.3],[-3.7,3.1],[-0.6,0.6],[-4.3,4.3],[-3.2,7.5]],[[-4.4,8.6],[-1.8,1.8],[-0.6,4.4],[-0.7,10.0],[1.2,8.7]],[[1.2,7.5],[-0.0,3.7],[0.6,4.4],[5.6,8.0],[0.6,5.6]],[[5.5,6.8],[1.8,6.9],[1.2,4.3],[5.6,8.0],[0.6,5.6]]],[[[-7.5,8.6],[-5.6,5.6],[-1.8,-1.2],[-3.7,2.5],[-5.6,10.5]],[[-6.8,8.7],[-4.3,2.5],[-1.2,-0.6],[-4.3,3.7],[-2.5,6.9]],[[-4.3,8.1],[-2.5,1.3],[-1.2,3.1],[-0.0,9.9],[2.5,9.9]],[[2.5,6.9],[-0.0,3.7],[0.6,3.1],[8.1,6.8],[1.2,4.9]],[[7.4,5.6],[2.5,6.2],[1.9,3.1],[8.1,6.8],[1.2,4.9]]],[[[-7.5,9.2],[-5.6,5.6],[-3.8,-0.6],[-5.6,3.7],[-7.5,9.9]],[[-7.5,8.6],[-5.6,2.5],[-3.1,-0.0],[-5.6,5.6],[-4.3,8.1]],[[-5.5,6.8],[-4.9,1.2],[-2.5,3.1],[-1.3,9.3],[0.6,11.2]],[[2.5,5.6],[-1.8,4.3],[-0.0,3.1],[8.7,6.8],[2.5,8.0]],[[8.1,4.3],[1.9,6.2],[1.3,2.5],[8.7,6.8],[2.5,8.0]]],[[[-6.9,10.6],[-5.6,6.2],[-6.2,0.6],[-7.4,6.2],[-10.0,8.7]],[[-8.1,9.3],[-6.9,2.5],[-4.9,1.9],[-7.5,8.0],[-6.9,9.9]],[[-8.0,6.3],[-7.5,1.2],[-3.7,3.7],[-3.7,8.7],[-2.5,11.8]],[[1.9,3.7],[-4.4,5.6],[-1.2,3.7],[8.7,6.8],[3.1,12.4]],[[8.7,2.5],[0.6,6.9],[-0.6,2.5],[8.7,6.8],[3.1,12.4]]]]};
+/* wind animation (Windy-style streaks over the 3D map, on a canvas above it). Particles live on the ground in lon/lat
+   and drift with the model wind at the replay time; real drift is a few km/h, so on screen they move at about
+   10 px/s + 6 px/s per km/h, in the true direction. Off by default on phones and with reduced motion
+   (with reduced motion the streaks stand still). */
+const reduceM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const WIND = { on: innerWidth >= 760 && !reduceM, ps: [], at: 0 };
+function windUV(lat, lon, hr) {
+  const G = WINDGRID;
+  if (!G) { const a = aloftAt(hr * 3600), r = a.from * Math.PI / 180; return [-a.kmh * Math.sin(r), -a.kmh * Math.cos(r)]; }
+  const cl = (v, n) => Math.max(0, Math.min(n - 1.0001, v));
+  const fy = cl((lat - G.lat[0]) / (G.lat[1] - G.lat[0]), G.lat.length), fx = cl((lon - G.lon[0]) / (G.lon[1] - G.lon[0]), G.lon.length), ft = cl(hr - G.h0, G.h.length);
+  const j = fy | 0, i = fx | 0, t = ft | 0, a = fy - j, b = fx - i, c = ft - t, o = [0, 0];
+  for (const [dt, wt] of [[0, 1 - c], [1, c]]) { const H = G.h[t + dt];
+    for (let k = 0; k < 2; k++) o[k] += wt * ((H[j][i][k] * (1 - b) + H[j][i + 1][k] * b) * (1 - a) + (H[j + 1][i][k] * (1 - b) + H[j + 1][i + 1][k] * b) * a); }
+  return o;
+}
+function windDraw(sec) {
+  const cv = $("windfx"), W = innerWidth, H = innerHeight, dpr = Math.min(2, devicePixelRatio || 1);
+  if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); WIND.ps = []; }
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+  if (!WIND.on) return;
+  const t = performance.now(), dt = reduceM ? 0 : Math.min(.05, (t - (WIND.at || t)) / 1000); WIND.at = t;
+  const hr = sec / 3600, n = Math.round(Math.min(420, W * H / 3200)), y0 = H * .28;   // stay below the horizon
+  const spawn = p => { const ll = map.unproject([Math.random() * W, y0 + Math.random() * (H - y0)]); p.lon = ll.lng; p.lat = ll.lat; p.age = reduceM ? .5 : 0; p.life = 2.5 + Math.random() * 3; return p; };
+  while (WIND.ps.length < n) WIND.ps.push(spawn({}));
+  WIND.ps.length = n;
+  const B = [[], [], [], []], kx = 1 / (111.32 * Math.cos(LAT0)), ky = 1 / 110.574;
+  for (const p of WIND.ps) {
+    const uv = windUV(p.lat, p.lon, hr), kmh = Math.hypot(uv[0], uv[1]) || .01, ux = uv[0] / kmh, uy = uv[1] / kmh;
+    const h = map.project([p.lon, p.lat]), q = map.project([p.lon + ux * .1 * kx, p.lat + uy * .1 * ky]);
+    const pxkm = Math.hypot(q.x - h.x, q.y - h.y) * 10 || 1, pxs = Math.min(40, 10 + 6 * kmh), L = Math.min(26, 8 + 2.5 * kmh) / pxkm;
+    if (p.age >= 1 || h.x < -20 || h.y < y0 - 40 || h.x > W + 20 || h.y > H + 20 || pxkm > 4000) { spawn(p); continue; }
+    const d = pxs * dt / pxkm; p.lon += ux * d * kx; p.lat += uy * d * ky; p.age += dt / p.life;
+    const tl = map.project([p.lon - ux * L * kx, p.lat - uy * L * ky]), hd = map.project([p.lon, p.lat]), a = Math.sin(Math.PI * p.age);
+    if (Math.hypot(tl.x - hd.x, tl.y - hd.y) > 40 || tl.y < y0 - 40) { spawn(p); continue; }   // near the horizon a few metres can span the screen
+    B[Math.min(3, Math.floor(a * 4))].push(tl.x, tl.y, hd.x, hd.y);
+  }
+  g.lineCap = "round"; g.lineWidth = 1.4;
+  B.forEach((L, k) => { if (!L.length) return; g.strokeStyle = `rgba(210,240,255,${(.1 + k * .1).toFixed(2)})`; g.beginPath();
+    for (let q = 0; q < L.length; q += 4) { g.moveTo(L[q], L[q + 1]); g.lineTo(L[q + 2], L[q + 3]); } g.stroke(); });
+}
+function setWind(on) { WIND.on = on; WIND.ps = []; windKey = ""; document.querySelectorAll("[data-wind]").forEach(b => b.setAttribute("aria-pressed", (b.dataset.wind === "1") === on)); }
+document.querySelectorAll("[data-wind]").forEach(b => b.onclick = () => setWind(b.dataset.wind === "1"));
 $("compass").onclick = () => map.easeTo({ bearing: 0, duration: 800 });
 let windKey = "";
 function instruments() {
@@ -520,7 +574,8 @@ function instruments() {
   const hh = String(Math.floor(sec / 3600) % 24).padStart(2, "0") + ":00", key = hh + DIR16(w.from) + Math.round(w.kmh);
   if (key !== windKey) { windKey = key;
     $("windV").innerHTML = `<i>Wind</i>${DIR16(w.from)} ${Math.max(1, Math.round(w.kmh))} km/h`; $("windS").textContent = `${ALOFT.lvl} · ${hh} · ${ALOFT.src}`;
-    $("windc").title = `Wind at ${ALOFT.lvl} (700 hPa) over take-off around ${hh} local: from ${Math.round(w.from)}° at ${w.kmh.toFixed(1)} km/h. Model: ECMWF IFS 0.25° via Open-Meteo. The blue mark on the compass shows where it blows from.`; }
+    $("windc").title = `Wind at ${ALOFT.lvl} (700 hPa) over take-off around ${hh} local: from ${Math.round(w.from)}° at ${w.kmh.toFixed(1)} km/h. Model: ECMWF IFS 0.25° via Open-Meteo. The blue mark on the compass shows where it blows from.${WIND.on ? ` Streaks: wind field from ${WINDGRID ? "25 model points over the task area" : "the take-off value"}, drift speed exaggerated so it shows.` : ""}`; }
+  windDraw(sec);
 }
 function frame(ts) {
   const dt = Math.min(0.1, (ts - last) / 1000); last = ts;
@@ -567,6 +622,7 @@ map.once("style.load", () => {
   if (hash.has("sky")) setSky(hash.get("sky"));
   if (hash.get("pilot")) select(hash.get("pilot"));
   if (hash.get("paused")) setPlaying(false);
+  setWind(hash.has("wind") ? hash.get("wind") === "1" : WIND.on);
   requestAnimationFrame(frame);
   map.once("idle", () => $("loading").classList.add("off"));
 });
