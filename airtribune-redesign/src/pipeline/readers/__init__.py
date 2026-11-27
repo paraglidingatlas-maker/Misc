@@ -13,6 +13,8 @@ READERS = [
 def pick(link):
     if "://" not in link:
         return "files"
+    if link.lower().split("?")[0].endswith(".fsdb"):
+        return "fsdb"
     host = urlparse(link).hostname or ""
     for dom, mod in READERS:
         if host == dom or host.endswith("." + dom):

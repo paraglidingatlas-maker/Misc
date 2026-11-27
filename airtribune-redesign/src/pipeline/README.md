@@ -14,10 +14,13 @@ Pages open a package with `?task=<comp>/<task>`: `events/live.html`, `concepts/f
 | Source | Module | Input | Status |
 |---|---|---|---|
 | Airtribune | `readers/airtribune.py` | task results page (or comp page + `--task N`) | done |
-| Files fallback | `readers/files.py` | `--files` task file + tracks (+ results) | next |
-| FS `.fsdb` | `readers/fsdb.py` | `.fsdb` file (task, turnpoints, results) | planned |
-| AirScore | `readers/airscore.py` | airscore.cc task link | planned |
+| Files fallback | `readers/files.py` | `--files` task (.xctsk / .cup / .fsdb) + tracks (zip / folder / .igc) [+ results .csv / FS .html] | done (tested on Task 3: goal times within 1 s, distances within 0.15 km) |
+| FS `.fsdb` | `readers/fsdb.py` | `.fsdb` link or file + `--files` tracks, `--task N` | done (tested on a real FS 3.5 file, Soca Open 2019; no tracks there) |
+| AirScore | `readers/airscore.py` | airscore.cc task link | blocked: on 27 Nov 2026 airscore.cc lists one comp with no task set, so its result data routes cannot be seen; use the files fallback |
 | PWCA / Livetrack24 / Flymaster | `readers/*.py` | event / task link | planned |
+
+Files fallback without a results file: date from the IGC headers, time zone from Open-Meteo (`timezone=auto`),
+results worked out from the tracklogs (goal time, then distance on the optimised route; marked `estimated`).
 
 A reader returns a RAW TASK (documented at the top of `taskpkg.py`); everything after that is shared:
 tags from the tracklogs, track encoding, area box, wind, KK7, relief, package writer.

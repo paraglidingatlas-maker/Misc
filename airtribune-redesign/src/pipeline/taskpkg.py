@@ -192,6 +192,67 @@ def wind_from_drift(tracks, frame, t_from, t_to):
                 note="Mean drift of the tracks while circling and climbing; an estimate, not a measured wind.")
 
 
+# ---------------------------------------------------------------- optimised route
+def optimised_route(frame, cyl):
+    """Shortest route from take-off touching each cylinder (same iteration as the pages). km points + leg lengths."""
+    C = [frame.km(c["lat"], c["lon"]) for c in cyl]
+    R = [(c.get("radius_m") or 0) / 1000 for c in cyl]
+    P = [list(c) for c in C]
+    d = lambda a, b: math.hypot(a[0] - b[0], a[1] - b[1])
+    for _ in range(40):
+        for i in range(len(C)):
+            prev = (0.0, 0.0) if i == 0 else P[i - 1]
+            nxt = P[i + 1] if i + 1 < len(C) else None
+            if not R[i]:
+                P[i] = list(C[i]); continue
+            if nxt is None:
+                a = math.atan2(prev[1] - C[i][1], prev[0] - C[i][0]); P[i] = [C[i][0] + R[i] * math.cos(a), C[i][1] + R[i] * math.sin(a)]; continue
+            best, bp = 1e18, P[i]
+            for k in range(360):
+                a = k / 360 * 2 * math.pi; x = [C[i][0] + R[i] * math.cos(a), C[i][1] + R[i] * math.sin(a)]
+                f = d(prev, x) + d(x, nxt)
+                if f < best:
+                    best, bp = f, x
+            if cyl[i]["role"] != "SSS":   # a point inside the cylinder on the straight line is shorter still
+                dx, dy = nxt[0] - prev[0], nxt[1] - prev[1]; L = dx * dx + dy * dy or 1
+                t = max(0, min(1, ((C[i][0] - prev[0]) * dx + (C[i][1] - prev[1]) * dy) / L)); q = [prev[0] + t * dx, prev[1] + t * dy]
+                if d(q, C[i]) <= R[i]:
+                    bp = q
+            P[i] = bp
+    route = [[0.0, 0.0]] + P
+    legs = [d(route[k], route[k + 1]) for k in range(len(P))]
+    return route, legs
+
+
+def derive_results(pilots, fixes_by_id, names, frame, cyl, G0):
+    """No results file: rank by goal time, then by distance along the optimised route (an estimate)."""
+    route, legs = optimised_route(frame, cyl)
+    total = sum(legs); suffix = [sum(legs[k:]) for k in range(len(legs))] + [0]
+    out = []
+    for p in pilots:
+        fx, k = fixes_by_id[p["id"]], 0
+        tags = [t + G0 for t in p["tags"]]
+        best = total
+        for t, lat, lon, _ in fx:
+            while k < len(tags) and t >= tags[k]:
+                k += 1
+            if k == 0:
+                continue                    # not started
+            if k >= len(route) - 1:
+                best = 0; break
+            x, y = frame.km(lat, lon)
+            best = min(best, math.hypot(x - route[k + 1][0], y - route[k + 1][1]) + suffix[k + 1])
+        fin = s_hms(tags[-1]) if p["goal"] else None
+        el = (tags[-1] - (tags[0] if cyl[0]["role"] == "SSS" else G0)) if p["goal"] else None
+        out.append(dict(rank=None, id=p["id"], name=names.get(p["id"]) or p["id"], nation=None, glider=None,
+                        start=s_hms(tags[0]) if tags else None, finish=fin, time=s_hms(el) if el else None,
+                        distance_km=round(total - best, 2), score=None, goal=p["goal"], estimated=True))
+    out.sort(key=lambda r: (not r["goal"], r["finish"] or "", -(r["distance_km"] or 0)))
+    for i, r in enumerate(out, 1):
+        r["rank"] = i
+    return out, round(total, 1)
+
+
 # ---------------------------------------------------------------- area box
 def area_box(tps, margin_km=6.0):
     """Lat/lon box around every cylinder plus a margin (km)."""
@@ -225,7 +286,7 @@ def build(raw, opts=None, log=print):
     res = {r["id"]: r for r in raw.get("results", [])}
 
     # ---- tracks
-    pilots, fixes_all = [], []
+    pilots, fixes_all, fixes_by_id, igc_names = [], [], {}, {}
     for pid, src in (raw.get("igc") or {}).items():
         head, fx = read_igc(src, off)
         if len(fx) < 30:
@@ -241,8 +302,16 @@ def build(raw, opts=None, log=print):
         flat = encode_track(fx, frame, G0, G0 - PRE, end, keep=tg)
         if len(flat) < 8:
             continue
-        fixes_all.append(fx)
+        fixes_all.append(fx); fixes_by_id[pid] = fx; igc_names[pid] = igc_pilot_name(head)
         pilots.append(dict(id=pid, tags=[t - G0 for t in tg], goal=in_goal, d=flat, _rank=r.get("rank") or 10 ** 6))
+    if raw.get("derive_results") and pilots:
+        raw["results"], tk["distance_km"] = derive_results(pilots, fixes_by_id, igc_names, frame, cyl, G0)
+        rk = {r["id"]: r["rank"] for r in raw["results"]}
+        for p in pilots:
+            p["_rank"] = rk.get(p["id"], 10 ** 6)
+        log("  results: worked out from the tracklogs (no results file)")
+    if not tk.get("distance_km"):
+        tk["distance_km"] = round(sum(optimised_route(frame, cyl)[1]), 1)
     pilots.sort(key=lambda p: (p["_rank"], p["id"]))
     for p in pilots:
         p.pop("_rank")
