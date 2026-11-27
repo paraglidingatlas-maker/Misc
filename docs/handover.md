@@ -47,6 +47,11 @@ Private page: https://claude.ai/artifact/PSxqVECj2bQ9kxDDNXbdUu. Source `airtrib
 - Layout: a 16:9 canvas the owner screen-records, with a teleprompter under it. 10 scenes; each plays its race window over the estimated reading time (default 150 wpm), then holds until → is pressed. Space play/pause, R restart, `#s8-80` deep link.
 - Map: light shaded relief baked from AWS Terrain Tiles (`python3 -I src/build/bake_relief.py <tile-cache>`). The owner asked for a lighter backdrop. Satellite imagery is not used: artifacts block it, and the Esri licence doesn't cover video.
 - Data: `python3 -I src/build/build_voiceover_data.py <igc-dir> <cache.pkl>`. Top 20 at 2 s with altitude, the rest at 10 s, race order every 10 s (re-optimised distance to go).
+- Draft 2 (27 Nov):
+  - Map control: drag, scroll or pinch to zoom, double-click to zoom; C returns to the auto camera; changing scene also resets it.
+  - The course line is always drawn (cased orange), and a mini-map of the whole course shows the current view box.
+  - The script was rewritten in the owner's own narration voice (see VOICE.md, from his highlight transcripts via the vidIQ connector).
+  - T toggles talking points (bullet beats) for ad-libbing.
 - Next: agree the concept with the owner (see RESEARCH.md: cold open, group labels, gap to the pilot ahead, explainers, prompter formatting, pronunciation), then rebuild.
 
 ## DONE (awaiting owner review): expert "key moments" analysis of Tapalpa Task 3 (26 Nov 2026)

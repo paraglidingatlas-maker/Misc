@@ -26,6 +26,11 @@ kbd{font:600 12px var(--body);border:1px solid var(--rule);padding:1px 6px;borde
 .script span{color:#5E7A7D;transition:color .25s}
 .script span.done{color:#8FA9AC}
 .script span.now{color:var(--ink)}
+.script.beats{display:grid;gap:4px}
+.script.beats span{display:block;color:var(--ink)}
+.script.beats span::before{content:"— ";color:var(--orange)}
+.stage canvas{cursor:grab;touch-action:none}
+.stage canvas:active{cursor:grabbing}
 .bar{height:4px;background:var(--rule)}
 .bar i{display:block;height:100%;width:0;background:var(--orange)}
 .next{color:var(--muted);font-size:14px}
@@ -44,8 +49,8 @@ select{background:var(--bg);color:var(--ink);border:1px solid var(--rule);paddin
 
 <div class="wrap">
   <div class="top">
-    <h1>Task 3 voice-over studio · draft 1</h1>
-    <p>Record only the 16:9 frame. Read the script below. <kbd>Space</kbd> play/pause · <kbd>→</kbd> next scene · <kbd>←</kbd> back · <kbd>R</kbd> restart scene</p>
+    <h1>Task 3 voice-over studio · draft 2</h1>
+    <p>Record only the 16:9 frame. Read the script below. <kbd>Space</kbd> play/pause · <kbd>→</kbd> next scene · <kbd>←</kbd> back · <kbd>R</kbd> restart · drag / scroll / pinch the map · <kbd>C</kbd> back to auto camera · <kbd>T</kbd> script or talking points</p>
   </div>
   <div class="stage" id="stage"><canvas id="cv" aria-label="Animated race map of SRS Tapalpa Task 3"></canvas></div>
   <section class="prompter" aria-label="Teleprompter">
@@ -58,11 +63,13 @@ select{background:var(--bg);color:var(--ink);border:1px solid var(--rule);paddin
       <button class="q" id="bPrev">← Back</button>
       <button class="q" id="bNext">Next →</button>
       <button class="q" id="bRestart">Restart scene</button>
+      <button id="bCam">Auto camera on</button>
+      <button class="q" id="bMode">Talking points (T)</button>
       <label for="wpm">Pace <select id="wpm"><option value="130">130 wpm</option><option value="150" selected>150 wpm</option><option value="170">170 wpm</option></select></label>
       <label for="auto"><input type="checkbox" id="auto"> Auto-advance</label>
       <div class="scenes" id="sl"></div>
     </div>
-    <p class="note">Each scene plays its part of the race while you read and then holds on the last frame until you press Next, so the picture waits for your voice. Draft for review: the script, scene choice and look are all open for change.</p>
+    <p class="note">Each scene plays its part of the race while you read and then holds on the last frame until you press Next, so the picture waits for your voice. Drag, scroll or pinch the map to point things out; the camera stays where you put it until you press C or change scene. Draft for review: the script, scene choice and look are all open for change.</p>
   </section>
 </div>
 
@@ -76,35 +83,35 @@ const hm = s => { const [h, m, x] = s.split(":").map(Number); return (h * 3600 +
 // ---------- scenes: race window, camera, focus pilots, markers, script ----------
 const SCENES = [
  { title: "Task 3, Tapalpa", sub: "58.7 km race to goal · 106 pilots", t: [-150, 40], cam: { box: [-4, -9, 25, 17] }, card: "intro",
-   focus: {}, script: "Task three in Tapalpa. A 58.7 kilometre race to goal. North to Las Gemelas, south-east to touch the huge Tamazula cylinder, then back across the valley to land at Amacueca. The start opens at a quarter past twelve, and almost the whole field is on the line. Eighty of the eighty-seven pilots who make goal cross in the first minute." },
+   focus: {}, script: "Hello and welcome to task three of the Sports Racing Series, Advance Edition, right here in Tapalpa, Mexico. I'm your host Aninder Singh, and today we're going to break down exactly how this race was won. The course is just under sixty kilometres, a race to goal: north to Las Gemelas, then south-east to tag the giant Tamazula cylinder, and back across the valley to land at Amacueca. And as the start opened at quarter past twelve, pretty much the whole field was right there on the line. So without further ado, let's dive right in.", beats: ["Welcome, task 3, Tapalpa", "~60 km race to goal", "Las Gemelas → Tamazula (giant cylinder) → Amacueca", "Start 12:15, whole field on the line"] },
  { title: "Leading out", sub: "Quintanilla 27:22 to TP2 · 4:18 circling", t: [40, 1720], cam: { box: [-3, -3, 17, 15] },
-   focus: { [Q]: "a", [V]: "b" }, script: "Manuel Quintanilla and Abel Varga take it on. They barely turn: just over four and six minutes of circling on the whole first leg. Quintanilla reaches the first turnpoint in 27 minutes, the fastest leg of the day. Behind them, Belcourt, Nazander and Desmond climb patiently, and arrive seven minutes later." },
+   focus: { [Q]: "a", [V]: "b" }, script: "Straight out of the start it's the home pilot Manuel Quintanilla and Hungary's Abel Varga pushing on the front, and guys, they are barely turning. Quintanilla tags the first turnpoint in just twenty-seven minutes, the fastest leg anyone flew all day, while names like Bill Belcourt and Ross Desmond take their time to climb and arrive a good seven minutes later.", beats: ["Quintanilla (MEX) + Varga (HUN) lead out", "Barely turning", "TP1 in 27 min, fastest leg of the day", "Belcourt, Desmond: 7 min back"] },
  { title: "Varga gets low", sub: "6 minutes behind at 34 km to go", t: [2420, 2860], cam: { follow: [V, TAK], minW: 11 },
    focus: { [V]: "a", [TAK]: "c" }, markers: [{ x: 11.41, y: 7.28, label: "0.9 m/s", from: hm("12:58:30") }],
-   script: "After the turnpoint, Varga gets low. Just before one o'clock he is scratching in less than a metre per second, about four hundred and sixty metres above the ground. He is now six minutes behind the fastest pilot. Up front, Pal Takats is leading the race." },
+   script: "But after the turnpoint, things start to unravel for Varga. He gets low, really low, scratching in less than a metre a second with only a few hundred metres under him. At this juncture he's a full six minutes off the pace, and up front it's none other than Pal Takats leading the race.", beats: ["Varga gets low after TP", "< 1 m/s, few hundred m above ground", "6 minutes off the pace", "Takats leading"] },
  { title: "The climb of the day", sub: "≈ 4 m/s · Varga leaves highest, 2,767 m", t: [2960, 3330], cam: { follow: [V, Q, L, SPA], minW: 7 },
    focus: { [V]: "a", [Q]: "b", [L]: "c", [SPA]: "d" }, markers: [{ x: 13.18, y: 5.1, label: "≈ 4 m/s", from: hm("13:05:00") }],
-   script: "Then the climb of the day. The lead gaggle hits four metres per second. They leave at about 2,680 metres. Varga arrives later and lower, but he stays, and leaves at 2,767: higher than anyone." },
+   script: "And then comes the climb of the day. The lead gaggle hooks into a proper four metre thermal, and while most of them leave it at around two thousand seven hundred metres, Varga, who arrived late and low, stays in. He's the last one out, and the highest.", beats: ["Climb of the day: 4 m/s", "Gaggle leaves ~2,700 m", "Varga arrived late and low, stays in", "Last out, highest"] },
  { title: "Varga goes alone", sub: "Leads from 13:14:50 · up to 1.6 km clear", t: [3330, 4320], cam: { follow: [V, Q, L], minW: 10 },
    focus: { [V]: "a", [Q]: "b", [L]: "c", [SPA]: "d" },
    markers: [{ x: 15.4, y: 1.2, label: "Leaders climb 2.4 m/s", from: hm("13:13:30") }, { x: 17.02, y: -2.44, label: "1.8", from: hm("13:18:35") },
              { x: 17.98, y: -4.22, label: "0.8", from: hm("13:21:57") }, { x: 19.54, y: -6.31, label: "1.4", from: hm("13:26:07") }],
-   script: "Eight minutes later the leaders stop again. Varga doesn't. He flies straight past their thermal and takes the lead, one and a half kilometres clear. But he is five hundred metres lower, and it costs him. Three weak climbs, and by the Tamazula cylinder the gaggle is back alongside." },
+   script: "Now here's where it gets interesting. The leaders stop for another climb, but Varga doesn't. He flies right past them, takes the lead and opens up more than a kilometre and a half. But he's half a kilometre lower, and he pays for it with three weak climbs, so by the time they reach the Tamazula cylinder the gaggle has caught right back up.", beats: ["Leaders stop again, Varga doesn't", "Takes the lead, 1.5 km clear", "500 m lower, 3 weak climbs", "Gaggle back with him at Tamazula"] },
  { title: "Low save", sub: "Sigel ≈ 10 m above the ground", t: [3800, 4330], cam: { follow: [SIG, MCC], minW: 7 },
    focus: { [SIG]: "a", [MCC]: "c" }, markers: [{ x: 16.03, y: -2.07, label: "Climbs out 2.4 m/s", from: hm("13:25:22") }],
-   script: "Not everyone gets through. Michael Sigel sinks to about ten metres above the ground, and climbs out from there. It costs him fourteen minutes, but he still makes goal." },
+   script: "Not everyone gets through this part clean. Switzerland's Michael Sigel gets so low he's practically skimming the ground, and somehow climbs out from there. It costs him a good fourteen minutes, but full credit to him, he still makes goal.", beats: ["Sigel (SUI) almost on the ground", "Climbs out", "Costs 14 min, still makes goal"] },
  { title: "Going long", sub: "Final glide from 11.4 km · 57–59 km/h", t: [5180, 5900], cam: { follow: [SIE, NAZ], minW: 14 },
    focus: { [SIE]: "a", [NAZ]: "b", [V]: "c" }, markers: [{ x: 15.87, y: 0.58, label: "3,190 m", from: hm("13:42:47") }],
-   script: "Four minutes behind, Torsten Siegel and Albert Nazander climb to 3,190 metres, and go for goal from eleven kilometres out. Fifty-eight kilometres an hour, and no more turns. They will pass most of the leaders." },
+   script: "Meanwhile, about four minutes back, Torsten Siegel and Albert Nazander have a different plan. They climb to almost three thousand two hundred metres and go for goal from eleven kilometres out. No more turns, just flat out at nearly sixty kilometres an hour.", beats: ["Siegel + Nazander, 4 min back", "Climb to ~3,200 m", "Final glide from 11 km", "No turns, ~60 km/h"] },
  { title: "Where the race is won", sub: "Two thermals, 1.2 km apart", t: [5640, 6070], cam: { box: [7.6, 2.6, 13.4, 7.4] },
    focus: { [V]: "a", [Q]: "a", [L]: "a", [SPA]: "c", [DIE]: "c", [ARR]: "c", [FOR]: "c", [TAK]: "c", [CAS]: "c", [ALV]: "c" },
    markers: [{ x: 10.5, y: 5.65, label: "North 2.0–2.4 m/s", from: hm("13:49:30") }, { x: 10.1, y: 4.4, label: "South 0.8–1.2 m/s", from: hm("13:49:40") }],
-   script: "And this is where the race is won. Five kilometres to go, and the leaders split between two thermals, one point two kilometres apart. Varga, Quintanilla and Luebberke find the north one: over two metres per second. The rest are in the south one, barely one. Both groups reach the same height. The north group leaves three minutes earlier." },
+   script: "And saving a bit of drama for the last, this is where the race is won. Five kilometres to go, and the lead group splits between two thermals barely a kilometre apart. Varga, Quintanilla and Luebberke pick the north one, climbing at over two metres a second. The rest of the gaggle sits in the south one, struggling at around one. Both groups top out at the same height, but the north group leaves a full three minutes earlier.", beats: ["Where the race is won", "5 km out, two thermals ~1 km apart", "North: Varga, Quintanilla, Luebberke, 2+ m/s", "South: the rest, ~1 m/s", "Same height, north leaves 3 min earlier"] },
  { title: "Goal", sub: "Varga 13:58:08", t: [6060, 6430], cam: { box: [3.6, 3.4, 11.2, 8.6] },
    focus: { [V]: "a", [L]: "b", [Q]: "b", [BEL]: "d", [SIE]: "c", [NAZ]: "c" },
-   script: "Varga crosses the line at 13:58:08. Luebberke is next, thirty-four seconds back, then Quintanilla, who still takes second on lead-out points. Belcourt slips in fourth with 158 metres to spare, and Siegel and Nazander beat the gaggle they were chasing. The south group arrives three minutes later." },
+   script: "And that's the race. Abel Varga crosses the line first, just before two o'clock. Chaeden Luebberke is next, and the home favourite Quintanilla comes in third but still takes second on the day, thanks to his leading points. Bill Belcourt sneaks in with just over a hundred and fifty metres to spare, and Siegel and Nazander's long glide pays off as they beat the gaggle they were chasing.", beats: ["Varga first, just before 2 pm", "Luebberke next", "Quintanilla 3rd across, 2nd on leading points", "Belcourt ~150 m to spare", "Siegel + Nazander beat the gaggle"] },
  { title: "Result", sub: "", t: [6430, 6430], cam: { box: [3.6, 3.4, 11.2, 8.6] }, card: "result", focus: {},
-   script: "Task three goes to Abel Varga. Eighty-eight of the hundred and six starters made goal." }
+   script: "What a day, what a day of racing, ladies and gentlemen. Task three goes to Abel Varga, with eighty-eight out of a hundred and six pilots making goal. I'll be bringing you all the remaining action from Tapalpa over the coming days, so don't forget to hit like and subscribe, and I'll see you tomorrow.", beats: ["What a day of racing", "Varga wins task 3", "88 of 106 in goal", "Like, subscribe, see you tomorrow"] }
 ];
 
 // ---------- state ----------
@@ -113,7 +120,25 @@ const W = 1920, H = 1080;
 let D = null, IMG = null, BY = {}, scene = 0, sceneT = 0, playing = false, last = 0;
 const cam = { x: 10, y: 4, w: 30 };
 const $ = id => document.getElementById(id);
-let wpm = 150;
+let wpm = 150, manual = false, mode = "script";
+function setManual(v) { manual = v; $("bCam").textContent = v ? "Auto camera (C)" : "Auto camera on"; $("bCam").classList.toggle("q", !v); }
+const ptrs = new Map(); let pinch = null;
+function toWorld(ev) { const r = cv.getBoundingClientRect(); const px = (ev.clientX - r.left) / r.width * W, py = (ev.clientY - r.top) / r.height * H;
+  return { px, py, x: cam.x + (px - W / 2) / W * cam.w, y: cam.y - (py - H / 2) / W * cam.w }; }
+function zoomAt(ev, f) { const a = toWorld(ev); cam.w = Math.min(60, Math.max(0.6, cam.w * f)); const b = toWorld(ev); cam.x += a.x - b.x; cam.y += a.y - b.y; setManual(true); }
+cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 2) { const [p1, p2] = [...ptrs.values()]; pinch = Math.hypot(p1.x - p2.x, p1.y - p2.y); } });
+cv.addEventListener("pointermove", e => {
+  if (!ptrs.has(e.pointerId)) return;
+  const prev = ptrs.get(e.pointerId), r = cv.getBoundingClientRect();
+  if (ptrs.size === 1) { cam.x -= (e.clientX - prev.x) / r.width * cam.w; cam.y += (e.clientY - prev.y) / r.width * cam.w; setManual(true); }
+  ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (ptrs.size === 2 && pinch) { const [p1, p2] = [...ptrs.values()], d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+    zoomAt({ clientX: (p1.x + p2.x) / 2, clientY: (p1.y + p2.y) / 2 }, pinch / d); pinch = d; }
+});
+const up = e => { ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; };
+cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+cv.addEventListener("wheel", e => { e.preventDefault(); zoomAt(e, Math.exp(e.deltaY * 0.0015)); }, { passive: false });
+cv.addEventListener("dblclick", e => zoomAt(e, e.shiftKey ? 2 : 0.5));
 
 const words = s => s.trim().split(/\s+/).length;
 const dur = s => words(s.script) / wpm * 60 + 1.2;
@@ -155,8 +180,8 @@ function draw(t, sc, prog) {
     ctx.strokeStyle = c.kind === "Goal" ? "rgba(230,85,0,.95)" : "rgba(3,16,15,.45)";
     ctx.beginPath(); ctx.arc(x, y, Math.max(c.r * kmPx(), 5), 0, Math.PI * 2); ctx.stroke();
   });
-  ctx.setLineDash([4, 10]); ctx.strokeStyle = "rgba(200,70,0,.7)"; ctx.lineWidth = 3;
-  ctx.beginPath(); D.route.forEach(([x, y], i) => { const [a, b] = S(x, y); i ? ctx.lineTo(a, b) : ctx.moveTo(a, b); }); ctx.stroke();
+  ctx.setLineDash([]); ctx.strokeStyle = "rgba(3,16,15,.5)"; ctx.lineWidth = 7; routePath(); ctx.stroke(); ctx.strokeStyle = "#FF5F00"; ctx.lineWidth = 3.5;
+  routePath(); ctx.stroke();
   ctx.setLineDash([]);
   // TP labels at the route touch points
   ctx.font = "600 20px Inter, sans-serif"; ctx.textBaseline = "middle";
@@ -220,6 +245,32 @@ function draw(t, sc, prog) {
   hud(t, sc, prog);
 }
 
+function routePath() { ctx.beginPath(); D.route.forEach(([x, y], i) => { const [a, b] = S(x, y); i ? ctx.lineTo(a, b) : ctx.moveTo(a, b); }); }
+function minimap(t, sc) {
+  // whole course, always on screen: route, cylinders, focus pilots, and the box the main view shows
+  const mx = W - 48 - 330, my = H - 66 - 300, mw = 330, mh = 300, bx = [-3.5, -8, 23, 15];
+  const sc_ = Math.min(mw / (bx[2] - bx[0]), mh / (bx[3] - bx[1])) * 0.92;
+  const cx = (bx[0] + bx[2]) / 2, cy = (bx[1] + bx[3]) / 2;
+  const M = (x, y) => [mx + mw / 2 + (x - cx) * sc_, my + mh / 2 - (y - cy) * sc_];
+  ctx.save();
+  ctx.fillStyle = "rgba(3,16,15,.86)"; ctx.fillRect(mx, my, mw, mh);
+  ctx.beginPath(); ctx.rect(mx, my, mw, mh); ctx.clip();
+  ctx.lineWidth = 1.2; ctx.setLineDash([4, 4]); ctx.strokeStyle = "rgba(234,242,242,.35)";
+  D.tps.forEach(c => { const [a, b] = M(c.x, c.y); ctx.beginPath(); ctx.arc(a, b, Math.max(c.r * sc_, 3), 0, 7); ctx.stroke(); });
+  ctx.setLineDash([]); ctx.strokeStyle = "#FF5F00"; ctx.lineWidth = 2.5;
+  ctx.beginPath(); D.route.forEach(([x, y], i) => { const [a, b] = M(x, y); i ? ctx.lineTo(a, b) : ctx.moveTo(a, b); }); ctx.stroke();
+  ctx.font = "600 13px Inter, sans-serif"; ctx.fillStyle = "rgba(234,242,242,.75)";
+  [["TAKE-OFF", 0, 0, 8, 16], ["LAS GEMELAS", ...D.route[2], -100, -8], ["TAMAZULA", ...D.route[3], -84, 16], ["GOAL", ...D.route[5], 8, 14]]
+    .forEach(([n, x, y, ox, oy]) => { const [a, b] = M(x, y); ctx.fillText(n, a + ox, b + oy); });
+  // view box
+  const hw = cam.w / 2, hh = cam.w * 9 / 32;
+  const [v0, v1] = M(cam.x - hw, cam.y + hh), [v2, v3] = M(cam.x + hw, cam.y - hh);
+  ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.lineWidth = 1.5; ctx.strokeRect(v0, v1, v2 - v0, v3 - v1);
+  // pilots: field as specks, focus pilots in their colours
+  D.pilots.forEach(p => { if (!p.top) return; const q = pos(p, t); if (!q) return; const [a, b] = M(q.x, q.y);
+    const role = (sc.focus || {})[p.id]; ctx.fillStyle = role ? COL[role] : "rgba(183,201,203,.6)"; ctx.beginPath(); ctx.arc(a, b, role ? 4 : 2, 0, 7); ctx.fill(); });
+  ctx.restore();
+}
 function hud(t, sc, prog) {
   // clock, top-left
   ctx.fillStyle = "rgba(3,16,15,.86)"; ctx.fillRect(48, 44, 360, 112);
@@ -255,11 +306,12 @@ function hud(t, sc, prog) {
     ctx.fillStyle = "#fff"; ctx.font = "800 46px Archivo, sans-serif"; ctx.fillText(sc.title.toUpperCase(), 80, y + 64);
     ctx.fillStyle = "#B7C9CB"; ctx.font = "500 24px Inter, sans-serif"; ctx.fillText(sc.sub, 80, y + 106);
   }
+  if (!sc.card) minimap(t, sc);
   if (sc.card === "intro") card("SRS ADVANCE EDITION · TAPALPA, MEXICO", "TASK 3", "Tue 10 Nov 2026 · Race to goal · 58.7 km");
   if (sc.card === "result") result();
   ctx.fillStyle = "rgba(3,16,15,.6)"; ctx.font = "500 14px Inter, sans-serif";
   const cr = "Tracks: official IGC, Airtribune · Terrain: Mapzen / AWS Terrain Tiles (SRTM)";
-  ctx.fillText(cr, W - 48 - ctx.measureText(cr).width, H - 28);
+  ctx.fillText(cr, W - 48 - ctx.measureText(cr).width, H - 34);
 }
 function measure(s) { ctx.save(); ctx.font = "800 22px Archivo, sans-serif"; const w = ctx.measureText(s).width; ctx.restore(); return w; }
 function card(k, h, s) {
@@ -291,7 +343,9 @@ function renderPrompter() {
   $("pt").textContent = sc.title;
   $("pd").textContent = `${words(sc.script)} words · ~${Math.round(dur(sc))} s · race ${fmtClock(sc.t[0]).slice(0, 5)}–${fmtClock(sc.t[1]).slice(0, 5)}`;
   const parts = sc.script.match(/[^.!?]+[.!?]+["”]?\s*/g) || [sc.script];
-  $("ps").innerHTML = parts.map(p => `<span>${p.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</span>`).join("");
+  const esc = x => x.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  $("ps").className = "script" + (mode === "beats" ? " beats" : "");
+  $("ps").innerHTML = mode === "beats" ? (sc.beats || []).map(b => `<span>${esc(b)}</span>`).join("") : parts.map(p => `<span>${esc(p)}</span>`).join("");
   const nx = SCENES[scene + 1];
   $("px").innerHTML = nx ? `Next: <b>${nx.title}</b> · ${nx.script.split(/(?<=[.!?])\s/)[0]}` : "Last scene.";
   [...$("sl").children].forEach((b, i) => b.classList.toggle("on", i === scene));
@@ -303,7 +357,7 @@ function updatePrompter(prog) {
   $("pb").style.width = (prog * 100).toFixed(1) + "%";
 }
 
-function go(i) { scene = Math.max(0, Math.min(SCENES.length - 1, i)); sceneT = 0; renderPrompter(); }
+function go(i) { scene = Math.max(0, Math.min(SCENES.length - 1, i)); sceneT = 0; setManual(false); renderPrompter(); }
 function setPlay(v) { playing = v; $("bPlay").textContent = v ? "Pause" : "Play"; }
 
 function frame(now) {
@@ -316,8 +370,8 @@ function frame(now) {
   const s2 = SCENES[scene], prog = Math.min(1, sceneT / dur(s2));
   const t = s2.t[0] + (s2.t[1] - s2.t[0]) * prog;
   if (D) {
-    const tg = camTarget(s2, t), k = 1 - Math.exp(-dt * 2.2);
-    cam.x += (tg.x - cam.x) * k; cam.y += (tg.y - cam.y) * k; cam.w *= Math.exp(Math.log(tg.w / cam.w) * k);
+    if (!manual) { const tg = camTarget(s2, t), k = 1 - Math.exp(-dt * 2.2);
+    cam.x += (tg.x - cam.x) * k; cam.y += (tg.y - cam.y) * k; cam.w *= Math.exp(Math.log(tg.w / cam.w) * k); }
     draw(t, s2, prog); updatePrompter(prog);
   }
   requestAnimationFrame(frame);
@@ -334,6 +388,9 @@ $("bPlay").onclick = e => { setPlay(!playing); e.currentTarget.blur(); };
 $("bNext").onclick = e => { go(scene + 1); e.currentTarget.blur(); };
 $("bPrev").onclick = e => { go(scene - 1); e.currentTarget.blur(); };
 $("bRestart").onclick = e => { sceneT = 0; e.currentTarget.blur(); };
+$("bCam").onclick = e => { setManual(false); e.currentTarget.blur(); };
+$("bMode").onclick = e => { setMode(mode === "script" ? "beats" : "script"); e.currentTarget.blur(); };
+function setMode(m) { mode = m; $("bMode").textContent = m === "script" ? "Talking points (T)" : "Full script (T)"; renderPrompter(); }
 $("wpm").onchange = e => { wpm = +e.target.value; renderPrompter(); };
 document.addEventListener("keydown", e => {
   if (e.target.tagName === "SELECT") return;
@@ -341,6 +398,10 @@ document.addEventListener("keydown", e => {
   else if (e.key === "ArrowRight") { e.preventDefault(); go(scene + 1); }
   else if (e.key === "ArrowLeft") { e.preventDefault(); go(scene - 1); }
   else if (e.key === "r" || e.key === "R") sceneT = 0;
+  else if (e.key === "c" || e.key === "C") setManual(false);
+  else if (e.key === "t" || e.key === "T") setMode(mode === "script" ? "beats" : "script");
+  else if (e.key === "+" || e.key === "=") zoomAt({ clientX: cv.getBoundingClientRect().left + cv.clientWidth / 2, clientY: cv.getBoundingClientRect().top + cv.clientHeight / 2 }, 0.7);
+  else if (e.key === "-") zoomAt({ clientX: cv.getBoundingClientRect().left + cv.clientWidth / 2, clientY: cv.getBoundingClientRect().top + cv.clientHeight / 2 }, 1.4);
 });
 
 // deep link for checks: #s3 opens scene 3; #s3-50 opens it halfway
