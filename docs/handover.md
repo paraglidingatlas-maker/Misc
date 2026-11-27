@@ -41,6 +41,16 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
+## NOW: broadcast replay look for the daily highlights video (27 Nov 2026, style frames awaiting owner review)
+
+Owner chose (27 Nov): **3D**, **dark relief with glowing trails** (my pick), **Paragliding Atlas branding**, **screen capture** (not a rendered video file). Review page (private): https://claude.ai/artifact/97YFPWMexU9YtppeMCyZwM, source `airtribune-redesign/docs/task3-broadcast/` (index.html + frame1–4.jpg).
+- Engine: `airtribune-redesign/concepts/broadcast.html` (MapLibre 4.7.1 terrain ×1.6 with dark hillshade, deck.gl 9.0.38 trails; tracks lifted by the same factor so height above ground is kept). `#f=1..4` picks a frame (title, race, the move, finish); `&t=` overrides the time. Graphics sit on a 1920×1080 stage scaled to the window.
+- Data: `concepts/broadcast-data.js` (all 106 pilots, every 4 s, x/y/GPS alt/re-optimised distance to go, delta-encoded, 2 MB), built by `python3 -I src/build/build_broadcast_data.py <unzipped-igc-dir> <cache.pkl>` (IGC zip URL in `src/data/srs-task3/SOURCES.md`).
+- Brand from the Website repo: logo `concepts/img/atlas-logo-white.png`, orange #ff7517, charcoal #141519, Poppins + DM Sans.
+- Graphics: timing tower (gap to leader, km), course ladder, automatic gaggle outlines/labels (single-linkage 0.9 km / 350 m), thermal columns with callouts (values from `analysis/key_moments.json`), lower third, title card, result card (ranked on points).
+- Stills need SwiftShader and ~2.5 min each here (script used: Playwright, wait for `window.__ready`).
+- Open questions on the page: look OK? terrain ×1.6 or true height? gaps in km or seconds? anything to add (photos, flags, mini-map)? Then: motion (wipes, count-ups, camera moves), clean-feed mode, scene playback tied to the voice-over script, north + wind cursor. Coordinate gaggle detection with the live-tracker item above.
+
 ## NOW: voice-over studio for the daily highlights video (draft 1 built 27 Nov 2026; owner wants to refine the concept before more building)
 
 Private page: https://claude.ai/artifact/PSxqVECj2bQ9kxDDNXbdUu. Source `airtribune-redesign/docs/task3-voiceover/` (index.html = artifact source, relief.jpg, race.json, RESEARCH.md).

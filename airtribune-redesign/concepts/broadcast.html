@@ -128,13 +128,13 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
 .result .hd{background:var(--orange);color:#141519;font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:.12em;text-transform:uppercase;padding:12px 20px;display:flex}
 .result .hd span{margin-left:auto;font-weight:700;letter-spacing:.04em}
 .result ol{list-style:none;background:rgba(20,21,25,.9)}
-.result li{display:grid;grid-template-columns:70px 1fr 120px;align-items:center;padding:16px 20px 16px 0;border-bottom:1px solid var(--line)}
+.result li{display:grid;grid-template-columns:70px 1fr 190px;align-items:center;padding:16px 20px 16px 0;border-bottom:1px solid var(--line)}
 .result li .p{font-family:var(--disp);font-weight:900;font-size:40px;text-align:center}
 .result li:first-child .p{color:var(--orange)}
 .result li .s{font-family:var(--disp);font-weight:700;font-size:28px;line-height:1.05;text-transform:uppercase}
 .result li .s span{display:block;font-family:var(--body);font-weight:500;font-size:14px;color:var(--g1);text-transform:none;letter-spacing:.03em;margin-top:5px}
 .result li .t{text-align:right;font-family:var(--disp);font-weight:700;font-size:26px}
-.result li .t span{display:block;font-family:var(--body);font-size:13px;color:var(--g1);font-weight:500;margin-top:4px}
+.result li .t span{display:block;white-space:nowrap;font-family:var(--body);font-size:13px;color:var(--g1);font-weight:500;margin-top:4px}
 .result .ft{background:rgba(32,33,39,.92);padding:14px 20px;font-size:15px;color:var(--g1);display:flex;gap:36px}
 .result .ft b{color:var(--white);font-family:var(--disp);font-weight:700;font-size:20px;margin-right:6px}
 .big{position:absolute;left:64px;bottom:120px}
@@ -418,7 +418,7 @@ function graphics(r) {
   if (F.show.includes("result")) {
     const top = pilots.filter(p => p.rank <= 3).sort((a, b) => a.rank - b.rank), win = top[0];
     $("result").innerHTML = `<div class="hd">Task 3 result<span>58.7 km</span></div><ol>` + top.map(p => `<li><span class="p">${p.rank}</span><span class="s">${surname(p)}<span>${p.first} · ${NAT[p.nat] || p.nat}</span></span><span class="t tn">${p.time.replace(/^0/, "")}<span>${p.score.toFixed(1)} pts · ${p.speed.toFixed(1)} km/h</span></span></li>`).join("") +
-      `</ol><div class="ft"><span><b>88</b>of 106 in goal</span><span><b>3</b>pilots within 66 s</span></div>`;
+      `</ol><div class="ft"><span><b>88</b>of 106 in goal</span><span><b>3</b>pilots within 66 s</span><span>Ranked on points</span></div>`;
     $("big").innerHTML = `<div class="k">Task 3 winner</div><h2>${surname(win)}</h2><p><b>${win.first} ${surname(win)}</b> · ${NAT[win.nat]} · ${win.time.replace(/^0/, "")} for 58.7 km</p>`;
   }
 }

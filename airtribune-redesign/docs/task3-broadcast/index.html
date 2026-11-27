@@ -1,0 +1,83 @@
+<title>Broadcast Replay Look</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* One column of 16:9 style frames, each with a short note on what it shows. Dark-only, Paragliding Atlas brand. */
+:root{
+  --bg:#141519; --card:#1d1e23; --ink:#f6f4f4; --muted:#a9a9ad; --line:rgba(180,180,180,.16); --accent:#ff7517;
+  --disp:"Poppins",Arial,Helvetica,sans-serif; --body:"DM Sans",Arial,Helvetica,sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1160px;margin:0 auto;padding-block:40px 64px}
+.kick{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(30px,5vw,48px);line-height:1.05;margin-top:8px;text-wrap:balance}
+.lede{max-width:68ch;color:var(--muted);margin-top:14px}
+.lede b{color:var(--ink);font-weight:700}
+.frames{display:grid;gap:48px;margin-top:40px}
+figure{margin:0}
+figure img{display:block;width:100%;height:auto;aspect-ratio:16/9;background:var(--card)}
+figcaption{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:8px 32px;margin-top:16px}
+figcaption h2{font-family:var(--disp);font-weight:800;font-size:20px;line-height:1.2}
+figcaption h2 span{display:block;font-family:var(--body);font-weight:500;font-size:14px;color:var(--muted);margin-top:4px}
+figcaption ul{margin:0;padding-left:18px;color:var(--muted)}
+figcaption li+li{margin-top:4px}
+figcaption li b{color:var(--ink);font-weight:700}
+.next{margin-top:56px;border-top:1px solid var(--line);padding-top:28px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+.next h3{font-family:var(--disp);font-weight:800;font-size:18px}
+.next ol,.next ul{margin:10px 0 0;padding-left:20px;color:var(--muted)}
+.next li+li{margin-top:6px}
+.next li b{color:var(--ink)}
+.foot{margin-top:40px;font-size:13px;color:var(--muted)}
+.foot a{color:var(--ink)}
+@media (max-width:720px){figcaption,.next{grid-template-columns:minmax(0,1fr)}}
+</style>
+<div class="wrap">
+  <div class="kick">Paragliding Atlas · Daily highlights</div>
+  <h1>Task 3 broadcast replay: four style frames</h1>
+  <p class="lede">These are still frames from the real replay engine, using the real tracks of all <b>106 pilots</b> at their GPS height over 3D terrain. The look is dark relief with glowing trails, Paragliding Atlas branding, and a graphics package that changes per scene. <b>Every number is real</b>, taken from the official IGC files and results.</p>
+
+  <div class="frames">
+    <figure>
+      <img src="frame1.jpg" alt="Title card: TASK 3, race to goal 58.7 km, over dark 3D terrain with the course drawn on the right">
+      <figcaption><h2>1 · Cold open<span>12:17, just after the start gate</span></h2>
+        <ul><li><b>Title card</b> with the Atlas arc, task facts and your name; the course and the field at the start sit to the right.</li>
+            <li>In motion: the camera drifts slowly along the course while the title builds in.</li></ul></figcaption>
+    </figure>
+    <figure>
+      <img src="frame2.jpg" alt="Race scene: lead gaggle of 16 outlined in orange, main gaggle in white, timing tower on the left, course ladder at the bottom">
+      <figcaption><h2>2 · The race<span>13:20, 23 km to go</span></h2>
+        <ul><li><b>Gaggles found automatically</b>, outlined and labelled ("Lead gaggle, 16 pilots, led by Varga"; "Main gaggle, +7.2 km").</li>
+            <li><b>As it stands</b>: the top 10 by real distance to goal, with the gap to the leader.</li>
+            <li><b>Course ladder</b>: the whole field on one line from start to goal, so viewers always know where we are.</li></ul></figcaption>
+    </figure>
+    <figure>
+      <img src="frame3.jpg" alt="The move: two thermal columns side by side, the north core at 2.0 to 2.4 m/s in orange and the gaggle thermal at 0.8 to 1.2 m/s in white, with a lower third for Abel Varga">
+      <figcaption><h2>3 · The move<span>13:51, 5 km to go</span></h2>
+        <ul><li><b>Thermal columns</b> compare the two climbs side by side: the north core at 2.0–2.4 m/s (Varga, Quintanilla, Luebberke) and the gaggle's at 0.8–1.2 m/s.</li>
+            <li><b>Lower third</b> for the pilot you're talking about: live height, climb and distance to goal.</li>
+            <li><b>Headline strip</b> ("The move") gives the story in one line.</li></ul></figcaption>
+    </figure>
+    <figure>
+      <img src="frame4.jpg" alt="Goal: VARGA in large type, task result for the top three on the right, goal cylinder glowing orange">
+      <figcaption><h2>4 · The finish<span>13:59, goal at Amacueca</span></h2>
+        <ul><li><b>Winner card</b> and the <b>top three</b> with time, points and speed. Luebberke was faster than Quintanilla but ranked third on points, so the card says "Ranked on points".</li>
+            <li>The goal cylinder is the only solid wall in the scene, so the finish stands out.</li></ul></figcaption>
+    </figure>
+  </div>
+
+  <div class="next">
+    <div><h3>Not shown in stills</h3>
+      <ul><li><b>Motion</b>: orange wipe between scenes, numbers that count up, graphics that slide in, a slow camera move in every scene.</li>
+          <li><b>Clean feed</b> for screen capture: no cursor or controls, fixed 16:9, and a hidden teleprompter on a second window.</li>
+          <li><b>North and wind cursor</b> in a corner (you asked the other chat for this). The wind comes from the drift measured in the thermals.</li></ul></div>
+    <div><h3>What I need from you</h3>
+      <ol><li>Is the <b>overall look</b> right: dark relief, orange for the pilots in the story, white for the field?</li>
+          <li><b>Terrain height ×1.6</b> makes the hills read on camera. Keep it, or show true height?</li>
+          <li><b>Gaps</b> in the tower: kilometres (as shown) or estimated seconds?</li>
+          <li>Anything to <b>add or drop</b> (pilot photos, gliders, flags, a mini-map)?</li></ol></div>
+  </div>
+  <p class="foot">Tracks from the official IGC files via Airtribune · Terrain from AWS Terrain Tiles (SRTM). The working replay page is <a href="https://paraglidingatlas-maker.github.io/Misc/airtribune-redesign/concepts/broadcast.html#f=3" target="_blank" rel="noopener">concepts/broadcast.html</a> (append #f=1 to #f=4 for each frame).</p>
+</div>
