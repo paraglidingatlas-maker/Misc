@@ -84,6 +84,8 @@ a{color:inherit;text-decoration:none}
 .row .d small{font:600 10px var(--f-body);font-style:normal;color:var(--muted);margin-left:2px}
 .row .g{text-align:right;font:600 12px var(--f-body);color:var(--ink-2)}
 .row.goal .d{color:var(--teal)}
+.row.out .pil b,.row.out .d{color:var(--muted)}
+.row .d .lo{font:700 10px var(--f-body);font-style:normal;color:var(--muted);letter-spacing:.06em;margin-right:4px}
 .pil > span:last-child{min-width:0}
 .pil b,.pil small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tele-h b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -387,7 +389,7 @@ a{color:inherit;text-decoration:none}
     <div class="t-wind"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255,255,255,.18)"/><g id="windArrow" transform="rotate(135 20 20)"><path d="M20 6 L26 22 L20 18 L14 22Z" fill="#FFFFFF"/></g></svg><div><span class="lbl">Thermal drift</span><span class="t-mid num" id="tWind">—</span></div></div>
     <div class="t-base"><span class="lbl">Highest pilot</span><span class="t-mid num" id="tBase">—</span></div>
     <div class="t-sp"></div>
-    <div class="t-stats"><div><span class="lbl">Racing</span><b id="sAir">12</b></div><div><span class="lbl">In goal</span><b id="sGoal">0</b></div></div>
+    <div class="t-stats"><div><span class="lbl">Racing</span><b id="sAir">12</b></div><div><span class="lbl">In goal</span><b id="sGoal">0</b></div><div><span class="lbl">Landed</span><b id="sOut">0</b></div></div>
   </header>
 
   <div class="main">
@@ -487,8 +489,9 @@ function terrain(sel, seed, W, H, alpha=1){
    Package: events/tasks/srs-2026-6/t3/ (built by src/pipeline/new_task.py from the Airtribune results page). */
 /* The task comes from a task package (events/tasks/<comp>/<task>/, written by src/pipeline/new_task.py),
    picked with ?task=<comp>/<task>; the loader at the end of the page fetches it. taskToT3 turns the package into
-   the compact shape this page was written for. Tracks: the first N pilots in goal (by rank) with a complete
-   tracklog, thinned to one fix per 10 s plus the exact tag fixes. */
+   the compact shape this page was written for. Tracks: every pilot with a tracklog, in results order (or the first
+   ?n= of them), thinned to one fix per 10 s plus the exact tag fixes; goal pilots up to goal, the others to the
+   end of their track (the package keeps 2 min after landing). */
 const PKG = window.TASKPKG.data, PKGBASE = window.TASKPKG.base;
 function taskToT3(pk, trk, nMax){
   const tk = pk.task, ev = pk.event, R = new Map(pk.results.map(r => [String(r.id), r]));
@@ -496,18 +499,19 @@ function taskToT3(pk, trk, nMax){
   const date = d0.toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short", year:"numeric", timeZone:"UTC"}).replace(",", "");
   const tps = tk.turnpoints.map(t => [t.code, t.short || t.name, t.role === "TO" ? null : t.check === "exit" ? "Exit" : "Entry",
     t.radius_m == null ? null : t.radius_m/1000, t.lat, t.lon, t.elev_m, t.role === "SSS" ? "SS" : (t.role === "ESS" || t.role === "GOAL") && t.ess ? "ES" : null]);
-  const pilots = trk.pilots.filter(p => p.goal && R.has(String(p.id))).slice(0, nMax).map(p => {
-    const r = R.get(String(p.id)), tags = new Set(p.tags), end = p.tags.at(-1), pts = [];
-    let t = 0, x = 0, y = 0, a = 0;
+  const pilots = trk.pilots.filter(p => R.has(String(p.id)) && p.d.length >= 8).slice(0, nMax > 0 ? nMax : Infinity).map(p => {
+    const r = R.get(String(p.id)), tags = new Set(p.tags), end = p.goal ? p.tags.at(-1) : Infinity, pts = [];
+    let t = 0, x = 0, y = 0, a = 0, last = null;
     for (let j = 0; j < p.d.length; j += 4){ t += p.d[j]; x += p.d[j+1]; y += p.d[j+2]; a += p.d[j+3];
-      if (t > end) break; if (t % 10 === 0 || tags.has(t)) pts.push([t, x, y, a]); }
-    return {id: r.id, n: r.name, c: r.nation, gl: r.glider || "", rk: r.rank, tm: r.time, sc: r.score, tg: p.tags, pts};
+      if (t > end) break; last = [t, x, y, a]; if (t % 10 === 0 || tags.has(t)) pts.push(last); }
+    if (last && pts.at(-1) !== last) pts.push(last);
+    return {id: r.id, n: r.name, c: r.nation, gl: r.glider || "", rk: r.rank, tm: r.time, sc: r.score, km: r.distance_km, goal: !!p.goal, tg: p.tags, pts};
   });
   return {ev: {name: ev.name, place: ev.place, country: ev.country, dates: ev.dates, date, dist: tk.distance_km,
                gate: tk.gates[0].slice(0,5), title: ev.short || ev.name, no: tk.no, series: ev.series || ""},
           tps, wind: pk.wind && pk.wind.drift, stats: pk.scoring, top: pk.results.slice(0,3).map(r => [r.rank, r.name, r.nation, r.score]), pilots};
 }
-const T3 = taskToT3(PKG, window.TASKPKG.tracks, +(new URLSearchParams(location.search).get("n") || 20));
+const T3 = taskToT3(PKG, window.TASKPKG.tracks, +(new URLSearchParams(location.search).get("n") || 0));   // ?n=20: only the first 20 pilots
 
 /* ---------------- task geometry (km space: x east, y south, origin = take-off) ---------------- */
 const LAT0 = T3.tps[0][4], LON0 = T3.tps[0][5], KX = 111.32*Math.cos(LAT0*Math.PI/180), KY = 110.574;
@@ -620,18 +624,22 @@ if (T3.wind){ const dirs = ["N","NE","E","SE","S","SW","W","NW"];
 
 const PILOTS = T3.pilots.map((pd,k) => ({k, no: pd.id, name: pd.n, sur: pd.n.split(" ").filter(w => w === w.toUpperCase() && /\p{L}/u.test(w)).join(" ") || pd.n,
   nat: {c: pd.c}, col: COLS[k % COLS.length], wing: pd.gl.split("/")[0],
-  rank: pd.rk, time: pd.tm, score: pd.sc, tg: pd.tg, pts: decodeTrack(pd)}));
+  rank: pd.rk, time: pd.tm, score: pd.sc, km: pd.km, goal: pd.goal, tg: pd.tg, pts: decodeTrack(pd)}));
+/* landing: the first fix after which the pilot stays within 60 m and 20 m of height of where the track ends */
+PILOTS.forEach(P => { const a = P.pts, z = a.at(-1); let j = a.length - 1;
+  while (j > 0 && dist(a[j-1].p, z.p) < .06 && Math.abs(a[j-1].alt - z.alt) < 20) j--;
+  P.goalT = P.goal ? z.t : Infinity; P.landT = P.goal ? Infinity : a[j].t; P.endT = Math.min(P.goalT, P.landT); });
 
 /* ---------- race analysis (computed once from the real tracks) ----------
    progress, time gaps, lead changes, and the generated race feed + timeline markers */
 const LEGS = BASE_TASK.legs, ROUTE = BASE_TASK.route, SUFFIX = LEGS.map((_,k) => d3.sum(LEGS.slice(k))), TOTAL = SUFFIX[0];
 const remKm = pt => pt.ti > LEGS.length ? 0 : dist(pt.p, ROUTE[pt.ti]) + (pt.ti < LEGS.length ? SUFFIX[pt.ti] : 0);
-const T_START = -12*60, T_END = d3.max(PILOTS, P => P.pts.at(-1).t) + 300;
-const N = PILOTS.length;
+const T_START = -12*60, T_END = d3.max(PILOTS, P => P.endT) + 300;
+const N = PILOTS.length, NG = PILOTS.filter(P => P.goal).length;
 PILOTS.forEach(P => {
   let m = 0;
   P.pts.forEach(q => { q.rem = remKm(q); q.prog = q.ti >= 2 ? TOTAL - q.rem : 0; m = Math.max(m, q.prog); q.bp = m; });
-  P.goalT = P.pts.at(-1).t;
+  P.bpEnd = P.pts.at(-1).bp;
   P.short = P.sur.length > 11 ? P.sur.split(" ")[0] : P.sur;
 });
 const fmtGap = s => { s = Math.max(0, Math.round(s)); const h = s/3600|0, m = (s/60|0)%60, x = String(s%60).padStart(2,"0"); return h ? `${h}:${String(m).padStart(2,"0")}:${x}` : `${m}:${x}`; };
@@ -670,24 +678,26 @@ const DIR16 = d => ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WS
 const WINDGRID = (PKG.wind && PKG.wind.grid) || null;
 
 /* ---------- gaggles (computed once from the real tracks) ----------
-   Every 10 s: pilots racing (out of the start, not yet in goal) are linked when they are within 1.5 km of each other
+   Every 10 s: pilots racing (out of the start, not yet in goal or landed) are linked when they are within 1.5 km of each other
    and 400 m in height; links are averaged over ±30 s so a pilot passing through does not flicker, then chained into
    groups. Groups are named in race order: anyone ahead of the first gaggle of 3+ is "Out front", then the lead gaggle,
    the chase group, middle and trailing groups; loose pilots behind the lead gaggle are stragglers.
    Final glide: from the end of a pilot's last climb (60 s average over +0.5 m/s, 100 m gained at least) within 20 km of goal. */
 const GAG = (() => {
   const STEP = 10, n = Math.floor(T_END/STEP) + 1, R = 1.5, DZ = 400, W = 3;
-  const act = [], raw = [];
-  for (let s = 0; s < n; s++){ const T = s*STEP, q = PILOTS.map(P => at(P, T));
-    act.push(PILOTS.map((P,i) => P.goalT > T && q[i].ti >= 2));
-    const A = new Uint8Array(N*N);
-    for (let i = 0; i < N; i++) if (act[s][i]) for (let j = i+1; j < N; j++) if (act[s][j] && dist(q[i].p, q[j].p) < R && Math.abs(q[i].alt - q[j].alt) < DZ) A[i*N + j] = 1;
-    raw.push({T, q, A}); }
-  const steps = raw.map(({T, q}, s) => {
-    const par = d3.range(N), f = i => par[i] === i ? i : (par[i] = f(par[i]));
-    for (let i = 0; i < N; i++) if (act[s][i]) for (let j = i+1; j < N; j++) if (act[s][j]){
-      let on = 0, c = 0; for (let u = Math.max(0, s - W); u <= Math.min(n - 1, s + W); u++) if (act[u][i] && act[u][j]){ c++; on += raw[u].A[i*N + j]; }
-      if (c && on/c >= .5) par[f(i)] = f(j); }
+  // links per step are kept as lists of pair indices (i*N + j), so 100+ pilots stay cheap
+  const act = [], raw = [], cnt = new Uint8Array(N*N);
+  for (let s = 0; s < n; s++){ const T = s*STEP, q = PILOTS.map(P => at(P, T)), a = PILOTS.map((P,i) => P.endT > T && q[i].ti >= 2), L = [];
+    act.push(a);
+    for (let i = 0; i < N; i++) if (a[i]) for (let j = i+1; j < N; j++) if (a[j] && Math.abs(q[i].alt - q[j].alt) < DZ && dist(q[i].p, q[j].p) < R) L.push(i*N + j);
+    raw.push({T, L}); }
+  const steps = raw.map(({T}, s) => {
+    const par = d3.range(N), f = i => par[i] === i ? i : (par[i] = f(par[i])), u0 = Math.max(0, s - W), u1 = Math.min(n - 1, s + W), seen = [];
+    for (let u = u0; u <= u1; u++) for (const x of raw[u].L){ if (!cnt[x]) seen.push(x); cnt[x]++; }
+    for (const x of seen){ const i = (x / N) | 0, j = x % N;
+      if (act[s][i] && act[s][j]){ let c = 0; for (let u = u0; u <= u1; u++) if (act[u][i] && act[u][j]) c++;
+        if (c && cnt[x]/c >= .5) par[f(i)] = f(j); }
+      cnt[x] = 0; }
     const g = new Map(); PILOTS.forEach((P,i) => { if (act[s][i]) { const r = f(i); if (!g.has(r)) g.set(r, []); g.get(r).push(P); } });
     const groups = [...g.values()].map(m => m.sort((a,b) => at(a,T).rem - at(b,T).rem)).sort((a,b) => at(a[0],T).rem - at(b[0],T).rem);
     // name them
@@ -702,7 +712,7 @@ const GAG = (() => {
     return {T, groups: out, of};
   });
   // final glide start per pilot
-  const fg = PILOTS.map(P => { const a = P.pts; let best = null, i = 0;
+  const fg = PILOTS.map(P => { if (!P.goal) return null; const a = P.pts; let best = null, i = 0;
     while (i + 6 < a.length && a[i + 6].t <= P.goalT){
       if ((a[i+6].alt - a[i].alt)/(a[i+6].t - a[i].t) > .5){ let j = i; while (j + 6 < a.length && a[j+6].t <= P.goalT && (a[j+6].alt - a[j].alt)/(a[j+6].t - a[j].t) > .5) j++;
         const top = a.slice(i, j + 7).reduce((m,q) => q.alt > m.alt ? q : m, a[i]);
@@ -725,30 +735,37 @@ const EVENTS = (() => {
   push(-60, "info", `<span class="tag info">−1 MIN</span>One minute to the gate. Highest: ${s1.slice(0,3).map(who).join(", ")}; ${fmtAlt(at(s1[0],-60).alt - at(s1.at(-1),-60).alt)} m between top and bottom of the gaggle.`);
   push(0, "gate", `<span class="tag start">GATE</span>Start gate open, ${T3.ev.gate} local. Race to goal, ${T3.ev.dist.toFixed(1)} km: exit the ${BASE_TASK.cyl[0].r} km start, ${BASE_TASK.cyl.slice(1,-1).filter((c,k,a) => k < a.length-1 || LEGS.at(-1) > 1.5).map(c => c.name).join(", ")}, goal at ${shortName(T3.tps.at(-1)[1])}.`,
     {mark:"gate", label:"Gate", toast:"Start gate open"});
-  // tag milestones per turnpoint (tag 0 = start, last = goal)
-  const nTags = PILOTS[0].tg.length;
+  // tag milestones per turnpoint (tag 0 = start, last = goal); only pilots who got there count
+  const nTags = BASE_TASK.cyl.length, HALF = Math.ceil(N/2), secs = t => t < 120 ? `${Math.round(t)} s` : fmtGap(t);
   for (let j=0; j<nTags; j++){
-    const seq = PILOTS.map(P => ({P, t:P.tg[j]})).sort((a,b) => a.t - b.t), first = seq[0], last = seq.at(-1);
+    const seq = PILOTS.filter(P => j === nTags-1 ? P.goal : P.tg.length > j).map(P => ({P, t:P.tg[j]})).sort((a,b) => a.t - b.t), first = seq[0], last = seq.at(-1);
+    if (!seq.length) continue;
     if (j === 0){
       push(first.t, "start", `<span class="tag start">START</span>${who(first.P)} first out of the start, ${Math.round(first.t)} s after the gate.`);
-      push(last.t, "start", `<span class="tag start">START</span>All ${N} pilots out of the start within ${Math.round(last.t)} s of the gate.`);
+      push(last.t, "start", `<span class="tag start">START</span>${seq.length === N ? `All ${N} pilots` : `${seq.length} of ${N} pilots`} out of the start within ${secs(last.t)} of the gate.`);
     } else if (j === nTags-1){
       push(first.t, "goal", `<span class="tag goal">GOAL</span>${who(first.P)} first in goal in ${fmtGap(first.t)}.`, {mark:"goal", label:"1st goal", k:first.P.k, toast:`${first.P.short} first in goal`, hi:true});
-      seq.slice(1).forEach(({P,t}) => push(t, "goal", `<span class="tag goal">GOAL</span>${who(P)} in goal · ${fmtGap(t)} · +${fmtGap(t - first.t)}`, {k:P.k}));
-      push(last.t + 1, "goal", `<span class="tag goal">GOAL</span>All ${N} in goal. ${fmtGap(last.t - first.t)} between first and last.`, {mark:"goal", label:""});
+      seq.slice(1).forEach(({P,t}, i) => push(t, "goal", `<span class="tag goal">GOAL</span>${who(P)} in goal · ${fmtGap(t)} · +${fmtGap(t - first.t)}${i + 2 === HALF ? ` · half the field (${HALF} of ${N}) home` : ""}`, {k:P.k}));
+      if (seq.length > 1) push(last.t + 1, "goal", `<span class="tag goal">GOAL</span>${seq.length === N ? `All ${N} in goal.` : `${who(last.P)} is the last of ${seq.length} in goal.`} ${fmtGap(last.t - first.t)} between first and last.`, {mark:"goal", label:""});
     } else {
       if (LEGS[j+1] !== undefined && LEGS[j+1] < 1.5 && j === nTags-2) continue;   // a TP just before goal: its tags are the goal arrivals
-      const name = nm(j+1), half = seq[Math.floor(N/2)-1];
+      const name = nm(j+1);
       push(first.t, "tp", `<span class="tag tp">TP${j}</span>${who(first.P)} first to tag ${name}.`, {mark:"tp", label:`TP${j}`, k:first.P.k, toast:`${first.P.short} first at ${name}`});
-      push(half.t, "tp", `<span class="tag tp">TP${j}</span>${N/2|0} of ${N} have tagged ${name}, ${fmtGap(half.t - first.t)} after ${who(first.P)}.`);
-      push(last.t, "tp", `<span class="tag tp">TP${j}</span>All ${N} through ${name}; ${who(last.P)} last, ${fmtGap(last.t - first.t)} behind.`);
+      if (N >= 4 && seq.length >= HALF){ const half = seq[HALF-1];
+        push(half.t, "tp", `<span class="tag tp">TP${j}</span>Half the field, ${HALF} of ${N}, has tagged ${name}, ${fmtGap(half.t - first.t)} after ${who(first.P)}.`); }
+      if (seq.length > 1) push(last.t, "tp", `<span class="tag tp">TP${j}</span>${seq.length === N ? `All ${N} through ${name}; ${who(last.P)} last` : `${who(last.P)} is the last of ${seq.length} to tag ${name}`}, ${fmtGap(last.t - first.t)} behind.`);
     }
   }
+  // landings: every pilot who lands short of goal, with the official distance
+  let nOut = 0;
+  PILOTS.filter(P => !P.goal).sort((a,b) => a.landT - b.landT).forEach(P => { const q = at(P, P.landT); nOut++;
+    push(P.landT, "land", `<span class="tag land">LANDED</span>${who(P)} lands ${q.ti < 2 ? (P.landT < 0 ? "before the start" : "in the start cylinder") : `out ${legName(q)}`}${P.km != null ? `, ${(+P.km).toFixed(1)} km` : ""}.${nOut === N - NG && nOut > 1 ? ` ${nOut} pilots down short of goal.` : ""}`, {k:P.k}); });
   // lead changes: the leader must hold it for 2 race minutes by more than 250 m
   let lead = null, cand = null, candT = 0;
   for (let T = 0; T <= T_END; T += 10){
-    const st = PILOTS.map(P => ({P, q: at(P,T)}));
-    if (st.some(s => s.P.goalT <= T)) break;
+    if (PILOTS.some(P => P.goalT <= T)) break;
+    const st = PILOTS.filter(P => P.endT > T).map(P => ({P, q: at(P,T)}));
+    if (st.length < 2) break;
     st.sort((a,b) => a.q.rem - b.q.rem);
     const L = st[0].P, margin = st[1].q.rem - st[0].q.rem;
     if (lead === null){ lead = L; continue; }
@@ -761,7 +778,7 @@ const EVENTS = (() => {
   }
   // strongest climbs: 2-minute average, announced each time the day's best is beaten clearly
   const climbs = [];
-  PILOTS.forEach(P => { const a = P.pts; for (let i=0; i+12 < a.length; i += 3){ const r = (a[i+12].alt - a[i].alt)/(a[i+12].t - a[i].t); if (r >= 1.8 && a[i+12].t > -300 && a[i+12].t < P.goalT) climbs.push({P, t:a[i+12].t, r, q:a[i+6]}); } });
+  PILOTS.forEach(P => { const a = P.pts; for (let i=0; i+12 < a.length; i += 3){ const r = (a[i+12].alt - a[i].alt)/(a[i+12].t - a[i].t); if (r >= 1.8 && a[i+12].t > -300 && a[i+12].t < P.endT) climbs.push({P, t:a[i+12].t, r, q:a[i+6]}); } });
   climbs.sort((a,b) => a.t - b.t);
   let best = 0;
   climbs.forEach(c => { if (c.r > best + .3){ best = c.r;
@@ -787,21 +804,21 @@ const EVENTS = (() => {
       }
     }
     // final glide of the eventual first pilot in goal
-    const first = PILOTS.slice().sort((a,b) => a.goalT - b.goalT)[0], f0 = GAG.fg[first.k];
+    const first = PILOTS.slice().sort((a,b) => a.goalT - b.goalT)[0], f0 = first && first.goal ? GAG.fg[first.k] : null;
     if (f0 !== null){ const q = at(first, f0), behind = PILOTS.filter(P => P !== first && GAG.fg[P.k] !== null && GAG.fg[P.k] <= f0 + 120).length;
       push(f0, "gag", `<span class="tag gag">FINAL GLIDE</span>${who(first)} leaves the last climb at ${fmtAlt(q.alt)} m, ${q.rem.toFixed(1)} km out, and goes for goal.${behind ? ` ${behind} more set off on glide within two minutes.` : ""}`, {k:first.k, toast:`${first.short} on final glide`}); }
   }
   // highest point of the race
   let hi = {alt:0};
-  PILOTS.forEach(P => P.pts.forEach(q => { if (q.t >= 0 && q.t < P.goalT && q.alt > hi.alt) hi = {alt:q.alt, t:q.t, P, q}; }));
+  PILOTS.forEach(P => P.pts.forEach(q => { if (q.t >= 0 && q.t < P.endT && q.alt > hi.alt) hi = {alt:q.alt, t:q.t, P, q}; }));
   if (hi.P) push(hi.t, "high", `<span class="tag high">HIGH</span>${who(hi.P)} tops out at ${fmtAlt(hi.alt)} m ${legName(hi.q)}, the highest anyone gets today.`, {k:hi.P.k});
-  push(T_END - 120, "result", `<span class="tag goal">RESULT</span>Official day result: ${T3.top.map(r => `${r[0]}. <b>${r[1].split(" ").filter(w => w === w.toUpperCase()).join(" ")}</b> ${r[2]} ${r[3].toFixed(1)} pts`).join(" · ")}. ${T3.stats.goal} of ${T3.stats.pilots} pilots made goal; points include lead-out, so the score order differs from the goal order.`,
+  push(T_END - 120, "result", `<span class="tag goal">RESULT</span>Official day result: ${T3.top.map(r => `${r[0]}. <b>${r[1].split(" ").filter(w => w === w.toUpperCase()).join(" ")}</b> ${r[2]} ${r[3].toFixed(1)} pts`).join(" · ")}. ${T3.stats.goal ?? NG} of ${T3.stats.pilots ?? N} pilots made goal; points include lead-out, so the score order differs from the goal order.`,
     {mark:"result", label:"Result", hi:true});
   return E.sort((a,b) => a.t - b.t);
 })();
 
 /* race stage at time T: before the gate / racing / pilots arriving in goal / all in, official result */
-const phaseAt = T => T < 0 ? "pre" : PILOTS.every(P => P.goalT <= T) ? "final" : PILOTS.some(P => P.goalT <= T) ? "goal" : "race";
+const phaseAt = T => T < 0 ? "pre" : PILOTS.every(P => P.endT <= T) ? "final" : PILOTS.some(P => P.goalT <= T) ? "goal" : "race";
 const PHASE = {
   pre:   {head:"Start gaggle", m:"Before start", v:"Height", g:"Gap", chip:"Highest"},
   race:  {head:"Race", m:"Racing", v:"Flown", g:"Gap", chip:"Leader"},
@@ -818,7 +835,8 @@ function rankAt(T, phase){
 function cells(P, i, order, phase, T){
   const top = order[0];
   if (phase === "pre") return {v:`${fmtAlt(P._alt)}<small>m</small>`, g: i === 0 ? "Top" : (d => `${d < 0 ? "+" : "−"}${fmtAlt(Math.abs(d))} m`)(Math.round(top._alt - P._alt))};
-  if (phase === "final") return {v:`${Math.round(P.score)}<small>pts</small>`, g: fmtGap(P.goalT)};
+  if (phase === "final") return {v:`${Math.round(P.score)}<small>pts</small>`, g: P.goal ? fmtGap(P.goalT) : P.km != null ? `${(+P.km).toFixed(1)} km` : "Landed"};
+  if (P.landT <= T) return {v:`<span class="lo">LO</span>${P._prog.toFixed(1)}<small>km</small>`, g:"Landed"};
   if (P.goalT <= T) return {v:`<span class="gl">GOAL</span>`, g: P === top ? fmtGap(P.goalT) : `+${fmtGap(P.goalT - top.goalT)}`};
   if (!P._started) return {v:`${P._prog.toFixed(1)}<small>km</small>`, g:"Start"};
   if (i === 0) return {v:`${P._prog.toFixed(1)}<small>km</small>`, g:"Leader"};
@@ -1023,14 +1041,14 @@ $("#windBtn").setAttribute("aria-pressed", WIND.on);
 
 function frame(force){
   const T = M.tStart + st.frac*(M.tEnd - M.tStart), rel = T;   // seconds from the start gate
-  M.pilots.forEach(pl => { pl.now = interp(pl, T); pl.rem = remKm(pl.now.pt); pl.done = pl.goalT <= T;
-    pl._alt = pl.now.alt; pl._started = pl.now.ti >= 2; pl._prog = pl.done ? TOTAL : pl._started ? Math.max(0, TOTAL - pl.rem) : 0; });
+  M.pilots.forEach(pl => { pl.now = interp(pl, T); pl.rem = remKm(pl.now.pt); pl.done = pl.goalT <= T; pl.out = pl.landT <= T;
+    pl._alt = pl.now.alt; pl._started = pl.now.ti >= 2; pl._prog = pl.done ? TOTAL : pl.out ? pl.bpEnd : pl._started ? Math.max(0, TOTAL - pl.rem) : 0; });
   const phase = phaseAt(T);
 
   // one ranking snapshot, refreshed with the board, used everywhere (board, map tags, chip, strip, broadcast)
   const now = performance.now(), ui = force || now - (M.uiAt||0) > 2000 || phase !== M.phase;
   // strict order from this snapshot (every 2 s), so the board never contradicts its own gaps; tags and "highest" use the same values
-  if (ui){ M.uiAt = now; M.order = rankAt(T, phase); M.pilots.forEach(pl => pl.sAlt = pl._alt); M.hi = d3.max(M.pilots, p => p.done ? 0 : p._alt); }
+  if (ui){ M.uiAt = now; M.order = rankAt(T, phase); M.pilots.forEach(pl => pl.sAlt = pl._alt); M.hi = d3.max(M.pilots, p => p.done || p.out ? 0 : p._alt); }
   const order = M.order, lead = order[0];
   if (st.sel === null || (st.cine && st.cineAuto && st.sel !== lead.k)) select(lead.k, false);
 
@@ -1074,14 +1092,17 @@ function frame(force){
   const posOf = new Map(order.map((pl,i) => [pl.k, i]));
   M.pilots.forEach(pl => {
     const i = pl.i;
-    if (force || st.tick % 6 === 0) pl.full.attr("d", d3.line()(pl.P.slice(0, i+1)));
-    pl.trail.attr("d", d3.line()(pl.P.slice(Math.max(0, i-60), i+1).concat([[pl.now.x, pl.now.y]]))).attr("stroke-opacity", pl.k === st.sel ? 1 : .7);
+    if (force || (st.tick % 6 === 0 && pl.fullI !== i)){ pl.fullI = i; pl.full.attr("d", d3.line()(pl.P.slice(0, i+1))); }
+    // a landed pilot's trail stops changing: redraw it only when asked to (scrub, resize) or when selection changes
+    const sel = pl.k === st.sel, tk = `${i}|${sel}`;
+    if (force || !pl.out || pl.trailKey !== tk){ pl.trailKey = pl.out ? tk : null;
+      pl.trail.attr("d", d3.line()(pl.P.slice(Math.max(0, i-60), i+1).concat([[pl.now.x, pl.now.y]]))).attr("stroke-opacity", sel ? 1 : pl.out ? .25 : .7); }
     [pl.sx, pl.sy] = scr([pl.now.x, pl.now.y]);
   });
   // gaggles: pilots within 22 px of a better-placed pilot merge into one bubble (3 or more); the followed pilot stays separate
   const used = new Set(), clusters = [];
-  order.forEach(pl => { if (used.has(pl.k) || pl.k === st.sel || pl.done) return;
-    const mem = order.filter(q => !used.has(q.k) && q.k !== st.sel && !q.done && Math.hypot(q.sx - pl.sx, q.sy - pl.sy) < 22);
+  order.forEach(pl => { if (used.has(pl.k) || pl.k === st.sel || pl.done || pl.out) return;
+    const mem = order.filter(q => !used.has(q.k) && q.k !== st.sel && !q.done && !q.out && Math.hypot(q.sx - pl.sx, q.sy - pl.sy) < 22);
     if (mem.length >= 3){ mem.forEach(q => used.add(q.k)); clusters.push(mem); } });
   // named gaggles (lead, chase, middle, trailing): a soft outline round the members, labelled when no bubble names it
   const GS = phase === "pre" ? null : GAG.atT(T), named = GS ? GS.groups.filter(G => !["front","strag"].includes(G.kind)) : [];
@@ -1100,12 +1121,13 @@ function frame(force){
   const labels = [];   // [tag, anchorX, anchorY, radius, priority]
   M.pilots.forEach(pl => {
     const isSel = pl.k === st.sel, isLead = pl === lead, inC = used.has(pl.k), p = posOf.get(pl.k);
-    pl.dotG.attr("transform", `translate(${pl.sx},${pl.sy})`).attr("opacity", inC ? .5 : 1);
+    const lo = pl.out && !isSel;
+    pl.dotG.attr("transform", `translate(${pl.sx},${pl.sy})`).attr("opacity", inC ? .5 : lo ? .55 : 1);
     pl.ring.attr("opacity", isSel ? 1 : 0).attr("stroke", isLead ? "#FF5F00" : "#fff");
-    pl.dot.attr("r", isSel ? 7 : inC ? 3 : 5.5);
+    pl.dot.attr("r", isSel ? 7 : inC || lo ? 3 : 5.5).attr("fill", lo ? "#6E8A8D" : pl.col);
     pl.tag.set(tagText(pl, p), isLead ? "#FF5F00" : "rgba(3,16,15,.88)");
     if (isSel) pl.dotG.raise();
-    if (!inC && (isSel || p < 4)) labels.push([pl.tag, pl.sx, pl.sy, isSel ? 11 : 7, isSel ? -1 : p]); else pl.tag.g.attr("display","none");
+    if (!inC && (isSel || (p < 4 && !pl.out))) labels.push([pl.tag, pl.sx, pl.sy, isSel ? 11 : 7, isSel ? -1 : p]); else pl.tag.g.attr("display","none");
   });
   M.bubbles.forEach((b,j) => {
     const mem = clusters[j]; b.mem = mem;
@@ -1132,17 +1154,17 @@ function frame(force){
   });
 
   // strip
-  M.pilots.forEach((pl,i) => M.stripDots[i].attr("cx", M.stripX(pl._prog)).attr("r", pl.k === st.sel ? 7.5 : 5.5));
+  M.pilots.forEach((pl,i) => M.stripDots[i].attr("cx", M.stripX(pl._prog)).attr("r", pl.k === st.sel ? 7.5 : pl.out ? 3.5 : N > 40 ? 4.5 : 5.5).attr("fill", pl.out && pl.k !== st.sel ? "#6E8A8D" : pl.col));
   M.stripLead.attr("x", Math.max(M.stripX(0) + 20, Math.min(M.stripX(M.suffix[0]) - 28, M.stripX(lead._prog)))).text(phase === "pre" ? "" : lead.short);
 
   // top bar
   $("#tClock").textContent = fmtT(rel);
   $("#tLocal").textContent = fmtClock(rel);
-  const inGoal = M.pilots.filter(p => p.done).length;
+  const inGoal = M.pilots.filter(p => p.done).length, nLand = M.pilots.filter(p => p.out).length;
   if (phase === "pre"){ $("#tLegL").textContent = `Gate ${T3.ev.gate}`; $("#tLeg").textContent = `in ${fmtGap(-T)}`; }
   else if (phase === "race"){ const ti = Math.min(ROUTE.length-1, Math.max(2, lead.now.ti)); $("#tLegL").textContent = "Leader on"; $("#tLeg").textContent = `${tpName(ti-1)} → ${tpName(ti)}`; }
   else { $("#tLegL").textContent = "In goal"; $("#tLeg").textContent = `${inGoal} of ${N}`; }
-  $("#sGoal").textContent = inGoal; $("#sAir").textContent = M.pilots.length - inGoal;
+  $("#sGoal").textContent = inGoal; $("#sOut").textContent = nLand; $("#sAir").textContent = M.pilots.length - inGoal - nLand;
   $("#ovLead").textContent = lead.short; $("#ovLeadL").textContent = PHASE[phase].chip;
   $("#tBase").textContent = M.hi ? `${fmtAlt(M.hi)} m` : "—";
   $("#scrub").value = Math.round(st.frac*1000);
@@ -1167,7 +1189,7 @@ function frame(force){
       r.style.transition = force ? "none" : "";
       r.style.transitionDelay = moved && !force ? `${Math.min(nMoved++, 6)*60}ms` : "0ms";
       r.style.zIndex = moved ? (prev > i ? 3 : 2) : 1;
-      r.style.transform = `translateY(${i*ROW_H}px)`; r.classList.toggle("p1", i===0); r.classList.toggle("goal", pl.done);
+      r.style.transform = `translateY(${i*ROW_H}px)`; r.classList.toggle("p1", i===0); r.classList.toggle("goal", pl.done); r.classList.toggle("out", pl.out);
       r.querySelector(".pos").textContent = i+1;
       const ch = r.querySelector(".chg");
       if (moved && !force && M.prevPhase === phase){ ch.textContent = prev > i ? "▲" : "▼"; ch.className = "chg " + (prev > i ? "up" : "dn"); pl.chgAt = now; }
@@ -1187,22 +1209,22 @@ function frame(force){
     const s = M.pilots[st.sel], sp = posOf.get(s.k), n = s.now;
     $("#teFlag").innerHTML = flagHTML(s.nat.c); $("#teName").textContent = `${s.short} · ${s.nat.c}`; $("#tePos").textContent = `P${sp+1}`;
     $("#teAlt").innerHTML = `${fmtAlt(n.alt)}<small>m</small>`;
-    const v = s.done ? 0 : n.v; $("#teVar").innerHTML = `${v>=0?"+":""}${v.toFixed(1)}<small>m/s</small>`;
+    const v = s.done || s.out ? 0 : n.v; $("#teVar").innerHTML = `${v>=0?"+":""}${v.toFixed(1)}<small>m/s</small>`;
     const vb = $("#teVarBar"), w = Math.min(50, Math.abs(v)/4*50); vb.style.width = w + "%"; vb.style.left = v >= 0 ? "50%" : (50-w) + "%"; vb.style.background = v >= 0 ? "#FF5F00" : "#6E8A8D";
-    $("#teGs").innerHTML = `${s.done ? 0 : Math.round(n.gs)}<small>km/h</small>`;
+    $("#teGs").innerHTML = `${s.done || s.out ? 0 : Math.round(n.gs)}<small>km/h</small>`;
     $("#teRem").innerHTML = s.done ? "GOAL" : `${s.rem.toFixed(1)}<small>km</small>`;
     $("#teTp").innerHTML = s.done ? "—" : `${dist(n.pt.p, M.route[Math.min(n.ti, M.route.length-1)]).toFixed(1)}<small>km</small>`;
     const ld = (s.rem*1000) / Math.max(1, n.alt - GOAL_ELEV);
-    $("#teLd").textContent = s.done ? "—" : (n.alt - GOAL_ELEV > 20 && ld < 25 ? `1:${ld.toFixed(1)}` : "—");
-    $("#teState").textContent = s.done ? "In goal" : n.v > 0 ? "Climbing in a thermal" : "On glide";
+    $("#teLd").textContent = s.done || s.out ? "—" : (n.alt - GOAL_ELEV > 20 && ld < 25 ? `1:${ld.toFixed(1)}` : "—");
+    $("#teState").textContent = s.done ? "In goal" : s.out ? `Landed${s.km != null ? `, ${(+s.km).toFixed(1)} km` : ""}` : n.v > 0 ? "Climbing in a thermal" : "On glide";
     if (st.cine){
       $("#cineBoard").innerHTML = order.slice(0,5).map((pl,i) => { const cl = cells(pl, i, order, phase, T);
         return `<div class="cb-row"><span class="p">${i+1}</span><span class="c" style="background:${pl.col}"></span><b>${pl.short}<small>${pl.nat.c}</small></b><span class="g">${i===0 ? cl.v.replace(/<[^>]+>/g," ").trim() : cl.g}</span></div>`; }).join("");
-      const vv = s.done ? 0 : n.v;
+      const vv = s.done || s.out ? 0 : n.v;
       $("#cineBar").innerHTML = `<div class="who"><span class="pp">P${sp+1}</span><span class="fl">${flagHTML(s.nat.c)}</span><b>${s.short}</b></div>`
         + `<div><span class="lbl">Altitude</span><span class="v">${fmtAlt(n.alt)}<small>m</small></span></div>`
         + `<div><span class="lbl">Vario</span><span class="v ${vv>=0?"up":"dn"}">${vv>=0?"+":""}${vv.toFixed(1)}<small>m/s</small></span></div>`
-        + `<div class="x"><span class="lbl">Speed</span><span class="v">${s.done?0:Math.round(n.gs)}<small>km/h</small></span></div>`
+        + `<div class="x"><span class="lbl">Speed</span><span class="v">${s.done||s.out?0:Math.round(n.gs)}<small>km/h</small></span></div>`
         + `<div class="x"><span class="lbl">To goal</span><span class="v">${s.done ? "GOAL" : s.rem.toFixed(1)}${s.done?"":"<small>km</small>"}</span></div>`;
     }
     // barogram

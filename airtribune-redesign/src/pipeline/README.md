@@ -7,7 +7,8 @@ python3 -I src/pipeline/new_task.py https://airtribune.com/srs-2026-6/results/ta
 
 Writes `events/tasks/<comp>/<task>/` and adds the task to `events/tasks/index.json` (listed on `events/tasks/`).
 Pages open a package with `?task=<comp>/<task>`: `events/live.html`, `concepts/flythrough.html`
-(default `srs-2026-6/t3`). Downloads are cached in `$TASK_CACHE` (default `/tmp/task-cache`); rerunning is fast.
+(default `srs-2026-6/t3`). Both pages show every pilot with a tracklog, goal and landed out; `&n=20` keeps the first 20 in
+results order. Downloads are cached in `$TASK_CACHE` (default `/tmp/task-cache`); rerunning is fast.
 
 ## Readers (picked by the link's domain, `readers/__init__.py`)
 

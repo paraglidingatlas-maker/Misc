@@ -109,19 +109,29 @@ package format: `airtribune-redesign/src/pipeline/README.md`.
   `events/img/sky/tapalpa-*.webp` (and the Tapalpa part of `bake_kk7.py`, which still bakes the venue images).
 - **Index page:** `events/tasks/` lists every package (Replay / 3D buttons). Not yet linked from the calendar or event pages.
 
+- **All pilots, goal and landed out (done 27 Nov 2026, live on main, awaiting owner review):** both pages now take every
+  pilot with a tracklog (Task 3: all 106, 87 in goal, 19 landed). Default `n` is now all; `&n=20` keeps the first 20.
+  Landing time = first fix after which the pilot stays within 60 m and 20 m of height of the track's end.
+  Live tracker: landed pilots turn into small grey dots with faint trails, rank by distance among the flyers ("LO 31.2 km",
+  gap "Landed"), official distance in the result phase; new "Landed" count in the top bar; telemetry says "Landed, x km".
+  Feed: start / TP / goal messages count only pilots who got there ("Half the field, 53 of 106, has tagged…",
+  "X is the last of 100 to tag…", "half the field home" on the goal arrival that makes it, "last of 87 in goal"), and a
+  LANDED line per pilot with the official distance. Gaggles: link lists per step instead of an N×N matrix per step (fast at
+  150+); landed pilots leave the gaggles; final glide only for goal pilots. Frame cost about 3.5 ms with 106 pilots.
+  Fly-through: landed pilots grey, "Landed" in the race order and pilot card, timeline tick "Landed"; goal pilots disappear
+  from the 3D view two minutes after finishing (they hovered at the goal line in a tower), unless followed; ground height
+  looked up only for the followed pilot; fixed a stack overflow (`Math.max(...all fixes)`). Checked 1440 / 390: no console
+  errors, no horizontal scroll.
+
 **Next, in this order:**
-1. **Pages for 100+ pilots and landed-out pilots.** The live tracker and fly-through still assume every shown pilot reached
-   goal (they take the top 20 goal finishers). Make them take all pilots (`goal` flag in tracks.json, shorter `tags` when landed
-   out), and scale the GAG (gaggles), EVENTS (feed: "All N in goal", half-field messages), final-glide and pilot-list code to
-   20–150+ pilots (performance too). Then raise the default `n`.
-2. **Broadcast and voice-over from the package:** `concepts/broadcast.html` (+ `broadcast-data.js` from
+1. **Broadcast and voice-over from the package:** `concepts/broadcast.html` (+ `broadcast-data.js` from
    `src/build/build_broadcast_data.py`) and `docs/task3-voiceover/` (`race.json` from `build_voiceover_data.py`, `relief.jpg`)
    still use the Task 3 builders (`src/data/srs-task3/t3lib.py`, `t3load.py`, need the unzipped IGC folder). Port their
    distance-to-go / thermals to work from `tracks.json` (or let the pipeline write their extra data), then add `?task=`.
-3. **Readers still to write:** PWCA, Livetrack24, Flymaster (check each site's terms and rate limits first). **AirScore is blocked**:
+2. **Readers still to write:** PWCA, Livetrack24, Flymaster (check each site's terms and rate limits first). **AirScore is blocked**:
    on 27 Nov 2026 airscore.cc lists one comp (Coppa delle Regioni 2026, task not set), so the result data routes cannot be seen;
    the files fallback covers AirScore comps until a scored task exists.
-4. Link `events/tasks/` from the calendar and event pages; add a Broadcast button on the index once step 2 is done.
+3. Link `events/tasks/` from the calendar and event pages; add a Broadcast button on the index once step 1 is done.
 
 ### Original brief (kept for reference)
 
