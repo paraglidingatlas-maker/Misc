@@ -80,6 +80,22 @@ Review page for the owner (private): https://claude.ai/artifact/9VDf1zcmDsh12PpV
 - `assets/drag.js` (loaded by the calendar and the event pages): any element with `data-drag` scrolls sideways when grabbed with the mouse, with a throw and snap on release; a drag swallows the click so links still work on a plain click. Touch and trackpads keep native scrolling. Used on the calendar strip (`#strip`), the season timeline (`.gantt-scroll`) and the event-page "On the hill" strip (`.gal-row`, set in `src/build/photos.py`).
 - Tour maps (calendar, `panZoom()` in `src/season-calendar.html`): d3.zoom on both maps. Drag to move (works at the default zoom too, out to the whole world / Europe from Scotland to Sicily); Ctrl/⌘ + scroll or trackpad pinch to zoom (plain scroll still scrolls the page); +/− and reset buttons top-right; two fingers on phones, one finger once zoomed in. Labels and dots follow the map; dots shrink as you zoom. Hint line in the map key.
 
+## FIRST, ASK THE OWNER (chat 18 → 19, 27 Nov 2026)
+
+Before doing any work, ask the owner these questions (they asked for them to be asked here):
+
+1. **All-pilots live tracker and fly-through (done in chat 18):** happy with it? In particular, goal pilots now disappear
+   from the 3D fly-through two minutes after finishing (otherwise 87 dots hover at the goal line) — keep that, or keep them visible?
+2. **Go on pipeline item 1, broadcast and voice-over for any task?** (`concepts/broadcast.html`, `docs/task3-voiceover/`
+   move onto the task package so they work from one link.)
+3. **Order after that:** more results sites (PWCA, Livetrack24, Flymaster; AirScore waits for a scored task), linking
+   `events/tasks/` from the calendar and event pages, then job 3 (Learn mode) — same order, or change it?
+4. **Still awaiting review from earlier chats:** wind animation, gaggle detection, compass + wind marker — any feedback?
+
+Chat housekeeping done in chat 18 (owner's requests): all Airtribune Code chats renamed "Airtribune redesign & updates 1–18",
+tagged `airtribune`; index for the claude.ai Airtribune project (Chats) in `docs/airtribune-code-chats.md` (Code chats cannot
+be moved into a Chats project; the owner uploads this file there). Rules for future chats are in `CLAUDE.md`.
+
 ## NOW: one-link task pipeline (job 1 of the 27 Nov second batch), IN PROGRESS (start here)
 
 Design agreed by the owner (27 Nov 2026): "not just Airtribune, any other website or any other comp should work too";
