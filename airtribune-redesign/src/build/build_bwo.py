@@ -159,7 +159,7 @@ rep = {
   "PLACE": "Panchgani, Maharashtra", "CARD1": "white-blur", "CARD2": "orange-blur",
   "RACELINE": "Seven tasks · £300 entry · 120 pilots max, selected by WPRS.",
   "TRIPLINE": "Fly to Pune (120 km) or Mumbai (255 km), then a taxi. HQ rooms from about €35.",
-  "EVTJSON": json.dumps({"start": "2027-02-23", "end": "2027-03-02", "tz": 5.5, "seed": 13 * 97 + 13}),
+  "EVTJSON": json.dumps({"start": "2027-02-23", "end": "2027-03-02", "tz": 5.5, "seed": 13 * 97 + 13, "ll": [17.92, 73.82], "venue": "Panchgani"}),
   "HELPERS": HELPERS,
 }
 _ph = photos.fields("bwo2027", "Panchgani")
@@ -214,7 +214,6 @@ EDITS = [
   ('<a href="https://sportsracingseries.org/rules/">SRS rules ↗</a><a href="https://sportsracingseries.org/faqs/">SRS FAQs ↗</a>',
    f'<a href="{LIVE}">Live tracking on Airtribune ↗</a><a href="#history">Past editions &amp; task replays</a><a href="https://www.bhpa.co.uk/">BHPA ↗</a>'),
   ('Registration numbers from Airtribune on 24 Nov 2026.', 'Registration numbers from Airtribune on 24 Nov 2026.'),
-  ('<p>Illustrative task shape, not an official task.</p>', '<p>Illustrative task shape, not an official task. Waypoint files are on the Airtribune page.</p>'),
   ('Sources, retrieved 24 Nov 2026: <a href="https://sportsracingseries.org/events/">sportsracingseries.org/events</a> · <a href="' + AT + '">airtribune.com/bwo2027</a>',
    f'Sources, retrieved 24 Nov 2026: <a href="{AT}">airtribune.com/bwo2027</a> (event, pilot list) · past results and replays on airtribune.com ({", ".join(e["slug"] for e in D["editions"])})'),
   ('Racing photos: Aninder Singh / Paragliding Atlas, SRS Tapalpa 2026. SRS logo © Sports-Class Racing Series.', 'Racing photos: Aninder Singh / Paragliding Atlas, SRS Tapalpa 2026 (not taken at Panchgani).'),

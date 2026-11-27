@@ -110,6 +110,15 @@ section.s{padding-block:96px 0}
 .tiles .eyebrow{font:400 13px var(--f-body);letter-spacing:0;text-transform:none}
 .taskbox{border-radius:var(--r);overflow:hidden;background:var(--deep);border:1px solid var(--line)}
 .taskbox svg{display:block;width:100%;height:340px}
+/* venue skyways map: shaded relief from open elevation tiles + KK7 skyways / thermals from public tracklogs */
+.skymap{position:relative;height:340px;background:var(--deep)}
+.skymap canvas{position:absolute;inset:0;width:100%;height:100%}
+.skymap .lay{position:absolute;z-index:1;right:10px;top:10px;display:flex;padding:3px;border-radius:8px;background:rgba(3,16,15,.82);border:1px solid var(--line-2)}
+.skymap .lay button{height:28px;padding:0 10px;border-radius:6px;font:700 10px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.skymap .lay button[aria-pressed="true"]{background:var(--orange);color:#fff}
+.skymap .sb{position:absolute;z-index:1;left:12px;bottom:10px;display:flex;align-items:center;gap:8px;font:600 11px var(--f-body);color:#fff;text-shadow:0 1px 2px #03100F}
+.skymap .sb i{display:block;height:6px;border:1.5px solid #fff;border-top:0}
+.taskbox p a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .taskbox p{padding:12px 16px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line)}
 .callout{margin-top:28px;padding-top:18px;border-top:1px solid var(--line-2);color:var(--ink-2);font-size:14.5px}
 .callout b{color:#fff;display:block;font:800 italic 18px var(--f-display);text-transform:uppercase;margin-bottom:6px}
@@ -197,6 +206,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
   .card{padding:22px 20px}
   .credit{left:16px;right:auto;bottom:8px}
   .taskbox svg{height:260px}
+  .skymap{height:280px}
   .prize{padding:18px;min-height:120px}
   .prize b{font-size:clamp(15px,4.3vw,19px);overflow-wrap:normal;hyphens:manual}
 }
@@ -454,7 +464,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
         <p class="lead">Launch from Mt Cuarnan; HQ, landing and camping at Bordano by the river, with land-out options all around.</p>
         
       </div>
-      <div class="col-r"><div class="taskbox"><svg id="task" aria-hidden="true"></svg><p>Illustrative task shape, not an official task.</p></div></div>
+      <div class="col-r"><div class="taskbox"><div class="skymap" id="skymap" role="img" aria-label="Map of the skyways and thermals around Gemona"><canvas></canvas><div class="lay" role="group" aria-label="Map layer"><button data-sky="" aria-pressed="false">Off</button><button data-sky="skyways" aria-pressed="true">Skyways</button><button data-sky="thermals" aria-pressed="false">Thermals</button></div><div class="sb" aria-hidden="true"><i></i><span></span></div></div><p>Where pilots fly around Gemona: the skyways are the lines most flown in thousands of public tracklogs; thermals show where they climbed. Skyways &amp; thermals: <a href="https://thermal.kk7.ch" target="_blank" rel="noopener">thermal.kk7.ch</a>, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · Relief: AWS Terrain Tiles (Mapzen, SRTM).</p></div></div>
     </div>
 
     <div class="panel" role="tabpanel" id="p-entry" aria-labelledby="t-entry" hidden><div class="tb-h"><span>1st SRS World Sports Final</span></div><div class="ground figs4"><div class="gs"><span class="k">Entry fee</span><span class="big">€395</span><span class="sm">Per pilot, by PayPal once accepted</span></div><div class="gs"><span class="k">Membership</span><span class="big">€45</span><span class="sm">Per season, covers every SRS round</span></div><div class="gs"><span class="k">Field</span><span class="big">125</span><span class="sm">Pilots max · Selection by the organisers</span></div><div class="gs"><span class="k">Refund window</span><span class="big">45 days</span><span class="sm">Cancel before for a full refund less €60</span></div></div><div class="runs"><div class="run"><div class="run-h"><span class="k">Included</span><span class="n">10</span></div><p class="words"><span class="w">Transport to launch</span>&nbsp;<i>/</i> <span class="w">Daily retrieves</span>&nbsp;<i>/</i> <span class="w">Lunch packs</span>&nbsp;<i>/</i> <span class="w">Live trackers</span>&nbsp;<i>/</i> <span class="w">Tasking &amp; scoring</span>&nbsp;<i>/</i> <span class="w">T-shirt &amp; souvenirs</span>&nbsp;<i>/</i> <span class="w">Bad-weather activity discounts</span>&nbsp;<i>/</i> <span class="w">Event benefits</span>&nbsp;<i>/</i> <span class="w">Social evenings</span>&nbsp;<i>/</i> <span class="w">Prize draws</span></p></div><div class="run need"><div class="run-h"><span class="k">You bring</span><span class="n">10</span></div><p class="words"><b class="w">FAI IPPI 4</b>&nbsp;<i>/</i> <b class="w">FAI Sporting Licence</b>&nbsp;<i>/</i> <span class="w">Medical &amp; travel insurance</span>&nbsp;<i>/</i> <span class="w">Third-party liability</span>&nbsp;<i>/</i> <span class="w">Mobile phone</span>&nbsp;<i>/</i> <span class="w">Repacked reserve</span>&nbsp;<i>/</i> <span class="w">Certified helmet</span>&nbsp;<i>/</i> <span class="w">Harness with back protection</span>&nbsp;<i>/</i> <span class="w">2 m radio · 143.900 MHz</span>&nbsp;<i>/</i> <span class="w">SRS rules</span></p></div></div><p class="tnote"><b>Glider class</b><span>EN-C and below. No CCC or EN-D wings.</span><a class="btn btn-o" href="https://airtribune.com/srs-2027-wsf/">Register on Airtribune</a></p></div>
@@ -486,7 +496,7 @@ footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 </footer>
 
 <script>
-const EVT = {"start": "2027-07-17", "end": "2027-07-24", "tz": 2, "seed": 2341};
+const EVT = {"start": "2027-07-17", "end": "2027-07-24", "tz": 2, "seed": 2341, "ll": [46.28, 13.14], "venue": "Gemona"};
 const $ = s => document.querySelector(s);
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* countdown to day 1, 09:00 local (estimate) */
@@ -672,22 +682,56 @@ function launchMark(sel, f, big){
 const climbCol = d3.scaleLinear([0.5,1.6,3.2],["#FFB07A","#FF7A2E","#FF5F00"]).clamp(true);
 
 
-/* illustrative task, same generator and seed as the season calendar */
+/* venue map: shaded relief (AWS terrarium elevation tiles) with KK7 skyways or thermals on top.
+   KK7 rules: send ?src=<our hostname>, fetch only the tiles shown, stay under 10 requests a second. */
 let taskDrawn = false;
 function drawTask(){ if (taskDrawn) return; taskDrawn = true;
-  const svgEl = $("#task"), bb = svgEl.getBoundingClientRect(), W = Math.round(bb.width) || 600, H = Math.round(bb.height) || 340;
-  const sel = d3.select(svgEl).attr("viewBox",`0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid slice");
-  const chk = addChk(sel), seed = EVT.seed;
-  terrain(sel, seed, W, H, 1.1);
-  const fit = bestFit(makeTask(seed), W, H, [60,46]), f = fit.f, task = fit.t;
-  drawCyl(sel, task, f, {labels:true, big:true, chk});
-  const R = task.route.map(f);
-  sel.append("path").attr("d", d3.line()(R)).attr("fill","none").attr("stroke","#03100F").attr("stroke-width",5).attr("opacity",.7);
-  const route = sel.append("path").attr("d", d3.line()(R)).attr("fill","none").attr("stroke","#FFFFFF").attr("stroke-width",2);
-  launchMark(sel, f, true);
-  chip(sel, W, H, `${task.total.toFixed(1)} km · ${task.cyl.length-2} turnpoints`, false);
-  if (!reduce){ const L = route.node().getTotalLength(); route.attr("stroke-dasharray",L).attr("stroke-dashoffset",L);
-    route.transition().duration(1800).ease(d3.easeCubicInOut).attr("stroke-dashoffset",0); }
+  const box = $("#skymap"), cv = box.querySelector("canvas"), W = box.clientWidth, H = box.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  const ctx = cv.getContext("2d"); ctx.scale(dpr, dpr);
+  const Z = 11, N = 2**Z, TS = 256, [lat, lon] = EVT.ll;
+  const wx = (lon + 180)/360*N*TS, wy = (1 - Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*N*TS;   // venue in world pixels
+  const ox = wx - W/2, oy = wy - H/2, tx0 = Math.floor(ox/TS), tx1 = Math.floor((ox + W)/TS), ty0 = Math.floor(oy/TS), ty1 = Math.floor((oy + H)/TS);
+  const tiles = []; for (let x = tx0; x <= tx1; x++) for (let y = ty0; y <= ty1; y++) tiles.push([x, y]);
+  const SRC = encodeURIComponent(/\./.test(location.hostname) ? location.hostname : "paraglidingatlas-maker.github.io");
+  let sent = []; const slot = () => new Promise(res => { const go = () => { const t = performance.now(); sent = sent.filter(s => t - s < 1000); if (sent.length < 8){ sent.push(t); res(); } else setTimeout(go, 130); }; go(); });
+  const load = (url, kk7) => (kk7 ? slot() : Promise.resolve()).then(() => new Promise(res => { const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => res(im); im.onerror = () => res(null); im.src = url; }));
+  // relief: decode elevation, hillshade from the north-west, tint in the site colours
+  const relief = document.createElement("canvas"); relief.width = W; relief.height = H;
+  const rel = Promise.all(tiles.map(([x, y]) => load(`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${Z}/${x}/${y}.png`).then(im => ({x, y, im})))).then(rs => {
+    const m = document.createElement("canvas"), mw = (tx1 - tx0 + 1)*TS, mh = (ty1 - ty0 + 1)*TS; m.width = mw; m.height = mh;
+    const mc = m.getContext("2d"); rs.forEach(r => r.im && mc.drawImage(r.im, (r.x - tx0)*TS, (r.y - ty0)*TS));
+    let d; try { d = mc.getImageData(0, 0, mw, mh).data; } catch(e){ return; }
+    const E = new Float32Array(mw*mh); for (let i = 0; i < mw*mh; i++) E[i] = d[i*4]*256 + d[i*4+1] + d[i*4+2]/256 - 32768;
+    const mpp = 40075016.7*Math.cos(lat*Math.PI/180)/(N*TS), az = 315*Math.PI/180, alt = 45*Math.PI/180;
+    const out = mc.createImageData(W, H), o = out.data, sx = Math.round(ox - tx0*TS), sy = Math.round(oy - ty0*TS);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){
+      const X = Math.min(mw - 2, Math.max(1, x + sx)), Y = Math.min(mh - 2, Math.max(1, y + sy)), i = Y*mw + X;
+      const dzdx = (E[i + 1] - E[i - 1])/(2*mpp)*1.6, dzdy = (E[i + mw] - E[i - mw])/(2*mpp)*1.6;
+      const slope = Math.atan(Math.hypot(dzdx, dzdy)), aspect = Math.atan2(dzdy, -dzdx);
+      const h = Math.max(0, Math.sin(alt)*Math.cos(slope) + Math.cos(alt)*Math.sin(slope)*Math.cos(az - Math.PI/2 - aspect));
+      const k = (y*W + x)*4; o[k] = 4 + 60*h; o[k+1] = 22 + 104*h; o[k+2] = 24 + 104*h; o[k+3] = 255; }
+    relief.getContext("2d").putImageData(out, 0, 0);
+  });
+  const cache = {};
+  const layer = name => cache[name] || (cache[name] = Promise.all(tiles.map(([x, y]) =>
+    load(`https://thermal.kk7.ch/tiles/${name}_all_all/${Z}/${x}/${N - 1 - y}.png?src=${SRC}`, true).then(im => ({x, y, im})))));
+  let mode = "skyways";
+  const paint = () => rel.then(() => (mode ? layer(mode) : Promise.resolve([]))).then(rs => {
+    ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.fillStyle = "#03100F"; ctx.fillRect(0, 0, W, H); ctx.drawImage(relief, 0, 0);
+    ctx.globalCompositeOperation = "screen"; ctx.globalAlpha = .95;
+    rs.forEach(r => r.im && ctx.drawImage(r.im, r.x*TS - ox, r.y*TS - oy, TS, TS));
+    ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
+    // venue marker + name
+    const cx = W/2, cy = H/2; ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI*2); ctx.fillStyle = "#FF5F00"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#fff"; ctx.stroke();
+    ctx.font = "800 italic 15px Archivo, system-ui, sans-serif"; ctx.textBaseline = "middle"; ctx.lineWidth = 4; ctx.strokeStyle = "rgba(3,16,15,.85)";
+    ctx.strokeText(EVT.venue.toUpperCase(), cx + 13, cy); ctx.fillStyle = "#fff"; ctx.fillText(EVT.venue.toUpperCase(), cx + 13, cy);
+  });
+  // scale bar
+  const mpp = 40075016.7*Math.cos(lat*Math.PI/180)/(N*TS), raw = mpp*W*.22, p10 = 10**Math.floor(Math.log10(raw)), nice = [5,2,1].map(k => k*p10).find(v => v <= raw);
+  box.querySelector(".sb i").style.width = Math.round(nice/mpp) + "px"; box.querySelector(".sb span").textContent = nice >= 1000 ? nice/1000 + " km" : nice + " m";
+  box.querySelectorAll("[data-sky]").forEach(b => b.onclick = () => { mode = b.dataset.sky; box.querySelectorAll("[data-sky]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
+  paint();
 }
 /* tabs */
 const tabs = [...document.querySelectorAll('[role="tab"]')];

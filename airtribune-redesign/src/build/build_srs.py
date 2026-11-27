@@ -248,6 +248,9 @@ def onsite_block(e, feats):
 WEEKDAY = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
 MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
+# venue coordinates for the Flying site skyways map (same points as the season calendar rows)
+VENUE_LL = {"srs-2027-1": [45.95, 13.73], "srs-2027-2": [44.40, 6.33], "srs-2027-wsf": [46.28, 13.14], "srs-2027-3": [41.37, 21.25], "srs-2027-4": [43.97, 6.51]}
+
 def text_of(slug, part=""):
     return json.load(open(f"{SRC}/{slug}{part}.json"))["text"]
 
@@ -371,7 +374,7 @@ for e in EVENTS:
       "STORY": "".join(f"<p>{esc(x)}</p>" for x in cc["story"]),
       "SCHEDULE": "".join(f"<li><b>{esc(a)}</b><span>{esc(b)}</span></li>" for a,b in cc["sched"]),
       "SITESHORT": esc(cc["siteshort"]), "PRIZES": prizes, "TRAVEL": trav_html, "RAIL": rail,
-      "EVTJSON": json.dumps({k: e[k] for k in ("start","end","tz","seed")}), "HELPERS": helpers,
+      "EVTJSON": json.dumps({**{k: e[k] for k in ("start","end","tz","seed")}, "ll": VENUE_LL[e["at"]], "venue": e["venue"]}), "HELPERS": helpers,
     }
     ph = photos.fields(e["at"], e["venue"])
     rep.update(ph); rep["CARD3"] = ph.pop("TRIP"); rep.pop("TRIP")
