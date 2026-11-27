@@ -49,6 +49,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .vgrp button{font-family:var(--f-display);font-size:15px;font-weight:600;color:rgba(255,255,255,.5);padding:4px 0;transition:color .15s}
 .vgrp button:hover{color:var(--ink)}
 .vgrp button[aria-pressed="true"]{color:var(--ink);font-weight:800}
+.instr{position:fixed;top:128px;right:var(--gut);z-index:5;display:flex;flex-direction:row-reverse;align-items:center;gap:10px}
+.compass{width:46px;height:46px;border-radius:50%;background:rgba(3,16,15,.7);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(10px);display:grid;place-items:center;cursor:pointer;padding:0}
+.compass:hover{border-color:#FF5F00}
+.compass svg{width:38px;height:38px;overflow:visible}
+.windc{margin:0;display:flex;flex-direction:column;align-items:flex-end;gap:1px;text-align:right;white-space:nowrap}
+.windc b{font-weight:800;font-size:14px;color:#fff}
+.windc b i{font-style:normal;color:#7FD3FF;margin-right:5px}
+.windc span{font-size:10.5px;color:var(--muted)}
 .proto{position:fixed;top:78px;right:var(--gut);z-index:5;font-size:11px;color:var(--muted);text-align:right;max-width:320px;line-height:1.45}
 
 /* ---------- left: race order ---------- */
@@ -126,6 +134,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .vgrp:last-child > span{display:inline}
   .vgrp button{font-size:13.5px}
   .proto{display:none}
+  .instr{top:auto;bottom:calc(var(--pilotH,250px));right:12px}
   .board{display:none;top:auto;bottom:150px;left:var(--gut);right:var(--gut);width:auto;background:rgba(3,16,15,.94);padding:14px 16px;border-radius:6px;max-height:52vh;overflow:auto}
   body.list .board{display:block}
   body.list .pilot{visibility:hidden}
@@ -190,6 +199,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     </div>
   </div>
 </header>
+<div class="instr" aria-label="Compass and wind">
+  <button class="compass" id="compass" aria-label="Turn the map north up" title="North up"><svg viewBox="0 0 40 40" aria-hidden="true"><g id="compassW" style="transform-origin:20px 20px"><path d="M20 -3.5 L15.5 -10 L24.5 -10Z" fill="#7FD3FF" stroke="#03100F" stroke-width="1"/></g><g id="compassN" style="transform-origin:20px 20px"><path d="M20 5 L25 20 L20 17 L15 20Z" fill="#FF5F00"/><path d="M20 35 L25 20 L20 23 L15 20Z" fill="rgba(255,255,255,.55)"/><text x="20" y="4" text-anchor="middle" font-size="6" font-weight="800" fill="#fff" font-family="Inter, sans-serif">N</text></g></svg></button>
+  <p class="windc" id="windc"><b id="windV">—</b><span id="windS">—</span></p>
+</div>
 <p class="proto">Prototype. Real tracks from the official IGC files, drawn at their GPS altitude over real terrain (no exaggeration).</p>
 
 <aside class="board" aria-label="Race order">
@@ -490,10 +503,30 @@ document.querySelectorAll("[data-sky]").forEach(b => b.onclick = () => setSky(b.
 
 const lerpAng = (a, b, k) => { let d = ((b - a + 540) % 360) - 180; return a + d * k; };
 let last = performance.now(), shadowAt = 0, uiAt = 0;
+/* wind aloft: hourly model wind at 700 hPa (about 3,200 m) over take-off, 10 Nov 2026, local time.
+   Source: ECMWF IFS 0.25° via the Open-Meteo historical forecast API (ICON and GFS agree: SSE, 3–8 km/h). [hour, km/h, from°] */
+const ALOFT = { src: "ECMWF IFS", lvl: "3,200 m", h: [[11, 4.2, 153], [12, 3.3, 158], [13, 2.8, 153], [14, 2.6, 135], [15, 2.8, 117]] };
+function aloftAt(sec) {
+  const H = ALOFT.h, x = Math.max(H[0][0], Math.min(H.at(-1)[0], sec / 3600)), i = Math.min(H.length - 2, Math.floor(x - H[0][0])), u = x - H[i][0];
+  const a = H[i], b = H[i + 1], d = ((b[2] - a[2] + 540) % 360) - 180;
+  return { kmh: a[1] + (b[1] - a[1]) * u, from: (a[2] + d * u + 360) % 360 };
+}
+const DIR16 = d => ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"][Math.round(d / 22.5) % 16];
+$("compass").onclick = () => map.easeTo({ bearing: 0, duration: 800 });
+let windKey = "";
+function instruments() {
+  const b = map.getBearing(), sec = 12 * 3600 + 15 * 60 + now, w = aloftAt(sec);
+  $("compassN").style.transform = `rotate(${-b}deg)`; $("compassW").style.transform = `rotate(${w.from - b}deg)`;
+  const hh = String(Math.floor(sec / 3600) % 24).padStart(2, "0") + ":00", key = hh + DIR16(w.from) + Math.round(w.kmh);
+  if (key !== windKey) { windKey = key;
+    $("windV").innerHTML = `<i>Wind</i>${DIR16(w.from)} ${Math.max(1, Math.round(w.kmh))} km/h`; $("windS").textContent = `${ALOFT.lvl} · ${hh} · ${ALOFT.src}`;
+    $("windc").title = `Wind at ${ALOFT.lvl} (700 hPa) over take-off around ${hh} local: from ${Math.round(w.from)}° at ${w.kmh.toFixed(1)} km/h. Model: ECMWF IFS 0.25° via Open-Meteo. The blue mark on the compass shows where it blows from.`; }
+}
 function frame(ts) {
   const dt = Math.min(0.1, (ts - last) / 1000); last = ts;
   if (playing) { now += dt * speed; if (now >= T1) { now = T1; setPlaying(false); } }
   const st = computeStates(now), s = st.find(x => x.p.id === selected);
+  instruments();
   leader = now >= 0 ? st[0].p.id : null;
   overlay.setProps({ layers: layers(st) });
 
