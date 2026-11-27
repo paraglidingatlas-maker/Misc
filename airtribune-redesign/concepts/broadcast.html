@@ -292,10 +292,10 @@ const lift = (ll, alt) => { const g = ground(ll); return g == null ? alt : alt +
 /* ================= frames ================= */
 const tSec = hhmmss => { const [h, m, s] = hhmmss.split(":").map(Number); return h * 3600 + m * 60 + (s || 0) - GATE; };
 const FRAMES = {
-  1: { t: tSec("12:17:00"), cam: { c: [10, 3], zoom: 10.05, pitch: 56, bearing: 28 }, show: ["title"], marks: true, trail: 120, feat: [] },
+  1: { t: tSec("12:17:00"), cam: { c: [11, 4], zoom: 10.2, pitch: 56, bearing: 28, pad: { left: 900, top: 60, right: 0, bottom: 0 } }, show: ["title"], marks: true, walls: true, trail: 120, feat: [] },
   2: { t: tSec("13:20:00"), cam: "groups", show: ["tower", "ladder"], groups: true, feat: "top3", trail: 420 },
-  3: { t: tSec("13:51:40"), cam: { c: [10.15, 4.55], zoom: 13.55, pitch: 66, bearing: 25 }, show: ["tower", "ladder", "l3", "strip"], thermals: true, feat: ["VARGA", "QUINTANILLA", "LUEBBERKE"], l3: "VARGA", trail: 600, strip: ["The move", "5 km to go: three pilots find the stronger core"] },
-  4: { t: tSec("13:59:20"), cam: { c: [6.5, 6.3], zoom: 13.1, pitch: 62, bearing: 205 }, show: ["result", "big"], feat: ["VARGA", "QUINTANILLA", "LUEBBERKE"], trail: 900, marks: "goal" }
+  3: { t: tSec("13:51:40"), cam: { c: [10.3, 5.0], zoom: 14.1, pitch: 62, bearing: 262, pad: { left: 420, top: 120, right: 0, bottom: 260 } }, show: ["tower", "ladder", "l3", "strip"], thermals: true, feat: ["VARGA", "QUINTANILLA", "LUEBBERKE"], l3: "VARGA", trail: 600, strip: ["The move", "5 km to go: three pilots find the stronger core"] },
+  4: { t: tSec("13:59:20"), cam: { c: [6.5, 6.3], zoom: 13.1, pitch: 62, bearing: 205 }, show: ["result", "big"], walls: true, feat: ["VARGA", "QUINTANILLA", "LUEBBERKE"], trail: 900, marks: "goal" }
 };
 const q = new URLSearchParams(location.hash.slice(1));
 const F = FRAMES[q.get("f") || 2];
@@ -322,7 +322,7 @@ function build() {
     for (let i = i0; i <= i1; i++) { const q = p.path[i]; path.push([q[0], q[1], lift([q[0], q[1]], q[2])]); ts.push(p.ts[i]); } return { id: p.id, path, ts }; };
   const trail = pilots.filter(p => !feat.has(p.id)).map(p => win(p, F.trail)).filter(Boolean), ft = pilots.filter(p => feat.has(p.id)).map(p => win(p, F.trail * 1.6)).filter(Boolean);
   const L = [
-    new SolidPolygonLayer({ id: "walls", data: cyl.filter(c => c.kind === "Goal"), getPolygon: c => { const o = circle(c.c, c.r + Math.max(0.02, c.r * .003), 140), i = circle(c.c, Math.max(.01, c.r - Math.max(0.02, c.r * .003)), 140).reverse(); return [o.map(p => [...p, 0]), i.map(p => [...p, 0])]; }, extruded: true, getElevation: 3300 * EX, getFillColor: [...OR, 38], material: false, parameters: { depthMask: false } }),
+    new SolidPolygonLayer({ id: "walls", data: F.walls ? cyl.filter(c => c.kind === "Goal") : [], getPolygon: c => { const o = circle(c.c, c.r + Math.max(0.02, c.r * .003), 140), i = circle(c.c, Math.max(.01, c.r - Math.max(0.02, c.r * .003)), 140).reverse(); return [o.map(p => [...p, 0]), i.map(p => [...p, 0])]; }, extruded: true, getElevation: 3300 * EX, getFillColor: [...OR, 38], material: false, parameters: { depthMask: false } }),
     new TripsLayer({ id: "fieldGlow", data: trail, getPath: p => p.path, getTimestamps: p => p.ts, getColor: [...WH, 40], widthUnits: "pixels", getWidth: 5, trailLength: F.trail, currentTime: now, fadeTrail: true, capRounded: true, jointRounded: true, parameters: { depthMask: false } }),
     new TripsLayer({ id: "field", data: trail, getPath: p => p.path, getTimestamps: p => p.ts, getColor: [...WH, 190], widthUnits: "pixels", getWidth: 1.3, trailLength: F.trail, currentTime: now, fadeTrail: true, capRounded: true, jointRounded: true }),
     new TripsLayer({ id: "featGlow", data: ft, getPath: p => p.path, getTimestamps: p => p.ts, getColor: [...OR, 70], widthUnits: "pixels", getWidth: 11, trailLength: F.trail * 1.6, currentTime: now, fadeTrail: true, capRounded: true, jointRounded: true, parameters: { depthMask: false } }),
@@ -334,8 +334,8 @@ function build() {
   ];
   if (F.groups) L.push(new PolygonLayer({ id: "groups", data: G.slice(0, 3), getPolygon: g => g.hull.map(h => [...toLL(h[0], h[1]), lift(toLL(g.cx, g.cy), g.alt) - 40]), filled: true, stroked: true, getFillColor: (g, { index }) => index === 0 ? [...OR, 34] : [...WH, 20], getLineColor: (g, { index }) => index === 0 ? [...OR, 230] : [...WH, 160], getLineWidth: 2, lineWidthUnits: "pixels", parameters: { depthMask: false } }));
   if (F.thermals) for (const [i, th] of THERMALS.entries()) {
-    const ll = toLL(th.c[0], th.c[1]), g0 = ground(ll) || 1500, rings = [];
-    for (let k = 0; k < 16; k++) { const h = g0 + (th.top - g0) * (k + 1) / 16, r = 0.10 + 0.07 * (k / 15); rings.push({ path: circle(th.c, r, 48).map(p => [...p, lift(ll, h)]), a: 40 + 150 * k / 15 }); }
+    const ll = toLL(th.c[0], th.c[1]), g0 = (ground(ll) || 1500 * EX) / EX + 40, rings = [];
+    for (let k = 0; k < 18; k++) { const h = g0 + (th.top - g0) * k / 17, r = 0.06 + 0.12 * (k / 17); rings.push({ path: circle(th.c, r, 48).map(p => [...p, lift(ll, h)]), a: 30 + 170 * k / 17 }); }
     L.push(new PathLayer({ id: "th" + i, data: rings, getPath: d => d.path, getColor: d => th.hot ? [...OR, d.a] : [...WH, d.a * .6], getWidth: th.hot ? 2.2 : 1.6, widthUnits: "pixels", parameters: { depthMask: false } }));
   }
   overlay.setProps({ layers: L });
@@ -389,12 +389,11 @@ function graphics(r) {
     tags.push(`<div class="tag" style="left:${p[0]}px;top:${y - dy}px"><i>${s.pos || ""}</i><b>${surname(s.p)}</b></div>`);
   }
   window.__tagTop = boxes.length ? Math.min(...boxes.map(b => b[1])) - 40 : null;
-  if (F.marks) for (const c of cyl.filter(c => F.marks === true || c.kind === "Goal")) {
+  if (F.marks) for (const c of cyl.filter(c => (F.marks === true && c.code !== cyl[3].code) || c.kind === "Goal")) {
     const ll = [c.lon, c.lat], p = proj(ll, (ground(ll) || c.elev || 1500) * 1 + 120 * EX);
     const lab = c.kind === "SSS" ? "Start" : c.kind === "Goal" ? "Goal" : "TP" + (cyl.indexOf(c) + 1);
     if (p && p[0] > 40 && p[0] < 1880 && p[1] > 120 && p[1] < 1040) tags.push(`<div class="mark ${c.kind === "Goal" ? "goal" : ""}" style="left:${p[0]}px;top:${p[1]}px"><b>${lab}</b><span>${title(c.name)} · ${c.r >= 1 ? c.r + " km" : c.r * 1000 + " m"}</span></div>`);
   }
-  if (F.marks === true) { const p = proj([TO.lon, TO.lat], (ground([TO.lon, TO.lat]) || 2200) + 150 * EX); if (p) tags.push(`<div class="mark" style="left:${p[0]}px;top:${p[1]}px"><b>Take-off</b><span>${title(TO.name)}</span></div>`); }
   if (F.groups) G.slice(0, 2).forEach((g, i) => {
     const top = g.m.reduce((m, s) => Math.max(m, s.z), 0), p = proj(toLL(g.cx, g.cy), top + 60); if (p && i === 0 && window.__tagTop != null) p[1] = Math.min(p[1], window.__tagTop);
     const name = i === 0 ? (g.m.length >= 8 ? "Lead gaggle" : "Lead group") : (g.m.length >= 8 ? "Main gaggle" : "Chase group");
@@ -403,7 +402,7 @@ function graphics(r) {
   });
   if (F.thermals) THERMALS.forEach((th, i) => {
     const ll = toLL(th.c[0], th.c[1]), p = proj(ll, lift(ll, th.top) + 30); if (!p) return;
-    const bx = i === 0 ? Math.min(1500, p[0] + 170) : Math.max(470, p[0] - 500), by = i === 0 ? p[1] - 190 : p[1] - 210;
+    const bx = i === 0 ? Math.min(1520, p[0] + 160) : Math.max(470, p[0] - 500), by = Math.max(240, p[1] - 200);
     tags.push(`<div class="call ${th.hot ? "hot" : "cool"}" style="left:${bx}px;top:${by}px"><div class="bar"></div><div class="k">${th.k}</div><div class="v">${th.v}<small>m/s</small></div><div class="w">${th.w}</div></div>`);
     const ax = i === 0 ? bx - 14 : bx + 344;
     lines += `<polyline points="${p[0]},${p[1]} ${ax},${by + 30} ${i === 0 ? ax - 0 : ax},${by + 30}" fill="none" stroke="${th.hot ? "#ff7517" : "#b4b4b4"}" stroke-width="2"/><circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${th.hot ? "#ff7517" : "#b4b4b4"}"/>`;
@@ -413,13 +412,13 @@ function graphics(r) {
   if (F.strip) { $("stripK").textContent = F.strip[0]; $("stripV").textContent = F.strip[1]; }
   if (F.l3) {
     const s = st.find(s => s.p.last === F.l3), p = s.p;
-    $("l3").innerHTML = `<div class="pos">${s.pos}</div><div class="body"><h2><small>${p.first}</small>${surname(p)}</h2><p><b>${NAT[p.nat] || p.nat}</b> · ${p.sponsor || ""} ${(p.glider || "").split("/")[0]} · Overall rank before task ${"—"}</p></div>
+    $("l3").innerHTML = `<div class="pos">${s.pos}</div><div class="body"><h2><small>${p.first}</small>${surname(p)}</h2><p><b>${NAT[p.nat] || p.nat}</b> · ${p.sponsor || ""} ${(p.glider || "").split("/")[0]}</p></div>
       <div class="stats"><div><b class="tn">${Math.round(s.alt).toLocaleString("en")}<small>m</small></b><span>Altitude</span></div><div class="${s.vario > 0.3 ? "up" : ""}"><b class="tn">${s.vario > 0 ? "+" : ""}${s.vario.toFixed(1)}<small>m/s</small></b><span>Climb</span></div><div><b class="tn">${s.dtg.toFixed(1)}<small>km</small></b><span>To goal</span></div></div>`;
   }
   if (F.show.includes("result")) {
     const top = pilots.filter(p => p.rank <= 3).sort((a, b) => a.rank - b.rank), win = top[0];
-    $("result").innerHTML = `<div class="hd">Task 3 result<span>58.7 km</span></div><ol>` + top.map(p => `<li><span class="p">${p.rank}</span><span class="s">${surname(p)}<span>${p.first} · ${NAT[p.nat] || p.nat}</span></span><span class="t tn">${p.time.replace(/^0/, "")}<span>${p.rank === 1 ? (58.71 / ((tSec(p.finish) - 0) / 3600)).toFixed(1) + " km/h" : "+" + hms(tSec(p.finish) - tSec(win.finish)).replace(/^0:0?/, "")}</span></span></li>`).join("") +
-      `</ol><div class="ft"><span><b>88</b>of 106 in goal</span><span><b>3</b>pilots within 2 min</span></div>`;
+    $("result").innerHTML = `<div class="hd">Task 3 result<span>58.7 km</span></div><ol>` + top.map(p => `<li><span class="p">${p.rank}</span><span class="s">${surname(p)}<span>${p.first} · ${NAT[p.nat] || p.nat}</span></span><span class="t tn">${p.time.replace(/^0/, "")}<span>${p.score.toFixed(1)} pts · ${p.speed.toFixed(1)} km/h</span></span></li>`).join("") +
+      `</ol><div class="ft"><span><b>88</b>of 106 in goal</span><span><b>3</b>pilots within 66 s</span></div>`;
     $("big").innerHTML = `<div class="k">Task 3 winner</div><h2>${surname(win)}</h2><p><b>${win.first} ${surname(win)}</b> · ${NAT[win.nat]} · ${win.time.replace(/^0/, "")} for 58.7 km</p>`;
   }
 }

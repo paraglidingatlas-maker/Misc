@@ -32,7 +32,7 @@ for p in order:
     up = [w for w in r["name"].split() if w.isupper() and len(w) > 1]
     first = " ".join(w for w in r["name"].split() if w not in up)
     pilots.append(dict(id=p, first=first, last=" ".join(up) if up else r["name"].split()[-1].upper(), nat=r["nation"],
-                       rank=r["rank"], glider=r.get("glider"), sponsor=r.get("sponsor"), time=r.get("time"),
+                       rank=r["rank"], score=r.get("score"), speed=r.get("speed_kmh"), glider=r.get("glider"), sponsor=r.get("sponsor"), time=r.get("time"),
                        finish=r.get("finish"), goal=bool(r.get("goal")), tags=[round(t) for t in f["tags"]], t0=int(t0), d=d))
 
 tps = [dict(name=c["name"], code=c["code"], lat=c["lat"], lon=c["lon"], elev=c.get("elev"), r=c["radius_km"],
