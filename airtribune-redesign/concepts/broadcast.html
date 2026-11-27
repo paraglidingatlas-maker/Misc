@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broadcast replay · SRS Tapalpa Task 3</title>
+<meta name="description" content="Style frames for the Paragliding Atlas daily highlights: Task 3 of SRS Tapalpa 2026 replayed in 3D with a broadcast graphics package.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+:root{
+  --bg:#141519; --card:#202127; --orange:#ff7517; --orange-lite:#ff8a3d; --white:#f6f4f4; --g1:#b4b4b4; --g2:#737373;
+  --line:rgba(180,180,180,.16); --up:#6FE0A0; --dn:#FF7A6B;
+  --disp:"Poppins",Arial,sans-serif; --body:"DM Sans",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+#map{position:fixed;inset:0}
+.maplibregl-ctrl-attrib{display:none}
+/* graphics are designed on a 1920×1080 stage and scaled to the window */
+#stage{position:fixed;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;pointer-events:none}
+.vig{position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 50% 45%,rgba(20,21,25,0) 55%,rgba(10,11,13,.55) 100%),
+  linear-gradient(180deg,rgba(12,13,16,.7) 0,rgba(12,13,16,0) 170px),
+  linear-gradient(0deg,rgba(12,13,16,.85) 0,rgba(12,13,16,0) 230px)}
+.hide{display:none!important}
+.tn{font-variant-numeric:tabular-nums}
+
+/* ---------- bug: logo + event, clock ---------- */
+.bug{position:absolute;left:64px;top:48px;display:flex;align-items:center;gap:22px}
+.bug img{height:40px;width:auto;display:block}
+.bug .rule{width:2px;height:40px;background:var(--orange)}
+.bug .ev{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:.06em;text-transform:uppercase;line-height:1.15}
+.bug .ev span{display:block;font-family:var(--body);font-weight:500;font-size:15px;letter-spacing:.02em;text-transform:none;color:var(--g1)}
+.clock{position:absolute;right:64px;top:44px;text-align:right}
+.clock b{display:block;font-family:var(--disp);font-weight:800;font-size:46px;line-height:1;letter-spacing:-.01em}
+.clock span{display:block;margin-top:8px;font-size:15px;color:var(--g1);letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+.clock span i{font-style:normal;color:var(--orange);font-weight:700}
+
+/* ---------- timing tower ---------- */
+.tower{position:absolute;left:64px;top:150px;width:356px}
+.tower .hd{display:flex;align-items:stretch;height:46px;background:var(--orange);color:#141519}
+.tower .hd b{font-family:var(--disp);font-weight:800;font-size:17px;letter-spacing:.07em;text-transform:uppercase;display:flex;align-items:center;padding:0 16px}
+.tower .hd span{margin-left:auto;display:flex;align-items:center;padding:0 14px;font-weight:700;font-size:14px;background:rgba(20,21,25,.12)}
+.tower ol{list-style:none;background:rgba(20,21,25,.86);backdrop-filter:blur(6px)}
+.tower li{display:grid;grid-template-columns:44px 44px 1fr 84px;align-items:center;height:40px;border-bottom:1px solid var(--line);font-size:16px}
+.tower li .p{font-family:var(--disp);font-weight:800;font-size:17px;text-align:center}
+.tower li .n{font-size:12px;color:var(--g2);font-weight:700;letter-spacing:.06em}
+.tower li .s{font-family:var(--disp);font-weight:600;font-size:17px;letter-spacing:.02em;white-space:nowrap;overflow:hidden}
+.tower li .g{text-align:right;padding-right:14px;color:var(--g1);font-weight:500}
+.tower li.f{background:linear-gradient(90deg,rgba(255,117,23,.28),rgba(255,117,23,0) 80%)}
+.tower li.f .p{color:var(--orange)}
+.tower li.grp{height:28px;font-size:11px;color:var(--orange);letter-spacing:.12em;font-weight:700;text-transform:uppercase;display:block;padding:7px 14px 0 14px;background:rgba(255,117,23,.06)}
+
+/* ---------- course ladder ---------- */
+.ladder{position:absolute;left:150px;right:150px;bottom:62px;height:70px}
+.ladder .rail{position:absolute;left:0;right:0;top:38px;height:3px;background:rgba(246,244,244,.22)}
+.ladder .done{position:absolute;left:0;top:38px;height:3px;background:var(--orange)}
+.ladder .tk{position:absolute;top:30px;width:2px;height:19px;background:rgba(246,244,244,.6)}
+.ladder .tk span{position:absolute;top:24px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--g1);white-space:nowrap}
+.ladder .dot{position:absolute;top:35px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:rgba(246,244,244,.75);box-shadow:0 0 6px rgba(246,244,244,.5)}
+.ladder .dot.f{width:13px;height:13px;top:33px;margin-left:-6.5px;background:var(--orange);box-shadow:0 0 10px var(--orange)}
+.ladder .lab{position:absolute;top:0;transform:translateX(-50%);font-family:var(--disp);font-weight:700;font-size:14px;white-space:nowrap;letter-spacing:.03em}
+.ladder .lab i{font-style:normal;color:var(--orange);margin-right:5px}
+
+/* ---------- labels in the scene ---------- */
+#tags{position:absolute;inset:0}
+.tag{position:absolute;transform:translate(-50%,-100%);display:flex;align-items:stretch;white-space:nowrap;font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.03em;margin-top:-14px}
+.tag i{font-style:normal;background:var(--orange);color:#141519;padding:3px 7px;font-weight:800}
+.tag b{background:rgba(20,21,25,.88);padding:3px 9px;font-weight:700}
+.tag.dim i{background:var(--white)}
+.mark{position:absolute;transform:translate(-50%,-100%);margin-top:-8px;text-align:center;white-space:nowrap}
+.mark b{display:block;font-family:var(--disp);font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase}
+.mark span{display:block;font-size:13px;color:var(--g1);margin-top:2px}
+.mark.goal b{color:var(--orange)}
+.grp{position:absolute;transform:translate(-50%,-100%);margin-top:-22px;white-space:nowrap;text-align:center}
+.grp b{display:inline-block;font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.12em;text-transform:uppercase;border-bottom:2px solid var(--orange);padding-bottom:3px}
+.grp span{display:block;font-size:14px;color:var(--g1);margin-top:5px;font-weight:500}
+.grp span em{font-style:normal;color:var(--white);font-weight:700}
+
+/* callout with a leader line (drawn in SVG) */
+#lines{position:absolute;inset:0}
+.call{position:absolute;width:330px}
+.call .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--g1)}
+.call .v{font-family:var(--disp);font-weight:800;font-size:52px;line-height:1;margin-top:6px;letter-spacing:-.01em}
+.call .v small{font-size:22px;font-weight:700;margin-left:4px;color:var(--g1)}
+.call .w{font-size:16px;color:var(--white);margin-top:8px;line-height:1.35}
+.call.hot .v{color:var(--orange)}
+.call .bar{height:3px;width:56px;background:var(--orange);margin-bottom:12px}
+.call.cool .bar{background:var(--g1)}
+
+/* ---------- lower third ---------- */
+.l3{position:absolute;left:64px;bottom:170px;display:flex;align-items:stretch}
+.l3 .pos{width:92px;background:var(--orange);color:#141519;font-family:var(--disp);font-weight:900;font-size:64px;display:flex;align-items:center;justify-content:center}
+.l3 .body{background:rgba(20,21,25,.9);padding:16px 26px 16px 24px;backdrop-filter:blur(6px)}
+.l3 h2{font-family:var(--disp);font-weight:800;font-size:44px;line-height:1;letter-spacing:.01em;text-transform:uppercase}
+.l3 h2 small{font-weight:600;font-size:26px;color:var(--g1);margin-right:10px;text-transform:none}
+.l3 p{margin-top:8px;font-size:16px;color:var(--g1);letter-spacing:.03em}
+.l3 p b{color:var(--white);font-weight:700}
+.l3 .stats{display:flex;background:rgba(32,33,39,.92);border-left:1px solid var(--line)}
+.l3 .stats div{padding:16px 24px 0;min-width:136px}
+.l3 .stats b{display:block;font-family:var(--disp);font-weight:800;font-size:34px;line-height:1}
+.l3 .stats b small{font-size:16px;font-weight:600;color:var(--g1);margin-left:3px}
+.l3 .stats span{display:block;font-size:12px;color:var(--g2);letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-top:8px}
+.l3 .stats .up b{color:var(--up)}
+
+/* ---------- title card ---------- */
+.title{position:absolute;left:120px;top:250px;width:900px}
+.title .arc{width:520px;height:70px;display:block;margin-left:-6px}
+.title .kick{font-family:var(--disp);font-weight:700;font-size:22px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-top:6px}
+.title h1{font-family:var(--disp);font-weight:900;font-size:190px;line-height:.86;letter-spacing:-.025em;text-transform:uppercase;margin-top:14px}
+.title h1 span{display:block;font-size:64px;font-weight:700;letter-spacing:.02em;line-height:1.1;margin-top:18px;color:var(--white)}
+.title .facts{display:flex;gap:56px;margin-top:40px}
+.title .facts b{display:block;font-family:var(--disp);font-weight:800;font-size:46px;line-height:1}
+.title .facts span{display:block;font-size:14px;color:var(--g1);letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-top:8px}
+.title .host{margin-top:44px;font-size:17px;color:var(--g1)}
+.title .host b{color:var(--white)}
+
+/* ---------- headline strip ---------- */
+.strip{position:absolute;left:50%;top:150px;transform:translateX(-50%);display:flex;align-items:stretch;white-space:nowrap}
+.strip b{background:var(--orange);color:#141519;font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:.12em;text-transform:uppercase;padding:10px 18px}
+.strip span{background:rgba(20,21,25,.9);font-family:var(--disp);font-weight:600;font-size:18px;padding:10px 20px;letter-spacing:.02em}
+
+/* ---------- result ---------- */
+.result{position:absolute;right:64px;top:170px;width:560px}
+.result .hd{background:var(--orange);color:#141519;font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:.12em;text-transform:uppercase;padding:12px 20px;display:flex}
+.result .hd span{margin-left:auto;font-weight:700;letter-spacing:.04em}
+.result ol{list-style:none;background:rgba(20,21,25,.9)}
+.result li{display:grid;grid-template-columns:70px 1fr 120px;align-items:center;padding:16px 20px 16px 0;border-bottom:1px solid var(--line)}
+.result li .p{font-family:var(--disp);font-weight:900;font-size:40px;text-align:center}
+.result li:first-child .p{color:var(--orange)}
+.result li .s{font-family:var(--disp);font-weight:700;font-size:28px;line-height:1.05;text-transform:uppercase}
+.result li .s span{display:block;font-family:var(--body);font-weight:500;font-size:14px;color:var(--g1);text-transform:none;letter-spacing:.03em;margin-top:5px}
+.result li .t{text-align:right;font-family:var(--disp);font-weight:700;font-size:26px}
+.result li .t span{display:block;font-family:var(--body);font-size:13px;color:var(--g1);font-weight:500;margin-top:4px}
+.result .ft{background:rgba(32,33,39,.92);padding:14px 20px;font-size:15px;color:var(--g1);display:flex;gap:36px}
+.result .ft b{color:var(--white);font-family:var(--disp);font-weight:700;font-size:20px;margin-right:6px}
+.big{position:absolute;left:64px;bottom:120px}
+.big .k{font-family:var(--disp);font-weight:700;font-size:22px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange)}
+.big h2{font-family:var(--disp);font-weight:900;font-size:150px;line-height:.88;text-transform:uppercase;letter-spacing:-.02em;margin-top:10px}
+.big p{font-size:20px;color:var(--g1);margin-top:18px}
+.big p b{color:var(--white)}
+
+.credit{position:absolute;right:64px;bottom:22px;font-size:11px;color:rgba(246,244,244,.45);letter-spacing:.02em}
+#loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--g1);background:var(--bg);z-index:9;transition:opacity .6s}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="stage">
+  <div class="vig"></div>
+  <svg id="lines" width="1920" height="1080"></svg>
+  <div id="tags"></div>
+
+  <div class="bug"><img src="img/atlas-logo-white.png" alt="Paragliding Atlas"><div class="rule"></div><div class="ev">SRS Tapalpa 2026<span>Task 3 · Tapalpa, Mexico</span></div></div>
+  <div class="clock" id="clock"><b class="tn" id="clk">12:15:00</b><span id="clkSub"></span></div>
+
+  <div class="tower hide" id="tower"><div class="hd"><b>As it stands</b><span id="towerSub"></span></div><ol id="towerRows"></ol></div>
+  <div class="strip hide" id="strip"><b id="stripK"></b><span id="stripV"></span></div>
+
+  <div class="title hide" id="title">
+    <svg class="arc" viewBox="0 0 520 70"><path d="M4 66 Q260 -30 516 66" fill="none" stroke="#ff7517" stroke-width="7" stroke-linecap="round"/></svg>
+    <div class="kick">SRS Tapalpa 2026 · Daily highlights</div>
+    <h1>Task 3<span>Race to goal, 58.7 km</span></h1>
+    <div class="facts"><div><b>106</b><span>Pilots</span></div><div><b>12:15</b><span>Start gate</span></div><div><b>4</b><span>Turnpoints</span></div><div><b>88</b><span>Made goal</span></div></div>
+    <div class="host">With your host <b>Aninder Singh</b></div>
+  </div>
+
+  <div class="l3 hide" id="l3"></div>
+  <div class="result hide" id="result"></div>
+  <div class="big hide" id="big"></div>
+  <div class="ladder hide" id="ladder"></div>
+  <div class="credit">Tracks: official IGC files via Airtribune · Terrain: AWS Terrain Tiles (SRTM), height ×1.6 · Paragliding Atlas</div>
+</div>
+<div id="loading">Loading terrain</div>
+
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
+<script src="broadcast-data.js"></script>
+<script>
+/* ================= data ================= */
+const D = window.BC, TO = D.takeoff, STEP = D.step, EX = 1.6; // terrain exaggeration (tracks are lifted to match)
+const LAT0 = TO.lat * Math.PI / 180, KX = 111.32 * Math.cos(LAT0), KY = 110.574;
+const toLL = (x, y) => [TO.lon + x / KX, TO.lat + y / KY];          // km → lon/lat
+const toXY = (lon, lat) => [(lon - TO.lon) * KX, (lat - TO.lat) * KY];
+const GATE = 12 * 3600 + 15 * 60;
+const hms = s => { s = Math.round(s); return `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`; };
+const NAT = { HUN: "Hungary", MEX: "Mexico", USA: "USA", CAN: "Canada", GBR: "Great Britain", BRA: "Brazil", RSA: "South Africa", ZAF: "South Africa", POL: "Poland", JPN: "Japan", CHN: "China", LTU: "Lithuania", FRA: "France", ESP: "Spain", COL: "Colombia", ARG: "Argentina", CHI: "Chile", AUS: "Australia", IND: "India" };
+const title = s => s.toLowerCase().replace(/(^|[\s-])\S/g, m => m.toUpperCase());
+
+const pilots = D.pilots.map(p => {
+  const n = p.d.length / 4, T = new Float64Array(n), X = new Float64Array(n), Y = new Float64Array(n), A = new Float64Array(n), G = new Float64Array(n);
+  let x = 0, y = 0, a = 0, g = 0;
+  for (let i = 0; i < n; i++) { x += p.d[i * 4]; y += p.d[i * 4 + 1]; a += p.d[i * 4 + 2]; g += p.d[i * 4 + 3]; T[i] = p.t0 + i * STEP; X[i] = x / 100; Y[i] = y / 100; A[i] = a; G[i] = g < 0 ? NaN : g / 10; }
+  const path = Array.from(T, (_, i) => [...toLL(X[i], Y[i]), A[i]]);
+  return { ...p, T, X, Y, A, G, path, ts: Array.from(T), end: T[n - 1], fin: p.goal && p.tags.length === 5 ? p.tags[4] : null };
+});
+const byLast = Object.fromEntries(pilots.map(p => [p.last, p]));
+const cyl = D.tps.map(c => ({ ...c, c: toXY(c.lon, c.lat) }));
+
+function at(p, t) {
+  if (t < p.T[0] || t > p.end) return null;
+  const f = (t - p.T[0]) / STEP, i = Math.min(Math.floor(f), p.T.length - 1), j = Math.min(i + 1, p.T.length - 1), u = f - i;
+  const L = (V) => V[i] + (V[j] - V[i]) * u;
+  const k = s => Math.max(0, Math.min(p.T.length - 1, Math.round((t + s - p.T[0]) / STEP)));
+  const b = k(-12), e = k(8), vario = (p.A[e] - p.A[b]) / Math.max(1, (e - b) * STEP);
+  const x = L(p.X), y = L(p.Y), alt = L(p.A);
+  const g = Number.isNaN(p.G[i]) ? p.G[j] : L(p.G);
+  const inGoal = p.fin != null && t >= p.fin;
+  return { p, x, y, alt, vario, dtg: inGoal ? 0 : g, inGoal, ll: toLL(x, y) };
+}
+function field(t) {
+  const st = pilots.map(p => at(p, t)).filter(Boolean);
+  const live = st.filter(s => t >= 0 && (s.inGoal || !Number.isNaN(s.dtg)));
+  live.sort((a, b) => a.inGoal && b.inGoal ? a.p.fin - b.p.fin : a.inGoal !== b.inGoal ? (a.inGoal ? -1 : 1) : a.dtg - b.dtg);
+  live.forEach((s, i) => s.pos = i + 1);
+  return st;
+}
+// gaggles: single-linkage clusters of airborne pilots within 0.9 km and 350 m of height
+function groups(st) {
+  const air = st.filter(s => !s.inGoal && s.pos), n = air.length, lab = new Array(n).fill(-1);
+  let g = 0;
+  for (let i = 0; i < n; i++) {
+    if (lab[i] >= 0) continue; lab[i] = g; const q = [i];
+    while (q.length) { const a = air[q.pop()]; for (let j = 0; j < n; j++) if (lab[j] < 0 && Math.hypot(air[j].x - a.x, air[j].y - a.y) < 0.9 && Math.abs(air[j].alt - a.alt) < 350) { lab[j] = g; q.push(j); } }
+    g++;
+  }
+  const out = [];
+  for (let k = 0; k < g; k++) { const m = air.filter((_, i) => lab[i] === k); if (m.length >= 3) out.push({ m: m.sort((a, b) => a.pos - b.pos) }); }
+  out.sort((a, b) => a.m[0].pos - b.m[0].pos);
+  out.forEach(o => { o.front = o.m[0].dtg; o.cx = o.m.reduce((s, a) => s + a.x, 0) / o.m.length; o.cy = o.m.reduce((s, a) => s + a.y, 0) / o.m.length; o.alt = o.m.reduce((s, a) => s + a.alt, 0) / o.m.length; o.hull = hull(o.m.map(a => [a.x, a.y]), 0.28); });
+  return out;
+}
+function hull(pts, pad) { // convex hull, then pushed out by pad km and rounded
+  const P = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]), cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lo = [], up = [];
+  for (const p of P) { while (lo.length >= 2 && cr(lo.at(-2), lo.at(-1), p) <= 0) lo.pop(); lo.push(p); }
+  for (const p of P.slice().reverse()) { while (up.length >= 2 && cr(up.at(-2), up.at(-1), p) <= 0) up.pop(); up.push(p); }
+  const H = lo.slice(0, -1).concat(up.slice(0, -1)), out = [];
+  for (const h of H) for (let k = 0; k < 10; k++) { const a = k / 10 * Math.PI * 2; out.push([h[0] + pad * Math.cos(a), h[1] + pad * Math.sin(a)]); }
+  // hull of the padded points again so the outline is smooth and convex
+  return out.length >= 3 ? (function () { const Q = out.sort((a, b) => a[0] - b[0] || a[1] - b[1]), l = [], u = []; for (const p of Q) { while (l.length >= 2 && cr(l.at(-2), l.at(-1), p) <= 0) l.pop(); l.push(p); } for (const p of Q.slice().reverse()) { while (u.length >= 2 && cr(u.at(-2), u.at(-1), p) <= 0) u.pop(); u.push(p); } return l.slice(0, -1).concat(u.slice(0, -1)); })() : out;
+}
+
+/* ================= map ================= */
+const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
+const circle = (c, r, n = 160) => Array.from({ length: n + 1 }, (_, i) => { const a = i / n * Math.PI * 2; return toLL(c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)); });
+// optimised route (take-off → touch points), for drawing only
+const route = (() => {
+  const P = cyl.map(c => c.c.slice()), d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+  for (let it = 0; it < 40; it++) for (let i = 0; i < cyl.length; i++) {
+    const c = cyl[i], prev = i ? P[i - 1] : [0, 0], next = P[i + 1]; let best = 1e9, bp;
+    for (let k = 0; k < 360; k++) { const a = k / 180 * Math.PI, x = [c.c[0] + c.r * Math.cos(a), c.c[1] + c.r * Math.sin(a)], f = d(prev, x) + (next ? d(x, next) : 0); if (f < best) { best = f; bp = x; } }
+    P[i] = bp;
+  }
+  return [[0, 0], ...P];
+})();
+const map = new maplibregl.Map({
+  container: "map",
+  style: {
+    version: 8,
+    sources: {
+      dem: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 13, encoding: "terrarium" },
+      hs: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 13, encoding: "terrarium" },
+      rings: { type: "geojson", data: { type: "FeatureCollection", features: cyl.map(c => ({ type: "Feature", properties: { goal: c.kind === "Goal" ? 1 : 0 }, geometry: { type: "LineString", coordinates: circle(c.c, c.r) } })) } },
+      route: { type: "geojson", data: { type: "Feature", geometry: { type: "LineString", coordinates: route.map(p => toLL(p[0], p[1])) } } }
+    },
+    layers: [
+      { id: "bg", type: "background", paint: { "background-color": "#16171C" } },
+      { id: "hill", type: "hillshade", source: "hs", paint: { "hillshade-shadow-color": "#050507", "hillshade-highlight-color": "#6B7080", "hillshade-accent-color": "#24262E", "hillshade-exaggeration": 0.85, "hillshade-illumination-direction": 300 } },
+      { id: "routeGlow", type: "line", source: "route", paint: { "line-color": "#ff7517", "line-width": 10, "line-opacity": 0.16, "line-blur": 6 } },
+      { id: "route", type: "line", source: "route", paint: { "line-color": "#ff8a3d", "line-width": 1.6, "line-opacity": 0.85, "line-dasharray": [4, 3] } },
+      { id: "ringsGlow", type: "line", source: "rings", paint: { "line-color": ["case", ["==", ["get", "goal"], 1], "#ff7517", "#f6f4f4"], "line-width": 7, "line-opacity": 0.12, "line-blur": 4 } },
+      { id: "rings", type: "line", source: "rings", paint: { "line-color": ["case", ["==", ["get", "goal"], 1], "#ff7517", "#f6f4f4"], "line-width": 1.6, "line-opacity": 0.7 } }
+    ],
+    terrain: { source: "dem", exaggeration: EX },
+    sky: { "sky-color": "#0B0C10", "horizon-color": "#2A2D37", "fog-color": "#1B1D24", "sky-horizon-blend": 0.55, "horizon-fog-blend": 0.6, "fog-ground-blend": 0.3, "atmosphere-blend": 0 }
+  },
+  center: [TO.lon, TO.lat], zoom: 11, pitch: 60, bearing: 0, maxPitch: 85,
+  attributionControl: false, antialias: true, fadeDuration: 0, preserveDrawingBuffer: true
+});
+const { MapboxOverlay, TripsLayer, ScatterplotLayer, LineLayer, PathLayer, PolygonLayer, SolidPolygonLayer } = deck;
+const overlay = new MapboxOverlay({ interleaved: true, layers: [] });
+map.addControl(overlay);
+const OR = [255, 117, 23], WH = [246, 244, 244];
+function ground(ll) { if (!map.terrain) return null; const g = map.terrain.getElevationForLngLatZoom(maplibregl.LngLat.convert(ll), map.transform.tileZoom); return g > 0 ? g : null; }
+// GPS altitudes over exaggerated terrain: keep each pilot's height above ground, scaled ground underneath
+const lift = (ll, alt) => { const g = ground(ll); return g == null ? alt : alt + g * (EX - 1) / EX; };
+
+/* ================= frames ================= */
+const tSec = hhmmss => { const [h, m, s] = hhmmss.split(":").map(Number); return h * 3600 + m * 60 + (s || 0) - GATE; };
+const FRAMES = {
+  1: { t: tSec("12:17:00"), cam: { c: [10, 3], zoom: 10.05, pitch: 56, bearing: 28 }, show: ["title"], marks: true, trail: 120, feat: [] },
+  2: { t: tSec("13:20:00"), cam: "groups", show: ["tower", "ladder"], groups: true, feat: "top3", trail: 420 },
+  3: { t: tSec("13:51:40"), cam: { c: [10.15, 4.55], zoom: 13.55, pitch: 66, bearing: 25 }, show: ["tower", "ladder", "l3", "strip"], thermals: true, feat: ["VARGA", "QUINTANILLA", "LUEBBERKE"], l3: "VARGA", trail: 600, strip: ["The move", "5 km to go: three pilots find the stronger core"] },
+  4: { t: tSec("13:59:20"), cam: { c: [6.5, 6.3], zoom: 13.1, pitch: 62, bearing: 205 }, show: ["result", "big"], feat: ["VARGA", "QUINTANILLA", "LUEBBERKE"], trail: 900, marks: "goal" }
+};
+const q = new URLSearchParams(location.hash.slice(1));
+const F = FRAMES[q.get("f") || 2];
+let now = q.has("t") ? +q.get("t") : F.t;
+
+// two thermals at 5 km to go (from the key-moments analysis: centres, climb rates and who used them)
+const THERMALS = [
+  { c: [10.50, 5.64], top: 2280, k: "North core", v: "2.0–2.4", w: "Varga, Quintanilla, Luebberke", hot: true },
+  { c: [10.10, 4.40], top: 2150, k: "Gaggle thermal", v: "0.8–1.2", w: "Takats, Forgo, Diaz Arriaga and 6 more", hot: false }
+];
+
+function featured(st) {
+  if (F.feat === "top3") return st.filter(s => s.pos && s.pos <= 3).map(s => s.p.id);
+  return F.feat.map(n => byLast[n] && byLast[n].id).filter(Boolean);
+}
+
+function build() {
+  const st = field(now), feat = new Set(featured(st)), live = st.filter(s => s.pos).sort((a, b) => a.pos - b.pos);
+  const G = F.groups ? groups(st) : [];
+  st.forEach(s => s.z = lift(s.ll, s.alt));
+  // only the visible stretch of each track (trail window), lifted onto the exaggerated terrain
+  const win = (p, len) => { const i0 = Math.max(0, Math.floor((now - len - p.T[0]) / STEP)), i1 = Math.min(p.T.length - 1, Math.ceil((now - p.T[0]) / STEP) + 1);
+    if (i1 <= i0) return null; const path = [], ts = [];
+    for (let i = i0; i <= i1; i++) { const q = p.path[i]; path.push([q[0], q[1], lift([q[0], q[1]], q[2])]); ts.push(p.ts[i]); } return { id: p.id, path, ts }; };
+  const trail = pilots.filter(p => !feat.has(p.id)).map(p => win(p, F.trail)).filter(Boolean), ft = pilots.filter(p => feat.has(p.id)).map(p => win(p, F.trail * 1.6)).filter(Boolean);
+  const L = [
+    new SolidPolygonLayer({ id: "walls", data: cyl.filter(c => c.kind === "Goal"), getPolygon: c => { const o = circle(c.c, c.r + Math.max(0.02, c.r * .003), 140), i = circle(c.c, Math.max(.01, c.r - Math.max(0.02, c.r * .003)), 140).reverse(); return [o.map(p => [...p, 0]), i.map(p => [...p, 0])]; }, extruded: true, getElevation: 3300 * EX, getFillColor: [...OR, 38], material: false, parameters: { depthMask: false } }),
+    new TripsLayer({ id: "fieldGlow", data: trail, getPath: p => p.path, getTimestamps: p => p.ts, getColor: [...WH, 40], widthUnits: "pixels", getWidth: 5, trailLength: F.trail, currentTime: now, fadeTrail: true, capRounded: true, jointRounded: true, parameters: { depthMask: false } }),
+    new TripsLayer({ id: "field", data: trail, getPath: p => p.path, getTimestamps: p => p.ts, getColor: [...WH, 190], widthUnits: "pixels", getWidth: 1.3, trailLength: F.trail, currentTime: now, fadeTrail: true, capRounded: true, jointRounded: true }),
+    new TripsLayer({ id: "featGlow", data: ft, getPath: p => p.path, getTimestamps: p => p.ts, getColor: [...OR, 70], widthUnits: "pixels", getWidth: 11, trailLength: F.trail * 1.6, currentTime: now, fadeTrail: true, capRounded: true, jointRounded: true, parameters: { depthMask: false } }),
+    new TripsLayer({ id: "feat", data: ft, getPath: p => p.path, getTimestamps: p => p.ts, getColor: [...OR, 255], widthUnits: "pixels", getWidth: 2.6, trailLength: F.trail * 1.6, currentTime: now, fadeTrail: true, capRounded: true, jointRounded: true }),
+    new LineLayer({ id: "drop", data: st.filter(s => feat.has(s.p.id) && !s.inGoal), getSourcePosition: s => [...s.ll, s.z], getTargetPosition: s => [...s.ll, ground(s.ll) || 0], getColor: [...OR, 150], getWidth: 1, widthUnits: "pixels" }),
+    new ScatterplotLayer({ id: "shadow", data: st.filter(s => feat.has(s.p.id) && !s.inGoal), getPosition: s => [...s.ll, (ground(s.ll) || 0) + 4], getFillColor: [0, 0, 0, 120], radiusUnits: "pixels", getRadius: 5, billboard: false }),
+    new ScatterplotLayer({ id: "halo", data: st.filter(s => !s.inGoal), getPosition: s => [...s.ll, s.z], getFillColor: s => feat.has(s.p.id) ? [...OR, 80] : [...WH, 45], radiusUnits: "pixels", getRadius: s => feat.has(s.p.id) ? 13 : 7, billboard: true, parameters: { depthMask: false } }),
+    new ScatterplotLayer({ id: "heads", data: st.filter(s => !s.inGoal), getPosition: s => [...s.ll, s.z], getFillColor: s => feat.has(s.p.id) ? OR : WH, getLineColor: [20, 21, 25, 230], stroked: true, lineWidthMinPixels: 1.2, radiusUnits: "pixels", getRadius: s => feat.has(s.p.id) ? 5.5 : 3.2, billboard: true })
+  ];
+  if (F.groups) L.push(new PolygonLayer({ id: "groups", data: G.slice(0, 3), getPolygon: g => g.hull.map(h => [...toLL(h[0], h[1]), lift(toLL(g.cx, g.cy), g.alt) - 40]), filled: true, stroked: true, getFillColor: (g, { index }) => index === 0 ? [...OR, 34] : [...WH, 20], getLineColor: (g, { index }) => index === 0 ? [...OR, 230] : [...WH, 160], getLineWidth: 2, lineWidthUnits: "pixels", parameters: { depthMask: false } }));
+  if (F.thermals) for (const [i, th] of THERMALS.entries()) {
+    const ll = toLL(th.c[0], th.c[1]), g0 = ground(ll) || 1500, rings = [];
+    for (let k = 0; k < 16; k++) { const h = g0 + (th.top - g0) * (k + 1) / 16, r = 0.10 + 0.07 * (k / 15); rings.push({ path: circle(th.c, r, 48).map(p => [...p, lift(ll, h)]), a: 40 + 150 * k / 15 }); }
+    L.push(new PathLayer({ id: "th" + i, data: rings, getPath: d => d.path, getColor: d => th.hot ? [...OR, d.a] : [...WH, d.a * .6], getWidth: th.hot ? 2.2 : 1.6, widthUnits: "pixels", parameters: { depthMask: false } }));
+  }
+  overlay.setProps({ layers: L });
+  return { st, live, feat, G };
+}
+
+/* ================= graphics ================= */
+const $ = id => document.getElementById(id);
+const stage = $("stage");
+let S = 1, OX = 0, OY = 0;
+function fit() { S = Math.min(innerWidth / 1920, innerHeight / 1080); OX = (innerWidth - 1920 * S) / 2; OY = (innerHeight - 1080 * S) / 2; stage.style.transform = `translate(${OX}px,${OY}px) scale(${S})`; }
+fit(); addEventListener("resize", fit);
+function proj(ll, z) { const vp = overlay._deck && overlay._deck.getViewports()[0]; if (!vp) return null; const [x, y] = vp.project([ll[0], ll[1], z]); return [(x - OX) / S, (y - OY) / S]; }
+const surname = p => title(p.last).replace(/\bMc(\w)/, (m, c) => "Mc" + c.toUpperCase());
+
+function graphics(r) {
+  const { st, live, feat, G } = r;
+  for (const k of ["tower", "ladder", "l3", "title", "strip", "result", "big"]) $(k).classList.toggle("hide", !F.show.includes(k));
+  $("clk").textContent = hms(GATE + now);
+  const lead = live[0];
+  $("clkSub").innerHTML = now < 0 ? "Start gate 12:15" : `Race time <i class="tn">${hms(now).replace(/^0:/, "")}</i>`;
+  // tower: top 10, with the gaggle a pilot is in
+  if (F.show.includes("tower")) {
+    $("towerSub").textContent = lead ? (lead.inGoal ? "Leader in goal" : `${lead.dtg.toFixed(1)} km to goal`) : "";
+    $("towerRows").innerHTML = live.slice(0, 10).map((s, i) => {
+      const gap = i === 0 ? "Leader" : s.inGoal ? "Goal" : `+${(s.dtg - live[0].dtg).toFixed(1)} km`;
+      return `<li class="${feat.has(s.p.id) ? "f" : ""}"><span class="p">${s.pos}</span><span class="n">${s.p.nat}</span><span class="s">${surname(s.p)}</span><span class="g tn">${gap}</span></li>`;
+    }).join("");
+  }
+  // ladder: whole course, every pilot by distance done
+  if (F.show.includes("ladder")) {
+    const W = 1620, dist = D.dist, x = d => Math.max(0, Math.min(1, (dist - d) / dist)) * W;
+    const tps = [["Start", route[1]], ["TP2", route[2]], ["TP3", route[3]], ["", route[4]], ["TP4 · Goal", route[5]]];
+    let acc = 0, ticks = [], prev = route[1];
+    for (const [n, p] of tps) { acc += Math.hypot(p[0] - prev[0], p[1] - prev[1]); prev = p; ticks.push([n, acc]); }
+    const tot = acc;
+    const dots = live.filter(s => !s.inGoal).map(s => `<div class="dot ${feat.has(s.p.id) ? "f" : ""}" style="left:${x(s.dtg)}px"></div>`).join("");
+    const labs = live.filter(s => feat.has(s.p.id) && !s.inGoal).slice(0, 1).map(s => `<div class="lab" style="left:${x(s.dtg)}px"><i>${s.pos}</i>${surname(s.p)}</div>`).join("");
+    $("ladder").innerHTML = `<div class="rail"></div><div class="done" style="width:${lead ? x(lead.dtg) : 0}px"></div>` +
+      ticks.map(([n, a]) => `<div class="tk" style="left:${a / tot * W}px"><span>${n}</span></div>`).join("") + dots + labs;
+  }
+  // in-scene labels
+  const tags = []; let lines = "";
+  const boxes = [];
+  for (const s of st.filter(s => feat.has(s.p.id) && !s.inGoal).sort((a, b) => a.pos - b.pos)) {
+    const p = proj(s.ll, s.z); if (!p) continue;
+    const w = surname(s.p).length * 10 + 46; let y = p[1], dy = 0;
+    while (boxes.some(b => Math.abs(b[0] - p[0]) < (b[2] + w) / 2 + 6 && Math.abs(b[1] - (y - dy)) < 30)) dy += 32;
+    boxes.push([p[0], y - dy, w]);
+    if (dy) lines += `<line x1="${p[0]}" y1="${p[1] - 6}" x2="${p[0]}" y2="${p[1] - dy - 14}" stroke="#ff7517" stroke-width="1.5"/>`;
+    tags.push(`<div class="tag" style="left:${p[0]}px;top:${y - dy}px"><i>${s.pos || ""}</i><b>${surname(s.p)}</b></div>`);
+  }
+  window.__tagTop = boxes.length ? Math.min(...boxes.map(b => b[1])) - 40 : null;
+  if (F.marks) for (const c of cyl.filter(c => F.marks === true || c.kind === "Goal")) {
+    const ll = [c.lon, c.lat], p = proj(ll, (ground(ll) || c.elev || 1500) * 1 + 120 * EX);
+    const lab = c.kind === "SSS" ? "Start" : c.kind === "Goal" ? "Goal" : "TP" + (cyl.indexOf(c) + 1);
+    if (p && p[0] > 40 && p[0] < 1880 && p[1] > 120 && p[1] < 1040) tags.push(`<div class="mark ${c.kind === "Goal" ? "goal" : ""}" style="left:${p[0]}px;top:${p[1]}px"><b>${lab}</b><span>${title(c.name)} · ${c.r >= 1 ? c.r + " km" : c.r * 1000 + " m"}</span></div>`);
+  }
+  if (F.marks === true) { const p = proj([TO.lon, TO.lat], (ground([TO.lon, TO.lat]) || 2200) + 150 * EX); if (p) tags.push(`<div class="mark" style="left:${p[0]}px;top:${p[1]}px"><b>Take-off</b><span>${title(TO.name)}</span></div>`); }
+  if (F.groups) G.slice(0, 2).forEach((g, i) => {
+    const top = g.m.reduce((m, s) => Math.max(m, s.z), 0), p = proj(toLL(g.cx, g.cy), top + 60); if (p && i === 0 && window.__tagTop != null) p[1] = Math.min(p[1], window.__tagTop);
+    const name = i === 0 ? (g.m.length >= 8 ? "Lead gaggle" : "Lead group") : (g.m.length >= 8 ? "Main gaggle" : "Chase group");
+    const sub = i === 0 ? `<em>${g.m.length}</em> pilots · led by <em>${surname(g.m[0].p)}</em>` : `<em>${g.m.length}</em> pilots · <em>+${(g.front - G[0].front).toFixed(1)} km</em>`;
+    if (p) tags.push(`<div class="grp" style="left:${p[0]}px;top:${p[1]}px"><b>${name}</b><span>${sub}</span></div>`);
+  });
+  if (F.thermals) THERMALS.forEach((th, i) => {
+    const ll = toLL(th.c[0], th.c[1]), p = proj(ll, lift(ll, th.top) + 30); if (!p) return;
+    const bx = i === 0 ? Math.min(1500, p[0] + 170) : Math.max(470, p[0] - 500), by = i === 0 ? p[1] - 190 : p[1] - 210;
+    tags.push(`<div class="call ${th.hot ? "hot" : "cool"}" style="left:${bx}px;top:${by}px"><div class="bar"></div><div class="k">${th.k}</div><div class="v">${th.v}<small>m/s</small></div><div class="w">${th.w}</div></div>`);
+    const ax = i === 0 ? bx - 14 : bx + 344;
+    lines += `<polyline points="${p[0]},${p[1]} ${ax},${by + 30} ${i === 0 ? ax - 0 : ax},${by + 30}" fill="none" stroke="${th.hot ? "#ff7517" : "#b4b4b4"}" stroke-width="2"/><circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${th.hot ? "#ff7517" : "#b4b4b4"}"/>`;
+  });
+  $("lines").innerHTML = lines;
+  $("tags").innerHTML = tags.join("");
+  if (F.strip) { $("stripK").textContent = F.strip[0]; $("stripV").textContent = F.strip[1]; }
+  if (F.l3) {
+    const s = st.find(s => s.p.last === F.l3), p = s.p;
+    $("l3").innerHTML = `<div class="pos">${s.pos}</div><div class="body"><h2><small>${p.first}</small>${surname(p)}</h2><p><b>${NAT[p.nat] || p.nat}</b> · ${p.sponsor || ""} ${(p.glider || "").split("/")[0]} · Overall rank before task ${"—"}</p></div>
+      <div class="stats"><div><b class="tn">${Math.round(s.alt).toLocaleString("en")}<small>m</small></b><span>Altitude</span></div><div class="${s.vario > 0.3 ? "up" : ""}"><b class="tn">${s.vario > 0 ? "+" : ""}${s.vario.toFixed(1)}<small>m/s</small></b><span>Climb</span></div><div><b class="tn">${s.dtg.toFixed(1)}<small>km</small></b><span>To goal</span></div></div>`;
+  }
+  if (F.show.includes("result")) {
+    const top = pilots.filter(p => p.rank <= 3).sort((a, b) => a.rank - b.rank), win = top[0];
+    $("result").innerHTML = `<div class="hd">Task 3 result<span>58.7 km</span></div><ol>` + top.map(p => `<li><span class="p">${p.rank}</span><span class="s">${surname(p)}<span>${p.first} · ${NAT[p.nat] || p.nat}</span></span><span class="t tn">${p.time.replace(/^0/, "")}<span>${p.rank === 1 ? (58.71 / ((tSec(p.finish) - 0) / 3600)).toFixed(1) + " km/h" : "+" + hms(tSec(p.finish) - tSec(win.finish)).replace(/^0:0?/, "")}</span></span></li>`).join("") +
+      `</ol><div class="ft"><span><b>88</b>of 106 in goal</span><span><b>3</b>pilots within 2 min</span></div>`;
+    $("big").innerHTML = `<div class="k">Task 3 winner</div><h2>${surname(win)}</h2><p><b>${win.first} ${surname(win)}</b> · ${NAT[win.nat]} · ${win.time.replace(/^0/, "")} for 58.7 km</p>`;
+  }
+}
+
+/* ================= camera + loop ================= */
+function camera(r) {
+  let c = F.cam;
+  if (c === "groups") {
+    const g = r.G.slice(0, 2), w = [0.7, 0.3]; const cx = g.length > 1 ? g[0].cx * w[0] + g[1].cx * w[1] : g[0].cx, cy = g.length > 1 ? g[0].cy * w[0] + g[1].cy * w[1] : g[0].cy;
+    const dir = g.length > 1 ? Math.atan2(g[0].cx - g[1].cx, g[0].cy - g[1].cy) * 180 / Math.PI : 0;
+    c = { c: [cx, cy], zoom: +q.get("z") || 12.9, pitch: 66, bearing: q.has("b") ? +q.get("b") : dir + 75, pad: { left: 380, top: 0, right: 0, bottom: 120 } };
+  }
+  ["zoom", "pitch", "bearing"].forEach(k => { if (q.has(k[0]) && F.cam !== "groups") c[k] = +q.get(k[0]); });
+  map.jumpTo({ center: toLL(c.c[0], c.c[1]), zoom: c.zoom, pitch: c.pitch, bearing: c.bearing, padding: c.pad || { left: 0, top: 0, right: 0, bottom: 0 } });
+}
+let zv = 0;
+function draw() { const r = build(); graphics(r); return r; }
+map.on("load", () => {
+  const r = build(); camera(r);
+  map.once("idle", () => { zv++; const r = build(); camera(r); map.once("idle", () => { zv++; draw(); setTimeout(() => { draw(); $("loading").style.opacity = 0; window.__ready = true; }, 300); }); });
+});
+map.on("moveend", () => { if (window.__ready) draw(); });
+</script>
+</body>
+</html>
