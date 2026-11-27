@@ -96,6 +96,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .speeds{display:flex;gap:12px;flex:none}
 .speeds button{font-family:var(--f-display);font-weight:600;font-size:14px;color:rgba(255,255,255,.5);font-variant-numeric:tabular-nums}
 .speeds button[aria-pressed="true"]{color:var(--ink);font-weight:800}
+.credit a{color:inherit}
 .credit{position:fixed;right:var(--gut);bottom:6px;z-index:4;font-size:10px;color:rgba(255,255,255,.45);text-align:right}
 .loading{position:fixed;inset:0;display:grid;place-items:center;z-index:9;background:var(--bg);transition:opacity .6s;font-family:var(--f-display);font-weight:700;color:var(--ink-2);letter-spacing:.02em}
 .loading.off{opacity:0;pointer-events:none}
@@ -105,7 +106,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @media (max-width:760px){
   :root{--gut:16px}
   .scrim.left{display:none}
-  .scrim.top{height:170px}
+  .scrim.top{height:200px}
   .top{flex-direction:column;gap:12px;padding-top:14px}
   .brand{gap:10px}
   .brand [data-brand]{width:28px;height:28px}
@@ -120,6 +121,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .views{gap:18px;padding-top:0;width:100%;justify-content:space-between}
   .vgrp{gap:11px}
   .vgrp > span{display:none}
+  .views{flex-wrap:wrap;row-gap:4px}
+  .vgrp:last-child{width:100%}
+  .vgrp:last-child > span{display:inline}
   .vgrp button{font-size:13.5px}
   .proto{display:none}
   .board{display:none;top:auto;bottom:150px;left:var(--gut);right:var(--gut);width:auto;background:rgba(3,16,15,.94);padding:14px 16px;border-radius:6px;max-height:52vh;overflow:auto}
@@ -133,7 +137,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .num b small{font-size:11px}
   .num span{font-size:10.5px}
   .num.hide-s{display:none}
-  .tl{gap:12px;padding:12px var(--gut) calc(18px + env(safe-area-inset-bottom))}
+  .tl{gap:12px;padding:12px var(--gut) calc(40px + env(safe-area-inset-bottom))}
   .play{min-width:0;width:44px;padding:0}
   .play .lbl{display:none}
   .clock{font-size:17px;width:70px}
@@ -143,7 +147,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .speeds .hide-s{display:none}
   .track .tick{font-size:9px}
   .track .tick.hide-s{display:none}
-  .credit{left:var(--gut);bottom:3px;font-size:8.5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .credit{left:var(--gut);bottom:3px;font-size:8.5px;line-height:1.3;text-align:center}
   .mobonly{display:inline}
   .listbtn{font-family:var(--f-display);font-size:13.5px;font-weight:700;color:var(--ink);position:absolute;right:0;top:0}
   .pname{position:relative}
@@ -178,6 +182,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <button data-base="sat" aria-pressed="true">Satellite</button>
       <button data-base="dark" aria-pressed="false">Dark</button>
     </div>
+    <div class="vgrp" role="group" aria-label="Layer">
+      <span>Layer</span>
+      <button data-sky="" aria-pressed="false">Off</button>
+      <button data-sky="skyways" aria-pressed="true">Skyways</button>
+      <button data-sky="thermals" aria-pressed="false">Thermals</button>
+    </div>
   </div>
 </header>
 <p class="proto">Prototype. Real tracks from the official IGC files, drawn at their GPS altitude over real terrain (no exaggeration).</p>
@@ -204,7 +214,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </section>
 
-<p class="credit">Imagery © Esri, Maxar, Earthstar Geographics · Terrain AWS Terrain Tiles (Mapzen, SRTM) · Task, results and tracks Airtribune · MapLibre, deck.gl</p>
+<p class="credit">Imagery © Esri, Maxar, Earthstar Geographics · Terrain AWS Terrain Tiles (Mapzen, SRTM) · <span id="skyCredit">Skyways &amp; thermals: <a href="https://thermal.kk7.ch" target="_blank" rel="noopener">thermal.kk7.ch</a>, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ·</span> Task, results and tracks Airtribune · MapLibre, deck.gl</p>
 
 <nav class="tl" aria-label="Replay">
   <button class="play" id="play" aria-label="Pause"><svg viewBox="0 0 12 12" id="playIco"><rect x="1" y="0" width="3.6" height="12"/><rect x="7.4" y="0" width="3.6" height="12"/></svg><span class="lbl" id="playLbl">Pause</span></button>
@@ -277,6 +287,9 @@ function stateAt(p, t) {
 
 /* ================= map ================= */
 const SAT = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+// KK7 Thermal & Skyways (thermal.kk7.ch, CC BY-NC-SA 4.0): TMS tiles from public tracklogs; send ?src=<our hostname>, MapLibre only fetches tiles in view
+const KK7SRC = encodeURIComponent(/\./.test(location.hostname) ? location.hostname : "paraglidingatlas-maker.github.io");
+const KK7 = l => `https://thermal.kk7.ch/tiles/${l}_all_all/{z}/{x}/{y}.png?src=${KK7SRC}`;
 const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
 const circle = (c, rKm, n = 160) => Array.from({ length: n + 1 }, (_, i) => { const a = i / n * Math.PI * 2; return toLL((c[0] + rKm * Math.cos(a)) * 1000, (c[1] + rKm * Math.sin(a)) * 1000); });
 const ringsGeo = { type: "FeatureCollection", features: cyl.map(c => ({ type: "Feature", properties: { goal: c.ss === "ES" ? 1 : 0 }, geometry: { type: "LineString", coordinates: circle(c.c, c.r) } })) };
@@ -290,6 +303,8 @@ const map = new maplibregl.Map({
       sat: { type: "raster", tiles: [SAT], tileSize: 256, maxzoom: 18, attribution: "Imagery © Esri, Maxar, Earthstar Geographics" },
       dem: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 14, encoding: "terrarium", attribution: "Terrain: AWS Terrain Tiles (Mapzen, SRTM)" },
       hs: { type: "raster-dem", tiles: [DEM], tileSize: 256, maxzoom: 14, encoding: "terrarium" },
+      skyways: { type: "raster", tiles: [KK7("skyways")], scheme: "tms", tileSize: 256, maxzoom: 13 },
+      thermals: { type: "raster", tiles: [KK7("thermals")], scheme: "tms", tileSize: 256, maxzoom: 12 },
       rings: { type: "geojson", data: ringsGeo },
       route: { type: "geojson", data: routeGeo },
       shadow: { type: "geojson", data: { type: "FeatureCollection", features: [] } }
@@ -298,6 +313,8 @@ const map = new maplibregl.Map({
       { id: "bg", type: "background", paint: { "background-color": "#0A1E21" } },
       { id: "sat", type: "raster", source: "sat", paint: { "raster-saturation": -0.12, "raster-contrast": 0.06, "raster-brightness-max": 0.92 } },
       { id: "hill", type: "hillshade", source: "hs", layout: { visibility: "none" }, paint: { "hillshade-shadow-color": "#020B0B", "hillshade-highlight-color": "#6FA3A8", "hillshade-accent-color": "#0C2A2D", "hillshade-exaggeration": 0.9, "hillshade-illumination-direction": 315 } },
+      { id: "skyways", type: "raster", source: "skyways", paint: { "raster-opacity": 0.72 } },
+      { id: "thermals", type: "raster", source: "thermals", layout: { visibility: "none" }, paint: { "raster-opacity": 0.72 } },
       { id: "rings", type: "line", source: "rings", paint: { "line-color": ["case", ["==", ["get", "goal"], 1], "#FF5F00", "#FFFFFF"], "line-width": 2, "line-opacity": 0.85 } },
       { id: "route", type: "line", source: "route", paint: { "line-color": "#FFFFFF", "line-width": 1.4, "line-opacity": 0.6, "line-dasharray": [3, 3] } },
       { id: "shadow", type: "line", source: "shadow", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#000000", "line-width": 3, "line-opacity": 0.45, "line-blur": 1.5 } }
@@ -463,6 +480,12 @@ function setBase(b) {
   map.setSky(SKIES[b]);
 }
 document.querySelectorAll("[data-base]").forEach(b => b.onclick = () => setBase(b.dataset.base));
+function setSky(m) {
+  document.querySelectorAll("[data-sky]").forEach(x => x.setAttribute("aria-pressed", x.dataset.sky === m));
+  ["skyways", "thermals"].forEach(l => map.setLayoutProperty(l, "visibility", l === m ? "visible" : "none"));
+  $("skyCredit").hidden = !m;
+}
+document.querySelectorAll("[data-sky]").forEach(b => b.onclick = () => setSky(b.dataset.sky));
 
 const lerpAng = (a, b, k) => { let d = ((b - a + 540) % 360) - 180; return a + d * k; };
 let last = performance.now(), shadowAt = 0, uiAt = 0;
@@ -507,6 +530,7 @@ map.once("style.load", () => {
   if (hash.get("t")) now = +hash.get("t");
   if (hash.get("cam")) setCam(hash.get("cam"));
   if (hash.get("base")) setBase(hash.get("base"));
+  if (hash.has("sky")) setSky(hash.get("sky"));
   if (hash.get("pilot")) select(hash.get("pilot"));
   if (hash.get("paused")) setPlaying(false);
   requestAnimationFrame(frame);

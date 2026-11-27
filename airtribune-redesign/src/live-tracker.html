@@ -332,6 +332,17 @@ a{color:inherit;text-decoration:none}
 .app.cine .maphint{display:none}
 .maphint{left:14px;top:auto;bottom:14px;transform:none;white-space:normal;max-width:calc(100% - 350px)}
 .app.cine .sheet{display:none!important}
+/* skyways / thermals overlay (KK7 tiles, drawn in map space under the task) */
+.layers{position:absolute;z-index:4;right:14px;top:70px;display:flex;padding:3px;border-radius:8px;background:rgba(3,16,15,.82);border:1px solid rgba(255,255,255,.14)}
+.layers button{height:28px;padding:0 10px;border-radius:6px;font:700 10px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.layers button[aria-pressed="true"]{background:var(--orange);color:#fff}
+.sky-credit{position:absolute;z-index:3;right:14px;bottom:10px;font:500 10.5px var(--f-body);color:rgba(255,255,255,.72);text-shadow:0 1px 2px #03100F}
+.sky-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.sky-credit[hidden]{display:none}
+.skyl{mix-blend-mode:screen;filter:brightness(1.35) saturate(1.15)}
+.skyl image{opacity:.9}
+.app.cine .layers,.app.cine .sky-credit{display:none}
+@media (max-width:820px){ .layers{top:auto;bottom:calc(var(--peek,196px) + 34px);right:10px} .layers button{height:26px;padding:0 8px} .sky-credit{right:10px;bottom:calc(var(--peek,196px) + 12px);font-size:10px} }
 @media (max-width:820px){ .maphint{display:none} .app.cine .compass{top:176px;right:10px} }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
@@ -375,6 +386,8 @@ a{color:inherit;text-decoration:none}
       <div class="cine-bar" id="cineBar" aria-live="off"></div>
       <div class="cine-bug" data-brand aria-label="Airtribune"></div>
       <button class="cine-exit" id="cineExit" aria-label="Exit broadcast view">Exit broadcast <kbd>Esc</kbd></button>
+      <div class="layers" role="group" aria-label="Map layer"><button data-sky="" aria-pressed="false">Off</button><button data-sky="skyways" aria-pressed="true">Skyways</button><button data-sky="thermals" aria-pressed="false">Thermals</button></div>
+      <div class="sky-credit" id="skyCredit">Skyways &amp; thermals: <a href="https://thermal.kk7.ch" target="_blank" rel="noopener">thermal.kk7.ch</a>, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a></div>
       <div class="scalebar" id="scalebar" aria-hidden="true"><i></i><span></span></div>
       <div class="tele off" id="tele" aria-live="off">
         <div class="tele-h"><span class="fl" id="teFlag"></span><b id="teName">—</b><span class="p" id="tePos">P1</span><button class="x" id="teClose" aria-label="Close pilot data">×</button></div>
@@ -689,6 +702,7 @@ function build(){
   st.pxkm = f.s; st.mapW = W;
   const world = svg.append("g").attr("class","world");
   const tg = world.append("g").attr("transform", `translate(${-W},${-H})`); terrain(tg, SEED, W*3, H*3, 1.1);
+  const skyG = world.append("g").attr("class","skyl");
   drawCyl(world, task, f, {alpha:.85, big:true, chk});
   world.append("path").attr("d", d3.line()(task.route.map(f))).attr("fill","none").attr("stroke","rgba(255,255,255,.4)").attr("stroke-dasharray","4 4").attr("stroke-width",1.2);
   const trails = world.append("g");
@@ -726,7 +740,7 @@ function build(){
   });
   const cy = PHONE.matches ? (104 + H - 150)/2 : H*.5;   // phone: centre between the telemetry card and the sheet
   M = {W, H, cy, svg, world, f, task, pilots, tpL, tpLabels, launch, launchEl, bubbles, tStart: T_START, tEnd: T_END, cumDist: ROUTE.map((_,k) => d3.sum(LEGS.slice(0,k))),
-       route: ROUTE, suffix: SUFFIX, cam: {fx:W/2, fy:H/2, s:1, r:0}, order: pilots.slice(), phase: null};
+       route: ROUTE, suffix: SUFFIX, skyG, sky: {layers: new Map(), z: null}, cam: {fx:W/2, fy:H/2, s:1, r:0}, order: pilots.slice(), phase: null};
   buildBoard(); buildStrip(); buildTimeline();
 }
 function mkTag(parent, col){
@@ -805,6 +819,57 @@ function interp(pl, T){
   return {x: A[0] + (B[0]-A[0])*u, y: A[1] + (B[1]-A[1])*u, alt: a.alt + (b.alt - a.alt)*u, v: b.v, gs: b.gs, ti: b.ti, pt: {p:[a.p[0]+(b.p[0]-a.p[0])*u, a.p[1]+(b.p[1]-a.p[1])*u], ti: b.ti}};
 }
 const overlap = (a,b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+/* ---------- skyways / thermals overlay ----------
+   KK7 Thermal & Skyways tiles (thermal.kk7.ch, CC BY-NC-SA 4.0, built from public tracklogs). TMS, 256 px.
+   Usage rules: send ?src=<our hostname> (browser sends the Referer), fetch only tiles in view, stay under 10 requests/s. */
+const SKY = {mode: "skyways", host: "https://thermal.kk7.ch/tiles/", src: /\./.test(location.hostname) ? location.hostname : "paraglidingatlas-maker.github.io",
+  max: {skyways: 13, thermals: 12}, at: 0, queue: [], sent: []};
+const tileLon = (x, n) => x/n*360 - 180, tileLat = (y, n) => Math.atan(Math.sinh(Math.PI*(1 - 2*y/n)))*180/Math.PI;
+function skyUpdate(c){
+  const now = performance.now(), S = M.sky;
+  // drain the request queue: at most 8 new tiles a second
+  SKY.sent = SKY.sent.filter(t => now - t < 1000);
+  while (SKY.queue.length && SKY.sent.length < 8){ const q = SKY.queue.shift(); if (q.el.isConnected){ q.el.setAttribute("href", q.url); SKY.sent.push(now); } }
+  if (now - SKY.at < 300) return; SKY.at = now;
+  if (!SKY.mode){ S.layers.forEach(l => l.remove()); S.layers.clear(); SKY.queue = []; S.z = null; return; }
+  // view in map space: screen corners (extra room above for the 3D tilt), then km, then lat/lon
+  const f = M.f, s = f.s, o = f([0,0]), up = st.view.tilt > .05 ? M.H*.7 : 0;
+  const cs = [[0,-up],[M.W,-up],[0,M.H],[M.W,M.H]].map(([x,y]) => M.scrInv(x, y)).map(([x,y]) => [(x - o[0])/s, (y - o[1])/s]);
+  const xs = cs.map(q => q[0]), ys = cs.map(q => q[1]);
+  const W0 = LON0 + d3.min(xs)/KX, E0 = LON0 + d3.max(xs)/KX, N0 = LAT0 - d3.min(ys)/KY, S0 = LAT0 - d3.max(ys)/KY;
+  // tile zoom so one tile pixel is about one screen pixel
+  const pxPerKm = s*c.s, kmTile0 = 40075*Math.cos(LAT0*Math.PI/180);
+  const z = Math.max(6, Math.min(SKY.max[SKY.mode], Math.round(Math.log2(pxPerKm*kmTile0/256)))), n = 2**z;
+  const key = SKY.mode + "/" + z;
+  const x0 = Math.floor((W0 + 180)/360*n), x1 = Math.floor((E0 + 180)/360*n);
+  const yOf = lat => Math.floor((1 - Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*n);
+  const y0 = yOf(N0), y1 = yOf(S0);
+  if ((x1 - x0 + 1)*(y1 - y0 + 1) > 120) return;          // safety: never ask for a huge block
+  let L = S.layers.get(key);
+  if (!L){ L = M.skyG.append("g").attr("data-k", key); L.tiles = new Map(); S.layers.set(key, L); }
+  L.raise();
+  // keep the previous zoom underneath until the new tiles have had time to arrive, then drop it
+  if (S.z !== key){ const old = [...S.layers.keys()].filter(k => k !== key); setTimeout(() => old.forEach(k => { if (M.sky.z !== k && M.sky.layers.has(k)){ M.sky.layers.get(k).remove(); M.sky.layers.delete(k); } }), 1500); S.z = key; }
+  const want = new Set();
+  for (let x = x0; x <= x1; x++) for (let y = y0; y <= y1; y++){
+    const id = x + "/" + y; want.add(id); if (L.tiles.has(id)) continue;
+    const a = f(proj(tileLat(y, n), tileLon(x, n))), b = f(proj(tileLat(y + 1, n), tileLon(x + 1, n)));
+    const el = L.append("image").attr("x", a[0]).attr("y", a[1]).attr("width", b[0] - a[0]).attr("height", b[1] - a[1]).attr("preserveAspectRatio","none").node();
+    L.tiles.set(id, el);
+    SKY.queue.push({el, d: Math.hypot((a[0] + b[0])/2 - c.fx, (a[1] + b[1])/2 - c.fy), url: `${SKY.host}${SKY.mode}_all_all/${z}/${x}/${n - 1 - y}.png?src=${encodeURIComponent(SKY.src)}`});
+  }
+  SKY.queue.sort((p, q) => p.d - q.d);          // nearest the camera first
+  // forget tiles far out of view so the page does not keep hundreds of images
+  if (L.tiles.size > 160) L.tiles.forEach((el, id) => { if (!want.has(id)){ el.remove(); L.tiles.delete(id); } });
+}
+function setSky(mode){
+  SKY.mode = mode; SKY.queue = [];
+  document.querySelectorAll("[data-sky]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sky === mode));
+  $("#skyCredit").hidden = !mode;
+  if (M){ M.sky.layers.forEach(l => l.remove()); M.sky.layers.clear(); M.sky.z = null; SKY.at = 0; }
+}
+document.querySelectorAll("[data-sky]").forEach(b => b.addEventListener("click", () => setSky(b.dataset.sky)));
+
 function frame(force){
   const T = M.tStart + st.frac*(M.tEnd - M.tStart), rel = T;   // seconds from the start gate
   M.pilots.forEach(pl => { pl.now = interp(pl, T); pl.rem = remKm(pl.now.pt); pl.done = pl.goalT <= T;
@@ -837,6 +902,7 @@ function frame(force){
   M.world.attr("transform", `translate(${cx},${cy}) rotate(${c.r}) scale(${c.s}) translate(${-c.fx},${-c.fy})`);
   const scr = p => { const dx = (p[0]-c.fx)*c.s, dy = (p[1]-c.fy)*c.s; return [cx + dx*co - dy*si, cy + dx*si + dy*co]; };
   M.scrInv = (sx, sy) => { const dx = sx - cx, dy = sy - cy; return [c.fx + (dx*co + dy*si)/c.s, c.fy + (-dx*si + dy*co)/c.s]; };
+  skyUpdate(c);
   const needle = document.getElementById("compassN"); if (needle) needle.style.transform = `rotate(${c.r}deg)`;
   if (st.pxkm){ const mpp = 1000/(st.pxkm*c.s), raw = mpp*110, p10 = Math.pow(10, Math.floor(Math.log10(raw))), nice = [5,2,1].map(m => m*p10).find(v => v <= raw) || p10;
     const lab = nice >= 1000 ? `${nice/1000} km` : `${nice} m`, w = Math.round(nice/mpp);
