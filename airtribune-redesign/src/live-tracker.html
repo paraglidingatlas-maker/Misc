@@ -339,8 +339,7 @@ a{color:inherit;text-decoration:none}
 .sky-credit{position:absolute;z-index:3;right:14px;bottom:10px;font:500 10.5px var(--f-body);color:rgba(255,255,255,.72);text-shadow:0 1px 2px #03100F}
 .sky-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .sky-credit[hidden]{display:none}
-.skyl{mix-blend-mode:screen;filter:brightness(1.35) saturate(1.15)}
-.skyl image{opacity:.9}
+.skyl image{opacity:.92}
 .app.cine .layers,.app.cine .sky-credit{display:none}
 @media (max-width:820px){ .layers{top:auto;bottom:calc(var(--peek,196px) + 34px);right:10px} .layers button{height:26px;padding:0 8px} .sky-credit{right:10px;bottom:calc(var(--peek,196px) + 12px);font-size:10px} }
 @media (max-width:820px){ .maphint{display:none} .app.cine .compass{top:176px;right:10px} }
@@ -825,13 +824,32 @@ const overlap = (a,b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3
 const SKY = {mode: "skyways", host: "https://thermal.kk7.ch/tiles/", src: /\./.test(location.hostname) ? location.hostname : "paraglidingatlas-maker.github.io",
   max: {skyways: 13, thermals: 12}, at: 0, queue: [], sent: []};
 const tileLon = (x, n) => x/n*360 - 180, tileLat = (y, n) => Math.atan(Math.sinh(Math.PI*(1 - 2*y/n)))*180/Math.PI;
+// KK7 colours the least-flown lines dark blue, which disappears on dark ground: lift blue-dominant pixels
+// towards a light sky blue (cyan, green, yellow and red are left as they are) and firm up faint alpha.
+// thermals: read the strength from KK7's blue→red scale (hue) and redraw it as pale amber → orange → red
+function kk7Heat(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
+  const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), c = mx - mn;
+  let h = 240; if (c > .04) h = mx === r ? 60*(((g - b)/c + 6) % 6) : mx === g ? 60*((b - r)/c + 2) : 60*((r - g)/c + 4);
+  if (h > 300) h = 0;                                    // magenta-ish tips count as strongest
+  const v = Math.max(0, Math.min(1, (240 - h)/240)), k = v < .5 ? v*2 : (v - .5)*2;
+  const A = v < .5 ? [255,205,130] : [255,125,35], B = v < .5 ? [255,125,35] : [215,25,25];
+  d[i] = A[0] + (B[0] - A[0])*k; d[i+1] = A[1] + (B[1] - A[1])*k; d[i+2] = A[2] + (B[2] - A[2])*k;
+  d[i+3] = Math.min(255, d[i+3]*(1.2 + .6*v)); } }
+function kk7Lift(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
+  const r = d[i], g = d[i+1], b = d[i+2], t = Math.max(0, b - Math.max(r, g))/255;
+  d[i] = r + 120*t; d[i+1] = g + 170*t; d[i+3] = Math.min(255, d[i+3]*1.5); } }
+const skyImg = url => new Promise(res => { const im = new Image(); im.crossOrigin = "anonymous";
+  im.onload = () => { const cv = document.createElement("canvas"); cv.width = im.width; cv.height = im.height; const x = cv.getContext("2d"); x.drawImage(im, 0, 0);
+    try { const d = x.getImageData(0, 0, cv.width, cv.height); (/thermals_/.test(url) ? kk7Heat : kk7Lift)(d.data); x.putImageData(d, 0, 0); cv.toBlob(b => res(b ? URL.createObjectURL(b) : url)); } catch(e){ res(url); } };
+  im.onerror = () => res(null); im.src = url; });
+const skyDrop = el => { const h = el.getAttribute("href"); if (h && h.startsWith("blob:")) URL.revokeObjectURL(h); el.remove(); };
 function skyUpdate(c){
   const now = performance.now(), S = M.sky;
   // drain the request queue: at most 8 new tiles a second
   SKY.sent = SKY.sent.filter(t => now - t < 1000);
-  while (SKY.queue.length && SKY.sent.length < 8){ const q = SKY.queue.shift(); if (q.el.isConnected){ q.el.setAttribute("href", q.url); SKY.sent.push(now); } }
+  while (SKY.queue.length && SKY.sent.length < 8){ const q = SKY.queue.shift(); if (q.el.isConnected){ const el = q.el; skyImg(q.url).then(u => { if (u && el.isConnected) el.setAttribute("href", u); else if (u && u.startsWith("blob:")) URL.revokeObjectURL(u); }); SKY.sent.push(now); } }
   if (now - SKY.at < 300) return; SKY.at = now;
-  if (!SKY.mode){ S.layers.forEach(l => l.remove()); S.layers.clear(); SKY.queue = []; S.z = null; return; }
+  if (!SKY.mode){ S.layers.forEach(l => { l.selectAll("image").each(function(){ skyDrop(this); }); l.remove(); }); S.layers.clear(); SKY.queue = []; S.z = null; return; }
   // view in map space: screen corners (extra room above for the 3D tilt), then km, then lat/lon
   const f = M.f, s = f.s, o = f([0,0]), up = st.view.tilt > .05 ? M.H*.7 : 0;
   const cs = [[0,-up],[M.W,-up],[0,M.H],[M.W,M.H]].map(([x,y]) => M.scrInv(x, y)).map(([x,y]) => [(x - o[0])/s, (y - o[1])/s]);
@@ -849,7 +867,7 @@ function skyUpdate(c){
   if (!L){ L = M.skyG.append("g").attr("data-k", key); L.tiles = new Map(); S.layers.set(key, L); }
   L.raise();
   // keep the previous zoom underneath until the new tiles have had time to arrive, then drop it
-  if (S.z !== key){ const old = [...S.layers.keys()].filter(k => k !== key); setTimeout(() => old.forEach(k => { if (M.sky.z !== k && M.sky.layers.has(k)){ M.sky.layers.get(k).remove(); M.sky.layers.delete(k); } }), 1500); S.z = key; }
+  if (S.z !== key){ const old = [...S.layers.keys()].filter(k => k !== key); setTimeout(() => old.forEach(k => { if (M.sky.z !== k && M.sky.layers.has(k)){ M.sky.layers.get(k).selectAll("image").each(function(){ skyDrop(this); }); M.sky.layers.get(k).remove(); M.sky.layers.delete(k); } }), 1500); S.z = key; }
   const want = new Set();
   for (let x = x0; x <= x1; x++) for (let y = y0; y <= y1; y++){
     const id = x + "/" + y; want.add(id); if (L.tiles.has(id)) continue;
@@ -860,13 +878,13 @@ function skyUpdate(c){
   }
   SKY.queue.sort((p, q) => p.d - q.d);          // nearest the camera first
   // forget tiles far out of view so the page does not keep hundreds of images
-  if (L.tiles.size > 160) L.tiles.forEach((el, id) => { if (!want.has(id)){ el.remove(); L.tiles.delete(id); } });
+  if (L.tiles.size > 160) L.tiles.forEach((el, id) => { if (!want.has(id)){ skyDrop(el); L.tiles.delete(id); } });
 }
 function setSky(mode){
   SKY.mode = mode; SKY.queue = [];
   document.querySelectorAll("[data-sky]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sky === mode));
   $("#skyCredit").hidden = !mode;
-  if (M){ M.sky.layers.forEach(l => l.remove()); M.sky.layers.clear(); M.sky.z = null; SKY.at = 0; }
+  if (M){ M.sky.layers.forEach(l => { l.selectAll("image").each(function(){ skyDrop(this); }); l.remove(); }); M.sky.layers.clear(); M.sky.z = null; SKY.at = 0; }
 }
 document.querySelectorAll("[data-sky]").forEach(b => b.addEventListener("click", () => setSky(b.dataset.sky)));
 

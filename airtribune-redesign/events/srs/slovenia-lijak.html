@@ -713,13 +713,29 @@ function drawTask(){ if (taskDrawn) return; taskDrawn = true;
       const k = (y*W + x)*4; o[k] = 4 + 60*h; o[k+1] = 22 + 104*h; o[k+2] = 24 + 104*h; o[k+3] = 255; }
     relief.getContext("2d").putImageData(out, 0, 0);
   });
+  // KK7 colours the least-flown lines dark blue, which disappears on dark ground: lift blue-dominant pixels
+  // towards a light sky blue (cyan, green, yellow and red are left as they are) and firm up faint alpha.
+  // thermals: read the strength from KK7's blue→red scale (hue) and redraw it as pale amber → orange → red
+  function kk7Heat(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
+    const r = d[i]/255, g = d[i+1]/255, b = d[i+2]/255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), c = mx - mn;
+    let h = 240; if (c > .04) h = mx === r ? 60*(((g - b)/c + 6) % 6) : mx === g ? 60*((b - r)/c + 2) : 60*((r - g)/c + 4);
+    if (h > 300) h = 0;                                    // magenta-ish tips count as strongest
+    const v = Math.max(0, Math.min(1, (240 - h)/240)), k = v < .5 ? v*2 : (v - .5)*2;
+    const A = v < .5 ? [255,205,130] : [255,125,35], B = v < .5 ? [255,125,35] : [215,25,25];
+    d[i] = A[0] + (B[0] - A[0])*k; d[i+1] = A[1] + (B[1] - A[1])*k; d[i+2] = A[2] + (B[2] - A[2])*k;
+    d[i+3] = Math.min(255, d[i+3]*(1.2 + .6*v)); } }
+  function kk7Lift(d){ for (let i = 0; i < d.length; i += 4){ if (!d[i+3]) continue;
+    const r = d[i], g = d[i+1], b = d[i+2], t = Math.max(0, b - Math.max(r, g))/255;
+    d[i] = r + 120*t; d[i+1] = g + 170*t; d[i+3] = Math.min(255, d[i+3]*1.5); } }
+  const lift = (im, heat) => { if (!im) return null; const c = document.createElement("canvas"); c.width = im.width; c.height = im.height; const x = c.getContext("2d"); x.drawImage(im, 0, 0);
+    try { const d = x.getImageData(0, 0, c.width, c.height); (heat ? kk7Heat : kk7Lift)(d.data); x.putImageData(d, 0, 0); } catch(e){} return c; };
   const cache = {};
   const layer = name => cache[name] || (cache[name] = Promise.all(tiles.map(([x, y]) =>
-    load(`https://thermal.kk7.ch/tiles/${name}_all_all/${Z}/${x}/${N - 1 - y}.png?src=${SRC}`, true).then(im => ({x, y, im})))));
+    load(`https://thermal.kk7.ch/tiles/${name}_all_all/${Z}/${x}/${N - 1 - y}.png?src=${SRC}`, true).then(im => ({x, y, im: lift(im, name === "thermals")})))));
   let mode = "skyways";
   const paint = () => rel.then(() => (mode ? layer(mode) : Promise.resolve([]))).then(rs => {
     ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.fillStyle = "#03100F"; ctx.fillRect(0, 0, W, H); ctx.drawImage(relief, 0, 0);
-    ctx.globalCompositeOperation = "screen"; ctx.globalAlpha = .95;
+    ctx.globalAlpha = .92;
     rs.forEach(r => r.im && ctx.drawImage(r.im, r.x*TS - ox, r.y*TS - oy, TS, TS));
     ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
     // venue marker + name

@@ -313,8 +313,8 @@ const map = new maplibregl.Map({
       { id: "bg", type: "background", paint: { "background-color": "#0A1E21" } },
       { id: "sat", type: "raster", source: "sat", paint: { "raster-saturation": -0.12, "raster-contrast": 0.06, "raster-brightness-max": 0.92 } },
       { id: "hill", type: "hillshade", source: "hs", layout: { visibility: "none" }, paint: { "hillshade-shadow-color": "#020B0B", "hillshade-highlight-color": "#6FA3A8", "hillshade-accent-color": "#0C2A2D", "hillshade-exaggeration": 0.9, "hillshade-illumination-direction": 315 } },
-      { id: "skyways", type: "raster", source: "skyways", paint: { "raster-opacity": 0.72 } },
-      { id: "thermals", type: "raster", source: "thermals", layout: { visibility: "none" }, paint: { "raster-opacity": 0.72 } },
+      { id: "skyways", type: "raster", source: "skyways", paint: { "raster-opacity": 0.85, "raster-brightness-min": 0.3 } },
+      { id: "thermals", type: "raster", source: "thermals", layout: { visibility: "none" }, paint: { "raster-opacity": 0.85 } },
       { id: "rings", type: "line", source: "rings", paint: { "line-color": ["case", ["==", ["get", "goal"], 1], "#FF5F00", "#FFFFFF"], "line-width": 2, "line-opacity": 0.85 } },
       { id: "route", type: "line", source: "route", paint: { "line-color": "#FFFFFF", "line-width": 1.4, "line-opacity": 0.6, "line-dasharray": [3, 3] } },
       { id: "shadow", type: "line", source: "shadow", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#000000", "line-width": 3, "line-opacity": 0.45, "line-blur": 1.5 } }
