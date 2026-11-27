@@ -38,6 +38,7 @@ the running plan is `docs/handover.md`. Code chats are tagged `airtribune`.
 | 15 | 27 Nov | KK7 bake, gaggles, wind, xcstats | https://claude.ai/code/session_018Da7i6i6ZB4X3f4yV8rmaP |
 | 16 | 27 Nov | One-link pipeline + wind animation | https://claude.ai/code/session_018Da7i4ry3TcqZLLKv4NJfz |
 | 17 | 27 Nov | One-link task pipeline (any comp site) | https://claude.ai/code/session_018Da7i8D6MEtKwCd7BRJCpH |
-| 18 | 27 Nov | 100+ pilots and landed-out pilots (current) | https://claude.ai/code/session_018Da7i84HWxW1Kpk21DZVFK |
+| 18 | 27 Nov | 100+ pilots and landed-out pilots | https://claude.ai/code/session_018Da7i84HWxW1Kpk21DZVFK |
+| 19 | 27 Nov | Broadcast + voice-over for any task (current) | https://claude.ai/code/session_018Da7i5ejsPatVK2jcKmEq2 |
 
 New Code chats are added to this table at each handover.
