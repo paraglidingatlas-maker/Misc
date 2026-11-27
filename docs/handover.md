@@ -1,6 +1,6 @@
 # Handover: Airtribune redesign concept
 
-Last updated 27 Nov 2026 by the chat "KK7 import, gaggles, wind, xcstats" (earlier: "Skyways overlay", "Design audit batch 2" and others).
+Last updated 27 Nov 2026 by the chat "One-link task pipeline, step 1" (before: "KK7 import, gaggles, wind, xcstats") (earlier: "Skyways overlay", "Design audit batch 2" and others).
 
 ## Live
 
@@ -9,6 +9,8 @@ Last updated 27 Nov 2026 by the chat "KK7 import, gaggles, wind, xcstats" (earli
 | Landing | https://paraglidingatlas-maker.github.io/Misc/airtribune-redesign/ |
 | Season calendar | …/airtribune-redesign/events/ |
 | Live tracker (has a Broadcast view: button, `B` key or `#broadcast`) | …/airtribune-redesign/events/live.html |
+| Task replays index (one package per task) | …/airtribune-redesign/events/tasks/ |
+| A task in the live tracker / 3D | …/events/live.html?task=srs-2026-6/t3 · …/concepts/flythrough.html?task=srs-2026-6/t3 |
 | 8th British Winter Open (Panchgani) | …/airtribune-redesign/events/bwo/british-winter-open.html |
 | SRS event pages (5) | …/airtribune-redesign/events/srs/slovenia-lijak.html and siblings |
 | Logo study | …/airtribune-redesign/logo/ |
@@ -22,6 +24,7 @@ Private preview of the calendar (owner only): https://claude.ai/artifact/4YVdfeK
 Sources are in `airtribune-redesign/src/`:
 
 - `season-calendar.html` → copy to `events/index.html`, wrapped in `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">` … `</html>` (the source has no doctype because it is also published as an Artifact).
+- Task data (live tracker, fly-through): task packages in `events/tasks/`, built by `src/pipeline/new_task.py` (see the pipeline section below).
 - `live-tracker.html` → `events/live.html`, wrapped the same way, with `</style>` followed by `</head><body>` and `</body></html>` at the end.
 - Calendar + live tracker in one go: `python3 src/build/build_pages.py` (run from `airtribune-redesign/`) does both wraps below.
 - Logo: `assets/brand.js`, loaded by every page, renders the Heritage logo into every `a.logo`, every `[data-brand]` element (`""` lockup, `"mark"`, `"tile"`) and the favicon. Change the logo there only.
@@ -77,15 +80,50 @@ Review page for the owner (private): https://claude.ai/artifact/9VDf1zcmDsh12PpV
 - `assets/drag.js` (loaded by the calendar and the event pages): any element with `data-drag` scrolls sideways when grabbed with the mouse, with a throw and snap on release; a drag swallows the click so links still work on a plain click. Touch and trackpads keep native scrolling. Used on the calendar strip (`#strip`), the season timeline (`.gantt-scroll`) and the event-page "On the hill" strip (`.gal-row`, set in `src/build/photos.py`).
 - Tour maps (calendar, `panZoom()` in `src/season-calendar.html`): d3.zoom on both maps. Drag to move (works at the default zoom too, out to the whole world / Europe from Scotland to Sicily); Ctrl/⌘ + scroll or trackpad pinch to zoom (plain scroll still scrolls the page); +/− and reset buttons top-right; two fingers on phones, one finger once zoomed in. Labels and dots follow the map; dots shrink as you zoom. Hint line in the map key.
 
-## NOW: owner requests from 27 Nov 2026, second batch (start here)
+## NOW: one-link task pipeline (job 1 of the 27 Nov second batch), IN PROGRESS (start here)
 
-**Job 1 design AGREED by the owner (27 Nov 2026), build it now.** Owner: "not just Airtribune, any other website or any other comp should work too." Agreed design:
-- **One common task package** `events/tasks/<comp>/<task>/data.json` (event, task, turnpoints + radii, SSS/ESS, gate, date, time zone, results, tracks, wind grid). The live tracker, fly-through, broadcast and voice-over read only this (`?task=<comp>/<task>`), never a specific website. Index page of covered comps/tasks.
-- **One reader per source**, picked by the link's domain in `new_task.py <link>`. Owner picked ALL of these: **Airtribune** (results page + `.cup` + IGC zip; see `src/data/srs-task3/extract_task3.py` and `SOURCES.md`), **FS `.fsdb`** (CIVL scoring program: task, turnpoints, results in one file), **AirScore** (airscore.cc), **PWCA / Livetrack24 / Flymaster**. Check each site's terms and rate limits before writing its reader.
-- **Files fallback** for any site without a reader: task file (XCTrack `.xctsk`, `.cup` or `.fsdb`) + IGC zip/folder + optional results CSV/HTML.
-- **Shared steps** whatever the source: area box from the turnpoints, `bake_relief.py`, `bake_kk7.py`, `bake_wind.py` (make date, box, level and time zone arguments), write the package. Gaggle/feed/final-glide thresholds scale with field size (20 to 150+ pilots).
-- Suggested order: package format + pages reading it (Tapalpa T3 as the first package, must look the same as today) → Airtribune reader → files fallback → FS → AirScore → PWCA/Livetrack24/Flymaster.
+Design agreed by the owner (27 Nov 2026): "not just Airtribune, any other website or any other comp should work too";
+readers for Airtribune, FS .fsdb, AirScore, PWCA / Livetrack24 / Flymaster, plus a files fallback. Full notes and the
+package format: `airtribune-redesign/src/pipeline/README.md`.
 
+**Done (live on main, 27 Nov 2026):**
+- `python3 -I src/pipeline/new_task.py <link>` (from `airtribune-redesign/`): picks the reader by the link's domain,
+  then shared steps in `taskpkg.py` / `shared.py`: turnpoint tags from the IGC files, tracks (5 s, delta ints), area
+  box from the cylinders, Open-Meteo ECMWF wind (5 x 5 grid + take-off caption, level 700 hPa or 600 hPa for high
+  take-offs), KK7 skyways/thermals for the box, optional relief (`--relief`). Writes `events/tasks/<comp>/<task>/`
+  (`data.json`, `tracks.json`, `sky-*.webp`, `relief.jpg`) and `events/tasks/index.json`. Downloads cached in `$TASK_CACHE`.
+- **Airtribune reader** (`readers/airtribune.py`): results page (FS export), `.cup` waypoints, IGC zip, time offset from
+  the event page; one request a second, no `/api/` (robots.txt). First package: `srs-2026-6/t3` (all 106 tracks), rebuilt with
+  `new_task.py https://airtribune.com/srs-2026-6/results/task6991/day/overall --short "Las Gemelas La Cueva=Las Gemelas" --relief`
+  (rerun gives a byte-identical data.json; the wind caption values equal the old hand-copied ALOFT).
+- **Files fallback** (`readers/files.py`): `--files <.xctsk|.cup|.fsdb> <zip|folder|.igc…> [results .csv|FS .html] --comp <slug>`.
+  No results file → results worked out from the tracklogs (tested on Task 3: goal times within 1 s, distances within 0.15 km;
+  ranks are by time, not points). Date from IGC headers, time zone from Open-Meteo.
+- **FS .fsdb reader** (`readers/fsdb.py`): `.fsdb` link or file, `--task N`, tracks via `--files`, matched by FsFlightData
+  tracklog_filename, id, CIVL id or IGC pilot name. Tested on a real FS 3.5 file (Soca Open 2019, from GitHub slo-pg-tm/slo-league).
+- **Pages read the package:** `events/live.html?task=<comp>/<task>` and `concepts/flythrough.html?task=…` (default
+  `srs-2026-6/t3`; `&n=` = how many goal pilots to show, default 20 as before). The app script is `type="text/plain" id="app"`,
+  a loader at the end fetches the package and then runs it; `taskToT3` / `taskToFT` adapt the package to each page's old shape.
+  Checked at 1440/390: no console errors, no horizontal scroll, live tracker looks the same as before (skyways now cover the
+  whole task area). Removed: the T3 blob, `embed_task3.py`, `build_flythrough_data.py`, `flythrough-data.js`, `bake_wind.py`,
+  `events/img/sky/tapalpa-*.webp` (and the Tapalpa part of `bake_kk7.py`, which still bakes the venue images).
+- **Index page:** `events/tasks/` lists every package (Replay / 3D buttons). Not yet linked from the calendar or event pages.
+
+**Next, in this order:**
+1. **Pages for 100+ pilots and landed-out pilots.** The live tracker and fly-through still assume every shown pilot reached
+   goal (they take the top 20 goal finishers). Make them take all pilots (`goal` flag in tracks.json, shorter `tags` when landed
+   out), and scale the GAG (gaggles), EVENTS (feed: "All N in goal", half-field messages), final-glide and pilot-list code to
+   20–150+ pilots (performance too). Then raise the default `n`.
+2. **Broadcast and voice-over from the package:** `concepts/broadcast.html` (+ `broadcast-data.js` from
+   `src/build/build_broadcast_data.py`) and `docs/task3-voiceover/` (`race.json` from `build_voiceover_data.py`, `relief.jpg`)
+   still use the Task 3 builders (`src/data/srs-task3/t3lib.py`, `t3load.py`, need the unzipped IGC folder). Port their
+   distance-to-go / thermals to work from `tracks.json` (or let the pipeline write their extra data), then add `?task=`.
+3. **Readers still to write:** PWCA, Livetrack24, Flymaster (check each site's terms and rate limits first). **AirScore is blocked**:
+   on 27 Nov 2026 airscore.cc lists one comp (Coppa delle Regioni 2026, task not set), so the result data routes cannot be seen;
+   the files fallback covers AirScore comps until a scored task exists.
+4. Link `events/tasks/` from the calendar and event pages; add a Broadcast button on the index once step 2 is done.
+
+### Original brief (kept for reference)
 
 1. **One link in, everything built (design agreed, see above): a pipeline for every task of every comp the owner covers.** Owner: "redo this for every task for each comp covered by me, so design the draft accordingly so that I just put the day's link and everything gets done." Today everything is hard-wired to Tapalpa Task 3: data embedded in `src/live-tracker.html` (`/*T3-DATA*/`), `concepts/flythrough.html` + its data from `src/build/build_flythrough_data.py`, `build_broadcast_data.py`, `build_voiceover_data.py`, the relief from `bake_relief.py` (fixed TO_LAT/TO_LON and box), KK7 from `bake_kk7.py` (fixed `TAPALPA` box), and the wind `ALOFT` constant (hand-copied from Open-Meteo). Suggested design (agree it with the owner first):
    - One command, e.g. `python3 src/build/new_task.py <airtribune task URL>`: fetch the task (turnpoints, radii, gate, date), results and IGC tracks from Airtribune; work out the area box from the turnpoints; bake relief and KK7 for that box; fetch hourly 700 hPa wind (and nearby levels) from the Open-Meteo historical forecast API for take-off's lat/lon and date (ECMWF IFS, with ICON/GFS as a cross-check), and also the wind field on a small grid for the animation below; then write `events/tasks/<comp>/<task>/data.json` plus images.
