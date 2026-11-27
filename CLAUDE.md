@@ -17,6 +17,7 @@ How to hand over (do all of it, in this order):
    Title it **"Airtribune redesign & updates N"**, where N is one more than this chat's number (owner, 27 Nov 2026).
    This chat's number is in its own title (`get_session`); chats 1–18 run from 23 to 27 Nov 2026, 18 being the one that
    set this rule. Side chats for this project get the next number too.
+   Give it the tag `airtribune` (`tags` on `create_session`); all chats 1–18 carry it.
 4. Give the owner the new chat's link in one line, then stop doing work in the old chat.
 
 Do not wait to be asked. Say in one line that you are switching and why.
