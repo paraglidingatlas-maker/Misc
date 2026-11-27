@@ -41,6 +41,14 @@ Sources are in `airtribune-redesign/src/`:
 
 
 
+## NOW: voice-over studio for the daily highlights video (draft 1 built 27 Nov 2026; owner wants to refine the concept before more building)
+
+Private page: https://claude.ai/artifact/PSxqVECj2bQ9kxDDNXbdUu. Source `airtribune-redesign/docs/task3-voiceover/` (index.html = artifact source, relief.jpg, race.json, RESEARCH.md).
+- Layout: a 16:9 canvas the owner screen-records, with a teleprompter under it. 10 scenes; each plays its race window over the estimated reading time (default 150 wpm), then holds until → is pressed. Space play/pause, R restart, `#s8-80` deep link.
+- Map: light shaded relief baked from AWS Terrain Tiles (`python3 -I src/build/bake_relief.py <tile-cache>`). The owner asked for a lighter backdrop. Satellite imagery is not used: artifacts block it, and the Esri licence doesn't cover video.
+- Data: `python3 -I src/build/build_voiceover_data.py <igc-dir> <cache.pkl>`. Top 20 at 2 s with altitude, the rest at 10 s, race order every 10 s (re-optimised distance to go).
+- Next: agree the concept with the owner (see RESEARCH.md: cold open, group labels, gap to the pilot ahead, explainers, prompter formatting, pronunciation), then rebuild.
+
 ## DONE (awaiting owner review): expert "key moments" analysis of Tapalpa Task 3 (26 Nov 2026)
 
 Review page for the owner (private): https://claude.ai/artifact/9VDf1zcmDsh12PpV5PnpxL. Source `airtribune-redesign/docs/task3-key-moments/index.html` (artifact source, no doctype; not a site page).

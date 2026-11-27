@@ -1,0 +1,359 @@
+<title>Task 3 Voice-over Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a 16:9 broadcast frame to screen-record on top; the teleprompter for the speaker underneath, never inside the frame. */
+:root{
+  --bg:#03100F; --panel:#0C2427; --ink:#EAF2F2; --muted:#8AA3A6; --rule:#1E3A3E;
+  --orange:#FF5F00; --blue:#6FB2FF;
+  --display:"Archivo",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1280px;margin:0 auto;padding-block:16px 40px;display:grid;gap:14px}
+.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;justify-content:space-between}
+.top h1{font:800 18px/1.2 var(--display);margin:0;letter-spacing:.01em}
+.top p{margin:0;color:var(--muted);font-size:13px}
+kbd{font:600 12px var(--body);border:1px solid var(--rule);padding:1px 6px;border-radius:3px;color:var(--ink)}
+.stage{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;background:#051416;outline:1px solid var(--rule)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.prompter{background:var(--panel);padding:18px 22px 20px;display:grid;gap:14px}
+.phead{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+.phead .n{font:700 13px var(--display);color:var(--orange);letter-spacing:.08em;text-transform:uppercase}
+.phead .t{font:800 20px/1.2 var(--display)}
+.phead .d{color:var(--muted);font-size:13px;margin-left:auto;font-variant-numeric:tabular-nums}
+.script{font:500 clamp(22px,2.6vw,32px)/1.45 var(--body);max-width:62ch;min-height:5.8em;text-wrap:pretty}
+.script span{color:#5E7A7D;transition:color .25s}
+.script span.done{color:#8FA9AC}
+.script span.now{color:var(--ink)}
+.bar{height:4px;background:var(--rule)}
+.bar i{display:block;height:100%;width:0;background:var(--orange)}
+.next{color:var(--muted);font-size:14px}
+.next b{color:var(--ink);font-weight:600}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:600 14px var(--body);background:var(--orange);color:#fff;border:0;padding:9px 16px;cursor:pointer;border-radius:2px}
+button.q{background:transparent;color:var(--ink);outline:1px solid var(--rule)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+label{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:13px}
+select{background:var(--bg);color:var(--ink);border:1px solid var(--rule);padding:6px 8px;font:inherit}
+.scenes{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.scenes button{padding:5px 9px;font-size:12px;background:transparent;outline:1px solid var(--rule);color:var(--muted)}
+.scenes button.on{background:var(--orange);color:#fff;outline-color:var(--orange)}
+.note{color:var(--muted);font-size:13px;max-width:80ch}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <h1>Task 3 voice-over studio · draft 1</h1>
+    <p>Record only the 16:9 frame. Read the script below. <kbd>Space</kbd> play/pause · <kbd>→</kbd> next scene · <kbd>←</kbd> back · <kbd>R</kbd> restart scene</p>
+  </div>
+  <div class="stage" id="stage"><canvas id="cv" aria-label="Animated race map of SRS Tapalpa Task 3"></canvas></div>
+  <section class="prompter" aria-label="Teleprompter">
+    <div class="phead"><span class="n" id="pn">Scene 1 / 10</span><span class="t" id="pt"></span><span class="d" id="pd"></span></div>
+    <div class="script" id="ps"></div>
+    <div class="bar"><i id="pb"></i></div>
+    <div class="next" id="px"></div>
+    <div class="ctrl">
+      <button id="bPlay">Play</button>
+      <button class="q" id="bPrev">← Back</button>
+      <button class="q" id="bNext">Next →</button>
+      <button class="q" id="bRestart">Restart scene</button>
+      <label for="wpm">Pace <select id="wpm"><option value="130">130 wpm</option><option value="150" selected>150 wpm</option><option value="170">170 wpm</option></select></label>
+      <label for="auto"><input type="checkbox" id="auto"> Auto-advance</label>
+      <div class="scenes" id="sl"></div>
+    </div>
+    <p class="note">Each scene plays its part of the race while you read and then holds on the last frame until you press Next, so the picture waits for your voice. Draft for review: the script, scene choice and look are all open for change.</p>
+  </section>
+</div>
+
+<script>
+(() => {
+const COL = { a: "#FF5F00", b: "#FFFFFF", c: "#6FB2FF", d: "#FFC24B" };
+const V = "0232", Q = "1709", L = "1667", BEL = "1574", SPA = "1151", SIE = "1736", NAZ = "1328", DIE = "1584", ARR = "1750",
+      DES = "1073", FOR = "0052", ALV = "1575", CAS = "0101", TAK = "0001", SIG = "1734", MCC = "1735";
+const hm = s => { const [h, m, x] = s.split(":").map(Number); return (h * 3600 + m * 60 + (x || 0)) - (12 * 3600 + 15 * 60); };
+
+// ---------- scenes: race window, camera, focus pilots, markers, script ----------
+const SCENES = [
+ { title: "Task 3, Tapalpa", sub: "58.7 km race to goal · 106 pilots", t: [-150, 40], cam: { box: [-4, -9, 25, 17] }, card: "intro",
+   focus: {}, script: "Task three in Tapalpa. A 58.7 kilometre race to goal. North to Las Gemelas, south-east to touch the huge Tamazula cylinder, then back across the valley to land at Amacueca. The start opens at a quarter past twelve, and almost the whole field is on the line. Eighty of the eighty-seven pilots who make goal cross in the first minute." },
+ { title: "Leading out", sub: "Quintanilla 27:22 to TP2 · 4:18 circling", t: [40, 1720], cam: { box: [-3, -3, 17, 15] },
+   focus: { [Q]: "a", [V]: "b" }, script: "Manuel Quintanilla and Abel Varga take it on. They barely turn: just over four and six minutes of circling on the whole first leg. Quintanilla reaches the first turnpoint in 27 minutes, the fastest leg of the day. Behind them, Belcourt, Nazander and Desmond climb patiently, and arrive seven minutes later." },
+ { title: "Varga gets low", sub: "6 minutes behind at 34 km to go", t: [2420, 2860], cam: { follow: [V, TAK], minW: 11 },
+   focus: { [V]: "a", [TAK]: "c" }, markers: [{ x: 11.41, y: 7.28, label: "0.9 m/s", from: hm("12:58:30") }],
+   script: "After the turnpoint, Varga gets low. Just before one o'clock he is scratching in less than a metre per second, about four hundred and sixty metres above the ground. He is now six minutes behind the fastest pilot. Up front, Pal Takats is leading the race." },
+ { title: "The climb of the day", sub: "≈ 4 m/s · Varga leaves highest, 2,767 m", t: [2960, 3330], cam: { follow: [V, Q, L, SPA], minW: 7 },
+   focus: { [V]: "a", [Q]: "b", [L]: "c", [SPA]: "d" }, markers: [{ x: 13.18, y: 5.1, label: "≈ 4 m/s", from: hm("13:05:00") }],
+   script: "Then the climb of the day. The lead gaggle hits four metres per second. They leave at about 2,680 metres. Varga arrives later and lower, but he stays, and leaves at 2,767: higher than anyone." },
+ { title: "Varga goes alone", sub: "Leads from 13:14:50 · up to 1.6 km clear", t: [3330, 4320], cam: { follow: [V, Q, L], minW: 10 },
+   focus: { [V]: "a", [Q]: "b", [L]: "c", [SPA]: "d" },
+   markers: [{ x: 15.4, y: 1.2, label: "Leaders climb 2.4 m/s", from: hm("13:13:30") }, { x: 17.02, y: -2.44, label: "1.8", from: hm("13:18:35") },
+             { x: 17.98, y: -4.22, label: "0.8", from: hm("13:21:57") }, { x: 19.54, y: -6.31, label: "1.4", from: hm("13:26:07") }],
+   script: "Eight minutes later the leaders stop again. Varga doesn't. He flies straight past their thermal and takes the lead, one and a half kilometres clear. But he is five hundred metres lower, and it costs him. Three weak climbs, and by the Tamazula cylinder the gaggle is back alongside." },
+ { title: "Low save", sub: "Sigel ≈ 10 m above the ground", t: [3800, 4330], cam: { follow: [SIG, MCC], minW: 7 },
+   focus: { [SIG]: "a", [MCC]: "c" }, markers: [{ x: 16.03, y: -2.07, label: "Climbs out 2.4 m/s", from: hm("13:25:22") }],
+   script: "Not everyone gets through. Michael Sigel sinks to about ten metres above the ground, and climbs out from there. It costs him fourteen minutes, but he still makes goal." },
+ { title: "Going long", sub: "Final glide from 11.4 km · 57–59 km/h", t: [5180, 5900], cam: { follow: [SIE, NAZ], minW: 14 },
+   focus: { [SIE]: "a", [NAZ]: "b", [V]: "c" }, markers: [{ x: 15.87, y: 0.58, label: "3,190 m", from: hm("13:42:47") }],
+   script: "Four minutes behind, Torsten Siegel and Albert Nazander climb to 3,190 metres, and go for goal from eleven kilometres out. Fifty-eight kilometres an hour, and no more turns. They will pass most of the leaders." },
+ { title: "Where the race is won", sub: "Two thermals, 1.2 km apart", t: [5640, 6070], cam: { box: [7.6, 2.6, 13.4, 7.4] },
+   focus: { [V]: "a", [Q]: "a", [L]: "a", [SPA]: "c", [DIE]: "c", [ARR]: "c", [FOR]: "c", [TAK]: "c", [CAS]: "c", [ALV]: "c" },
+   markers: [{ x: 10.5, y: 5.65, label: "North 2.0–2.4 m/s", from: hm("13:49:30") }, { x: 10.1, y: 4.4, label: "South 0.8–1.2 m/s", from: hm("13:49:40") }],
+   script: "And this is where the race is won. Five kilometres to go, and the leaders split between two thermals, one point two kilometres apart. Varga, Quintanilla and Luebberke find the north one: over two metres per second. The rest are in the south one, barely one. Both groups reach the same height. The north group leaves three minutes earlier." },
+ { title: "Goal", sub: "Varga 13:58:08", t: [6060, 6430], cam: { box: [3.6, 3.4, 11.2, 8.6] },
+   focus: { [V]: "a", [L]: "b", [Q]: "b", [BEL]: "d", [SIE]: "c", [NAZ]: "c" },
+   script: "Varga crosses the line at 13:58:08. Luebberke is next, thirty-four seconds back, then Quintanilla, who still takes second on lead-out points. Belcourt slips in fourth with 158 metres to spare, and Siegel and Nazander beat the gaggle they were chasing. The south group arrives three minutes later." },
+ { title: "Result", sub: "", t: [6430, 6430], cam: { box: [3.6, 3.4, 11.2, 8.6] }, card: "result", focus: {},
+   script: "Task three goes to Abel Varga. Eighty-eight of the hundred and six starters made goal." }
+];
+
+// ---------- state ----------
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+const W = 1920, H = 1080;
+let D = null, IMG = null, BY = {}, scene = 0, sceneT = 0, playing = false, last = 0;
+const cam = { x: 10, y: 4, w: 30 };
+const $ = id => document.getElementById(id);
+let wpm = 150;
+
+const words = s => s.trim().split(/\s+/).length;
+const dur = s => words(s.script) / wpm * 60 + 1.2;
+
+function fmtClock(t) { const s = Math.round(t + 12 * 3600 + 15 * 60); return [s / 3600 | 0, (s / 60 | 0) % 60, s % 60].map(v => String(v).padStart(2, "0")).join(":"); }
+
+function pos(p, t) {
+  const st = p.step, n = p.pts.length / (p.top ? 3 : 2), k = p.top ? 3 : 2;
+  const f = (t - p.t0) / st;
+  if (f < 0 || f > n - 1) return null;
+  const i = Math.floor(f), a = f - i, j = Math.min(i + 1, n - 1);
+  return { x: (p.pts[i * k] * (1 - a) + p.pts[j * k] * a) / 100, y: (p.pts[i * k + 1] * (1 - a) + p.pts[j * k + 1] * a) / 100,
+           alt: p.top ? p.pts[i * k + 2] * (1 - a) + p.pts[j * k + 2] * a : null };
+}
+
+// ---------- camera ----------
+function camTarget(sc, t) {
+  if (sc.cam.box) { const [x0, y0, x1, y1] = sc.cam.box; return { x: (x0 + x1) / 2, y: (y0 + y1) / 2, w: Math.max(x1 - x0, (y1 - y0) * 16 / 9) * 1.04 }; }
+  const ps = sc.cam.follow.map(id => pos(BY[id], t)).filter(Boolean);
+  if (!ps.length) return cam;
+  let x0 = Math.min(...ps.map(p => p.x)), x1 = Math.max(...ps.map(p => p.x)), y0 = Math.min(...ps.map(p => p.y)), y1 = Math.max(...ps.map(p => p.y));
+  const w = Math.max(sc.cam.minW || 8, (x1 - x0) * 1.6, (y1 - y0) * 1.6 * 16 / 9);
+  return { x: (x0 + x1) / 2 + w * 0.06, y: (y0 + y1) / 2, w };   // nudge left so the race-order panel doesn't cover pilots
+}
+const S = (x, y) => [(x - cam.x) / cam.w * W + W / 2, H / 2 - (y - cam.y) / cam.w * W];
+const kmPx = () => W / cam.w;
+
+// ---------- drawing ----------
+function draw(t, sc, prog) {
+  ctx.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+  ctx.fillStyle = "#051416"; ctx.fillRect(0, 0, W, H);
+  if (IMG) { const b = D.bounds, [sx, sy] = S(b.x0, b.y1); ctx.drawImage(IMG, sx, sy, (b.x1 - b.x0) * kmPx(), (b.y1 - b.y0) * kmPx()); }
+  
+  // cylinders + route
+  ctx.lineWidth = 2;
+  D.tps.forEach((c, k) => {
+    const [x, y] = S(c.x, c.y);
+    ctx.setLineDash(c.kind === "Goal" ? [] : [10, 10]);
+    ctx.strokeStyle = c.kind === "Goal" ? "rgba(230,85,0,.95)" : "rgba(3,16,15,.45)";
+    ctx.beginPath(); ctx.arc(x, y, Math.max(c.r * kmPx(), 5), 0, Math.PI * 2); ctx.stroke();
+  });
+  ctx.setLineDash([4, 10]); ctx.strokeStyle = "rgba(200,70,0,.7)"; ctx.lineWidth = 3;
+  ctx.beginPath(); D.route.forEach(([x, y], i) => { const [a, b] = S(x, y); i ? ctx.lineTo(a, b) : ctx.moveTo(a, b); }); ctx.stroke();
+  ctx.setLineDash([]);
+  // TP labels at the route touch points
+  ctx.font = "600 20px Inter, sans-serif"; ctx.textBaseline = "middle";
+  const lab = [["Take-off", 0, 0], ["Start", ...D.route[1]], ["Las Gemelas", ...D.route[2]], ["Tamazula", ...D.route[3]], ["Amacueca", ...D.route[4]], ["Goal", ...D.route[5]]];
+  lab.forEach(([n, x, y]) => {
+    const [a, b] = S(x, y); if (a < -50 || a > W + 50 || b < -50 || b > H + 50) return;
+    if (cam.w > 12 && (n === "Goal" || n === "Take-off")) return;
+    ctx.fillStyle = "rgba(3,16,15,.75)"; ctx.fillText(n.toUpperCase(), a + 12, b - 16);
+  });
+
+  // field: other pilots as small dots
+  const focus = sc.focus || {};
+  D.pilots.forEach(p => {
+    if (p.top || focus[p.id]) return;
+    const q = pos(p, t); if (!q) return; const [a, b] = S(q.x, q.y);
+    ctx.fillStyle = "rgba(20,44,46,.55)"; ctx.beginPath(); ctx.arc(a, b, 3, 0, 7); ctx.fill();
+  });
+  // top 20: trails; focus ones bright and labelled
+  const order = D.pilots.filter(p => p.top).sort((a, b) => (focus[a.id] ? 1 : 0) - (focus[b.id] ? 1 : 0));
+  const labels = [];
+  order.forEach(p => {
+    const role = focus[p.id], col = role ? COL[role] : "rgba(20,44,46,.7)";
+    const q = pos(p, t); if (!q) return;
+    const tr = role ? 300 : 150;
+    ctx.strokeStyle = role ? col : "rgba(20,44,46,.28)"; ctx.lineWidth = role ? 3 : 1.5; ctx.globalAlpha = role ? .85 : 1;
+    ctx.beginPath(); let first = true;
+    for (let s = Math.max(p.t0, t - tr); s <= t; s += 2) { const r = pos(p, s); if (!r) continue; const [a, b] = S(r.x, r.y); first ? ctx.moveTo(a, b) : ctx.lineTo(a, b); first = false; }
+    if (role) { ctx.save(); ctx.strokeStyle = 'rgba(3,16,15,.55)'; ctx.lineWidth = 6.5; ctx.stroke(); ctx.restore(); }
+    ctx.stroke(); ctx.globalAlpha = 1;
+    const [a, b] = S(q.x, q.y);
+    ctx.fillStyle = role ? col : "rgba(20,44,46,.75)"; ctx.beginPath(); ctx.arc(a, b, role ? 8 : 4, 0, 7); ctx.fill();
+    if (role) { ctx.strokeStyle = "#03100F"; ctx.lineWidth = 2.5; ctx.stroke(); labels.push({ a, b, p, q, col }); }
+  });
+  // labels, nudged apart vertically
+  labels.sort((m, n) => m.b - n.b);
+  let lastY = -1e9;
+  labels.forEach(l => {
+    let y = Math.max(l.b - 30, lastY + 34); lastY = y;
+    const txt = l.p.last.toUpperCase(), alt = Math.round(l.q.alt).toLocaleString("en") + " m";
+    ctx.font = "800 22px Archivo, sans-serif"; const w1 = ctx.measureText(txt).width;
+    ctx.font = "500 18px Inter, sans-serif"; const w2 = ctx.measureText(alt).width;
+    const x = l.a + 16;
+    ctx.fillStyle = "rgba(3,16,15,.82)"; ctx.fillRect(x, y - 15, w1 + w2 + 34, 30);
+    ctx.fillStyle = l.col; ctx.fillRect(x, y - 15, 5, 30);
+    ctx.fillStyle = "#fff"; ctx.font = "800 22px Archivo, sans-serif"; ctx.fillText(txt, x + 13, y + 1);
+    ctx.fillStyle = "#B7C9CB"; ctx.font = "500 18px Inter, sans-serif"; ctx.fillText(alt, x + 21 + w1, y + 1);
+    if (Math.abs(y - (l.b - 30)) > 4) { ctx.strokeStyle = "rgba(234,242,242,.4)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(l.a, l.b); ctx.lineTo(x, y); ctx.stroke(); }
+  });
+  // markers (thermals)
+  (sc.markers || []).forEach(m => {
+    if (t < m.from) return;
+    const [a, b] = S(m.x, m.y), age = Math.min(1, (t - m.from) / 40);
+    const pulse = (performance.now() / 900) % 1;
+    ctx.strokeStyle = `rgba(255,194,75,${.9 * (1 - pulse)})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(a, b, 18 + pulse * 26, 0, 7); ctx.stroke();
+    ctx.strokeStyle = "rgba(255,194,75,.95)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(a, b, 16, 0, 7); ctx.stroke();
+    ctx.globalAlpha = age; ctx.font = "700 22px Inter, sans-serif"; const w = ctx.measureText(m.label).width;
+    ctx.fillStyle = "rgba(255,194,75,.95)"; ctx.fillRect(a - w / 2 - 10, b + 26, w + 20, 32);
+    ctx.fillStyle = "#03100F"; ctx.fillText(m.label, a - w / 2, b + 43); ctx.globalAlpha = 1;
+  });
+
+  hud(t, sc, prog);
+}
+
+function hud(t, sc, prog) {
+  // clock, top-left
+  ctx.fillStyle = "rgba(3,16,15,.86)"; ctx.fillRect(48, 44, 360, 112);
+  ctx.fillStyle = COL.a; ctx.fillRect(48, 44, 6, 112);
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#8AA3A6"; ctx.font = "700 18px Inter, sans-serif"; ctx.fillText("SRS TAPALPA · TASK 3", 74, 78);
+  ctx.fillStyle = "#fff"; ctx.font = "800 52px Archivo, sans-serif"; ctx.fillText(fmtClock(t), 72, 134);
+  const span = sc.t[1] - sc.t[0];
+  if (span > 0 && prog < 1) { ctx.fillStyle = COL.a; ctx.font = "700 20px Inter, sans-serif"; ctx.fillText("×" + Math.round(span / dur(sc)), 330, 134); }
+
+  // race order, top-right
+  if (!sc.card && t >= -60) {
+    const row = D.board[Math.max(0, Math.min(D.board.length - 1, Math.round((t - D.t_from) / 10)))];
+    const x = W - 48 - 400, y = 44;
+    ctx.fillStyle = "rgba(3,16,15,.86)"; ctx.fillRect(x, y, 400, 48 + row.length * 42);
+    ctx.fillStyle = "#8AA3A6"; ctx.font = "700 17px Inter, sans-serif"; ctx.fillText(t < 0 ? "BEFORE THE START" : "RACE ORDER · KM TO GOAL", x + 22, y + 32);
+    row.forEach(([pi, d], i) => {
+      const p = D.pilots[pi], yy = y + 76 + i * 42, role = (sc.focus || {})[p.id];
+      if (role) { ctx.fillStyle = COL[role]; ctx.fillRect(x, yy - 28, 5, 38); }
+      ctx.fillStyle = "#8AA3A6"; ctx.font = "800 22px Archivo, sans-serif"; ctx.fillText(String(i + 1), x + 22, yy);
+      ctx.fillStyle = "#fff"; ctx.fillText(p.last.toUpperCase(), x + 56, yy);
+      ctx.fillStyle = "#8AA3A6"; ctx.font = "600 16px Inter, sans-serif"; ctx.fillText(p.nat, x + 62 + ctx.measureText("").width + measure(p.last.toUpperCase()), yy);
+      ctx.fillStyle = "#fff"; ctx.font = "600 21px Inter, sans-serif"; const s = d < 0 ? "GOAL" : (d / 10).toFixed(1);
+      ctx.fillText(s, x + 400 - 22 - ctx.measureText(s).width, yy);
+    });
+  }
+  // lower third
+  if (!sc.card) {
+    ctx.font = "800 46px Archivo, sans-serif"; const w1 = ctx.measureText(sc.title.toUpperCase()).width;
+    ctx.font = "500 24px Inter, sans-serif"; const w2 = ctx.measureText(sc.sub).width;
+    const w = Math.max(w1, w2) + 64, y = H - 210;
+    ctx.fillStyle = "rgba(3,16,15,.88)"; ctx.fillRect(48, y, w, 132); ctx.fillStyle = COL.a; ctx.fillRect(48, y, 6, 132);
+    ctx.fillStyle = "#fff"; ctx.font = "800 46px Archivo, sans-serif"; ctx.fillText(sc.title.toUpperCase(), 80, y + 64);
+    ctx.fillStyle = "#B7C9CB"; ctx.font = "500 24px Inter, sans-serif"; ctx.fillText(sc.sub, 80, y + 106);
+  }
+  if (sc.card === "intro") card("SRS ADVANCE EDITION · TAPALPA, MEXICO", "TASK 3", "Tue 10 Nov 2026 · Race to goal · 58.7 km");
+  if (sc.card === "result") result();
+  ctx.fillStyle = "rgba(3,16,15,.6)"; ctx.font = "500 14px Inter, sans-serif";
+  const cr = "Tracks: official IGC, Airtribune · Terrain: Mapzen / AWS Terrain Tiles (SRTM)";
+  ctx.fillText(cr, W - 48 - ctx.measureText(cr).width, H - 28);
+}
+function measure(s) { ctx.save(); ctx.font = "800 22px Archivo, sans-serif"; const w = ctx.measureText(s).width; ctx.restore(); return w; }
+function card(k, h, s) {
+  ctx.fillStyle = "rgba(3,16,15,.72)"; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = COL.a; ctx.fillRect(140, 420, 8, 250);
+  ctx.fillStyle = "#B7C9CB"; ctx.font = "700 28px Inter, sans-serif"; ctx.fillText(k, 180, 470);
+  ctx.fillStyle = "#fff"; ctx.font = "800 150px Archivo, sans-serif"; ctx.fillText(h, 172, 610);
+  ctx.fillStyle = "#B7C9CB"; ctx.font = "500 32px Inter, sans-serif"; ctx.fillText(s, 180, 662);
+}
+function result() {
+  ctx.fillStyle = "rgba(3,16,15,.8)"; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#B7C9CB"; ctx.font = "700 26px Inter, sans-serif"; ctx.fillText("TASK 3 RESULT · SPEED SECTION 58.0 KM", 180, 250);
+  const rows = D.pilots.filter(p => p.rank <= 6).sort((a, b) => a.rank - b.rank);
+  rows.forEach((p, i) => {
+    const y = 340 + i * 92;
+    if (i === 0) { ctx.fillStyle = COL.a; ctx.fillRect(140, y - 56, 8, 76); }
+    ctx.fillStyle = "#8AA3A6"; ctx.font = "800 48px Archivo, sans-serif"; ctx.fillText(String(p.rank), 180, y);
+    ctx.fillStyle = "#fff"; ctx.fillText(p.name.toUpperCase(), 260, y);
+    ctx.fillStyle = "#8AA3A6"; ctx.font = "600 26px Inter, sans-serif"; ctx.fillText(p.nat, 1220, y);
+    ctx.fillStyle = "#fff"; ctx.font = "600 34px Inter, sans-serif"; ctx.fillText(p.finish, 1420, y);
+  });
+  ctx.fillStyle = "#B7C9CB"; ctx.font = "500 26px Inter, sans-serif"; ctx.fillText("88 of 106 pilots in goal · official results, Airtribune", 180, 340 + 6 * 92 + 10);
+}
+
+// ---------- prompter ----------
+function renderPrompter() {
+  const sc = SCENES[scene];
+  $("pn").textContent = `Scene ${scene + 1} / ${SCENES.length}`;
+  $("pt").textContent = sc.title;
+  $("pd").textContent = `${words(sc.script)} words · ~${Math.round(dur(sc))} s · race ${fmtClock(sc.t[0]).slice(0, 5)}–${fmtClock(sc.t[1]).slice(0, 5)}`;
+  const parts = sc.script.match(/[^.!?]+[.!?]+["”]?\s*/g) || [sc.script];
+  $("ps").innerHTML = parts.map(p => `<span>${p.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</span>`).join("");
+  const nx = SCENES[scene + 1];
+  $("px").innerHTML = nx ? `Next: <b>${nx.title}</b> · ${nx.script.split(/(?<=[.!?])\s/)[0]}` : "Last scene.";
+  [...$("sl").children].forEach((b, i) => b.classList.toggle("on", i === scene));
+}
+function updatePrompter(prog) {
+  const spans = $("ps").children, total = $("ps").textContent.length;
+  let acc = 0; const at = prog * total;
+  [...spans].forEach(s => { const len = s.textContent.length; s.className = at >= acc + len ? "done" : at >= acc ? "now" : ""; acc += len; });
+  $("pb").style.width = (prog * 100).toFixed(1) + "%";
+}
+
+function go(i) { scene = Math.max(0, Math.min(SCENES.length - 1, i)); sceneT = 0; renderPrompter(); }
+function setPlay(v) { playing = v; $("bPlay").textContent = v ? "Pause" : "Play"; }
+
+function frame(now) {
+  const dt = last ? (now - last) / 1000 : 0; last = now;
+  const sc = SCENES[scene], D_ = dur(sc);
+  if (playing) {
+    sceneT += dt;
+    if (sceneT >= D_ && $("auto").checked && scene < SCENES.length - 1) go(scene + 1);
+  }
+  const s2 = SCENES[scene], prog = Math.min(1, sceneT / dur(s2));
+  const t = s2.t[0] + (s2.t[1] - s2.t[0]) * prog;
+  if (D) {
+    const tg = camTarget(s2, t), k = 1 - Math.exp(-dt * 2.2);
+    cam.x += (tg.x - cam.x) * k; cam.y += (tg.y - cam.y) * k; cam.w *= Math.exp(Math.log(tg.w / cam.w) * k);
+    draw(t, s2, prog); updatePrompter(prog);
+  }
+  requestAnimationFrame(frame);
+}
+
+function resize() {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+}
+window.addEventListener("resize", resize);
+
+SCENES.forEach((s, i) => { const b = document.createElement("button"); b.textContent = i + 1; b.title = s.title; b.onclick = e => { go(i); e.currentTarget.blur(); }; $("sl").appendChild(b); });
+$("bPlay").onclick = e => { setPlay(!playing); e.currentTarget.blur(); };
+$("bNext").onclick = e => { go(scene + 1); e.currentTarget.blur(); };
+$("bPrev").onclick = e => { go(scene - 1); e.currentTarget.blur(); };
+$("bRestart").onclick = e => { sceneT = 0; e.currentTarget.blur(); };
+$("wpm").onchange = e => { wpm = +e.target.value; renderPrompter(); };
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "SELECT") return;
+  if (e.code === "Space") { e.preventDefault(); setPlay(!playing); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); go(scene + 1); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); go(scene - 1); }
+  else if (e.key === "r" || e.key === "R") sceneT = 0;
+});
+
+// deep link for checks: #s3 opens scene 3; #s3-50 opens it halfway
+function fromHash() { const m = /^#s(\d+)(?:-(\d+))?$/.exec(location.hash); if (m) { go(+m[1] - 1); if (m[2]) sceneT = dur(SCENES[scene]) * (+m[2] / 100); } }
+
+resize(); renderPrompter();
+const img = new Image(); img.onload = () => { IMG = img; }; img.src = "relief.jpg";
+Promise.all([fetch("race.json").then(r => r.json()), document.fonts ? document.fonts.ready : null]).then(([d]) => {
+  D = d; d.pilots.forEach(p => BY[p.id] = p);
+  fromHash();
+  const tg = camTarget(SCENES[scene], SCENES[scene].t[0]); Object.assign(cam, tg);
+  requestAnimationFrame(frame);
+});
+window.addEventListener("hashchange", fromHash);
+})();
+</script>
