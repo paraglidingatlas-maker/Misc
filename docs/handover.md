@@ -1,6 +1,6 @@
 # Handover: Airtribune redesign concept
 
-Last updated 27 Nov 2026 by the chat "KK7 import, gaggles, wind, xcstats" (before it: "Skyways overlay" (after "Design audit batch 2" and earlier chats).
+Last updated 27 Nov 2026 by the chat "KK7 import, gaggles, wind, xcstats" (earlier: "Skyways overlay", "Design audit batch 2" and others).
 
 ## Live
 
