@@ -1,0 +1,21 @@
+{
+ "format": "airtribune-task/1",
+ "tasks": [
+  {
+   "id": "srs-2026-6/t3",
+   "event": "SRS Advance Edition 2026",
+   "series": "Sports-Class Racing Series",
+   "place": "Tapalpa",
+   "country": "Mexico",
+   "task": 3,
+   "title": "Task T6.3 (Sports) Tue 10-Nov-26 - Official",
+   "date": "2026-11-10",
+   "distance_km": 58.7,
+   "pilots": 106,
+   "goal": 88,
+   "tracks": 106,
+   "source": "airtribune",
+   "url": "https://airtribune.com/srs-2026-6/results/task6991/day/overall"
+  }
+ ]
+}

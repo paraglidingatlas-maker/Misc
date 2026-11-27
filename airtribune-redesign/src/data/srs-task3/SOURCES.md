@@ -17,8 +17,9 @@ Task 3 was flown on Tue 10 Nov 2026 ("Task T6.3 (Sports)", official).
 ## Files
 
 - `task3.json`: everything above, extracted by `extract_task3.py` (results.html, wp.cup and the unzipped IGC folder as inputs).
-- `embed_task3.py`: writes a compact copy into `src/live-tracker.html` (between the `/*T3-DATA*/` markers). Run it from
-  `airtribune-redesign/`, then `python3 src/build/build_pages.py`.
+- The pages no longer embed this file: since 27 Nov 2026 the live tracker and the fly-through read the task package
+  `events/tasks/srs-2026-6/t3/`, built straight from the Airtribune results page by `src/pipeline/new_task.py`
+  (all 106 tracks, 5 s). `task3.json` is still used by the key-moments analysis, broadcast and voice-over builders.
 
 ## Derived or inferred (not stated by the source)
 
@@ -38,8 +39,7 @@ Task 3 was flown on Tue 10 Nov 2026 ("Task T6.3 (Sports)", official).
 
 ## Also used by
 
-- `concepts/flythrough.html` (3D fly-through prototype) via `src/build/build_flythrough_data.py` → `concepts/flythrough-data.js`
-  (all fixes of the 20 tracks, not downsampled further). Terrain there is real (AWS Terrain Tiles, SRTM-based), imagery Esri World Imagery.
+- `concepts/flythrough.html` (3D fly-through prototype), now from the task package (see above). Terrain there is real (AWS Terrain Tiles, SRTM-based), imagery Esri World Imagery.
 
 ## Key-moments analysis (26 Nov 2026)
 

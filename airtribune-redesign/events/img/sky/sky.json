@@ -1,13 +1,6 @@
 {
  "credit": "Skyways & thermals: thermal.kk7.ch, CC BY-NC-SA 4.0",
  "baked": "2026-11-27",
- "tapalpa": {
-  "s": 19.5,
-  "n": 20.4,
-  "w": -103.9,
-  "e": -103.05,
-  "z": 12
- },
  "venues": {
   "srs-2027-1": {
    "ll": [

@@ -8,8 +8,6 @@ Recolouring is the same as the old in-browser code:
   thermals - strength read from KK7's blue->red hue, redrawn pale amber -> orange -> red.
 
 Outputs (WebP with alpha):
-  events/img/sky/tapalpa-<layer>.webp      Tapalpa Task 3 area at z12, resampled to a plain lat/lon grid
-                                           (the live tracker's map frame is equirectangular, so one <image> fits);
   events/img/sky/<slug>-<layer>.webp       each event venue at z11, a 1536 x 640 px Web Mercator crop centred
                                            on the venue (the Flying site map draws it at the venue's world pixel).
   events/img/sky/sky.json                  bounds of every image.
@@ -26,8 +24,7 @@ cache = sys.argv[1]; os.makedirs(cache, exist_ok=True); os.makedirs(OUT, exist_o
 SRC = "paraglidingatlas-maker.github.io"
 LAYERS = ("skyways", "thermals")
 
-# Tapalpa task area (lat/lon box) and venues (lat, lon); venue slugs = Airtribune slugs used by the page builders
-TAPALPA = dict(s=19.50, n=20.40, w=-103.90, e=-103.05, z=12)
+# Venues (lat, lon); venue slugs = Airtribune slugs used by the page builders
 VENUES = {"srs-2027-1": [45.95, 13.73], "srs-2027-2": [44.40, 6.33], "srs-2027-wsf": [46.28, 13.14],
           "srs-2027-3": [41.37, 21.25], "srs-2027-4": [43.97, 6.51], "bwo2027": [17.92, 73.82]}
 VZ, VW, VH = 11, 1536, 640
@@ -90,23 +87,7 @@ def save(arr, name):
 
 meta = {"credit": "Skyways & thermals: thermal.kk7.ch, CC BY-NC-SA 4.0", "baked": time.strftime("%Y-%m-%d")}
 
-# --- Tapalpa: Mercator mosaic resampled onto a linear lat/lon grid (bilinear) ---
-T = TAPALPA; n = 2 ** T["z"]
-px0, px1, py0, py1 = wx(T["w"], n), wx(T["e"], n), wy(T["n"], n), wy(T["s"], n)
-tx0, tx1, ty0, ty1 = int(px0 // 256), int(px1 // 256), int(py0 // 256), int(py1 // 256)
-W, H = int(round(px1 - px0)), int(round(py1 - py0))
-lon = T["w"] + (np.arange(W) + .5) / W * (T["e"] - T["w"])
-lat = T["n"] - (np.arange(H) + .5) / H * (T["n"] - T["s"])
-fx = wx(lon, n) - tx0 * 256 - .5; fy = wy(lat, n) - ty0 * 256 - .5
-print(f"Tapalpa z{T['z']}: tiles {tx1 - tx0 + 1}x{ty1 - ty0 + 1}, image {W}x{H}")
-for layer in LAYERS:
-    m = (lift if layer == "skyways" else heat)(mosaic(layer, T["z"], tx0, tx1, ty0, ty1)).astype(np.float32)
-    ix = np.clip(fx.astype(int), 0, m.shape[1] - 2); iy = np.clip(fy.astype(int), 0, m.shape[0] - 2)
-    ux = np.clip(fx - ix, 0, 1)[None, :, None]; uy = np.clip(fy - iy, 0, 1)[:, None, None]
-    I, J = np.meshgrid(ix, iy)
-    p = m[J, I] * (1 - ux) * (1 - uy) + m[J, I + 1] * ux * (1 - uy) + m[J + 1, I] * (1 - ux) * uy + m[J + 1, I + 1] * ux * uy
-    save(np.clip(p, 0, 255).astype(np.uint8), f"tapalpa-{layer}.webp")
-meta["tapalpa"] = {k: T[k] for k in ("s", "n", "w", "e", "z")}
+# (task areas are baked per task by src/pipeline/shared.py bake_kk7 into events/tasks/<comp>/<task>/)
 
 # --- venues: Web Mercator crops centred on the venue ---
 n = 2 ** VZ; meta["venues"] = {}

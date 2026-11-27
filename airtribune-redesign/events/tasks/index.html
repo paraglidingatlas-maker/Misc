@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Task replays</title>
+<meta name="description" content="Every covered competition task: live-tracker replay, 3D fly-through and broadcast view, built from one task package each.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..900;1,300..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:,">
+<style>
+:root{--bg:#051416;--panel:#0C2427;--ink:#fff;--ink-2:#B7C9CB;--muted:#6E8A8D;--line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.16);--orange:#FF5F00;
+  --f-display:"Archivo",system-ui,sans-serif;--f-body:"Inter",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+header{display:flex;align-items:center;gap:14px;padding:18px clamp(16px,4vw,48px);border-bottom:1px solid var(--line)}
+header .logo{display:inline-flex;height:28px}
+header .back{color:var(--ink-2);text-decoration:none;font-size:20px}
+main{max-width:1180px;margin:0 auto;padding:clamp(28px,6vw,72px) clamp(16px,4vw,48px) 80px}
+.kick{font:700 12px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin:0 0 14px}
+h1{font:italic 900 clamp(40px,7vw,84px)/.92 var(--f-display);text-transform:uppercase;letter-spacing:-.01em;margin:0 0 18px}
+.lede{color:var(--ink-2);max-width:62ch;margin:0 0 clamp(32px,5vw,56px)}
+.ev{border-top:1px solid var(--line-2);padding:22px 0 6px}
+.ev h2{font:italic 800 clamp(22px,3vw,30px)/1.05 var(--f-display);text-transform:uppercase;margin:0}
+.ev .where{color:var(--muted);font-size:13px;letter-spacing:.04em;margin:6px 0 10px}
+.row{display:grid;grid-template-columns:90px 1fr auto;gap:8px 24px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.tno{font:italic 900 34px/1 var(--f-display);color:var(--ink)}
+.tno small{display:block;font:600 11px/1.4 var(--f-body);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.facts{font:500 14px/1.5 var(--f-body);color:var(--ink-2)}
+.facts b{color:var(--ink);font-weight:700}
+.facts .sep{color:var(--muted);margin:0 .5em}
+.acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:6px;background:var(--orange);color:#fff;text-decoration:none;font:700 13px/1 var(--f-body);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.btn:hover{filter:brightness(1.08)}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.src{color:var(--muted);font-size:12px}
+.src a{color:var(--ink-2)}
+.empty{color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,48px) 48px;color:var(--muted);font-size:12px}
+@media (max-width:700px){
+  .row{grid-template-columns:64px 1fr}
+  .tno{font-size:28px}
+  .acts{grid-column:1/-1;justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<header><a class="back" href="../index.html" aria-label="Back to the season calendar">←</a><a class="logo" href="../index.html" data-brand="" aria-label="Airtribune"></a></header>
+<main>
+  <p class="kick">Replays</p>
+  <h1>Every task, flown again</h1>
+  <p class="lede">Each task below is one package built from the organiser's official task, results and tracklogs. Open it in the live tracker or in 3D.</p>
+  <div id="list"><p class="empty">Loading tasks…</p></div>
+</main>
+<footer>Tracks, tasks and results: the source linked on each task. Wind: Open-Meteo (ECMWF IFS). Skyways &amp; thermals: <a href="https://thermal.kk7.ch" target="_blank" rel="noopener">thermal.kk7.ch</a>, CC BY-NC-SA 4.0.</footer>
+<script>
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
+const fmtDate = d => new Date(d + "T12:00:00Z").toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short", year:"numeric", timeZone:"UTC"}).replace(",", "");
+const SRC = {airtribune:"Airtribune", fsdb:"FS file", airscore:"AirScore", pwca:"PWCA", livetrack24:"Livetrack24", flymaster:"Flymaster", files:"Files"};
+fetch("index.json").then(r => r.json()).then(idx => {
+  const by = new Map();
+  idx.tasks.forEach(t => { const k = t.id.split("/")[0]; if (!by.has(k)) by.set(k, []); by.get(k).push(t); });
+  document.getElementById("list").innerHTML = [...by.values()].map(ts => {
+    const e = ts[0];
+    return `<section class="ev"><h2>${esc(e.event)}</h2><p class="where">${esc([e.place, e.country].filter(Boolean).join(", "))}${e.series ? ` · ${esc(e.series)}` : ""}</p>` +
+      ts.sort((a, b) => (a.task || 0) - (b.task || 0)).map(t => `<div class="row">
+        <div class="tno"><small>Task</small>${esc(t.task ?? "–")}</div>
+        <div><div class="facts"><b>${esc(fmtDate(t.date))}</b>${t.distance_km ? `<span class="sep">/</span>${(+t.distance_km).toFixed(1)} km` : ""}${t.pilots ? `<span class="sep">/</span>${t.pilots} pilots` : ""}${t.goal != null ? `<span class="sep">/</span>${t.goal} in goal` : ""}</div>
+          <div class="src">${t.tracks} tracklogs · source: ${t.url ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(SRC[t.source] || t.source)}</a>` : esc(SRC[t.source] || t.source)}</div></div>
+        <div class="acts"><a class="btn" href="../live.html?task=${encodeURIComponent(t.id).replace("%2F", "/")}">Replay</a><a class="btn" href="../../concepts/flythrough.html?task=${encodeURIComponent(t.id).replace("%2F", "/")}">3D</a></div>
+      </div>`).join("") + `</section>`;
+  }).join("") || `<p class="empty">No tasks yet.</p>`;
+}).catch(() => { document.getElementById("list").innerHTML = `<p class="empty">The task list could not be loaded.</p>`; });
+</script>
+<script src="../../assets/brand.js" defer></script>
+</body>
+</html>

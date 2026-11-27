@@ -173,11 +173,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <div class="brand">
     <a class="back" href="../events/live.html" aria-label="Back to the live tracker">←</a>
     <span data-brand="tile" role="img" aria-label="Airtribune"></span>
-    <img src="../events/img/srs-full-white.png" alt="Sports-Class Racing Series">
+    <img data-srs src="../events/img/srs-full-white.png" alt="Sports-Class Racing Series">
     <span class="sep"></span>
     <div class="title">
-      <h1>Tapalpa · Task 3 in 3D</h1>
-      <p><b>SRS <span class="hide-m">Advance Edition </span>2026</b> <span class="hide-s">· Tue 10 Nov 2026 ·</span> 58.7 km race to goal</p>
+      <h1 id="ftTitle">Task in 3D</h1>
+      <p id="ftSub"></p>
     </div>
   </div>
   <div class="views">
@@ -251,14 +251,39 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
-<script src="flythrough-data.js"></script>
-<script>
+<script type="text/plain" id="app">
 /* ================= data ================= */
-const D = window.FT, TO = D.tps[0];
+/* The task comes from a task package (../events/tasks/<comp>/<task>/, src/pipeline/new_task.py), picked with
+   ?task=<comp>/<task>; the loader at the end fetches it. taskToFT keeps the shape this page was written for:
+   the first N pilots in goal by rank (?n=, default 20), every stored fix up to the goal tag. */
+function taskToFT(pk, trk, nMax){
+  const tk = pk.task, ev = pk.event, R = new Map(pk.results.map(r => [String(r.id), r]));
+  const date = new Date(tk.date + "T12:00:00Z").toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short", year:"numeric", timeZone:"UTC"}).replace(",", "");
+  const tps = tk.turnpoints.map(t => ({code: t.code, name: t.short || t.name, check: t.role === "TO" ? null : t.check === "exit" ? "Exit" : "Entry",
+    r: t.radius_m == null ? null : t.radius_m / 1000, lat: t.lat, lon: t.lon, elev: t.elev_m,
+    ss: t.role === "SSS" ? "SS" : t.ess ? "ES" : null, order: t.role}));
+  const pilots = trk.pilots.filter(p => p.goal && R.has(String(p.id))).slice(0, nMax).map(p => {
+    const r = R.get(String(p.id)), end = p.tags.at(-1), d = [];
+    let t = 0, x = 0, y = 0, a = 0, pt = 0, px = 0, py = 0, pa = 0;
+    for (let j = 0; j < p.d.length; j += 4){ t += p.d[j]; x += p.d[j+1]; y += p.d[j+2]; a += p.d[j+3]; if (t > end) break;
+      d.push(t - pt, x - px, y - py, a - pa); pt = t; px = x; py = y; pa = a; }
+    return {id: r.id, n: r.name, c: r.nation, gl: r.glider || "", rk: r.rank, tm: r.time, fin: r.finish, sc: r.score, tg: p.tags, d};
+  });
+  return {ev: {name: ev.name, short: ev.short || ev.name, place: ev.place, country: ev.country, dates: ev.dates, date, no: tk.no,
+               dist: tk.distance_km, gate: tk.gates[0].slice(0, 5), url: ev.url, series: ev.series || ""},
+          tps, stats: pk.scoring, pilots};
+}
+const PKG = window.TASKPKG.data, PKGBASE = window.TASKPKG.base;
+const D = taskToFT(PKG, window.TASKPKG.tracks, +(new URLSearchParams(location.search).get("n") || 20)), TO = D.tps[0];
+{ const e = D.ev, srs = /Sports-Class|SRS/.test(e.series || e.name);
+  document.title = `3D Fly-through · ${e.short} Task ${e.no}`;
+  if (!srs) document.querySelector("img[data-srs]")?.remove();
+  document.querySelector("#ftTitle").textContent = `${e.place || e.name} · Task ${e.no} in 3D`;
+  document.querySelector("#ftSub").innerHTML = `<b>${e.name}</b> <span class="hide-s">· ${e.date} ·</span> ${e.dist ? e.dist.toFixed(1) + " km " : ""}race to goal`; }
 const LAT0 = TO.lat * Math.PI / 180, KX = 111.32 * Math.cos(LAT0), KY = 110.574;
 const toLL = (xm, ym) => [TO.lon + xm / 1000 / KX, TO.lat + ym / 1000 / KY];
 const toXY = (lon, lat) => [(lon - TO.lon) * KX, (lat - TO.lat) * KY]; // km
-const GATE = 12 * 3600 + 15 * 60;
+const GATE = (+D.ev.gate.slice(0, 2)) * 3600 + (+D.ev.gate.slice(3, 5)) * 60;
 const fmtClock = t => { let s = Math.round(GATE + t); const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60; s %= 60; return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`; };
 const hypot = Math.hypot;
 
@@ -309,8 +334,9 @@ function stateAt(p, t) {
 const SAT = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 // KK7 Thermal & Skyways (thermal.kk7.ch, CC BY-NC-SA 4.0), imported once and recoloured by src/build/bake_kk7.py:
 // one image per layer over the Task 3 area, so the page never asks KK7 at runtime
-const SKYBOX = [[-103.90, 20.40], [-103.05, 20.40], [-103.05, 19.50], [-103.90, 19.50]];
-const KK7 = l => ({ type: "image", url: `../events/img/sky/tapalpa-${l}.webp`, coordinates: SKYBOX });
+const SB = PKG.sky ? PKG.sky.box : null;
+const SKYBOX = SB ? [[SB.w, SB.n], [SB.e, SB.n], [SB.e, SB.s], [SB.w, SB.s]] : null;
+const KK7 = l => ({ type: "image", url: PKGBASE + PKG.sky[l], coordinates: SKYBOX });
 const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
 const circle = (c, rKm, n = 160) => Array.from({ length: n + 1 }, (_, i) => { const a = i / n * Math.PI * 2; return toLL((c[0] + rKm * Math.cos(a)) * 1000, (c[1] + rKm * Math.sin(a)) * 1000); });
 const ringsGeo = { type: "FeatureCollection", features: cyl.map(c => ({ type: "Feature", properties: { goal: c.ss === "ES" ? 1 : 0 }, geometry: { type: "LineString", coordinates: circle(c.c, c.r) } })) };
@@ -512,7 +538,7 @@ const lerpAng = (a, b, k) => { let d = ((b - a + 540) % 360) - 180; return a + d
 let last = performance.now(), shadowAt = 0, uiAt = 0;
 /* wind aloft: hourly model wind at 700 hPa (about 3,200 m) over take-off, 10 Nov 2026, local time.
    Source: ECMWF IFS 0.25° via the Open-Meteo historical forecast API (ICON and GFS agree: SSE, 3–8 km/h). [hour, km/h, from°] */
-const ALOFT = { src: "ECMWF IFS", lvl: "3,200 m", h: [[11, 4.2, 153], [12, 3.3, 158], [13, 2.8, 153], [14, 2.6, 135], [15, 2.8, 117]] };
+const ALOFT = (PKG.wind && PKG.wind.aloft) || { src: "", lvl: "", h: [[12, 0, 0], [13, 0, 0]] };
 function aloftAt(sec) {
   const H = ALOFT.h, x = Math.max(H[0][0], Math.min(H.at(-1)[0], sec / 3600)), i = Math.min(H.length - 2, Math.floor(x - H[0][0])), u = x - H[i][0];
   const a = H[i], b = H[i + 1], d = ((b[2] - a[2] + 540) % 360) - 180;
@@ -520,9 +546,9 @@ function aloftAt(sec) {
 }
 const DIR16 = d => ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"][Math.round(d / 22.5) % 16];
 /* wind field for the wind animation: 5 x 5 ECMWF IFS 0.25° grid points over the task area, hourly, local time;
-   [u, v] = km/h toward east / north. Written by src/build/bake_wind.py (do not edit by hand); null = use ALOFT only. */
+   [u, v] = km/h toward east / north. From the task package (wind.grid, baked by src/pipeline/shared.py fetch_wind); null = use ALOFT only. */
 /*WINDGRID*/
-const WINDGRID = {"src":"ECMWF IFS 0.25°","lvl":"3,200 m (700 hPa)","lat":[19.5,19.75,20.0,20.25,20.5],"lon":[-104.0,-103.75,-103.5,-103.25,-103.0],"h0":10,"h":[[[[-5.5,13.7],[-4.4,8.6],[-1.2,3.1],[-3.7,5.0],[-6.9,6.9]],[[-5.0,11.8],[-3.1,6.1],[-1.8,4.3],[-3.8,6.8],[-3.7,4.3]],[[-3.0,9.9],[-2.5,4.3],[-1.2,4.9],[-1.9,6.2],[-0.6,1.2]],[[-1.2,8.7],[-1.2,4.9],[-0.0,5.0],[1.8,4.3],[1.8,1.2]],[[-0.0,8.7],[-0.0,6.2],[1.2,4.3],[1.8,4.3],[1.8,1.2]]],[[[-7.6,14.2],[-5.6,7.4],[-0.6,2.5],[-5.0,5.6],[-8.7,9.3]],[[-6.8,11.8],[-3.7,5.0],[-1.8,4.3],[-4.9,6.8],[-4.9,6.8]],[[-5.0,9.9],[-1.9,3.7],[-0.6,5.6],[-3.1,6.9],[-1.9,3.7]],[[-1.2,8.7],[-1.2,4.9],[-0.0,6.8],[0.7,7.5],[0.6,5.6]],[[0.6,8.7],[-0.0,6.8],[0.6,6.2],[0.7,7.5],[0.6,5.6]]],[[[-8.6,14.3],[-6.2,6.8],[-0.6,1.9],[-5.6,5.6],[-10.0,11.1]],[[-7.4,11.8],[-3.7,4.3],[-1.2,3.7],[-5.5,6.8],[-5.6,8.6]],[[-5.5,10.0],[-1.2,3.1],[-0.0,6.2],[-3.8,8.1],[-2.5,6.2]],[[-1.2,8.7],[-0.6,5.0],[-0.0,7.4],[0.6,9.3],[-0.0,8.1]],[[1.9,8.7],[0.7,7.5],[-0.0,7.4],[0.6,9.3],[-0.0,8.1]]],[[[-8.7,12.5],[-6.2,6.2],[-0.6,0.6],[-5.0,4.3],[-8.6,11.8]],[[-7.4,10.6],[-3.7,3.7],[-1.3,2.5],[-5.0,5.6],[-4.4,8.6]],[[-5.6,9.3],[-1.3,2.5],[-0.0,5.6],[-2.5,8.7],[-1.2,7.5]],[[-0.0,8.1],[-0.0,4.3],[-0.0,6.2],[2.5,9.3],[-0.0,7.4]],[[3.8,8.1],[1.2,7.5],[0.6,6.2],[2.5,9.3],[-0.0,7.4]]],[[[-8.1,9.9],[-5.6,5.6],[-1.2,-0.6],[-3.7,3.1],[-6.7,11.2]],[[-6.8,9.3],[-3.7,3.1],[-0.6,0.6],[-4.3,4.3],[-3.2,7.5]],[[-4.4,8.6],[-1.8,1.8],[-0.6,4.4],[-0.7,10.0],[1.2,8.7]],[[1.2,7.5],[-0.0,3.7],[0.6,4.4],[5.6,8.0],[0.6,5.6]],[[5.5,6.8],[1.8,6.9],[1.2,4.3],[5.6,8.0],[0.6,5.6]]],[[[-7.5,8.6],[-5.6,5.6],[-1.8,-1.2],[-3.7,2.5],[-5.6,10.5]],[[-6.8,8.7],[-4.3,2.5],[-1.2,-0.6],[-4.3,3.7],[-2.5,6.9]],[[-4.3,8.1],[-2.5,1.3],[-1.2,3.1],[-0.0,9.9],[2.5,9.9]],[[2.5,6.9],[-0.0,3.7],[0.6,3.1],[8.1,6.8],[1.2,4.9]],[[7.4,5.6],[2.5,6.2],[1.9,3.1],[8.1,6.8],[1.2,4.9]]],[[[-7.5,9.2],[-5.6,5.6],[-3.8,-0.6],[-5.6,3.7],[-7.5,9.9]],[[-7.5,8.6],[-5.6,2.5],[-3.1,-0.0],[-5.6,5.6],[-4.3,8.1]],[[-5.5,6.8],[-4.9,1.2],[-2.5,3.1],[-1.3,9.3],[0.6,11.2]],[[2.5,5.6],[-1.8,4.3],[-0.0,3.1],[8.7,6.8],[2.5,8.0]],[[8.1,4.3],[1.9,6.2],[1.3,2.5],[8.7,6.8],[2.5,8.0]]],[[[-6.9,10.6],[-5.6,6.2],[-6.2,0.6],[-7.4,6.2],[-10.0,8.7]],[[-8.1,9.3],[-6.9,2.5],[-4.9,1.9],[-7.5,8.0],[-6.9,9.9]],[[-8.0,6.3],[-7.5,1.2],[-3.7,3.7],[-3.7,8.7],[-2.5,11.8]],[[1.9,3.7],[-4.4,5.6],[-1.2,3.7],[8.7,6.8],[3.1,12.4]],[[8.7,2.5],[0.6,6.9],[-0.6,2.5],[8.7,6.8],[3.1,12.4]]]]};
+const WINDGRID = (PKG.wind && PKG.wind.grid) || null;
 /* wind animation (Windy-style streaks over the 3D map, on a canvas above it). Particles live on the ground in lon/lat
    and drift with the model wind at the replay time; real drift is a few km/h, so on screen they move at about
    10 px/s + 6 px/s per km/h, in the true direction. Off by default on phones and with reduced motion
@@ -627,6 +653,17 @@ map.once("style.load", () => {
   map.once("idle", () => $("loading").classList.add("off"));
 });
 setTimeout(() => $("loading").classList.add("off"), 5000);
+</script>
+<script>
+/* task loader: ?task=<comp>/<task> (default: SRS Tapalpa 2026, Task 3), then run the app above */
+(function(){
+  const id = (new URLSearchParams(location.search).get("task") || "srs-2026-6/t3").replace(/[^\w\-\/]/g, "");
+  const base = `../events/tasks/${id}/`, j = f => fetch(base + f).then(r => { if (!r.ok) throw new Error(`${f}: ${r.status}`); return r.json(); });
+  Promise.all([j("data.json"), j("tracks.json")]).then(([data, tracks]) => {
+    window.TASKPKG = {id, base, data, tracks};
+    const s = document.createElement("script"); s.textContent = document.getElementById("app").textContent; document.body.appendChild(s);
+  }).catch(e => { const l = document.getElementById("loading"); if (l) l.textContent = `Task “${id}” could not be loaded (${e.message}).`; });
+})();
 </script>
 <script src="../assets/brand.js" defer></script>
 </body>

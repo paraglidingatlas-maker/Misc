@@ -1,0 +1,2820 @@
+{
+ "format": "airtribune-task/1",
+ "id": "srs-2026-6/t3",
+ "built": "2026-11-27",
+ "source": {
+  "kind": "airtribune",
+  "url": "https://airtribune.com/srs-2026-6/results/task6991/day/overall",
+  "files": [
+   "https://airtribune.fra1.digitaloceanspaces.com/media/contest/waypoints/2026/11/v2-srs-2026-6.SeeYou.cup",
+   "https://airtribune.fra1.digitaloceanspaces.com/media/task/archive/2026/11/6991/2710_31.zip"
+  ],
+  "replay": "https://airtribune.com/play/6991/2d"
+ },
+ "event": {
+  "name": "SRS Advance Edition 2026",
+  "series": "Sports-Class Racing Series",
+  "place": "Tapalpa",
+  "country": "Mexico",
+  "dates": "7–14 Nov 2026",
+  "url": "https://airtribune.com/srs-2026-6/",
+  "short": "SRS Tapalpa 2026"
+ },
+ "task": {
+  "no": 3,
+  "title": "Task T6.3 (Sports) Tue 10-Nov-26 - Official",
+  "date": "2026-11-10",
+  "utc_offset_s": -21600,
+  "type": "race",
+  "distance_km": 58.7,
+  "gates": [
+   "12:15:00"
+  ],
+  "deadline": null,
+  "turnpoints": [
+   {
+    "code": "D01",
+    "name": "Gravedad Cero",
+    "short": "Gravedad Cero",
+    "lat": 19.9423,
+    "lon": -103.65415,
+    "elev_m": 2210.0,
+    "radius_m": null,
+    "role": "TO",
+    "check": "enter",
+    "ess": false
+   },
+   {
+    "code": "B19",
+    "name": "El Asoleado",
+    "short": "El Asoleado",
+    "lat": 19.88455,
+    "lon": -103.672617,
+    "elev_m": 2615.0,
+    "radius_m": 6000.0,
+    "role": "SSS",
+    "check": "exit",
+    "ess": false
+   },
+   {
+    "code": "B08",
+    "name": "Las Gemelas La Cueva",
+    "short": "Las Gemelas",
+    "lat": 20.194783,
+    "lon": -103.509817,
+    "elev_m": 1654.0,
+    "radius_m": 15000.0,
+    "role": "TP",
+    "check": "enter",
+    "ess": false
+   },
+   {
+    "code": "D05",
+    "name": "TAMAZULA",
+    "short": "Tamazula",
+    "lat": 19.687433,
+    "lon": -103.258317,
+    "elev_m": 1440.0,
+    "radius_m": 31000.0,
+    "role": "TP",
+    "check": "enter",
+    "ess": false
+   },
+   {
+    "code": "B04",
+    "name": "Amacueca",
+    "short": "Amacueca",
+    "lat": 20.010683,
+    "lon": -103.6,
+    "elev_m": 1434.0,
+    "radius_m": 1000.0,
+    "role": "TP",
+    "check": "enter",
+    "ess": false
+   },
+   {
+    "code": "A03",
+    "name": "LZ AMACUECA",
+    "short": "LZ Amacueca",
+    "lat": 19.996433,
+    "lon": -103.594083,
+    "elev_m": 1346.0,
+    "radius_m": 200.0,
+    "role": "GOAL",
+    "check": "enter",
+    "ess": true
+   }
+  ]
+ },
+ "scoring": {
+  "Total Pilots": "106",
+  "Nominal Distance": "50.0 km",
+  "Launch Validity": "1.000",
+  "Max Distance Points": "363.7",
+  "Pilots Landed Out": "18",
+  "Minimum Distance": "3.0 km",
+  "Distance Validity": "1.000",
+  "Max Time Points": "468.8",
+  "Pilots at ES": "88",
+  "Nominal Goal": "30 %",
+  "Time Validity": "1.000",
+  "Max Lead-Out Points": "167.5",
+  "Pilots in Goal": "88",
+  "Nominal Time": "01:15",
+  "Task Validity": "1.000",
+  "Max Arrival Points": "0.0",
+  "Max Task Points": "1000.0",
+  "pilots": 106,
+  "goal": 88
+ },
+ "results": [
+  {
+   "rank": 1,
+   "id": "0232",
+   "name": "Abel VARGA",
+   "nation": "HUN",
+   "glider": "Tigra/Submarine",
+   "sponsor": "Bgd",
+   "start": "12:15:00",
+   "finish": "13:58:08",
+   "time": "01:43:08",
+   "height_m": 363.0,
+   "speed_kmh": 33.5,
+   "distance_km": 58.71,
+   "score": 993.5,
+   "goal": true
+  },
+  {
+   "rank": 2,
+   "id": "1709",
+   "name": "Manuel QUINTANILLA",
+   "nation": "MEX",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "CONCEPTO Q",
+   "start": "12:15:00",
+   "finish": "13:59:14",
+   "time": "01:44:14",
+   "height_m": 545.0,
+   "speed_kmh": 33.14,
+   "distance_km": 58.71,
+   "score": 979.8,
+   "goal": true
+  },
+  {
+   "rank": 3,
+   "id": "1667",
+   "name": "Chaeden LUEBBERKE",
+   "nation": "USA",
+   "glider": "Artik R 2/Submarine",
+   "sponsor": "Reno-Tahoe Paragliding",
+   "start": "12:15:00",
+   "finish": "13:58:42",
+   "time": "01:43:42",
+   "height_m": 169.0,
+   "speed_kmh": 33.31,
+   "distance_km": 58.71,
+   "score": 977.9,
+   "goal": true
+  },
+  {
+   "rank": 4,
+   "id": "1574",
+   "name": "Bill BELCOURT",
+   "nation": "USA",
+   "glider": "Lyght/Submarine",
+   "sponsor": "Ozone, Flytec, TAKA",
+   "start": "12:15:00",
+   "finish": "13:59:26",
+   "time": "01:44:26",
+   "height_m": 158.0,
+   "speed_kmh": 33.08,
+   "distance_km": 58.71,
+   "score": 963.2,
+   "goal": true
+  },
+  {
+   "rank": 5,
+   "id": "1151",
+   "name": "Deonir SPANCERSKI",
+   "nation": "BRA",
+   "glider": "Photon/Submarine",
+   "sponsor": "me",
+   "start": "12:15:00",
+   "finish": "14:01:34",
+   "time": "01:46:34",
+   "height_m": 369.0,
+   "speed_kmh": 32.42,
+   "distance_km": 58.71,
+   "score": 958.5,
+   "goal": true
+  },
+  {
+   "rank": 6,
+   "id": "1736",
+   "name": "Torsten SIEGEL",
+   "nation": "DEU",
+   "glider": "Tau DLS/Lightness 4",
+   "sponsor": "Advance",
+   "start": "12:15:00",
+   "finish": "13:59:35",
+   "time": "01:44:35",
+   "height_m": 529.0,
+   "speed_kmh": 33.03,
+   "distance_km": 58.71,
+   "score": 956.3,
+   "goal": true
+  },
+  {
+   "rank": 7,
+   "id": "1328",
+   "name": "Albert NAZANDER",
+   "nation": "USA",
+   "glider": "Artik R 2/Submarine",
+   "sponsor": "Niviuk, Red Tail Paragliding",
+   "start": "12:15:00",
+   "finish": "13:59:22",
+   "time": "01:44:22",
+   "height_m": 330.0,
+   "speed_kmh": 33.1,
+   "distance_km": 58.71,
+   "score": 954.7,
+   "goal": true
+  },
+  {
+   "rank": 8,
+   "id": "1584",
+   "name": "Pamela DIEZ",
+   "nation": "MEX",
+   "glider": "Tau DLS/Submarine",
+   "sponsor": "HANGAR 5 , Advance",
+   "start": "12:15:00",
+   "finish": "14:01:30",
+   "time": "01:46:30",
+   "height_m": 383.0,
+   "speed_kmh": 32.44,
+   "distance_km": 58.71,
+   "score": 953.3,
+   "goal": true
+  },
+  {
+   "rank": 9,
+   "id": "1750",
+   "name": "Salvador DIAZ ARRIAGA",
+   "nation": "MEX",
+   "glider": "Photon/Submarine",
+   "sponsor": "A.G. MIS AMIGOS. Pintando el cielo,",
+   "start": "12:15:00",
+   "finish": "14:01:32",
+   "time": "01:46:32",
+   "height_m": 353.0,
+   "speed_kmh": 32.43,
+   "distance_km": 58.71,
+   "score": 952.2,
+   "goal": true
+  },
+  {
+   "rank": 10,
+   "id": "1073",
+   "name": "Ross DESMOND",
+   "nation": "USA",
+   "glider": "Lyght/Submarine",
+   "sponsor": "Ozone",
+   "start": "12:15:00",
+   "finish": "14:01:19",
+   "time": "01:46:19",
+   "height_m": 259.0,
+   "speed_kmh": 32.49,
+   "distance_km": 58.71,
+   "score": 949.2,
+   "goal": true
+  },
+  {
+   "rank": 11,
+   "id": "0052",
+   "name": "Szilard FORGO",
+   "nation": "HUN",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "SKYNET",
+   "start": "12:15:00",
+   "finish": "14:01:55",
+   "time": "01:46:55",
+   "height_m": 350.0,
+   "speed_kmh": 32.31,
+   "distance_km": 58.71,
+   "score": 949.1,
+   "goal": true
+  },
+  {
+   "rank": 12,
+   "id": "1575",
+   "name": "Andrés TELLO ALVARADO",
+   "nation": "MEX",
+   "glider": "Tau DLS/Submarine",
+   "sponsor": "Skyrides, hangar 5",
+   "start": "12:15:00",
+   "finish": "14:00:55",
+   "time": "01:45:55",
+   "height_m": 287.0,
+   "speed_kmh": 32.62,
+   "distance_km": 58.71,
+   "score": 944.1,
+   "goal": true
+  },
+  {
+   "rank": 13,
+   "id": "0101",
+   "name": "Arnold CASTRO",
+   "nation": "ARG",
+   "glider": "Photon/Submarine",
+   "sponsor": "Ozone Grupo Optico",
+   "start": "12:15:00",
+   "finish": "14:01:24",
+   "time": "01:46:24",
+   "height_m": 393.0,
+   "speed_kmh": 32.47,
+   "distance_km": 58.71,
+   "score": 937.2,
+   "goal": true
+  },
+  {
+   "rank": 14,
+   "id": "0015",
+   "name": "Aurelijus ANDRELIUNAS",
+   "nation": "LTU",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "GIN Gliders, TowTechniks.de",
+   "start": "12:15:00",
+   "finish": "14:03:55",
+   "time": "01:48:55",
+   "height_m": 102.0,
+   "speed_kmh": 31.72,
+   "distance_km": 58.71,
+   "score": 925.3,
+   "goal": true
+  },
+  {
+   "rank": 15,
+   "id": "0002",
+   "name": "Luke NICOL",
+   "nation": "GBR",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "GIN GLIDERS | XC MAG",
+   "start": "12:15:00",
+   "finish": "14:03:49",
+   "time": "01:48:49",
+   "height_m": 606.0,
+   "speed_kmh": 31.75,
+   "distance_km": 58.71,
+   "score": 921.9,
+   "goal": true
+  },
+  {
+   "rank": 16,
+   "id": "0001",
+   "name": "Pal TAKATS",
+   "nation": "HUN",
+   "glider": "Photon/Submarine",
+   "sponsor": "Ozone, paltakats.com",
+   "start": "12:15:00",
+   "finish": "14:04:52",
+   "time": "01:49:52",
+   "height_m": 45.0,
+   "speed_kmh": 31.44,
+   "distance_km": 58.71,
+   "score": 901.6,
+   "goal": true
+  },
+  {
+   "rank": 17,
+   "id": "0008",
+   "name": "Dustin PACHURA",
+   "nation": "USA",
+   "glider": "GTO 3/Zeppelin 2",
+   "sponsor": "Dragonfly Paragliding",
+   "start": "12:15:00",
+   "finish": "14:03:24",
+   "time": "01:48:24",
+   "height_m": 472.0,
+   "speed_kmh": 31.87,
+   "distance_km": 58.71,
+   "score": 898.4,
+   "goal": true
+  },
+  {
+   "rank": 18,
+   "id": "0236",
+   "name": "Luis POL BERNAL",
+   "nation": "ESP",
+   "glider": "Tau DLS/Genie Race 5",
+   "sponsor": "_",
+   "start": "12:15:00",
+   "finish": "14:06:38",
+   "time": "01:51:38",
+   "height_m": 473.0,
+   "speed_kmh": 30.95,
+   "distance_km": 58.71,
+   "score": 882.7,
+   "goal": true
+  },
+  {
+   "rank": 19,
+   "id": "1734",
+   "name": "Michael SIGEL",
+   "nation": "CHE",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "Gin Gliders, Naviter",
+   "start": "12:15:00",
+   "finish": "14:11:42",
+   "time": "01:56:42",
+   "height_m": 390.0,
+   "speed_kmh": 29.6,
+   "distance_km": 58.71,
+   "score": 848.8,
+   "goal": true
+  },
+  {
+   "rank": 20,
+   "id": "1735",
+   "name": "Gavin MCCLURG",
+   "nation": "USA",
+   "glider": "Artik R 2/Rocket R",
+   "sponsor": "Niviuk, Patagonia, Global Rescue, XCTracer, Electr",
+   "start": "12:15:00",
+   "finish": "14:11:43",
+   "time": "01:56:43",
+   "height_m": 284.0,
+   "speed_kmh": 29.6,
+   "distance_km": 58.71,
+   "score": 840.6,
+   "goal": true
+  },
+  {
+   "rank": 21,
+   "id": "0005",
+   "name": "Brett JANAWAY",
+   "nation": "GBR",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "GIN | Naviter",
+   "start": "12:15:00",
+   "finish": "14:11:43",
+   "time": "01:56:43",
+   "height_m": 344.0,
+   "speed_kmh": 29.6,
+   "distance_km": 58.71,
+   "score": 834.3,
+   "goal": true
+  },
+  {
+   "rank": 22,
+   "id": "1481",
+   "name": "Estefano SALGADO",
+   "nation": "MEX",
+   "glider": "Lyght/Sublite",
+   "sponsor": "Me",
+   "start": "12:15:00",
+   "finish": "14:11:40",
+   "time": "01:56:40",
+   "height_m": 331.0,
+   "speed_kmh": 29.61,
+   "distance_km": 58.71,
+   "score": 826.1,
+   "goal": true
+  },
+  {
+   "rank": 23,
+   "id": "0036",
+   "name": "Zoltan FORDOS",
+   "nation": "HUN",
+   "glider": "Artik R 2/Genie Race 6",
+   "sponsor": "Street Kitchen",
+   "start": "12:15:00",
+   "finish": "14:13:15",
+   "time": "01:58:15",
+   "height_m": 586.0,
+   "speed_kmh": 29.22,
+   "distance_km": 58.71,
+   "score": 824.7,
+   "goal": true
+  },
+  {
+   "rank": 24,
+   "id": "1144",
+   "name": "Yury MISHANIN",
+   "nation": "KAZ",
+   "glider": "Tau DLS/Genie Race 6",
+   "sponsor": "No",
+   "start": "12:15:00",
+   "finish": "14:14:51",
+   "time": "01:59:51",
+   "height_m": 675.0,
+   "speed_kmh": 28.83,
+   "distance_km": 58.71,
+   "score": 822.2,
+   "goal": true
+  },
+  {
+   "rank": 25,
+   "id": "1579",
+   "name": "Rodrigo DE OBESO",
+   "nation": "MEX",
+   "glider": "Photon/Submarine",
+   "sponsor": "Alasnubes, Winston & Fiona Corp.",
+   "start": "12:15:00",
+   "finish": "14:14:19",
+   "time": "01:59:19",
+   "height_m": 747.0,
+   "speed_kmh": 28.95,
+   "distance_km": 58.71,
+   "score": 810.8,
+   "goal": true
+  },
+  {
+   "rank": 26,
+   "id": "1593",
+   "name": "Lynsey HAYNES",
+   "nation": "CAN",
+   "glider": "Artik R 2/Submarine",
+   "sponsor": "It's me, hi",
+   "start": "12:15:00",
+   "finish": "14:16:01",
+   "time": "02:01:01",
+   "height_m": 593.0,
+   "speed_kmh": 28.55,
+   "distance_km": 58.71,
+   "score": 806.7,
+   "goal": true
+  },
+  {
+   "rank": 27,
+   "id": "1038",
+   "name": "Oliver THURMAN",
+   "nation": "SWE",
+   "glider": "Tau DLS/Submarine",
+   "sponsor": "Phuket Paragliding Soul Villas Phuket",
+   "start": "12:15:00",
+   "finish": "14:16:31",
+   "time": "02:01:31",
+   "height_m": 884.0,
+   "speed_kmh": 28.43,
+   "distance_km": 58.71,
+   "score": 803.3,
+   "goal": true
+  },
+  {
+   "rank": 28,
+   "id": "0019",
+   "name": "Magdalena JANAWAY",
+   "nation": "GBR",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": "GIN Gliders, FlyEvent",
+   "start": "12:15:00",
+   "finish": "14:25:17",
+   "time": "02:10:17",
+   "height_m": 875.0,
+   "speed_kmh": 26.52,
+   "distance_km": 58.71,
+   "score": 742.5,
+   "goal": true
+  },
+  {
+   "rank": 29,
+   "id": "1698",
+   "name": "Enes MENTESE",
+   "nation": "USA",
+   "glider": "Photon/Genie Race 6",
+   "sponsor": "ozone, Danny, Mentese Labs",
+   "start": "12:15:00",
+   "finish": "14:21:17",
+   "time": "02:06:17",
+   "height_m": 635.0,
+   "speed_kmh": 27.36,
+   "distance_km": 58.71,
+   "score": 741.3,
+   "goal": true
+  },
+  {
+   "rank": 30,
+   "id": "1055",
+   "name": "Evan FURBEYRE",
+   "nation": "USA",
+   "glider": "Photon/Genie Race 5",
+   "sponsor": "RedTail Paragliding",
+   "start": "12:15:00",
+   "finish": "14:21:27",
+   "time": "02:06:27",
+   "height_m": 701.0,
+   "speed_kmh": 27.32,
+   "distance_km": 58.71,
+   "score": 739.7,
+   "goal": true
+  },
+  {
+   "rank": 31,
+   "id": "0106",
+   "name": "Philipp LANGENEGGER",
+   "nation": "CHE",
+   "glider": "Mint/Zeppelin 2",
+   "sponsor": "Skywalk",
+   "start": "12:15:00",
+   "finish": "14:27:36",
+   "time": "02:12:36",
+   "height_m": 268.0,
+   "speed_kmh": 26.05,
+   "distance_km": 58.71,
+   "score": 724.2,
+   "goal": true
+  },
+  {
+   "rank": 32,
+   "id": "1679",
+   "name": "Benjamin SILVA CUEVAS",
+   "nation": "MEX",
+   "glider": "Lyght/Genie Race 5",
+   "sponsor": "Me",
+   "start": "12:15:00",
+   "finish": "14:25:57",
+   "time": "02:10:57",
+   "height_m": 257.0,
+   "speed_kmh": 26.38,
+   "distance_km": 58.71,
+   "score": 721.3,
+   "goal": true
+  },
+  {
+   "rank": 33,
+   "id": "0027",
+   "name": "Summer BARHAM",
+   "nation": "USA",
+   "glider": "Photon/Forza 2",
+   "sponsor": "Ozone",
+   "start": "12:15:00",
+   "finish": "14:26:47",
+   "time": "02:11:47",
+   "height_m": 313.0,
+   "speed_kmh": 26.21,
+   "distance_km": 58.71,
+   "score": 707.4,
+   "goal": true
+  },
+  {
+   "rank": 34,
+   "id": "0040",
+   "name": "Matthijs GROENEVELD",
+   "nation": "NLD",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "Gin Gliders | Collegats Outdoor",
+   "start": "12:15:00",
+   "finish": "14:26:24",
+   "time": "02:11:24",
+   "height_m": 312.0,
+   "speed_kmh": 26.29,
+   "distance_km": 58.71,
+   "score": 707.1,
+   "goal": true
+  },
+  {
+   "rank": 35,
+   "id": "1357",
+   "name": "Eric BADER",
+   "nation": "USA",
+   "glider": "Photon/Genie Race 5",
+   "sponsor": "Boulder Outdoor Center",
+   "start": "12:15:00",
+   "finish": "14:27:47",
+   "time": "02:12:47",
+   "height_m": 172.0,
+   "speed_kmh": 26.02,
+   "distance_km": 58.71,
+   "score": 699.0,
+   "goal": true
+  },
+  {
+   "rank": 36,
+   "id": "1206",
+   "name": "Mark SIMPSON",
+   "nation": "NZL",
+   "glider": "Photon/Submarine",
+   "sponsor": "Telluride Realty, Hallie",
+   "start": "12:15:00",
+   "finish": "14:27:01",
+   "time": "02:12:01",
+   "height_m": 392.0,
+   "speed_kmh": 26.17,
+   "distance_km": 58.71,
+   "score": 698.8,
+   "goal": true
+  },
+  {
+   "rank": 37,
+   "id": "0103",
+   "name": "Boon ONG",
+   "nation": "SGP",
+   "glider": "Lyght/Sublite",
+   "sponsor": "-",
+   "start": "12:15:00",
+   "finish": "14:32:12",
+   "time": "02:17:12",
+   "height_m": 184.0,
+   "speed_kmh": 25.18,
+   "distance_km": 58.71,
+   "score": 685.1,
+   "goal": true
+  },
+  {
+   "rank": 38,
+   "id": "0007",
+   "name": "Ulric JESSOP",
+   "nation": "GBR",
+   "glider": "Photon/Submarine",
+   "sponsor": "Ozone",
+   "start": "12:15:00",
+   "finish": "14:30:01",
+   "time": "02:15:01",
+   "height_m": 137.0,
+   "speed_kmh": 25.59,
+   "distance_km": 58.71,
+   "score": 675.2,
+   "goal": true
+  },
+  {
+   "rank": 39,
+   "id": "0125",
+   "name": "Yann GALLIN",
+   "nation": "FRA",
+   "glider": "Photon/Zeppelin 2",
+   "sponsor": "Chicago Paragliding",
+   "start": "12:15:00",
+   "finish": "14:31:20",
+   "time": "02:16:20",
+   "height_m": 267.0,
+   "speed_kmh": 25.34,
+   "distance_km": 58.71,
+   "score": 674.2,
+   "goal": true
+  },
+  {
+   "rank": 40,
+   "id": "1040",
+   "name": "Junio Cesar DA SILVA RODRIGUES",
+   "nation": "BRA",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": "Cia do Vento / Dentalcap / Global Multi Service",
+   "start": "12:15:00",
+   "finish": "14:30:56",
+   "time": "02:15:56",
+   "height_m": 54.0,
+   "speed_kmh": 25.41,
+   "distance_km": 58.71,
+   "score": 668.3,
+   "goal": true
+  },
+  {
+   "rank": 41,
+   "id": "0175",
+   "name": "Jan RINDLISBACHER",
+   "nation": "CHE",
+   "glider": "Scala 2 Light/F*Race 2",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:33:26",
+   "time": "02:18:26",
+   "height_m": 248.0,
+   "speed_kmh": 24.96,
+   "distance_km": 58.71,
+   "score": 666.0,
+   "goal": true
+  },
+  {
+   "rank": 42,
+   "id": "1585",
+   "name": "Jonathan ARRIAGA",
+   "nation": "MEX",
+   "glider": "Photon/Submarine",
+   "sponsor": "Skyrides",
+   "start": "12:15:00",
+   "finish": "14:33:59",
+   "time": "02:18:59",
+   "height_m": 368.0,
+   "speed_kmh": 24.86,
+   "distance_km": 58.71,
+   "score": 660.8,
+   "goal": true
+  },
+  {
+   "rank": 43,
+   "id": "1150",
+   "name": "Thomas MILKO",
+   "nation": "BRA",
+   "glider": "Cure 3/Genie Race 6",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:33:12",
+   "time": "02:18:12",
+   "height_m": 249.0,
+   "speed_kmh": 25.0,
+   "distance_km": 58.71,
+   "score": 660.3,
+   "goal": true
+  },
+  {
+   "rank": 44,
+   "id": "0020",
+   "name": "Didier DE SAINT ETIENNE",
+   "nation": "FRA",
+   "glider": "GTO 3/Submarine",
+   "sponsor": "GIN Plaine Altitude",
+   "start": "12:15:00",
+   "finish": "14:33:11",
+   "time": "02:18:11",
+   "height_m": 388.0,
+   "speed_kmh": 25.0,
+   "distance_km": 58.71,
+   "score": 659.9,
+   "goal": true
+  },
+  {
+   "rank": 45,
+   "id": "0165",
+   "name": "Yemerson AGUDELO",
+   "nation": "COL",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": "Quirón IPS",
+   "start": "12:15:00",
+   "finish": "14:34:43",
+   "time": "02:19:43",
+   "height_m": 529.0,
+   "speed_kmh": 24.73,
+   "distance_km": 58.71,
+   "score": 658.7,
+   "goal": true
+  },
+  {
+   "rank": 46,
+   "id": "1468",
+   "name": "Vincent GRIFFITH",
+   "nation": "USA",
+   "glider": "Photon/Genie Race 5",
+   "sponsor": "Dusty's Rodeo",
+   "start": "12:15:00",
+   "finish": "14:32:05",
+   "time": "02:17:05",
+   "height_m": 215.0,
+   "speed_kmh": 25.2,
+   "distance_km": 58.71,
+   "score": 656.7,
+   "goal": true
+  },
+  {
+   "rank": 47,
+   "id": "1341",
+   "name": "Pierre SAVARD",
+   "nation": "CAN",
+   "glider": "Lyght/F*Race 2",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:33:11",
+   "time": "02:18:11",
+   "height_m": 413.0,
+   "speed_kmh": 25.0,
+   "distance_km": 58.71,
+   "score": 655.7,
+   "goal": true
+  },
+  {
+   "rank": 48,
+   "id": "0144",
+   "name": "Jarotron KRUPA",
+   "nation": "VIR",
+   "glider": "Mystic +/Submarine",
+   "sponsor": "777usa, Chicago Paragliding, naviter, wifey",
+   "start": "12:15:00",
+   "finish": "14:37:48",
+   "time": "02:22:48",
+   "height_m": 212.0,
+   "speed_kmh": 24.19,
+   "distance_km": 58.71,
+   "score": 654.7,
+   "goal": true
+  },
+  {
+   "rank": 49,
+   "id": "1143",
+   "name": "Cesar Dario AREVALO URREGO",
+   "nation": "COL",
+   "glider": "Tigra/Tuna",
+   "sponsor": "BGD / Redbull / fly the earth",
+   "start": "12:15:00",
+   "finish": "14:33:34",
+   "time": "02:18:34",
+   "height_m": 259.0,
+   "speed_kmh": 24.93,
+   "distance_km": 58.71,
+   "score": 652.9,
+   "goal": true
+  },
+  {
+   "rank": 50,
+   "id": "0126",
+   "name": "Juan Camilo ZULUAGA GIRALDO",
+   "nation": "COL",
+   "glider": "GTO 3/Submarine",
+   "sponsor": "CJZ Group",
+   "start": "12:15:00",
+   "finish": "14:34:43",
+   "time": "02:19:43",
+   "height_m": 519.0,
+   "speed_kmh": 24.73,
+   "distance_km": 58.71,
+   "score": 652.3,
+   "goal": true
+  },
+  {
+   "rank": 51,
+   "id": "0065",
+   "name": "Lucas DUBINSKI",
+   "nation": "AUS",
+   "glider": "Photon/Genie Race 6",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:32:32",
+   "time": "02:17:32",
+   "height_m": 466.0,
+   "speed_kmh": 25.12,
+   "distance_km": 58.71,
+   "score": 651.8,
+   "goal": true
+  },
+  {
+   "rank": 52,
+   "id": "1669",
+   "name": "Flavio LYSZKOWSKI PINHEIRO",
+   "nation": "BRA",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": "Pro Esportes RS/ Família Geisse/Cia dia Ar Escola",
+   "start": "12:15:00",
+   "finish": "14:37:27",
+   "time": "02:22:27",
+   "height_m": 503.0,
+   "speed_kmh": 24.25,
+   "distance_km": 58.71,
+   "score": 648.4,
+   "goal": true
+  },
+  {
+   "rank": 53,
+   "id": "0156",
+   "name": "Manuel LOZADA",
+   "nation": "VEN",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "@parapenteenlaterma, Davinci Paragliders",
+   "start": "12:15:00",
+   "finish": "14:35:22",
+   "time": "02:20:22",
+   "height_m": 338.0,
+   "speed_kmh": 24.61,
+   "distance_km": 58.71,
+   "score": 647.8,
+   "goal": true
+  },
+  {
+   "rank": 54,
+   "id": "1539",
+   "name": "Grant FOAD",
+   "nation": "USA",
+   "glider": "Artik R 2/Impress 4",
+   "sponsor": "Niviuk, Aerial Adventures",
+   "start": "12:15:00",
+   "finish": "14:34:26",
+   "time": "02:19:26",
+   "height_m": 297.0,
+   "speed_kmh": 24.78,
+   "distance_km": 58.71,
+   "score": 643.6,
+   "goal": true
+  },
+  {
+   "rank": 55,
+   "id": "0086",
+   "name": "Korey CURTIS",
+   "nation": "USA",
+   "glider": "GTO 3/Submarine",
+   "sponsor": "Gin, SuperFly",
+   "start": "12:15:00",
+   "finish": "14:34:28",
+   "time": "02:19:28",
+   "height_m": 340.0,
+   "speed_kmh": 24.77,
+   "distance_km": 58.71,
+   "score": 643.4,
+   "goal": true
+  },
+  {
+   "rank": 56,
+   "id": "1409",
+   "name": "Chad UCHINO",
+   "nation": "USA",
+   "glider": "Lyght/Calixte",
+   "sponsor": "Aerial adventures",
+   "start": "12:15:00",
+   "finish": "14:34:41",
+   "time": "02:19:41",
+   "height_m": 373.0,
+   "speed_kmh": 24.73,
+   "distance_km": 58.71,
+   "score": 636.9,
+   "goal": true
+  },
+  {
+   "rank": 57,
+   "id": "0182",
+   "name": "Eduardo MENDEZ",
+   "nation": "VEN",
+   "glider": "GTO 3/Vissta",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:37:46",
+   "time": "02:22:46",
+   "height_m": 439.0,
+   "speed_kmh": 24.2,
+   "distance_km": 58.71,
+   "score": 630.9,
+   "goal": true
+  },
+  {
+   "rank": 58,
+   "id": "0055",
+   "name": "Adrian ACOSTA",
+   "nation": "ARG",
+   "glider": "Tigra/Genie Race 6",
+   "sponsor": "Shauin",
+   "start": "12:15:00",
+   "finish": "14:37:02",
+   "time": "02:22:02",
+   "height_m": 403.0,
+   "speed_kmh": 24.32,
+   "distance_km": 58.71,
+   "score": 626.7,
+   "goal": true
+  },
+  {
+   "rank": 59,
+   "id": "1086",
+   "name": "Angel RIVERA",
+   "nation": "MEX",
+   "glider": "Photon/Impress",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:39:00",
+   "time": "02:24:00",
+   "height_m": 633.0,
+   "speed_kmh": 23.99,
+   "distance_km": 58.71,
+   "score": 626.5,
+   "goal": true
+  },
+  {
+   "rank": 60,
+   "id": "1748",
+   "name": "Celia VIERMANN",
+   "nation": "DEU",
+   "glider": "Tau DLS/Lightness 4",
+   "sponsor": "AiR-touch, ADVANCE, Cat&Clean",
+   "start": "12:15:00",
+   "finish": "14:38:34",
+   "time": "02:23:34",
+   "height_m": 401.0,
+   "speed_kmh": 24.06,
+   "distance_km": 58.71,
+   "score": 619.4,
+   "goal": true
+  },
+  {
+   "rank": 61,
+   "id": "0010",
+   "name": "Riley FERRE",
+   "nation": "USA",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "Gin Gliders, Naviter",
+   "start": "12:15:00",
+   "finish": "14:38:31",
+   "time": "02:23:31",
+   "height_m": 477.0,
+   "speed_kmh": 24.07,
+   "distance_km": 58.71,
+   "score": 616.2,
+   "goal": true
+  },
+  {
+   "rank": 62,
+   "id": "0118",
+   "name": "Michael GRAEF",
+   "nation": "USA",
+   "glider": "Merlin/Forza 2",
+   "sponsor": "Chicago Paragliding",
+   "start": "12:15:00",
+   "finish": "14:37:23",
+   "time": "02:22:23",
+   "height_m": 396.0,
+   "speed_kmh": 24.26,
+   "distance_km": 58.71,
+   "score": 615.3,
+   "goal": true
+  },
+  {
+   "rank": 63,
+   "id": "0098",
+   "name": "Jason GORE",
+   "nation": "USA",
+   "glider": "Artik R 2/Genie Race 6",
+   "sponsor": "Saturn Leadership",
+   "start": "12:15:00",
+   "finish": "14:38:28",
+   "time": "02:23:28",
+   "height_m": 399.0,
+   "speed_kmh": 24.08,
+   "distance_km": 58.71,
+   "score": 613.1,
+   "goal": true
+  },
+  {
+   "rank": 64,
+   "id": "1684",
+   "name": "Alberto KAWAKAMI",
+   "nation": "BRA",
+   "glider": "Merlin/Cx Max",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:45:03",
+   "time": "02:30:03",
+   "height_m": 375.0,
+   "speed_kmh": 23.02,
+   "distance_km": 58.71,
+   "score": 582.9,
+   "goal": true
+  },
+  {
+   "rank": 65,
+   "id": "0060",
+   "name": "Marcin KRAWCZYK",
+   "nation": "NLD",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": "Gin Gliders",
+   "start": "12:15:00",
+   "finish": "14:43:50",
+   "time": "02:28:50",
+   "height_m": 762.0,
+   "speed_kmh": 23.21,
+   "distance_km": 58.71,
+   "score": 579.2,
+   "goal": true
+  },
+  {
+   "rank": 66,
+   "id": "1081",
+   "name": "Mike STEED",
+   "nation": "USA",
+   "glider": "Mystic +/Tuna",
+   "sponsor": "Flow",
+   "start": "12:15:00",
+   "finish": "14:46:34",
+   "time": "02:31:34",
+   "height_m": 483.0,
+   "speed_kmh": 22.79,
+   "distance_km": 58.71,
+   "score": 577.4,
+   "goal": true
+  },
+  {
+   "rank": 67,
+   "id": "0278",
+   "name": "Fabio POTENZA",
+   "nation": "USA",
+   "glider": "Photon/Genie Race 4",
+   "sponsor": "Chicago Paragliding",
+   "start": "12:15:00",
+   "finish": "14:44:46",
+   "time": "02:29:46",
+   "height_m": 475.0,
+   "speed_kmh": 23.07,
+   "distance_km": 58.71,
+   "score": 574.4,
+   "goal": true
+  },
+  {
+   "rank": 68,
+   "id": "1597",
+   "name": "Patrick CANNON",
+   "nation": "USA",
+   "glider": "Artik R 2/Range X-Alps 3",
+   "sponsor": "Niviuk",
+   "start": "12:15:00",
+   "finish": "14:44:30",
+   "time": "02:29:30",
+   "height_m": 663.0,
+   "speed_kmh": 23.11,
+   "distance_km": 58.71,
+   "score": 573.6,
+   "goal": true
+  },
+  {
+   "rank": 69,
+   "id": "1677",
+   "name": "Sebastian RODRIGUEZ ROMERO",
+   "nation": "MEX",
+   "glider": "Lyght/BV1",
+   "sponsor": "JALISCO ES MEXICO, TURISMO INTERIOR DE JALISCO, LO",
+   "start": "12:15:00",
+   "finish": "14:50:39",
+   "time": "02:35:39",
+   "height_m": 295.0,
+   "speed_kmh": 22.2,
+   "distance_km": 58.71,
+   "score": 563.9,
+   "goal": true
+  },
+  {
+   "rank": 70,
+   "id": "0138",
+   "name": "Lukas GAFNER",
+   "nation": "CHE",
+   "glider": "Sage/Range X-Alps 3",
+   "sponsor": "Skywalk",
+   "start": "12:15:00",
+   "finish": "14:52:51",
+   "time": "02:37:51",
+   "height_m": 148.0,
+   "speed_kmh": 21.89,
+   "distance_km": 58.71,
+   "score": 529.5,
+   "goal": true
+  },
+  {
+   "rank": 71,
+   "id": "1260",
+   "name": "Jay ZOLLINGER",
+   "nation": "USA",
+   "glider": "Artik R 2/Forza 2",
+   "sponsor": "OGCS",
+   "start": "12:15:00",
+   "finish": "14:54:49",
+   "time": "02:39:49",
+   "height_m": 611.0,
+   "speed_kmh": 21.62,
+   "distance_km": 58.71,
+   "score": 521.8,
+   "goal": true
+  },
+  {
+   "rank": 72,
+   "id": "0201",
+   "name": "Wade LIPPINCOTT",
+   "nation": "USA",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": "Atlas",
+   "start": "12:15:00",
+   "finish": "14:54:10",
+   "time": "02:39:10",
+   "height_m": 486.0,
+   "speed_kmh": 21.7,
+   "distance_km": 58.71,
+   "score": 511.5,
+   "goal": true
+  },
+  {
+   "rank": 73,
+   "id": "0044",
+   "name": "Louis COULOMBE",
+   "nation": "USA",
+   "glider": "Lyght/Impress 4",
+   "sponsor": "N/A",
+   "start": "12:15:00",
+   "finish": "14:54:20",
+   "time": "02:39:20",
+   "height_m": 553.0,
+   "speed_kmh": 21.68,
+   "distance_km": 58.71,
+   "score": 511.2,
+   "goal": true
+  },
+  {
+   "rank": 74,
+   "id": "1680",
+   "name": "Tiago Cassiano FORTUNA MENEZES",
+   "nation": "BRA",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": "Geisse Family Winery",
+   "start": "12:15:00",
+   "finish": "14:55:15",
+   "time": "02:40:15",
+   "height_m": 653.0,
+   "speed_kmh": 21.56,
+   "distance_km": 58.71,
+   "score": 505.1,
+   "goal": true
+  },
+  {
+   "rank": 75,
+   "id": "1661",
+   "name": "Juan Felipe KARAM PARTIDA",
+   "nation": "MEX",
+   "glider": "Lyght/F*Race 2",
+   "sponsor": "None",
+   "start": "12:15:00",
+   "finish": "14:57:22",
+   "time": "02:42:22",
+   "height_m": 228.0,
+   "speed_kmh": 21.28,
+   "distance_km": 58.71,
+   "score": 503.0,
+   "goal": true
+  },
+  {
+   "rank": 76,
+   "id": "1581",
+   "name": "Mike BROWN",
+   "nation": "USA",
+   "glider": "Sigma/Arrow",
+   "sponsor": "Jasper",
+   "start": "12:15:00",
+   "finish": "14:57:23",
+   "time": "02:42:23",
+   "height_m": 432.0,
+   "speed_kmh": 21.27,
+   "distance_km": 58.71,
+   "score": 495.9,
+   "goal": true
+  },
+  {
+   "rank": 77,
+   "id": "1229",
+   "name": "Cristiano ROSSA MODEL",
+   "nation": "BRA",
+   "glider": "Volt 5/Sock",
+   "sponsor": "xx",
+   "start": "12:15:00",
+   "finish": "14:57:06",
+   "time": "02:42:06",
+   "height_m": 572.0,
+   "speed_kmh": 21.31,
+   "distance_km": 58.71,
+   "score": 490.4,
+   "goal": true
+  },
+  {
+   "rank": 78,
+   "id": "1694",
+   "name": "Tom ZHOU",
+   "nation": "USA",
+   "glider": "Photon/Range X-Alps 3",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:55:57",
+   "time": "02:40:57",
+   "height_m": 621.0,
+   "speed_kmh": 21.46,
+   "distance_km": 58.71,
+   "score": 488.7,
+   "goal": true
+  },
+  {
+   "rank": 79,
+   "id": "1721",
+   "name": "Jose Henrique HERRERA",
+   "nation": "MEX",
+   "glider": "Cure 3/Tuna",
+   "sponsor": "BGD",
+   "start": "12:15:00",
+   "finish": "15:01:26",
+   "time": "02:46:26",
+   "height_m": 343.0,
+   "speed_kmh": 20.76,
+   "distance_km": 58.71,
+   "score": 484.8,
+   "goal": true
+  },
+  {
+   "rank": 80,
+   "id": "0041",
+   "name": "Rasa GRIGORAITIENE",
+   "nation": "LTU",
+   "glider": "GTO 3/X-Rated 7",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:57:26",
+   "time": "02:42:26",
+   "height_m": 454.0,
+   "speed_kmh": 21.27,
+   "distance_km": 58.71,
+   "score": 483.6,
+   "goal": true
+  },
+  {
+   "rank": 81,
+   "id": "1576",
+   "name": "Luis FLORES GARZA",
+   "nation": "MEX",
+   "glider": "Lyght/F*Race 2",
+   "sponsor": "CANTINA EL 40",
+   "start": "12:15:00",
+   "finish": "15:01:17",
+   "time": "02:46:17",
+   "height_m": 431.0,
+   "speed_kmh": 20.78,
+   "distance_km": 58.71,
+   "score": 481.1,
+   "goal": true
+  },
+  {
+   "rank": 82,
+   "id": "1154",
+   "name": "Julia MENZEL",
+   "nation": "DEU",
+   "glider": "Alpina 5/Impress 4",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "14:58:32",
+   "time": "02:43:32",
+   "height_m": 73.0,
+   "speed_kmh": 21.13,
+   "distance_km": 58.71,
+   "score": 473.1,
+   "goal": true
+  },
+  {
+   "rank": 83,
+   "id": "1706",
+   "name": "Jon GLEASON",
+   "nation": "USA",
+   "glider": "Alpina/Range X-Alps",
+   "sponsor": "none",
+   "start": "12:15:00",
+   "finish": "15:01:58",
+   "time": "02:46:58",
+   "height_m": 568.0,
+   "speed_kmh": 20.69,
+   "distance_km": 58.71,
+   "score": 454.5,
+   "goal": true
+  },
+  {
+   "rank": 84,
+   "id": "1497",
+   "name": "Adrian J GARZA SADA",
+   "nation": "MEX",
+   "glider": "Lyght/Forza 2",
+   "sponsor": "Poncho el Piloto",
+   "start": "12:15:00",
+   "finish": "15:04:24",
+   "time": "02:49:24",
+   "height_m": 940.0,
+   "speed_kmh": 20.39,
+   "distance_km": 58.71,
+   "score": 436.5,
+   "goal": true
+  },
+  {
+   "rank": 85,
+   "id": "1454",
+   "name": "Xinling YUAN",
+   "nation": "CHN",
+   "glider": "Tau DLS/Submarine",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "15:08:36",
+   "time": "02:53:36",
+   "height_m": 716.0,
+   "speed_kmh": 19.9,
+   "distance_km": 58.71,
+   "score": 431.0,
+   "goal": true
+  },
+  {
+   "rank": 86,
+   "id": "0204",
+   "name": "William CORCHADO",
+   "nation": "USA",
+   "glider": "GTO 3/Genie Race 4",
+   "sponsor": "ME",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 58.17,
+   "score": 428.0,
+   "goal": false
+  },
+  {
+   "rank": 87,
+   "id": "1119",
+   "name": "Andrew RAYHILL",
+   "nation": "USA",
+   "glider": "Tigra/Zeppelin",
+   "sponsor": "BGD",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 58.57,
+   "score": 399.6,
+   "goal": false
+  },
+  {
+   "rank": 88,
+   "id": "1681",
+   "name": "Adolfo TOLEDO",
+   "nation": "MEX",
+   "glider": "Bonanza 2/GTO Light 2",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": "15:38:16",
+   "time": "03:23:16",
+   "height_m": 450.0,
+   "speed_kmh": 17.0,
+   "distance_km": 58.71,
+   "score": 373.3,
+   "goal": true
+  },
+  {
+   "rank": 89,
+   "id": "0256",
+   "name": "Xinwei ZHENG",
+   "nation": "CHN",
+   "glider": "Photon/Submarine",
+   "sponsor": "风之翼",
+   "start": "12:15:00",
+   "finish": "15:37:36",
+   "time": "03:22:36",
+   "height_m": 117.0,
+   "speed_kmh": 17.05,
+   "distance_km": 58.71,
+   "score": 363.7,
+   "goal": true
+  },
+  {
+   "rank": 89,
+   "id": "1009",
+   "name": "Luis ROSENKJER",
+   "nation": "USA",
+   "glider": "Lyght/Zeppelin",
+   "sponsor": "Yo",
+   "start": "12:15:00",
+   "finish": "15:32:12",
+   "time": "03:17:12",
+   "height_m": 210.0,
+   "speed_kmh": 17.52,
+   "distance_km": 58.71,
+   "score": 363.7,
+   "goal": true
+  },
+  {
+   "rank": 91,
+   "id": "1172",
+   "name": "Martin BASTOW",
+   "nation": "GBR",
+   "glider": "X2C/Delight 4",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 41.66,
+   "score": 277.3,
+   "goal": false
+  },
+  {
+   "rank": 92,
+   "id": "0082",
+   "name": "Mike RAVELLI",
+   "nation": "NLD",
+   "glider": "Sphera 2 RS/Genie Race 5",
+   "sponsor": "Air Time Paragliding | Swing Paragliders | Veerpla",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 35.69,
+   "score": 221.1,
+   "goal": false
+  },
+  {
+   "rank": 93,
+   "id": "0216",
+   "name": "Jeff SINASON",
+   "nation": "USA",
+   "glider": "Alpina 4/Ozium 3",
+   "sponsor": "Skyout PG",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 26.73,
+   "score": 165.6,
+   "goal": false
+  },
+  {
+   "rank": 94,
+   "id": "0209",
+   "name": "Stephen NOBLE",
+   "nation": "AUS",
+   "glider": "Vortex/F*Race 2",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 26.04,
+   "score": 161.3,
+   "goal": false
+  },
+  {
+   "rank": 95,
+   "id": "0053",
+   "name": "Héctor VALDÉS",
+   "nation": "MEX",
+   "glider": "GTO 3/Genie Race 6",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 25.85,
+   "score": 160.1,
+   "goal": false
+  },
+  {
+   "rank": 96,
+   "id": "0187",
+   "name": "Sebastian GARCIA OYANGUREN",
+   "nation": "MEX",
+   "glider": "Photon/Artus",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 25.7,
+   "score": 159.2,
+   "goal": false
+  },
+  {
+   "rank": 97,
+   "id": "0173",
+   "name": "Michael VERGALLA",
+   "nation": "USA",
+   "glider": "Camino 2/BV1",
+   "sponsor": "Free Flight Lab",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 25.64,
+   "score": 158.8,
+   "goal": false
+  },
+  {
+   "rank": 98,
+   "id": "1751",
+   "name": "Andres CANTU",
+   "nation": "MEX",
+   "glider": "Alpina 5/Wani Light 2",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 25.05,
+   "score": 155.2,
+   "goal": false
+  },
+  {
+   "rank": 99,
+   "id": "0046",
+   "name": "Jk SMITH",
+   "nation": "USA",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 24.1,
+   "score": 149.3,
+   "goal": false
+  },
+  {
+   "rank": 100,
+   "id": "0145",
+   "name": "Iain DOUGLAS",
+   "nation": "GBR",
+   "glider": "Lyght/Zeppelin 2",
+   "sponsor": "Escape Paragliding",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 21.28,
+   "score": 131.8,
+   "goal": false
+  },
+  {
+   "rank": 101,
+   "id": "0302",
+   "name": "Monika TAKÁTS",
+   "nation": "AUT",
+   "glider": "Lyght/Forza 2",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 11.6,
+   "score": 71.9,
+   "goal": false
+  },
+  {
+   "rank": 102,
+   "id": "1591",
+   "name": "Brian DUFFY",
+   "nation": "USA",
+   "glider": "Photon/Genie Race 5",
+   "sponsor": "Noflipduffy.com",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 10.23,
+   "score": 63.4,
+   "goal": false
+  },
+  {
+   "rank": 103,
+   "id": "1127",
+   "name": "Patti MAYFIELD",
+   "nation": "USA",
+   "glider": "Lyght/Delight 4 Sport",
+   "sponsor": null,
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 10.06,
+   "score": 62.3,
+   "goal": false
+  },
+  {
+   "rank": 104,
+   "id": "1049",
+   "name": "Steven YOUNG",
+   "nation": "USA",
+   "glider": "Photon/Delight 4",
+   "sponsor": "NCXC",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 9.94,
+   "score": 61.6,
+   "goal": false
+  },
+  {
+   "rank": 105,
+   "id": "0275",
+   "name": "Andria Lea MONTELEONE",
+   "nation": "USA",
+   "glider": "Photon/Delight 4 Sport",
+   "sponsor": "Triple Seven Paragliders, 777 USA, Chicago PG, Sai",
+   "start": "12:15:00",
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 5.5,
+   "score": 34.1,
+   "goal": false
+  },
+  {
+   "rank": 106,
+   "id": "0094",
+   "name": "Fermin MONTANER MORANT",
+   "nation": "DEU",
+   "glider": "GTO 3/Genie Race 5",
+   "sponsor": null,
+   "start": null,
+   "finish": null,
+   "time": null,
+   "height_m": null,
+   "speed_kmh": null,
+   "distance_km": 3.0,
+   "score": 18.6,
+   "goal": false
+  }
+ ],
+ "wind": {
+  "drift": {
+   "speed_kmh": 1.7,
+   "from_deg": 152,
+   "samples": 8793,
+   "note": "Mean drift of the tracks while circling and climbing; an estimate, not a measured wind."
+  },
+  "aloft": {
+   "src": "ECMWF IFS",
+   "lvl": "3,200 m",
+   "h": [
+    [
+     11,
+     4.2,
+     153
+    ],
+    [
+     12,
+     3.3,
+     158
+    ],
+    [
+     13,
+     2.8,
+     153
+    ],
+    [
+     14,
+     2.6,
+     135
+    ],
+    [
+     15,
+     2.8,
+     117
+    ]
+   ]
+  },
+  "grid": {
+   "src": "ECMWF IFS 0.25°",
+   "lvl": "3,200 m (700 hPa)",
+   "lat": [
+    19.25,
+    19.5,
+    19.75,
+    20.0,
+    20.25
+   ],
+   "lon": [
+    -103.75,
+    -103.5,
+    -103.25,
+    -103.0,
+    -102.75
+   ],
+   "h0": 10,
+   "h": [
+    [
+     [
+      [
+       -6.9,
+       12.4
+      ],
+      [
+       -3.7,
+       6.2
+      ],
+      [
+       -3.7,
+       2.5
+      ],
+      [
+       -8.0,
+       5.6
+      ],
+      [
+       -8.1,
+       5.0
+      ]
+     ],
+     [
+      [
+       -4.4,
+       8.6
+      ],
+      [
+       -1.2,
+       3.1
+      ],
+      [
+       -3.7,
+       5.0
+      ],
+      [
+       -6.9,
+       6.9
+      ],
+      [
+       -5.0,
+       3.7
+      ]
+     ],
+     [
+      [
+       -3.1,
+       6.1
+      ],
+      [
+       -1.8,
+       4.3
+      ],
+      [
+       -3.8,
+       6.8
+      ],
+      [
+       -3.7,
+       4.3
+      ],
+      [
+       -1.3,
+       1.3
+      ]
+     ],
+     [
+      [
+       -2.5,
+       4.3
+      ],
+      [
+       -1.2,
+       4.9
+      ],
+      [
+       -1.9,
+       6.2
+      ],
+      [
+       -0.6,
+       1.2
+      ],
+      [
+       0.6,
+       -1.2
+      ]
+     ],
+     [
+      [
+       -1.2,
+       4.9
+      ],
+      [
+       -0.0,
+       5.0
+      ],
+      [
+       1.8,
+       4.3
+      ],
+      [
+       1.8,
+       1.2
+      ],
+      [
+       0.6,
+       1.2
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       -9.3,
+       11.1
+      ],
+      [
+       -3.7,
+       5.6
+      ],
+      [
+       -4.3,
+       3.7
+      ],
+      [
+       -9.9,
+       7.5
+      ],
+      [
+       -7.5,
+       8.0
+      ]
+     ],
+     [
+      [
+       -5.6,
+       7.4
+      ],
+      [
+       -0.6,
+       2.5
+      ],
+      [
+       -5.0,
+       5.6
+      ],
+      [
+       -8.7,
+       9.3
+      ],
+      [
+       -5.5,
+       6.8
+      ]
+     ],
+     [
+      [
+       -3.7,
+       5.0
+      ],
+      [
+       -1.8,
+       4.3
+      ],
+      [
+       -4.9,
+       6.8
+      ],
+      [
+       -4.9,
+       6.8
+      ],
+      [
+       -2.5,
+       3.7
+      ]
+     ],
+     [
+      [
+       -1.9,
+       3.7
+      ],
+      [
+       -0.6,
+       5.6
+      ],
+      [
+       -3.1,
+       6.9
+      ],
+      [
+       -1.9,
+       3.7
+      ],
+      [
+       -0.6,
+       1.9
+      ]
+     ],
+     [
+      [
+       -1.2,
+       4.9
+      ],
+      [
+       -0.0,
+       6.8
+      ],
+      [
+       0.7,
+       7.5
+      ],
+      [
+       0.6,
+       5.6
+      ],
+      [
+       -0.6,
+       4.4
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       -10.6,
+       9.9
+      ],
+      [
+       -3.7,
+       5.0
+      ],
+      [
+       -5.0,
+       4.3
+      ],
+      [
+       -11.2,
+       8.7
+      ],
+      [
+       -7.5,
+       9.9
+      ]
+     ],
+     [
+      [
+       -6.2,
+       6.8
+      ],
+      [
+       -0.6,
+       1.9
+      ],
+      [
+       -5.6,
+       5.6
+      ],
+      [
+       -10.0,
+       11.1
+      ],
+      [
+       -5.6,
+       9.3
+      ]
+     ],
+     [
+      [
+       -3.7,
+       4.3
+      ],
+      [
+       -1.2,
+       3.7
+      ],
+      [
+       -5.5,
+       6.8
+      ],
+      [
+       -5.6,
+       8.6
+      ],
+      [
+       -3.1,
+       5.6
+      ]
+     ],
+     [
+      [
+       -1.2,
+       3.1
+      ],
+      [
+       -0.0,
+       6.2
+      ],
+      [
+       -3.8,
+       8.1
+      ],
+      [
+       -2.5,
+       6.2
+      ],
+      [
+       -1.2,
+       4.9
+      ]
+     ],
+     [
+      [
+       -0.6,
+       5.0
+      ],
+      [
+       -0.0,
+       7.4
+      ],
+      [
+       0.6,
+       9.3
+      ],
+      [
+       -0.0,
+       8.1
+      ],
+      [
+       -1.9,
+       6.2
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       -9.9,
+       9.9
+      ],
+      [
+       -4.3,
+       3.1
+      ],
+      [
+       -5.0,
+       3.1
+      ],
+      [
+       -9.9,
+       9.3
+      ],
+      [
+       -7.5,
+       9.9
+      ]
+     ],
+     [
+      [
+       -6.2,
+       6.2
+      ],
+      [
+       -0.6,
+       0.6
+      ],
+      [
+       -5.0,
+       4.3
+      ],
+      [
+       -8.6,
+       11.8
+      ],
+      [
+       -5.0,
+       9.4
+      ]
+     ],
+     [
+      [
+       -3.7,
+       3.7
+      ],
+      [
+       -1.3,
+       2.5
+      ],
+      [
+       -5.0,
+       5.6
+      ],
+      [
+       -4.4,
+       8.6
+      ],
+      [
+       -2.5,
+       6.2
+      ]
+     ],
+     [
+      [
+       -1.3,
+       2.5
+      ],
+      [
+       -0.0,
+       5.6
+      ],
+      [
+       -2.5,
+       8.7
+      ],
+      [
+       -1.2,
+       7.5
+      ],
+      [
+       -0.6,
+       6.2
+      ]
+     ],
+     [
+      [
+       -0.0,
+       4.3
+      ],
+      [
+       -0.0,
+       6.2
+      ],
+      [
+       2.5,
+       9.3
+      ],
+      [
+       -0.0,
+       7.4
+      ],
+      [
+       -1.3,
+       5.6
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       -7.5,
+       9.9
+      ],
+      [
+       -4.9,
+       1.2
+      ],
+      [
+       -4.3,
+       1.2
+      ],
+      [
+       -8.1,
+       9.9
+      ],
+      [
+       -6.8,
+       9.3
+      ]
+     ],
+     [
+      [
+       -5.6,
+       5.6
+      ],
+      [
+       -1.2,
+       -0.6
+      ],
+      [
+       -3.7,
+       3.1
+      ],
+      [
+       -6.7,
+       11.2
+      ],
+      [
+       -4.4,
+       8.6
+      ]
+     ],
+     [
+      [
+       -3.7,
+       3.1
+      ],
+      [
+       -0.6,
+       0.6
+      ],
+      [
+       -4.3,
+       4.3
+      ],
+      [
+       -3.2,
+       7.5
+      ],
+      [
+       -0.6,
+       5.6
+      ]
+     ],
+     [
+      [
+       -1.8,
+       1.8
+      ],
+      [
+       -0.6,
+       4.4
+      ],
+      [
+       -0.7,
+       10.0
+      ],
+      [
+       1.2,
+       8.7
+      ],
+      [
+       0.6,
+       6.9
+      ]
+     ],
+     [
+      [
+       -0.0,
+       3.7
+      ],
+      [
+       0.6,
+       4.4
+      ],
+      [
+       5.6,
+       8.0
+      ],
+      [
+       0.6,
+       5.6
+      ],
+      [
+       -0.6,
+       3.8
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       -6.2,
+       9.9
+      ],
+      [
+       -5.6,
+       -0.0
+      ],
+      [
+       -4.3,
+       -0.0
+      ],
+      [
+       -6.9,
+       9.9
+      ],
+      [
+       -7.5,
+       8.6
+      ]
+     ],
+     [
+      [
+       -5.6,
+       5.6
+      ],
+      [
+       -1.8,
+       -1.2
+      ],
+      [
+       -3.7,
+       2.5
+      ],
+      [
+       -5.6,
+       10.5
+      ],
+      [
+       -4.3,
+       7.4
+      ]
+     ],
+     [
+      [
+       -4.3,
+       2.5
+      ],
+      [
+       -1.2,
+       -0.6
+      ],
+      [
+       -4.3,
+       3.7
+      ],
+      [
+       -2.5,
+       6.9
+      ],
+      [
+       -0.6,
+       5.6
+      ]
+     ],
+     [
+      [
+       -2.5,
+       1.3
+      ],
+      [
+       -1.2,
+       3.1
+      ],
+      [
+       -0.0,
+       9.9
+      ],
+      [
+       2.5,
+       9.9
+      ],
+      [
+       0.7,
+       7.5
+      ]
+     ],
+     [
+      [
+       -0.0,
+       3.7
+      ],
+      [
+       0.6,
+       3.1
+      ],
+      [
+       8.1,
+       6.8
+      ],
+      [
+       1.2,
+       4.9
+      ],
+      [
+       -0.6,
+       2.5
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       -6.2,
+       9.9
+      ],
+      [
+       -6.8,
+       -0.0
+      ],
+      [
+       -5.6,
+       1.3
+      ],
+      [
+       -8.1,
+       9.3
+      ],
+      [
+       -9.3,
+       8.1
+      ]
+     ],
+     [
+      [
+       -5.6,
+       5.6
+      ],
+      [
+       -3.8,
+       -0.6
+      ],
+      [
+       -5.6,
+       3.7
+      ],
+      [
+       -7.5,
+       9.9
+      ],
+      [
+       -6.9,
+       6.9
+      ]
+     ],
+     [
+      [
+       -5.6,
+       2.5
+      ],
+      [
+       -3.1,
+       -0.0
+      ],
+      [
+       -5.6,
+       5.6
+      ],
+      [
+       -4.3,
+       8.1
+      ],
+      [
+       -2.5,
+       6.9
+      ]
+     ],
+     [
+      [
+       -4.9,
+       1.2
+      ],
+      [
+       -2.5,
+       3.1
+      ],
+      [
+       -1.3,
+       9.3
+      ],
+      [
+       0.6,
+       11.2
+      ],
+      [
+       -0.6,
+       8.7
+      ]
+     ],
+     [
+      [
+       -1.8,
+       4.3
+      ],
+      [
+       -0.0,
+       3.1
+      ],
+      [
+       8.7,
+       6.8
+      ],
+      [
+       2.5,
+       8.0
+      ],
+      [
+       -2.5,
+       1.9
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       -6.9,
+       9.9
+      ],
+      [
+       -8.1,
+       0.6
+      ],
+      [
+       -7.4,
+       3.8
+      ],
+      [
+       -9.9,
+       8.1
+      ],
+      [
+       -11.8,
+       6.8
+      ]
+     ],
+     [
+      [
+       -5.6,
+       6.2
+      ],
+      [
+       -6.2,
+       0.6
+      ],
+      [
+       -7.4,
+       6.2
+      ],
+      [
+       -10.0,
+       8.7
+      ],
+      [
+       -9.9,
+       6.2
+      ]
+     ],
+     [
+      [
+       -6.9,
+       2.5
+      ],
+      [
+       -4.9,
+       1.9
+      ],
+      [
+       -7.5,
+       8.0
+      ],
+      [
+       -6.9,
+       9.9
+      ],
+      [
+       -6.3,
+       8.0
+      ]
+     ],
+     [
+      [
+       -7.5,
+       1.2
+      ],
+      [
+       -3.7,
+       3.7
+      ],
+      [
+       -3.7,
+       8.7
+      ],
+      [
+       -2.5,
+       11.8
+      ],
+      [
+       -2.5,
+       9.9
+      ]
+     ],
+     [
+      [
+       -4.4,
+       5.6
+      ],
+      [
+       -1.2,
+       3.7
+      ],
+      [
+       8.7,
+       6.8
+      ],
+      [
+       3.1,
+       12.4
+      ],
+      [
+       -5.0,
+       0.6
+      ]
+     ]
+    ]
+   ]
+  },
+  "query": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=19.25,19.25,19.25,19.25,19.25,19.5,19.5,19.5,19.5,19.5,19.75,19.75,19.75,19.75,19.75,20.0,20.0,20.0,20.0,20.0,20.25,20.25,20.25,20.25,20.25,19.9423&longitude=-103.75,-103.5,-103.25,-103.0,-102.75,-103.75,-103.5,-103.25,-103.0,-102.75,-103.75,-103.5,-103.25,-103.0,-102.75,-103.75,-103.5,-103.25,-103.0,-102.75,-103.75,-103.5,-103.25,-103.0,-102.75,-103.65415&start_date=2026-11-09&end_date=2026-11-11&hourly=wind_speed_700hPa,wind_direction_700hPa&models=ecmwf_ifs025&timezone=GMT",
+  "credit": "Wind: Open-Meteo historical forecast API, ECMWF IFS 0.25°"
+ },
+ "sky": {
+  "box": {
+   "s": 19.353,
+   "n": 20.385,
+   "w": -103.787,
+   "e": -102.905
+  },
+  "z": 12,
+  "credit": "Skyways & thermals: thermal.kk7.ch, CC BY-NC-SA 4.0",
+  "skyways": "sky-skyways.webp",
+  "thermals": "sky-thermals.webp"
+ },
+ "relief": {
+  "file": "relief.jpg",
+  "x0": -13.902,
+  "x1": 78.395,
+  "y0": -65.161,
+  "y1": 48.951,
+  "res_m": 46.1,
+  "credit": "Terrain: Mapzen / AWS Terrain Tiles, SRTM"
+ },
+ "box": {
+  "s": 19.353,
+  "n": 20.385,
+  "w": -103.787,
+  "e": -102.905
+ },
+ "tracks": {
+  "file": "tracks.json",
+  "count": 106,
+  "step_s": 5,
+  "t0": "first gate",
+  "units": "t s from the first gate; x, y m east/north of take-off; alt m (GPS)"
+ }
+}
